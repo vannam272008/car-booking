@@ -4,8 +4,6 @@ import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
 import RequestLayout from '../../RequestLayout';
 
-import "./detail.css";
-
 function DetailRequest(): JSX.Element {
 
     //Data informationrequest

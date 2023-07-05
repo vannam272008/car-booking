@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
+import './App.css';
 import { Row, Col, Radio, RadioChangeEvent } from 'antd';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
 import RequestLayout from '../../RequestLayout';
-
-import "./detail.css";
 
 function DetailRequest(): JSX.Element {
 
