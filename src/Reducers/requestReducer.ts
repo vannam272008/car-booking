@@ -1,3 +1,7 @@
+// interface RequestState {
+//     requestList: string[]
+// }
+
 const initState = {
     requestList: [],
     success: true,
