@@ -1,6 +1,21 @@
 .mcs-footer {
+    background-color: #167c82;
+    color: #fff;
     position: absolute;
-    text-align: center;
     width: 100%;
     bottom: 0;
+    padding: 5px;
+
+    & .footer-left {
+        float: left;
+    }
+
+    & .footer-right {
+        float: right;
+
+        & span {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
 }

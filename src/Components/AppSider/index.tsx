@@ -3,11 +3,10 @@ import type { MenuProps } from 'antd';
 import { Layout, Menu, theme, Space } from 'antd';
 import { Input } from 'antd';
 
-import { AppstoreOutlined, MailOutlined, SettingOutlined, SearchOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, BarChartOutlined, SearchOutlined } from '@ant-design/icons';
 import "./AppSider.scss";
 
 
-const { Search } = Input;
 
 const { Sider } = Layout;
 
@@ -30,25 +29,27 @@ function getItem(
 }
 
 const items: MenuProps['items'] = [
-    getItem('Requests', 'requests', <SettingOutlined />, [
+    getItem('Requests', 'requests', <FolderOpenOutlined />, [
         getItem('All requests', 'all-request'),
         getItem('Sent to me', 'sent-to-me'),
         getItem('Sent to others', 'sent-to-others'),
         getItem('Shared with me', 'shared-with-me'),
     ]),
 
-    getItem('Status', 'status', <SettingOutlined />, [
+    getItem('Status', 'status', <BarChartOutlined />, [
         getItem('Draft', 'draft'),
         getItem('Approving', 'approving'),
         getItem('Approved', 'approved'),
         getItem('Rejected', 'rejected'),
     ]),
 
-    getItem('Reports', 'reports', <SettingOutlined />),
+    getItem('Reports', 'reports', <BarChartOutlined />),
 
 ];
 
 const AppSider = () => {
+
+    const [openItem, setOpenItem] = useState('requests');
 
     const handleClick: MenuProps['onClick'] = (e) => {
         console.log('click ', e);
@@ -65,11 +66,15 @@ const AppSider = () => {
                 </Space.Compact>
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={['all-request']}
+                    defaultSelectedKeys={[openItem]}
                     defaultOpenKeys={['requests']}
+                    openKeys={[openItem]}
                     style={{ height: '100%' }}
                     items={items}
                     onClick={handleClick}
+                    onOpenChange={(openKey) => {
+                        setOpenItem(openKey[1])
+                    }}
                 />
             </Sider>
         </>

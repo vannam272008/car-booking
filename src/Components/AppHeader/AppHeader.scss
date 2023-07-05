@@ -67,19 +67,95 @@
 }
 
 .ant-dropdown {
+
     & .dropdown-help {
-        -webkit-transition: none;
-        transition: none;
         display: block;
+        right: 0;
         top: 50px;
         width: 320px;
-        height: 100%;
-        right: 0;
-        position: fixed;
+        height: calc(100vh - 84px);
         background-color: #fff;
         border: 1px solid #c8c8c8;
-        overflow-y: auto;
-        overflow-x: auto;
+
+        & .title-dropdown {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            padding-top: 5px;
+
+            & span {
+                margin-left: 10px;
+                font-size: 25px;
+            }
+
+            & .btn-close {
+                font-size: 20px;
+                margin-left: 5px;
+                margin-right: 5px;
+                border: none;
+                background-color: white;
+                color: black;
+                float: right;
+            }
+        }
+
+        & .content-dropdown {
+            display: block;
+            margin-top: 10px;
+
+
+
+
+            & .account-info {
+                & img {
+                    margin-left: 10px;
+                    float: left;
+                    width: 64px;
+                    height: 64px;
+                }
+
+                & .info-name {
+                    margin-left: 10px;
+                    float: left;
+                    font-size: 20px;
+                }
+
+                & .info-email {
+                    margin-left: 10px;
+                    font-style: italic;
+                }
+            }
+
+            .content-info {
+                border-top: 1px solid #ddd;
+                margin-top: 20px;
+
+                & span {
+                    font-size: 20px;
+                    margin-left: 10px;
+                }
+
+                & p {
+                    color: #4BA747;
+                    margin-left: 25px;
+                }
+            }
+
+            & span {
+                font-size: 20px;
+                margin-left: 10px;
+            }
+
+            & p {
+                color: #4BA747;
+                margin-left: 25px;
+            }
+
+
+        }
+
+
+
+
     }
 }
 

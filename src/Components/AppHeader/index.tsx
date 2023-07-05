@@ -1,9 +1,8 @@
-import { Col, Layout, Row, Button, Dropdown, Space, Divider, theme } from "antd";
+import { Col, Layout, Row, Button, Dropdown, theme } from "antd";
 import "./AppHeader.scss";
 import { NavLink } from "react-router-dom";
-import React, { useState } from "react";
-import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined } from "@ant-design/icons";
-import type { MenuProps } from 'antd';
+import { useState } from "react";
+import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 const { Header } = Layout;
 const { useToken } = theme;
 
@@ -19,15 +18,23 @@ const { useToken } = theme;
 // ];
 
 const AppHeader = () => {
+    const avatar = require('../../public/images/logo192.png');
     const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
-    const [open, setOpen] = useState(false);
+    const [openHelp, setOpenHelp] = useState(false);
+    const [openProfile, setOpenProfile] = useState(false);
     const handlePathName = () => {
         setPathName(window.location.pathname);
     }
 
     const handleClickHelp = () => {
-        setOpen(true);
+        setOpenHelp(!openHelp);
+        setOpenProfile(false);
+    }
+
+    const handleClickProfile = () => {
+        setOpenProfile(!openProfile);
+        setOpenHelp(false);
     }
 
     const contentStyle = {
@@ -36,9 +43,6 @@ const AppHeader = () => {
         boxShadow: token.boxShadowSecondary,
     };
 
-    const menuStyle = {
-        boxShadow: 'none',
-    };
     // const pathName = window.location.pathname;
     return (
         <Header className="mcs-header">
@@ -66,19 +70,52 @@ const AppHeader = () => {
                 <Col span={18} className="col-function">
                     <div className="group-btn">
                         <Dropdown
-                            open={open}
+                            placement="bottomRight"
+                            trigger={['click']}
+                            open={openHelp}
                             onOpenChange={handleClickHelp}
                             dropdownRender={() => (
-                                <div style={contentStyle} className="dropdown-help">
+                                <div className="dropdown-help" style={contentStyle}>
                                     {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
-                                    <h2>Help</h2>
-                                    <span onClick={() => setOpen(false)}>close</span>
-                                    <div>
-                                        <h4>OPUS HELPDESK</h4>
-                                        <span>a</span>
-                                        <span>a</span>
-                                        <span>a</span>
-                                        <span>a</span>
+                                    <div className="title-dropdown">
+                                        <span>Help</span>
+                                        <Button className="btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
+                                    </div>
+
+                                    <div className="content-dropdown">
+                                        <span><b>Opus Helpdesk</b></span>
+                                        <NavLink
+
+                                            to="/"
+                                            className={`${pathName === "/" && "select-page"}`}
+                                        >
+                                            <p>Introduction</p>
+                                        </NavLink>
+                                        <NavLink
+
+                                            to="/"
+                                            className={`${pathName === "/" && "select-page"}`}
+                                        >
+                                            <p>Feedbacks & Suggest idea</p>
+                                        </NavLink>
+
+                                        <NavLink
+
+                                            to="/"
+                                            className={`${pathName === "/" && "select-page"}`}
+                                        >
+                                            <p>Open ticket</p>
+                                        </NavLink>
+
+                                        <NavLink
+
+                                            to="/"
+                                            className={`${pathName === "/" && "select-page"}`}
+                                        >
+                                            <p>Help</p>
+                                        </NavLink>
+
+
 
                                     </div>
                                 </div>
@@ -88,8 +125,69 @@ const AppHeader = () => {
                         </Dropdown>
 
                         <Button className="btn-item"><BellOutlined /></Button>
-                        <Button className="btn-item"><SettingOutlined /></Button>
-                        <Button className="btn-item"><UserOutlined /></Button>
+                        <NavLink
+
+                            to="/"
+                            className={`${pathName === "/" && "select-page"}`}
+                        >
+                            <Button className="btn-item"><SettingOutlined /></Button>
+                        </NavLink>
+
+
+                        <Dropdown
+                            trigger={['click']}
+                            open={openProfile}
+                            onOpenChange={handleClickProfile}
+                            dropdownRender={() => (
+                                <div className="dropdown-help" style={contentStyle}>
+                                    {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
+                                    <div className="title-dropdown">
+                                        <span>My Account</span>
+                                        <Button className="btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
+                                    </div>
+
+                                    <div className="content-dropdown">
+                                        <div className="account-info">
+                                            <img src={String(avatar)} alt="avatar"></img>
+                                            <span className="info-name">Bang Nguyen Minh</span>
+                                            <br />
+                                            <span className="info-email">bangmn@o365.vn</span>
+                                        </div>
+                                        <div className="content-info">
+                                            <NavLink
+
+                                                to="/"
+                                                className={`${pathName === "/" && "select-page"}`}
+                                            >
+                                                <p>My Profile</p>
+                                            </NavLink>
+                                            <NavLink
+
+                                                to="/"
+                                                className={`${pathName === "/" && "select-page"}`}
+                                            >
+                                                <p>My Account</p>
+                                            </NavLink>
+
+                                            <NavLink
+
+                                                to="/"
+                                                className={`${pathName === "/" && "select-page"}`}
+                                            >
+                                                <p>Sign out</p>
+                                            </NavLink>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </div>
+                            )}
+                        >
+                            <Button className="btn-item"><UserOutlined /></Button>
+                        </Dropdown>
+
                     </div>
 
                 </Col>

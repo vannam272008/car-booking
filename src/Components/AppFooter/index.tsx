@@ -6,7 +6,16 @@ const { Footer } = Layout
 const AppFooter = () => {
     return (
         <Footer className='mcs-footer'>
-            <b>Ant Design ©2023 Created by KuRo</b>
+            <div>
+                <span className='footer-left'><b>Tasken @ Opus Solution</b></span>
+                <div className='footer-right'>
+                    <span>EN</span>
+                    <span>Website</span>
+                    <span>Terms</span>
+                    <span>About</span>
+                </div>
+            </div>
+
         </Footer>)
 }
 
