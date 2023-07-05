@@ -5,7 +5,7 @@ import RequestLayout from '../../Components/RequestLayout';
 
 
 const ManageRequest: React.FC = () => {
-    const profile = false;
+    const profile = true;
 
     return (
         <RequestLayout profile={profile}>

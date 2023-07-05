@@ -1,4 +1,20 @@
-.carbooking-sider {
+.ant-layout {
+        & li {
+                padding-left: 5px;
+        }
 
-        position: fixed;
+        & .ant-layout-sider {
+                position: sticky;
+                left: 0;
+                margin-top: 50px;
+
+
+
+        }
+
+        & .ant-layout-sider-children {}
+
+        & .ant-layout-sider-trigger {
+                margin-bottom: 29px;
+        }
 }

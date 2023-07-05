@@ -67,25 +67,24 @@ const AppSider = (props: any) => {
         token: { colorBgContainer },
     } = theme.useToken();
     return (
-        <>
-            <Sider className="carbooking-sider" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={200}>
-                <Space.Compact size="large">
-                    <Input addonBefore={<SearchOutlined />} placeholder="..." />
-                </Space.Compact>
-                <Menu
-                    mode="inline"
-                    defaultSelectedKeys={[openItem]}
-                    defaultOpenKeys={['requests']}
-                    openKeys={[openItem]}
-                    style={{ height: '100%' }}
-                    items={props.profile ? profileItems : items}
-                    onClick={handleClick}
-                    onOpenChange={(openKey) => {
-                        setOpenItem(openKey[1])
-                    }}
-                />
-            </Sider>
-        </>
+        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
+            <Space.Compact size="large">
+                <Input addonBefore={<SearchOutlined />} placeholder="..." />
+            </Space.Compact>
+            <Menu
+                mode="inline"
+                defaultSelectedKeys={[openItem]}
+                defaultOpenKeys={['requests']}
+                openKeys={[openItem]}
+                style={{ height: '100%' }}
+                items={props.profile ? profileItems : items}
+                onClick={handleClick}
+                onOpenChange={(openKey) => {
+                    setOpenItem(openKey[1])
+                }}
+            />
+        </Sider>
+
 
     )
 }
