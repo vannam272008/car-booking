@@ -3,7 +3,7 @@ import type { MenuProps } from 'antd';
 import { Layout, Menu, theme, Space } from 'antd';
 import { Input } from 'antd';
 
-import { FolderOpenOutlined, BarChartOutlined, SearchOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, BarChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import "./AppSider.scss";
 
 
@@ -28,26 +28,34 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuProps['items'] = [
-    getItem('Requests', 'requests', <FolderOpenOutlined />, [
-        getItem('All requests', 'all-request'),
-        getItem('Sent to me', 'sent-to-me'),
-        getItem('Sent to others', 'sent-to-others'),
-        getItem('Shared with me', 'shared-with-me'),
-    ]),
 
-    getItem('Status', 'status', <BarChartOutlined />, [
-        getItem('Draft', 'draft'),
-        getItem('Approving', 'approving'),
-        getItem('Approved', 'approved'),
-        getItem('Rejected', 'rejected'),
-    ]),
 
-    getItem('Reports', 'reports', <BarChartOutlined />),
+const AppSider = (props: any) => {
 
-];
+    const items: MenuProps['items'] = [
+        getItem('Requests', 'requests', <FolderOpenOutlined />, [
+            getItem('All requests', 'all-request'),
+            getItem('Sent to me', 'sent-to-me'),
+            getItem('Sent to others', 'sent-to-others'),
+            getItem('Shared with me', 'shared-with-me'),
+        ]),
 
-const AppSider = () => {
+        getItem('Status', 'status', <BarChartOutlined />, [
+            getItem('Draft', 'draft'),
+            getItem('Approving', 'approving'),
+            getItem('Approved', 'approved'),
+            getItem('Rejected', 'rejected'),
+        ]),
+
+        getItem('Reports', 'reports', <BarChartOutlined />),
+
+    ];
+
+    const profileItems: MenuProps['items'] = [
+
+        getItem('Setting', 'setting', <SettingOutlined />),
+
+    ];
 
     const [openItem, setOpenItem] = useState('requests');
 
@@ -70,7 +78,7 @@ const AppSider = () => {
                     defaultOpenKeys={['requests']}
                     openKeys={[openItem]}
                     style={{ height: '100%' }}
-                    items={items}
+                    items={props.profile ? profileItems : items}
                     onClick={handleClick}
                     onOpenChange={(openKey) => {
                         setOpenItem(openKey[1])
