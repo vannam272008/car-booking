@@ -6,6 +6,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { CaretDownOutlined, FileExcelOutlined, FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { Form, Input, DatePicker, Select, Dropdown } from 'antd';
 import RequestLayout from '../../Components/RequestLayout';
+import moment from 'moment';
 
 interface DataType {
   key: string;
@@ -142,16 +143,27 @@ const data: DataType[] = [
 const FilterForm = () => {
   const [form] = Form.useForm();
 
-
   return (
-    <Form form={form} className='filter-form'>
-      <Form.Item name="requestCode" label="Request Code">
-        <Input />
+    <Form form={form} className='filter-form' initialValues={{ createdBy: 'all-user', status: 'all-request' }}>
+      <p style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>Filter</p>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" style={{ color: 'white', backgroundColor: '#5cb85c', fontFamily: 'Segoe UI' }}>
+          Apply
+        </Button>
+        <Button htmlType="button" style={{ color: '#5cb85c', border: 'none', marginLeft: '20px', fontFamily: 'Segoe UI' }} onClick={() => {
+          form.setFieldsValue({ requestCode: undefined, created: undefined, createdBy: 'all-user', status: 'all-request' });
+        }}>
+          Clear
+        </Button>
+        <hr style={{ border: "1px solid gray" }} />
       </Form.Item>
-      <Form.Item name="created" label="Created">
+      <Form.Item name="requestCode" label="Request Code" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+        <Input placeholder='Key words...' />
+      </Form.Item>
+      <Form.Item name="created" label="Created" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
         <DatePicker.RangePicker />
       </Form.Item>
-      <Form.Item name="createdBy" label="Created by">
+      <Form.Item name="createdBy" label="Created by" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
         <Select>
           <Select.Option value="all-user" default>All</Select.Option>
           <Select.Option value="user1">Khai Tran</Select.Option>
@@ -160,7 +172,7 @@ const FilterForm = () => {
           <Select.Option value="user4">Demo Nhan Vien</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item name="status" label="Status">
+      <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
         <Select>
           <Select.Option value="all-request" default>All requests</Select.Option>
           <Select.Option value="status1">Draft</Select.Option>
@@ -171,19 +183,12 @@ const FilterForm = () => {
           <Select.Option value="status4">Done</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Apply
-        </Button>
-        <Button htmlType="button" onClick={() => form.resetFields()}>
-          Clear
-        </Button>
-      </Form.Item>
     </Form>
   );
 };
 
 const FilterDropdown = () => {
+
   return (
     <Dropdown overlay={<FilterForm />} trigger={['click']}>
       <Button style={{ marginRight: 5, marginLeft: 3, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}>
@@ -200,7 +205,7 @@ const ManageRequest: React.FC = () => {
   return (
     <RequestLayout profile={profile}>
       {() => (
-        <div style={{ overflowX: 'hidden' }}>
+        <div style={{ overflowX: 'hidden' }} className='request'>
           <div id='navbar'>
             <div className='title'>car booking</div>
             <div>
