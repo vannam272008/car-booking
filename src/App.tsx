@@ -12,9 +12,9 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/request/carbooking" element={<ManageRequest />} />
-      <Route path="/request/detail" element={<DetailRequest />} />
+      <Route path="/request/carbooking/detail" element={<DetailRequest />} />
       <Route path='/request/addrequest' element={<AddRequest />} />
-      <Route path='/request/profile' element={<Profile />} />
+      <Route path='/profile' element={<Profile />} />
       {/* <Route path="/employee/create" element={<AddEmployee />} />
         <Route path="/department/create" element={<AddDepartment />} /> */}
     </Routes>
