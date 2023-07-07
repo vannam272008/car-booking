@@ -15,8 +15,6 @@ function App() {
       <Route path="/request/carbooking/detail" element={<DetailRequest />} />
       <Route path='/request/addrequest' element={<AddRequest />} />
       <Route path='/profile' element={<Profile />} />
-      {/* <Route path="/employee/create" element={<AddEmployee />} />
-        <Route path="/department/create" element={<AddDepartment />} /> */}
     </Routes>
   );
 }
