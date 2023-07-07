@@ -6,7 +6,6 @@ import type { ColumnsType } from 'antd/es/table';
 import { CaretDownOutlined, FileExcelOutlined, FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import { Form, Input, DatePicker, Select, Dropdown } from 'antd';
 import RequestLayout from '../../Components/RequestLayout';
-import moment from 'moment';
 
 interface DataType {
   key: string;
