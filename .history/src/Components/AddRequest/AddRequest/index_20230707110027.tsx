@@ -3,7 +3,7 @@ import MenuAdd from '../MenuAdd';
 import RequestLayout from '../../RequestLayout';
 import { Col, Input, Row, Form, Select, DatePicker, Radio, RadioChangeEvent, Upload, Button } from 'antd';
 import './addRequest.css'
-import { DeleteOutlined, DragOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from '@ant-design/icons';
 
 
 function AddRequest(): JSX.Element {
@@ -233,7 +233,7 @@ function AddRequest(): JSX.Element {
                                 </Form>
                             </div>
                         </div>
-                        <div className='attention-radio' style={{ marginTop: '0' }}>
+                        <div className='attention-radio'>
                             <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                             <Radio.Group onChange={onChange} value={value}>
                                 <Radio value={1}>Yes</Radio>
@@ -249,27 +249,34 @@ function AddRequest(): JSX.Element {
                                 <span> (Maximum 20MB per file)</span>
                             </Upload>
                         </div>
-                        <div className='form-approver'>
+                        <div>
                             <h6>Send to approvers</h6>
                             <div>
                                 <Form>
                                     <Row gutter={16}>
                                         <Col span={8}>
                                             <Form.Item
-                                                label={
-                                                    <div>
-                                                        Pho phong IT
-                                                        <span>
-                                                            <Button type="link" icon={<DeleteOutlined />} />
-                                                        </span>
-                                                        <span>
-                                                            <Button type="link" icon={<EditOutlined />} />
-                                                        </span>
-                                                        <span>
-                                                            <Button type="link" icon={<DragOutlined />} />
-                                                        </span>
-                                                    </div>
-                                                }
+                                                label="Pho phong IT"
+                                                name="Approver"
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Select something!',
+                                                    },
+                                                ]}
+                                                initialValue="1"
+                                                labelCol={{ span: 24 }}
+                                            >
+                                                <Select className='select-add-request'>
+                                                    <Option value="1">bangnm@o365.vn, Developer</Option>
+                                                    <Option value="2">thy@o365.vn, Giám đốc tài chính</Option>
+                                                </Select>
+                                            </Form.Item>
+                                        </Col>
+                                        <Col span={8}>
+                                            <Form.Item
+                                                label="Approver"
+
                                                 name="Approver"
                                                 rules={[
                                                     {
@@ -287,23 +294,10 @@ function AddRequest(): JSX.Element {
                                             </Form.Item>
                                         </Col>
                                         {inputs.map((input, index) => (
-                                            <Col span={8} key={index = 1}>
+                                            <Col span={8} key={index}>
                                                 <Form.Item
-                                                    label={
-                                                        <div>
-                                                            Approver {index + 1}
-                                                            <span>
-                                                                <Button type="link" icon={<DeleteOutlined />} />
-                                                            </span>
-                                                            <span>
-                                                                <Button type="link" icon={<EditOutlined />} />
-                                                            </span>
-                                                            <span>
-                                                                <Button type="link" icon={<DragOutlined />} />
-                                                            </span>
-                                                        </div>
-                                                    }
-                                                    name={`Approver${index}`}
+                                                    label="Approver"
+                                                    name="Approver"
                                                     rules={[
                                                         {
                                                             required: true,
@@ -315,7 +309,7 @@ function AddRequest(): JSX.Element {
                                                 >
                                                     <Select
                                                         className='select-add-request'
-                                                        onChange={(value) => handleInputChange(index, value)}
+                                                        onChange={(value: string) => handleInputChange(index, value)}
                                                     >
                                                         <Option value="1">bangnm@o365.vn, Developer</Option>
                                                         <Option value="2">thy@o365.vn, Giám đốc tài chính</Option>
@@ -323,9 +317,8 @@ function AddRequest(): JSX.Element {
                                                 </Form.Item>
                                             </Col>
                                         ))}
-
-                                        <Col span={8} className='btn-add-approver'>
-                                            <Button type="primary" onClick={handleAddInput} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
+                                        <Col span={8}>
+                                            <Button type="primary" onClick={handleAddInput}>
                                                 Add
                                             </Button>
                                         </Col>

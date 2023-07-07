@@ -233,7 +233,7 @@ function AddRequest(): JSX.Element {
                                 </Form>
                             </div>
                         </div>
-                        <div className='attention-radio' style={{ marginTop: '0' }}>
+                        <div className='attention-radio'>
                             <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                             <Radio.Group onChange={onChange} value={value}>
                                 <Radio value={1}>Yes</Radio>
@@ -253,7 +253,7 @@ function AddRequest(): JSX.Element {
                             <h6>Send to approvers</h6>
                             <div>
                                 <Form>
-                                    <Row gutter={16}>
+                                    <Row gutter={16} className='form-approver'>
                                         <Col span={8}>
                                             <Form.Item
                                                 label={

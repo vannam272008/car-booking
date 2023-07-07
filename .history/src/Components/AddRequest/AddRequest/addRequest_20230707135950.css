@@ -43,9 +43,7 @@
     line-height: 1.42857143;
   
 }
-.ant-form-item-control-input-content .ant-select .ant-select-selector{
-    border: none;
-    border-radius: 0;
+.ant-select {
     border-bottom: 1px solid #2F85EF;
     width: 100%;
     float: left;
@@ -53,8 +51,10 @@
     background-color: #fff;
     padding: 6px 12px;  
     white-space: nowrap;
-    color: #2F85EF;
-
+}
+.ant-form-item-control-input-content .ant-select .ant-select-selector{
+    height: 53px;
+    border: none;
 } 
 .ant-picker{
     border: none;
