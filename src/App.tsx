@@ -1,9 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './Pages/Home';
-import ContentProfile from './Components/Profile/content-profile';
+import DetailRequest from './Components/DetailRequest/Detail/detail';
 import ManageRequest from './Pages/ManageRequest/ManageRequest';
 import Login from './Pages/Login/Login';
+import Profile from './Components/Profile';
+import AddRequest from './Components/AddRequest/AddRequest';
 
 
 function App() {
@@ -11,10 +13,10 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/request/carbooking" element={<ManageRequest />} />
-      <Route path="/profile" element={<ContentProfile />} />
-      {/* <Route path="/employee/create" element={<AddEmployee />} />
-        <Route path="/department/create" element={<AddDepartment />} /> */}
       <Route path="/login" element={<Login />} />
+      <Route path="/request/carbooking/detail" element={<DetailRequest />} />
+      <Route path='/request/addrequest' element={<AddRequest />} />
+      <Route path='/profile' element={<Profile />} />
     </Routes>
   );
 }

@@ -200,7 +200,7 @@ const FilterDropdown = () => {
 };
 
 const ManageRequest: React.FC = () => {
-  const profile = true;
+  const profile = false;
   return (
     <RequestLayout profile={profile}>
       {() => (
