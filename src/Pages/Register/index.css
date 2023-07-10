@@ -1,55 +1,47 @@
-.login-page {
+.register-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  height: 100vh;
   text-align: center;
   background: linear-gradient(to right, #000000, #ffffff);
 }
 
-.login-page h2 {
-  padding-left: 150px;
+.register-page h2 {
+  padding-left: 120px;
+  padding-bottom: 150px;
   color: white;
 }
 
-.login-form {
+.register-form {
   margin: 0 auto;
   padding: 2rem;
   background-color: white;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   border-radius: 0.5rem;
-  width: 470px;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.login-form input,
-.login-form input[type="password"] {
+.register-form input,
+.register-form input[type="password"] {
   height: 50px;
 }
 
-.login-form #btn-login {
-  margin-right: 20px;
-}
-
-.login-form #btn-register {
-  color: white;
-  background-color: #42b72a;
+.register-page button {
+  margin-left: 30px;
 }
 
 @media screen and (max-width: 320px) {
-  .login-page {
+  .register-page {
     width: 220px;
     height: 400px;
     padding-left: 10px;
   }
-  .login-page h2 {
+  .register-page h2 {
     font-size: 15px;
   }
-  .login-form {
+  .register-form {
     width: 150px;
     padding-left: 10px;
-  }
-  .login-page #btn-login {
-    margin-bottom: 10px;
   }
 }

@@ -6,6 +6,7 @@ import ManageRequest from './Pages/ManageRequest/ManageRequest';
 import Login from './Pages/Login/Login';
 import Profile from './Components/Profile';
 import AddRequest from './Components/AddRequest/AddRequest';
+import Register from './Pages/Register/Register';
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
       <Route path="/request/carbooking/detail" element={<DetailRequest />} />
       <Route path='/request/addrequest' element={<AddRequest />} />
       <Route path='/profile' element={<Profile />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }

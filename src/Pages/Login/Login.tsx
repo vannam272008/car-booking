@@ -1,10 +1,8 @@
-import React from "react";
-import { Input, Button, Form, message } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Input, Button, Form } from "antd";
+import { Link } from "react-router-dom";
 import "./index.css";
 
 const Login = () => {
-
 
   return (
     <div className="login-page">
@@ -62,8 +60,8 @@ const Login = () => {
           <Button type="primary" htmlType="submit" id="btn-login">
             Log In
           </Button>
-          <Link to={`/sign-up`} style={{ textDecoration: "none" }}>
-            <Button type="primary" htmlType="submit" id="btn-signup">
+          <Link to={`/register`} style={{ textDecoration: "none" }}>
+            <Button type="primary" htmlType="submit" id="btn-register">
               Register
             </Button>
           </Link>
