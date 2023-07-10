@@ -1,10 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './Pages/Home';
-import DetailRequest from './Components/DetailRequest/Detail/detail';
+import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
 import ManageRequest from './Pages/ManageRequest/ManageRequest';
 import Profile from './Components/Profile';
-import AddRequest from './Components/AddRequest/AddRequest';
+import AddRequest from './Components/AddRequest/AddRequest/addRequest';
 
 
 function App() {
