@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme, Space, Affix } from 'antd';
+import { Layout, Menu, theme, Space } from 'antd';
 import { Input } from 'antd';
 
 import { FolderOpenOutlined, BarChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
@@ -67,27 +67,27 @@ const AppSider = (props: any) => {
         token: { colorBgContainer },
     } = theme.useToken();
     return (
-        <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
-            <Affix offsetTop={75} onChange={(affixed) => console.log(affixed)}>
-                <Space.Compact size="large">
-                    <Input addonBefore={<SearchOutlined />} placeholder="..." />
-                </Space.Compact>
-                <Menu
-                    mode="inline"
-                    defaultSelectedKeys={[openItem]}
-                    defaultOpenKeys={['requests']}
-                    openKeys={[openItem]}
-                    style={{ height: '100%' }}
-                    items={props.profile ? profileItems : items}
-                    onClick={handleClick}
-                    onOpenChange={(openKey) => {
-                        setOpenItem(openKey[1])
-                    }}
-                />
-            </Affix>
-        </Sider>
-
-
+        <div className='sider-layout'>
+            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
+                <div>
+                    <Space.Compact size="large">
+                        <Input addonBefore={<SearchOutlined />} placeholder="..." />
+                    </Space.Compact>
+                    <Menu
+                        mode="inline"
+                        defaultSelectedKeys={[openItem]}
+                        defaultOpenKeys={['requests']}
+                        openKeys={[openItem]}
+                        style={{ height: '100%' }}
+                        items={props.profile ? profileItems : items}
+                        onClick={handleClick}
+                        onOpenChange={(openKey) => {
+                            setOpenItem(openKey[1])
+                        }}
+                    />
+                </div>
+            </Sider>
+        </div>
     )
 }
 

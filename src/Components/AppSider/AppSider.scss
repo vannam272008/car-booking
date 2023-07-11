@@ -6,12 +6,13 @@
         & .ant-layout-sider {
                 position: sticky;
                 left: 0;
-                margin-top: 50px;
+                margin-top: 10px;
         }
-
-        & .ant-layout-sider-children {}
-
         & .ant-layout-sider-trigger {
                 margin-bottom: 29px;
         }
+}
+.sider-layout{
+        margin-top: 64px;
+        height: calc(100vh - 112px);
 }

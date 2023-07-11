@@ -136,7 +136,6 @@ function DetailRequest(): JSX.Element {
                 </div>
             )}
         </RequestLayout>
-
     );
 }
 
