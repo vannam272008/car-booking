@@ -164,7 +164,7 @@ const FilterForm = () => {
       </Form.Item>
       <Form.Item name="createdBy" label="Created by" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
         <Select>
-          <Select.Option value="all-user" default>All</Select.Option>
+          <Select.Option value="all-user">All</Select.Option>
           <Select.Option value="user1">Khai Tran</Select.Option>
           <Select.Option value="user2">Dat Truong Minh</Select.Option>
           <Select.Option value="user3">Bang Nguyen Minh</Select.Option>
@@ -173,7 +173,7 @@ const FilterForm = () => {
       </Form.Item>
       <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
         <Select>
-          <Select.Option value="all-request" default>All requests</Select.Option>
+          <Select.Option value="all-request">All requests</Select.Option>
           <Select.Option value="status1">Draft</Select.Option>
           <Select.Option value="status2">Waiting for approval</Select.Option>
           <Select.Option value="status3">Approved</Select.Option>

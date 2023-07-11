@@ -1,8 +1,40 @@
 import { Input, Button, Form } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import axios from "axios";
 import "./index.css";
 
+interface LoginValues {
+  username: string;
+  password: string;
+}
+
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleLogIn = useCallback(
+    (values: LoginValues) => {
+      fetch(`http://localhost:63642/api/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data) {
+            localStorage.setItem("accessToken", data?.Username);
+            localStorage.setItem("userId", data?.Password);
+            navigate("/request/carbooking")
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    [navigate]
+  );
 
   return (
     <div className="login-page">
@@ -24,7 +56,9 @@ const Login = () => {
           remember: true,
         }}
         autoComplete="off"
+        onFinish={handleLogIn} // Gọi handleLogIn khi form submit
       >
+        {/* Các trường dữ liệu trong form */}
         <Form.Item
           label="Username"
           name="username"
@@ -51,6 +85,7 @@ const Login = () => {
           <Input.Password placeholder="Type your password" />
         </Form.Item>
 
+        {/* Nút đăng nhập */}
         <Form.Item
           wrapperCol={{
             offset: 8,

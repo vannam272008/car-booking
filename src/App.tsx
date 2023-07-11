@@ -5,7 +5,8 @@ import DetailRequest from './Components/DetailRequest/DetailRequest/detailReques
 import ManageRequest from './Pages/ManageRequest/ManageRequest';
 import Login from './Pages/Login/Login';
 import Profile from './Components/Profile';
-import AddRequest from './Components/AddRequest/AddRequest';
+import AddRequest from './Components/AddRequest/AddRequest/addRequest';
+import Register from './Pages/Register/Register';
 
 
 function App() {
