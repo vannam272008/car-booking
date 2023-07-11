@@ -1,0 +1,222 @@
+.mcs-header {
+    position: fixed;
+    z-index: 1001;
+    align-items: center;
+    background-color: #167c82;
+    width: 100%;
+    padding-inline: 0;
+
+    & .row-header {
+        align-items: center;
+
+        & .btn-menu {
+            border: none;
+            background-color: #167c82;
+            color: white;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+    }
+
+    & .col-logo {
+        width: 100%;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+
+
+        & p {
+            width: 100%;
+            color: white;
+            display: contents;
+        }
+    }
+
+    & .col-label {
+        padding-left: 10px;
+        width: 100%;
+
+
+        & p {
+            width: 100%;
+            color: white;
+            display: contents;
+        }
+    }
+
+    & .col-function {
+        & .group-btn {
+            float: right;
+
+            & .btn-item {
+                font-size: 20px;
+                margin-left: 5px;
+                margin-right: 5px;
+                border: none;
+                background-color: #167c82;
+                color: white;
+
+                margin-left: 10px;
+            }
+
+        }
+    }
+
+
+
+
+
+
+
+}
+
+.ant-dropdown {
+
+    & .dropdown-help {
+        display: block;
+        top: 50px;
+        width: 320px;
+        height: calc(100vh - 95px);
+        background-color: #fff;
+        border: 1px solid #c8c8c8;
+        position: fixed;
+        top: 64;
+        // right: -200;
+
+        & .title-dropdown {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            padding-top: 5px;
+
+            & span {
+                margin-left: 10px;
+                font-size: 25px;
+            }
+
+            & .header-btn-close {
+                font-size: 20px;
+                margin-left: 5px;
+                margin-right: 5px;
+                border: none;
+                background-color: white;
+                color: black;
+                float: right;
+            }
+        }
+
+        & .content-dropdown {
+            display: block;
+            margin-top: 10px;
+
+
+
+
+            & .account-info {
+                & img {
+                    margin-left: 10px;
+                    float: left;
+                    width: 64px;
+                    height: 64px;
+                }
+
+                & .info-name {
+                    margin-left: 10px;
+                    float: left;
+                    font-size: 20px;
+                }
+
+                & .info-email {
+                    margin-left: 10px;
+                    font-style: italic;
+                }
+            }
+
+            .content-info {
+                border-top: 1px solid #ddd;
+                margin-top: 20px;
+
+                & span {
+                    font-size: 20px;
+                    margin-left: 10px;
+                }
+
+                & p {
+                    color: #4BA747;
+                    margin-left: 25px;
+                }
+            }
+
+            & span {
+                font-size: 20px;
+                margin-left: 10px;
+            }
+
+            & p {
+                color: #4BA747;
+                margin-left: 25px;
+            }
+
+
+        }
+
+
+
+
+    }
+}
+
+// .logo {
+//     width: 200px;
+//     height: 100px;
+// }
+
+// .header {
+//     background-color: #fff;
+//     height: 100px;
+//     line-height: 100px;
+//     padding: 0;
+// }
+
+// .header-name {
+//     font-family: 'Segoe UI';
+//     font-size: 16px;
+//     font-weight: 700;
+//     color: #0273bb;
+// }
+
+// .header-homepage {
+//     font-family: 'Segoe UI';
+//     font-size: 16px;
+//     font-weight: 700;
+//     color: #0273bb;
+//     float: right;
+//     padding-right: 50px;
+//     position: relative;
+//     top: -100px;
+// }
+
+// .logo-name {
+//     display: flex;
+// }
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .header-homepage {
+        display: none;
+    }
+
+    .header-name {
+        font-size: 10px;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1240px) {}
