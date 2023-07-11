@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+import { Button, Input, Menu, Modal, Select } from 'antd';
+import './menu.css'
+import {
+    ArrowLeftOutlined,
+    FilePdfOutlined,
+    DeleteOutlined,
+    RiseOutlined,
+    ShareAltOutlined,
+    CheckOutlined,
+    CloseOutlined,
+    DeliveredProcedureOutlined,
+    EllipsisOutlined
+} from '@ant-design/icons';
+
+
+function MenuRequest(): JSX.Element {
+
+    const ShareModal = ({ visible, onClose, onShare }) => {
+        const handleShare = () => {
+            // Xử lý logic khi nhấp vào nút Share
+            onShare();
+        };
+
+        return (
+            <Modal
+                title={null}
+                visible={visible}
+                closable={false}
+                onCancel={onClose}
+                footer={
+                    <div>
+                        <Button type="primary" onClick={handleShare}>
+                            Share
+                        </Button>
+                        <Button onClick={onClose}>
+                            Close
+                        </Button>
+                    </div>
+                }
+            >
+                <Select style={{ width: '100%' }}>
+                    <Option value="1">bangnm@o365.vn, Developer</Option>
+                    <Option value="2">bu.test5@o365.vn, Tài xế</Option>
+                </Select>
+            </Modal>
+        );
+    };
+
+    const { Option } = Select;
+
+    const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
+    const [isModalOpenReject, setIsModalOpenReject] = useState(false);
+    const [isModalOpenShare, setIsModalOpenShare] = useState(false);
+
+    const showModalShare = () => {
+        setIsModalOpenShare(true);
+    }
+
+    const showModalApprove = () => {
+        setIsModalOpenApprove(true);
+    };
+
+    const showModalReject = () => {
+        setIsModalOpenReject(true);
+    };
+
+    const handleShare = () => {
+        setIsModalOpenShare(false);
+    }
+
+    const handleApprove = () => {
+        setIsModalOpenApprove(false);
+    }
+
+    const handleReject = () => {
+        setIsModalOpenReject(false);
+    };
+
+    const handleClose = () => {
+        setIsModalOpenShare(false);
+        setIsModalOpenApprove(false);
+        setIsModalOpenReject(false);
+    };
+
+    return (
+        <div>
+            <Menu mode="horizontal" className='fixed-menu'>
+                <Menu.Item key="return" icon={<ArrowLeftOutlined />}>
+                    Return
+                </Menu.Item>
+                <Menu.Item key="download" icon={<FilePdfOutlined />}>
+                    Download file
+                </Menu.Item>
+                <Menu.Item key="delete" icon={<DeleteOutlined />}>
+                    Delete
+                </Menu.Item>
+                <Menu.Item key="progress" icon={<RiseOutlined />}>
+                    Progress
+                </Menu.Item>
+                <Menu.Item onClick={handleOpenModalShare} key="share" icon={<ShareAltOutlined />}>
+                    Share
+                </Menu.Item>
+                <ShareModal visible={isModalOpenShare} onClose={handleCloseModalShare} onShare={handleShare} />
+                <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
+                    Approve
+                </Menu.Item>
+                <Modal title="Note" closable={false} open={isModalOpenApprove} footer={
+                    <div>
+                        <Button type="primary" onClick={handleApprove}>Approve</Button>
+                        <Button onClick={handleClose}>Close</Button>
+                    </div>
+                }>
+                    <Input />
+                </Modal>
+                <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
+                    Reject
+                </Menu.Item>
+                <Modal closable={false} title="Reason" open={isModalOpenReject} footer={
+                    <div>
+                        <Button type="primary" onClick={handleReject}>Reject</Button>
+                        <Button onClick={handleClose}>Close</Button>
+                    </div>
+                }>
+                    <Input />
+                </Modal>
+                <Menu.Item key="forward" icon={<DeliveredProcedureOutlined />}>
+                    Forward
+                </Menu.Item>
+                <Modal className="select-user-share" title="Share" open={isModalOpenShare} footer={
+                    <div>
+                        <Button type="primary" onClick={handleShare}>Share</Button>
+                        <Button onClick={handleClose}>Close</Button>
+                    </div>
+                }>
+                    <Select style={{ width: '100%' }}>
+                        <Option value="1">bangnm@o365.vn, Developer</Option>
+                        <Option value="2">bu.test5@o365.vn, Tài xế</Option>
+                    </Select>
+                </Modal>
+                <Menu.Item key="ellipsis" icon={<EllipsisOutlined />}>
+                </Menu.Item>
+            </Menu>
+        </div>
+    );
+}
+
+export default MenuRequest;

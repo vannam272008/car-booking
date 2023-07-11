@@ -1,0 +1,9 @@
+.label-approver{
+    margin-bottom: 10px;
+}
+.label-approver input{
+    border: none;
+}
+.ant-col{
+    height: fit-content;
+}

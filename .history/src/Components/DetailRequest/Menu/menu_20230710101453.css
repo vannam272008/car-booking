@@ -1,0 +1,30 @@
+.fixed-menu {
+    position: fixed;
+    top: 64px;
+    width: 100%;
+    z-index: 999;
+    border-bottom: 1px solid #e1e1e1;
+    border-top-left-radius: 0;
+    background-color: rgb(245,246,250);
+    min-height: 61px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-left: -24px;
+}
+
+.fixed-menu .Menu.Item {
+    white-space: nowrap;
+    margin: 0 10px;
+    color: #8894A1;
+    font-weight: 500;
+    text-decoration: none;
+    outline: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    background-color: transparent;
+}
+.select-user-share {
+    width: 100%;
+}
+  
