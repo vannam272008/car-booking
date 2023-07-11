@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = '/api';
+const API_URL = 'http://localhost:63642/api';
 
 const request = axios.create({
     baseURL: API_URL,
@@ -17,8 +17,8 @@ const getToken = () => {
 };
 
 export const get = async (endpoint: string, options = {}) => {
-    const token = getToken();
-    return await request.get(endpoint, options);
+    // const token = getToken();
+    return await request.get(endpoint);
 };
 
 export const post = async (endpoint: string, data = {}) => {

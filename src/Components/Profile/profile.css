@@ -1,5 +1,5 @@
 .info-user{
-    background-color: wheat;
+    background-color: '';
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -7,4 +7,11 @@
     margin-bottom: 10px;
     box-sizing: border-box
 }
-
+.nav-bar-profile{
+    margin-top:  15px;
+    border-bottom: 2px solid #e1e1e1;
+    margin-right:-25px;
+    margin-left:-25px;
+    background-color: #F5F6FA;
+    align-items: center;
+}
