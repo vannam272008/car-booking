@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Radio, RadioChangeEvent } from 'antd';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
 import RequestLayout from '../../RequestLayout';
+import request from "../../../Utils/request";
+
 import "./detailRequest.css";
 
 function DetailRequest(): JSX.Element {
 
     //Data information detail request
-    const requestCode: string = '2023OPS-CAR-0704-001';
-    const createdAt: string = '04/07/2023 09:33 AM';
-    const status: string = 'Waiting for Approval';
+    // const requestCode: string = '2023OPS-CAR-0704-001';
+    // const createdAt: string = '04/07/2023 09:33 AM';
+    // const status: string = 'Waiting for Approval';
 
     //Data table detail request
-    const Applicant: string = 'Bang Minh Nguyen';
-    const Department: string = 'Kiem thu Testing';
-    const User: string = 'bangnm@o365.vn, Developer';
+    // const Applicant: string = 'Bang Minh Nguyen';
+    // const Department: string = 'Kiem thu Testing';
+    // const User: string = 'bangnm@o365.vn, Developer';
     const Mobile: string = '0382187648';
     const CostCenter: string = '1001';
     const Totalpassengers: string = '2';
@@ -27,6 +29,8 @@ function DetailRequest(): JSX.Element {
 
     //Setup select-adio Yes or No
     const [value, setValue] = useState(2);
+    const [detailData, setDetailData] = useState<any>({});
+
 
     const onChange = (e: RadioChangeEvent) => {
         console.log('radio checked', e.target.value);
@@ -39,6 +43,22 @@ function DetailRequest(): JSX.Element {
 
     const profile = false;
 
+    useEffect(() => {
+        const getDetailRequest = async () => {
+            const endpoint = "request/Id=64ff041d-d67c-4a35-b6e9-0033134e4d53";
+            const response = await request.get(endpoint).then((res) => {
+                setDetailData(res.data);
+            }
+            );
+        }
+        getDetailRequest();
+
+    }, [])
+
+    console.log(detailData);
+
+
+
 
     return (
         <RequestLayout profile={profile}>
@@ -47,9 +67,9 @@ function DetailRequest(): JSX.Element {
                     <MenuRequest />
                     <div className='info-detail-request'>
                         <div className='info-basic-detail-request'>
-                            <p>Request Code: {requestCode}</p>
-                            <p>Created at: {createdAt}</p>
-                            <p>Status: {status}</p>
+                            <p>Request Code: {detailData.RequestCode}</p>
+                            <p>Created at: {detailData.Created}</p>
+                            <p>Status: {detailData.Status}</p>
                         </div>
                         <div className='main-detail-request'>
                             <h2 className='title-detail-request'>CAR BOOKING REQUEST</h2>
@@ -57,15 +77,15 @@ function DetailRequest(): JSX.Element {
                                 <Row className='row-detail-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Applicant <span className='required'>*</span></label>
-                                        <div>{Applicant}</div>
+                                        {/* <div>{detailData.SenderUser.FullName}</div> */}
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Department <span className='required'>*</span></label>
-                                        <div>{Department}</div>
+                                        {/* <div>{detailData.Department.Name}</div> */}
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>User <span className='required'>*</span></label>
-                                        <div>{User}</div>
+                                        {/* <div>{detailData.SenderUser.FullName}</div> */}
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Mobile <span className='required'>*</span></label>
@@ -136,6 +156,7 @@ function DetailRequest(): JSX.Element {
                 </div>
             )}
         </RequestLayout>
+
     );
 }
 
