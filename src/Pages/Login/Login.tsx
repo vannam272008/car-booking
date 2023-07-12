@@ -1,7 +1,7 @@
 import { Input, Button, Form } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
-import axios from "axios";
+import request from "../../Utils/request";
 import "./index.css";
 
 interface LoginValues {
@@ -14,23 +14,18 @@ const Login = () => {
 
   const handleLogIn = useCallback(
     (values: LoginValues) => {
-      fetch(`http://localhost:63642/api/user/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      })
-        .then((res) => res.json())
-        .then((data) => {
+      request
+        .post("/user/login", values)
+        .then((response) => {
+          const data = response.data;
           if (data) {
-            localStorage.setItem("accessToken", data?.Username);
-            localStorage.setItem("userId", data?.Password);
-            navigate("/request/carbooking")
+            localStorage.setItem("token", data?.token);
+            localStorage.setItem("Id", data?.Id);
+            navigate("/request/carbooking");
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
         });
     },
     [navigate]
