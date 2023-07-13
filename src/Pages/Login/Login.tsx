@@ -1,4 +1,4 @@
-import { Input, Button, Form } from "antd";
+import { Input, Button, Form, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import request from "../../Utils/request";
@@ -19,9 +19,12 @@ const Login = () => {
         .then((response) => {
           const data = response.data;
           if (data) {
-            localStorage.setItem("token", data?.token);
-            localStorage.setItem("Id", data?.Id);
-            navigate("/request/carbooking");
+            localStorage.setItem("Data", data?.Data);
+            if (data.Success == false) {
+              message.error(data.Message);
+            }else{
+              navigate("/request/carbooking");
+            }
           }
         })
         .catch((error) => {
@@ -51,9 +54,9 @@ const Login = () => {
           remember: true,
         }}
         autoComplete="off"
-        onFinish={handleLogIn} // Gọi handleLogIn khi form submit
+        onFinish={handleLogIn}
       >
-        {/* Các trường dữ liệu trong form */}
+
         <Form.Item
           label="Username"
           name="username"
@@ -80,7 +83,6 @@ const Login = () => {
           <Input.Password placeholder="Type your password" />
         </Form.Item>
 
-        {/* Nút đăng nhập */}
         <Form.Item
           wrapperCol={{
             offset: 8,

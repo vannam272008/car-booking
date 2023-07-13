@@ -61,20 +61,22 @@
   color: white;
 }
 
-.filter-form {
-  padding: 16px;
-  background-color: white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+.waiting-approval {
+  background-color: #2f85ef;
+  color: white;
 }
 
-.filter-form .ant-form-item {
-  margin-bottom: 8px;
+.approval {
+  background-color: #4ba747;
+  color: white;
 }
 
-.filter-form .ant-form-item-control-input {
-  display: flex;
+.rejected {
+  background-color: #ff3030;
+  color: white;
 }
 
-.filter-form .ant-form-item-control-input .ant-form-item-children-icon {
-  margin-left: auto;
+.canceled {
+  background-color: #7a7879;
+  color: white;
 }
