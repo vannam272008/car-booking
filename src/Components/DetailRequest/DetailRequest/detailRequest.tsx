@@ -6,6 +6,7 @@ import RequestLayout from '../../RequestLayout';
 import request from "../../../Utils/request";
 
 import "./detailRequest.css";
+import { useParams } from 'react-router';
 
 function DetailRequest(): JSX.Element {
 
@@ -18,24 +19,17 @@ function DetailRequest(): JSX.Element {
     // const Applicant: string = 'Bang Minh Nguyen';
     // const Department: string = 'Kiem thu Testing';
     // const User: string = 'bangnm@o365.vn, Developer';
-    const Mobile: string = '0382187648';
-    const CostCenter: string = '1001';
-    const Totalpassengers: string = '2';
-    const Usagetimefrom: string = '04/07/2023 09:36 AM - 04/07/2023 10:36 AM';
-    const Picktime: string = '04/07/2023 09:36 AM';
-    const Destination: string = 'Vung Tau';
-    const Picklocation: string = 'TP.Ho Chi Minh'
-    const Reason: string = 'Cong tac'
+    // const Mobile: string = '0382187648';
+    // const CostCenter: string = '1001';
+    // const Totalpassengers: string = '2';
+    // const Usagetimefrom: string = '04/07/2023 09:36 AM - 04/07/2023 10:36 AM';
+    // const Picktime: string = '04/07/2023 09:36 AM';
+    // const Destination: string = 'Vung Tau';
+    // const Picklocation: string = 'TP.Ho Chi Minh'
+    // const Reason: string = 'Cong tac'
 
-    //Setup select-adio Yes or No
-    const [value, setValue] = useState(2);
+    //Get Api
     const [detailData, setDetailData] = useState<any>({});
-
-
-    const onChange = (e: RadioChangeEvent) => {
-        console.log('radio checked', e.target.value);
-        setValue(e.target.value);
-    };
 
     //Data Approver
     const Approver1: string = 'Approver 1';
@@ -43,9 +37,13 @@ function DetailRequest(): JSX.Element {
 
     const profile = false;
 
+    const { requestId } = useParams();
+
+    const [value, setValue] = useState(!!detailData.ApplyNote);
+
     useEffect(() => {
         const getDetailRequest = async () => {
-            const endpoint = "request/Id=64ff041d-d67c-4a35-b6e9-0033134e4d53";
+            const endpoint = "request/Id=" + requestId;
             const response = await request.get(endpoint).then((res) => {
                 setDetailData(res.data);
             }
@@ -55,10 +53,14 @@ function DetailRequest(): JSX.Element {
 
     }, [])
 
-    console.log(detailData);
+    //Setup select-adio Yes or No
 
+    const onChange = (e: RadioChangeEvent) => {
+        console.log('radio checked', e.target.value);
+        setValue(e.target.value);
+    };
 
-
+    // console.log(detailData);
 
     return (
         <RequestLayout profile={profile}>
@@ -77,52 +79,52 @@ function DetailRequest(): JSX.Element {
                                 <Row className='row-detail-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Applicant <span className='required'>*</span></label>
-                                        {/* <div>{detailData.SenderUser.FullName}</div> */}
+                                        <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Department <span className='required'>*</span></label>
-                                        {/* <div>{detailData.Department.Name}</div> */}
+                                        <div>{detailData.Department ? detailData.Department.Name : ""}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>User <span className='required'>*</span></label>
-                                        {/* <div>{detailData.SenderUser.FullName}</div> */}
+                                        <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""} </div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Mobile <span className='required'>*</span></label>
-                                        <div>{Mobile}</div>
+                                        <div>{detailData.Mobile}</div>
                                     </Col>
                                 </Row>
                                 <Row className='row-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Cost Center <span className='required'>*</span></label>
-                                        <div>{CostCenter}</div>
+                                        <div>{detailData.CostCenter}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Total passengers <span className='required'>*</span></label>
-                                        <div>{Totalpassengers}</div>
+                                        <div>{detailData.TotalPassengers}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Usage time from <span className='required'>*</span></label>
-                                        <div>{Usagetimefrom}</div>
+                                        <div>{detailData.UsageFrom}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'></Col>
                                 </Row>
                                 <Row className='row-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick time <span className='required'>*</span></label>
-                                        <div>{Picktime}</div>
+                                        <div>{detailData.PickTime}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick location <span className='required'>*</span></label>
-                                        <div>{Picklocation}</div>
+                                        <div>{detailData.PickLocation}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Destination <span className='required'>*</span></label>
-                                        <div>{Destination}</div>
+                                        <div>{detailData.Destination}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Reason <span className='required'>*</span></label>
-                                        <div>{Reason}</div>
+                                        <div>{detailData.Reason}</div>
                                     </Col>
                                 </Row>
                             </div>
@@ -130,8 +132,8 @@ function DetailRequest(): JSX.Element {
                         <div className='attention-detail-request'>
                             <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                             <Radio.Group onChange={onChange} value={value}>
-                                <Radio value={1}>Yes</Radio>
-                                <Radio value={2}>No</Radio>
+                                <Radio value={true}>Yes</Radio>
+                                <Radio value={false}>No</Radio>
                             </Radio.Group>
                         </div>
                         <div className='Attachment'>
