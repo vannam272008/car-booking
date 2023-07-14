@@ -13,6 +13,7 @@ import {
     EllipsisOutlined
 } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { useNavigate } from 'react-router';
 
 function MenuRequest(): JSX.Element {
 
@@ -76,10 +77,15 @@ function MenuRequest(): JSX.Element {
         setIsModalOpenForward(false);
     };
 
+    const navigate = useNavigate();
+
+    const handleReturn = () => {
+        navigate("/request/carbooking");
+    }
     return (
         <div>
             <Menu mode="horizontal" className='fixed-menu'>
-                <Menu.Item key="return" icon={<ArrowLeftOutlined />}>
+                <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     Return
                 </Menu.Item>
                 <Menu.Item key="download" icon={<FilePdfOutlined />}>
