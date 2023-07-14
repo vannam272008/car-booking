@@ -10,6 +10,7 @@ import {
   DatePicker,
   Modal,
   Button,
+  Select,
 } from "antd";
 import { useState, useEffect } from "react";
 import {
@@ -25,6 +26,7 @@ import {
 import "./profile.css";
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { TabsProps } from 'antd';
 
 const { Title } = Typography;
 
@@ -48,7 +50,6 @@ const ContentProfile: React.FC = () => {
   //avatar
   const [imageUrl, setImageUrl] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  // const [preview,setPreview] = useState(false);
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
@@ -67,27 +68,8 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-  // avatar
-  // const handleChange = async (file: UploadFile) => {
-  //   if (!file.url) {
-  //     file.url = await getBase64(file.originFileObj as RcFile);
-  //   }
-  //   setImageUrl(file.url || (file.preview as string));
 
-  // };
-
-  //Edit contract
-  // const handleEditContract = () =>{
-  //   const randomNumber = parseInt(Math.random() );
-  //   const newContract = {
-  //     id: randomNumber,
-  //     contract_type:"" ,
-  //   };
-  //   setEdit_Contract(true)
-  //   // console.log(randomNumber)
-  // }
-
-  const handleDeleteContract = () => { };
+  const handleDeleteContract = () => {};
 
   const onEditInfo = () => {
     setIsEditing(true);
@@ -557,7 +539,7 @@ const ContentProfile: React.FC = () => {
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => { }} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
       dataIndex: "action",
     },
   ];
@@ -1041,7 +1023,7 @@ const ContentProfile: React.FC = () => {
       Subject: edit_contract ? <Input /> : null,
       Department: edit_contract ? <Input /> : null,
       Note: edit_contract ? <Input /> : null,
-      action: edit_contract ? <DeleteFilled onClick={() => { }} /> : null,
+      action: edit_contract ? <DeleteFilled onClick={() => {}} /> : null,
     },
   ];
 
@@ -1074,7 +1056,7 @@ const ContentProfile: React.FC = () => {
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => { }} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
       dataIndex: "action",
     },
   ];
@@ -1294,8 +1276,32 @@ const ContentProfile: React.FC = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+  // tab signature
+  const signature_tab : TabsProps['items']= [
+    {
+      key: "1",
+      label: "Type signature",
+      children:(
+      <>
+      <div>
+        <strong>Confirm your Name</strong>
+        <Input placeholder="Confirm your name"/>
+        <strong>Signature Style</strong>
+        <Select placeholder="Choose your signature" style={{ width: '100%' }}/>
+      </div>
+      </>
+      
+      ) ,
+    },
+    {
+      key: "2",
+      label: "Upload your own",
+      children: "dragger upload file",
+    },
+];
 
-  let label = [
+
+  let label: TabsProps['items']= [
     {
       key: "1",
       label: <strong>Overview</strong>,
@@ -1344,7 +1350,10 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: (
+      children: isEditing?(
+        <Tabs type="card" items={signature_tab} />
+      ):(
+        
         <div
           className="QR_signature"
           style={{
@@ -1354,6 +1363,7 @@ const ContentProfile: React.FC = () => {
             padding: "50px 50px 50px 50px",
           }}
         >
+          
           <QRCodeCanvas
             style={{ height: "200px", width: "200px" }}
             value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
@@ -1362,10 +1372,10 @@ const ContentProfile: React.FC = () => {
           <p>{currentTime.toLocaleString()}</p>
           <h1 style={{ fontFamily: "Monospace" }}>Nguyễn Minh Bằng</h1>
         </div>
-      ),
+      )
     },
   ];
-  // console.log(imageUrl)
+  
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
