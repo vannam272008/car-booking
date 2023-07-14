@@ -25,7 +25,6 @@ import {
 import "./profile.css";
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
-import { TRUE } from "sass";
 
 const { Title } = Typography;
 
