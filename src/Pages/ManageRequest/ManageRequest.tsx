@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import "./index.css";
-import { Button } from 'antd';
-import { Table } from 'antd';
+import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import RequestLayout from '../../Components/RequestLayout';
 import request from "../../Utils/request";
@@ -89,18 +88,28 @@ const ManageRequest: React.FC = () => {
                         className = 'rejected';
                         break;
                       case 'Approved':
-                        className = 'approval';
+                        className = 'approved';
                         break;
                       case 'Waiting for approval':
                         className = 'waiting-approval';
                         break;
+                      case 'Done':
+                        className = 'done';
+                        break;
                       case 'Canceled':
                         className = 'canceled';
+                        break;
+                      case 'Draf':
+                        className = 'draft';
                         break;
                       default:
                         className = '';
                     }
-                    return <div className={className}>{changeFormatDate(text)}</div>;
+                    return (
+                      <Tooltip title={record.Status} className="small-tooltip" color="black">
+                        <div className={className}>{changeFormatDate(text)}</div>
+                      </Tooltip>
+                    );
                   },
                 },
                 {
