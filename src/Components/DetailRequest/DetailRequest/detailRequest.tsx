@@ -30,6 +30,7 @@ function DetailRequest(): JSX.Element {
 
     //Get Api
     const [detailData, setDetailData] = useState<any>({});
+    const [attachmentData, setAttachmentData] = useState<any>({})
 
     //Data Approver
     const Approver1: string = 'Approver 1';
@@ -43,18 +44,24 @@ function DetailRequest(): JSX.Element {
 
     useEffect(() => {
         const getDetailRequest = async () => {
-            const endpoint = "request/Id=" + requestId;
+            const endpoint = "/request/Id=" + requestId;
             const response = await request.get(endpoint).then((res) => {
-                setDetailData(res.data);
+                setDetailData(res.data.Data);
             }
             );
         }
+        const getAttachmentsRequest = async () => {
+            const endpoint = "/request/workflow/requestId=" + requestId;
+            const response = await request.get(endpoint).then((res) => {
+                setAttachmentData(res.data.Data);
+            }
+            );
+        }
+        getAttachmentsRequest();
         getDetailRequest();
 
     }, [])
-
     //Setup select-adio Yes or No
-
     const onChange = (e: RadioChangeEvent) => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
@@ -107,7 +114,10 @@ function DetailRequest(): JSX.Element {
                                         <label>Usage time from <span className='required'>*</span></label>
                                         <div>{detailData.UsageFrom}</div>
                                     </Col>
-                                    <Col span={6} className='col-detail-request'></Col>
+                                    <Col span={6} className='col-detail-request'>
+                                        <label>Usage time to <span className='required'>*</span></label>
+                                        <div>{detailData.UsageTo}</div>
+                                    </Col>
                                 </Row>
                                 <Row className='row-request'>
                                     <Col span={6} className='col-detail-request'>

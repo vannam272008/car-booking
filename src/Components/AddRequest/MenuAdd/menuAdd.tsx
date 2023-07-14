@@ -52,7 +52,7 @@ function MenuAdd({ formData }: MenuAddProps): JSX.Element {
             });
     }, [formData, navigate]);
 
-    console.log(formData);
+    // console.log(formData);
 
     return (
         <div>
