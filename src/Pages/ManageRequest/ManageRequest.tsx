@@ -16,7 +16,7 @@ interface RequestType {
   createdDate: string;
   from: string;
   to: string;
-  Status: string; 
+  Status: string;
 }
 
 const ManageRequest: React.FC = () => {
@@ -28,7 +28,7 @@ const ManageRequest: React.FC = () => {
     setLoading(true);
     try {
       const response = await request.get('/request/get-all?page=1&limit=8');
-      setRequestData(response.data);
+      setRequestData(response.data.Data);
       setLoading(false);
 
 
