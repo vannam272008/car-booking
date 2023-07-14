@@ -5,8 +5,8 @@ import { Table } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import RequestLayout from '../../Components/RequestLayout';
 import request from "../../Utils/request";
-import { changeFormatDate } from '../../Utils/formatDate';
 import FilterDropdown from './FilterDropdown/FilterDropdown';
+import { changeFormatDate } from '../../Utils/formatDate';
 
 interface RequestType {
   requestCode: string;
@@ -16,7 +16,7 @@ interface RequestType {
   createdDate: string;
   from: string;
   to: string;
-  Status: string; 
+  Status: string;
 }
 
 const ManageRequest: React.FC = () => {
@@ -28,7 +28,7 @@ const ManageRequest: React.FC = () => {
     setLoading(true);
     try {
       const response = await request.get('/request/get-all?page=1&limit=8');
-      setRequestData(response.data);
+      setRequestData(response.data.Data);
       setLoading(false);
 
 
