@@ -256,6 +256,7 @@ const ContentProfile: React.FC = () => {
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
+          className="profile-birth-day-datepicker"
           value={info.birth_day}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
