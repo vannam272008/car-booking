@@ -88,13 +88,13 @@ function MenuRequest(): JSX.Element {
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                     Delete
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4 style={{ marginBottom: '10px', marginTop: '20px', textAlign: 'center' }}>Are you sure ?</h4>} open={isModalOpenDelete} footer={
-                    <div style={{ textAlign: 'center' }}>
+                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
+                    <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>Cancel</Button>
                     </div>
                 }>
-                    <Checkbox style={{ marginTop: '10px', marginBottom: '10px' }} defaultChecked onChange={onChangeCheckbox}>Delete approval tasks related to this request.</Checkbox>
+                    <Checkbox className='menu-btn-delete-checkbox' defaultChecked onChange={onChangeCheckbox}>Delete approval tasks related to this request.</Checkbox>
                 </Modal>
                 <Menu.Item key="progress" icon={<RiseOutlined />}>
                     Progress
@@ -108,7 +108,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Select style={{ width: '100%' }}>
+                    <Select className='fixed-width-object'>
                         <Option value="1">bangnm@o365.vn, Developer</Option>
                         <Option value="2">bu.test5@o365.vn, Tài xế</Option>
                     </Select>
@@ -122,7 +122,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Input style={{ height: '114px' }} />
+                    <Input className='menu-after-btn-input' />
                 </Modal>
                 <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
                     Reject
@@ -133,7 +133,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Input style={{ height: '114px' }} />
+                    <Input className='menu-after-btn-input' />
                 </Modal>
                 <Menu.Item onClick={showModalForward} key="forward" icon={<DeliveredProcedureOutlined />}>
                     Forward
@@ -144,11 +144,11 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Select style={{ width: '100%' }}>
+                    <Select className='fixed-width-object'>
                         <Option value="1">bangnm@o365.vn, Developer</Option>
                         <Option value="2">bu.test5@o365.vn, Tài xế</Option>
                     </Select>
-                    <Input style={{ height: '54px', marginTop: '15px' }}></Input>
+                    <Input className='menu-after-btn-forward'></Input>
                 </Modal>
                 <Menu.Item key="ellipsis" icon={<EllipsisOutlined />}>
                 </Menu.Item>

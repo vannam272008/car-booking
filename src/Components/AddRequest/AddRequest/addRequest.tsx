@@ -244,11 +244,11 @@ function AddRequest(): JSX.Element {
                                                 initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
                                             >
                                                 <DatePicker
+                                                    className='.add-request-width-formitem'
                                                     value={dayjs(formData.UsageFrom)}
                                                     onChange={(value) => handleDatePicker(value, 'usageFrom')}
                                                     showTime
                                                     placeholder='From date time'
-                                                    style={{ width: '100%' }}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -267,11 +267,12 @@ function AddRequest(): JSX.Element {
                                                 initialValue={futureTime} // Giá trị mặc định là thời gian sau 24 giờ
                                             >
                                                 <DatePicker
+                                                    className='add-request-width-formitem'
                                                     value={dayjs(formData.UsageTo)}
                                                     onChange={(value) => handleDatePicker(value, 'usageTo')}
                                                     showTime
                                                     placeholder='To date time'
-                                                    style={{ width: '100%' }} />
+                                                />
                                             </Form.Item>
                                         </Col>
                                     </Row>
@@ -291,10 +292,10 @@ function AddRequest(): JSX.Element {
                                                 initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
                                             >
                                                 <DatePicker
+                                                    className='.add-request-width-formitem'
                                                     value={dayjs(formData.PickTime)}
                                                     onChange={(value) => handleDatePicker(value, 'pickTime')}
                                                     showTime placeholder='Pick time'
-                                                    style={{ width: '100%' }}
                                                 />
                                             </Form.Item>
                                         </Col>
