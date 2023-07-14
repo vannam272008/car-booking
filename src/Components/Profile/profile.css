@@ -24,6 +24,12 @@
 .Upload-Avatar{
     margin : -150px 0px 0px -40px;
 }
-/* .avatar{
-    z-index: 1;    
-} */
+.content-profile{
+    width: 100%;
+    height: calc(100vh - 100px);
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-top: 50px;
+    padding-left: 15px;
+    margin-bottom: 50px;
+}
