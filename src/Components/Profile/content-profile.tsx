@@ -87,7 +87,7 @@ const ContentProfile: React.FC = () => {
   //   // console.log(randomNumber)
   // }
 
-  const handleDeleteContract = () => {};
+  const handleDeleteContract = () => { };
 
   const onEditInfo = () => {
     setIsEditing(true);
@@ -557,7 +557,7 @@ const ContentProfile: React.FC = () => {
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => { }} /> : null,
       dataIndex: "action",
     },
   ];
@@ -1041,7 +1041,7 @@ const ContentProfile: React.FC = () => {
       Subject: edit_contract ? <Input /> : null,
       Department: edit_contract ? <Input /> : null,
       Note: edit_contract ? <Input /> : null,
-      action: edit_contract ? <DeleteFilled onClick={() => {}} /> : null,
+      action: edit_contract ? <DeleteFilled onClick={() => { }} /> : null,
     },
   ];
 
@@ -1074,7 +1074,7 @@ const ContentProfile: React.FC = () => {
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => { }} /> : null,
       dataIndex: "action",
     },
   ];
@@ -1393,7 +1393,7 @@ const ContentProfile: React.FC = () => {
         <span style={{ color: "#8894A1", fontSize: "15px" }}>Return</span>
       </div>
       <div className="info-user">
-        <span style={{ margin: "120px -50px 0px 0px", zIndex: 1}}>
+        <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
           <Button
             className="btn-camera"
             size="middle"

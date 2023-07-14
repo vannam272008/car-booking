@@ -7,6 +7,7 @@ import request from "../../../Utils/request";
 
 import "./detailRequest.css";
 import { useParams } from 'react-router';
+import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 
 function DetailRequest(): JSX.Element {
 
@@ -53,7 +54,7 @@ function DetailRequest(): JSX.Element {
         const getAttachmentsRequest = async () => {
             const endpoint = "/request/workflow/requestId=" + requestId;
             const response = await request.get(endpoint).then((res) => {
-                setAttachmentData(res.data.Data);
+                setAttachmentData(res.data);
             }
             );
         }
@@ -67,7 +68,7 @@ function DetailRequest(): JSX.Element {
         setValue(e.target.value);
     };
 
-    // console.log(detailData);
+    console.log(attachmentData);
 
     return (
         <RequestLayout profile={profile}>
@@ -112,17 +113,17 @@ function DetailRequest(): JSX.Element {
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Usage time from <span className='required'>*</span></label>
-                                        <div>{detailData.UsageFrom}</div>
+                                        <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Usage time to <span className='required'>*</span></label>
-                                        <div>{detailData.UsageTo}</div>
+                                        <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
                                     </Col>
                                 </Row>
                                 <Row className='row-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick time <span className='required'>*</span></label>
-                                        <div>{detailData.PickTime}</div>
+                                        <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick location <span className='required'>*</span></label>

@@ -36,5 +36,26 @@
 .custom-menu .ant-select {
   margin-bottom: 15px;
 }
-
+.menu-title-alert {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+}
+.menu-btn-delete-checkbox{
+    margin-top: '10px'; 
+    margin-bottom: '10px'; 
+}
+.fixed-width-object{
+    width: 100%;
+}
+.menu-after-btn-input{
+    height: 114px;
+}
+.menu-after-btn-forward{
+    height: 54px;
+    margin-top: 15px;
+}
+.menu-btn-delete{
+    text-align: center;
+}
   

@@ -13,6 +13,7 @@ import {
     EllipsisOutlined
 } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { useNavigate } from 'react-router';
 
 function MenuRequest(): JSX.Element {
 
@@ -76,10 +77,15 @@ function MenuRequest(): JSX.Element {
         setIsModalOpenForward(false);
     };
 
+    const navigate = useNavigate();
+
+    const handleReturn = () => {
+        navigate("/request/carbooking");
+    }
     return (
         <div>
             <Menu mode="horizontal" className='fixed-menu'>
-                <Menu.Item key="return" icon={<ArrowLeftOutlined />}>
+                <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     Return
                 </Menu.Item>
                 <Menu.Item key="download" icon={<FilePdfOutlined />}>
@@ -88,13 +94,13 @@ function MenuRequest(): JSX.Element {
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                     Delete
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4 style={{ marginBottom: '10px', marginTop: '20px', textAlign: 'center' }}>Are you sure ?</h4>} open={isModalOpenDelete} footer={
-                    <div style={{ textAlign: 'center' }}>
+                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
+                    <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>Cancel</Button>
                     </div>
                 }>
-                    <Checkbox style={{ marginTop: '10px', marginBottom: '10px' }} defaultChecked onChange={onChangeCheckbox}>Delete approval tasks related to this request.</Checkbox>
+                    <Checkbox className='menu-btn-delete-checkbox' defaultChecked onChange={onChangeCheckbox}>Delete approval tasks related to this request.</Checkbox>
                 </Modal>
                 <Menu.Item key="progress" icon={<RiseOutlined />}>
                     Progress
@@ -108,7 +114,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Select style={{ width: '100%' }}>
+                    <Select className='fixed-width-object'>
                         <Option value="1">bangnm@o365.vn, Developer</Option>
                         <Option value="2">bu.test5@o365.vn, Tài xế</Option>
                     </Select>
@@ -122,7 +128,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Input style={{ height: '114px' }} />
+                    <Input className='menu-after-btn-input' />
                 </Modal>
                 <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
                     Reject
@@ -133,7 +139,7 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Input style={{ height: '114px' }} />
+                    <Input className='menu-after-btn-input' />
                 </Modal>
                 <Menu.Item onClick={showModalForward} key="forward" icon={<DeliveredProcedureOutlined />}>
                     Forward
@@ -144,11 +150,11 @@ function MenuRequest(): JSX.Element {
                         <Button onClick={handleClose}>Close</Button>
                     </div>
                 }>
-                    <Select style={{ width: '100%' }}>
+                    <Select className='fixed-width-object'>
                         <Option value="1">bangnm@o365.vn, Developer</Option>
                         <Option value="2">bu.test5@o365.vn, Tài xế</Option>
                     </Select>
-                    <Input style={{ height: '54px', marginTop: '15px' }}></Input>
+                    <Input className='menu-after-btn-forward'></Input>
                 </Modal>
                 <Menu.Item key="ellipsis" icon={<EllipsisOutlined />}>
                 </Menu.Item>
