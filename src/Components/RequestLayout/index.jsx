@@ -20,7 +20,7 @@ const RequestLayout = ({ profile, children }) => {
             <Content>
                 <Layout style={{ backgroundColor: colorBgContainer }}>
                     <AppSider profile={profile} />
-                    <Layout style={{ backgroundColor: colorBgContainer }}>
+                    <Layout style={{ backgroundColor: colorBgContainer}}>
                         <Content style={{ minHeight: 280 }}>
                             {children()}
                         </Content>

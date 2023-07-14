@@ -18,8 +18,11 @@ const Login = () => {
         .post("/user/login", values)
         .then((response) => {
           const data = response.data;
+          console.log(data);
+          
+          console.log(data);
           if (data) {
-            localStorage.setItem("Data", data?.Data);
+            localStorage.setItem("Token", data?.Data);
             if (data.Success == false) {
               message.error(data.Message);
             }else{

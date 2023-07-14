@@ -64,19 +64,35 @@
 .waiting-approval {
   background-color: #2f85ef;
   color: white;
+  text-align: center;
 }
 
-.approval {
+.approved {
   background-color: #4ba747;
   color: white;
+  text-align: center;
 }
 
 .rejected {
   background-color: #ff3030;
   color: white;
+  text-align: center;
 }
 
 .canceled {
   background-color: #7a7879;
   color: white;
+  text-align: center;
+}
+
+.draft {
+  background-color: #f5ad5f;
+  color: white;
+  text-align: center;
+}
+
+.done {
+  background-color: #2a5b28;
+  color: white;
+  text-align: center;
 }
