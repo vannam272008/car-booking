@@ -4,7 +4,7 @@ import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import RequestLayout from '../../Components/RequestLayout';
 import request from "../../Utils/request";
-import FilterDropdown from './FilterDropdown/FilterDropdown';
+import FilterDropdown from '../ManageRequest/FilterDropdown/FilterDropdown';
 import { changeFormatDate } from '../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +20,7 @@ interface RequestType {
   Status: string;
 }
 
-const ManageRequest: React.FC = () => {
+const SendToMe: React.FC = () => {
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const ManageRequest: React.FC = () => {
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = ``;
       const response = await request.get(url);
 
       setRequestData(response.data.Data);
@@ -151,4 +151,4 @@ const ManageRequest: React.FC = () => {
   )
 }
 
-export default ManageRequest
+export default SendToMe
