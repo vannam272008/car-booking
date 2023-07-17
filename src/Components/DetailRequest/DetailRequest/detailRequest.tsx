@@ -32,10 +32,11 @@ function DetailRequest(): JSX.Element {
     //Get Api
     const [detailData, setDetailData] = useState<any>({});
     const [attachmentData, setAttachmentData] = useState<any>({})
+    const [workflowData, setWorkflowData] = useState<any>({})
 
     //Data Approver
-    const Approver1: string = 'Approver 1';
-    const Approver2: string = 'Approver 2';
+    // const Approver1: string = 'Approver 1';
+    // const Approver2: string = 'Approver 2';
 
     const profile = false;
 
@@ -52,12 +53,20 @@ function DetailRequest(): JSX.Element {
             );
         }
         const getAttachmentsRequest = async () => {
-            const endpoint = "/request/workflow/requestId=" + requestId;
+            const endpoint = "/request/attachment/requestId=" + requestId;
             const response = await request.get(endpoint).then((res) => {
-                setAttachmentData(res.data);
+                setAttachmentData(res.data.Data);
             }
             );
         }
+        const getWokflowRequest = async () => {
+            const endpoint = "/request/workflow/requestId=" + requestId;
+            const response = await request.get(endpoint).then((res) => {
+                setWorkflowData(res.data.Data);
+            }
+            );
+        }
+        getWokflowRequest();
         getAttachmentsRequest();
         getDetailRequest();
 
@@ -68,7 +77,8 @@ function DetailRequest(): JSX.Element {
         setValue(e.target.value);
     };
 
-    console.log(attachmentData);
+    console.log(workflowData);
+
 
     return (
         <RequestLayout profile={profile}>
@@ -149,19 +159,24 @@ function DetailRequest(): JSX.Element {
                         </div>
                         <div className='Attachment'>
                             <b>Attachment(s)</b>
+                            {/* <div>
+                                <a href={attachmentData.Path}>
+                                    Open File
+                                </a>
+                            </div> */}
                         </div>
                         <div className='list-approvers'>
                             <p>Approvers:</p>
                             <Row>
-                                <Col span={8} className='approver'>
-                                    <label>Approver</label>
-                                    <div>{Approver1}</div>
-                                </Col>
-                                <Col span={8} className='approver'>
-                                    <label>Pho phong IT</label>
-                                    <div>{Approver2}</div>
-                                </Col>
-                                <Col span={8}></Col>
+                                {Array.isArray(workflowData) ? (
+                                    workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
+                                        <Col key={approverData.Id} span={8} className='approver'>
+                                            {approverData.User.FullName}
+                                        </Col>
+                                    ))
+                                ) : (
+                                    <div>No workflow data available.</div>
+                                )}
                             </Row>
                         </div>
                         <Comment />
@@ -169,7 +184,6 @@ function DetailRequest(): JSX.Element {
                 </div>
             )}
         </RequestLayout>
-
     );
 }
 

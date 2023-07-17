@@ -1,7 +1,9 @@
 import { CommentOutlined, UserOutlined, UploadOutlined, SelectOutlined } from '@ant-design/icons';
 import { Input, Button, Avatar, Row, Col, Upload, } from 'antd';
 import './comment.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import request from "../../../Utils/request";
+import { useParams } from 'react-router';
 
 interface CommentItem {
     author: string;
@@ -11,6 +13,10 @@ interface CommentItem {
 }
 
 function Comment(): JSX.Element {
+
+    const [detailData, setDetailData] = useState<any>({});
+
+    const { requestId } = useParams();
 
     const [newComment, setNewComment] = useState('');
 
@@ -23,13 +29,25 @@ function Comment(): JSX.Element {
     const [comments, setComments] = useState<CommentItem[]>([
         {
             author: 'Bang Minh Nguyen',
-            content: 'Submit the request 2023OPS-CAR-0705-001 for approval',
+            content: '',
             datetime: '04/07/2023 09:33 AM',
             id: '04/07/2023 09:33 AM',
         },
     ]);
 
     const [replyComments, setReplyComments] = useState<CommentItem[]>([]);
+
+    useEffect(() => {
+        const getDetailRequest = async () => {
+            const endpoint = "/request/Id=" + requestId;
+            const response = await request.get(endpoint).then((res) => {
+                setDetailData(res.data.Data);
+            }
+            );
+        }
+        getDetailRequest();
+    }, [])
+
 
     const handleSaveComment = () => {
         if (newComment) {
@@ -112,7 +130,7 @@ function Comment(): JSX.Element {
                         <Col span={18}>
                             <span className="comment-author">{comment.author}</span>
                             <span className="comment-date">{comment.datetime}</span>
-                            <div className="comment-content">{comment.content}</div>
+                            <div className="comment-content"><span>Submit the request </span>{detailData.RequestCode}<span> for approval</span></div>
                         </Col>
                         {!showReplyForm && (
                             <Col span={2} className='comment-reply'>
