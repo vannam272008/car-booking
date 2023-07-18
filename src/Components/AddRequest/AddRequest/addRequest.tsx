@@ -19,13 +19,13 @@ function AddRequest(): JSX.Element {
     const updatefutureTime = changeFormatDatePostRequest(futureTime);
     const updateMoment = changeFormatDatePostRequest(usageMoment);
 
-    const [initialValue, setInitialValue] = useState('Bang Minh Nguyen');
+    // const [initialValue, setInitialValue] = useState('Bang Minh Nguyen');
 
 
     const [formData, setFormData] = useState({
-        SenderId: "005DDF64-B5FE-45CD-896F-84755E572414",
-        DepartmentId: "C35112A9-52CD-4323-8511-20ABF7964A1F",
-        ReceiverId: "2F271114-5CC5-4728-A56A-A39CDE018F2B",
+        SenderId: "5260A4CA-52A9-4CFB-B70C-021FB9491312",
+        DepartmentId: "E0187AD8-0766-4300-B937-25B5F778A8B1",
+        ReceiverId: "39EF11A8-28F1-4F90-A796-45F9CFB06491",
         Mobile: null as string | null,
         CostCenter: null as string | null,
         TotalPassengers: null as string | null,
@@ -47,9 +47,9 @@ function AddRequest(): JSX.Element {
             [name]: value,
         }));
 
-        if (name === 'applicant') {
-            setInitialValue(value);
-        }
+        // if (name === 'applicant') {
+        //     setInitialValue(value);
+        // }
     };
 
     const handleSelectChange = (value: string, field: string) => {
@@ -62,16 +62,15 @@ function AddRequest(): JSX.Element {
     const handleDatePicker = (value: Dayjs | null, field: string) => {
         if (value) {
             const formattedValue = value.format('YYYY-MM-DD HH:mm:ss');
-            const updateformattedValue = changeFormatDatePostRequest(formattedValue);
             setFormData((prevFormData) => ({
                 ...prevFormData,
-                [field]: updateformattedValue,
+                [field]: formattedValue,
             }));
         }
     };
 
 
-    // console.log(formData);
+    console.log(formData);
 
 
     return (
@@ -91,23 +90,24 @@ function AddRequest(): JSX.Element {
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Applicant"
-                                                name="Applicant"
+                                                name="SenderId"
                                                 rules={[
                                                     {
                                                         required: true,
+                                                        message: 'Applicant is require'
                                                     },
                                                 ]}
                                                 labelCol={{ span: 24 }}
-                                                initialValue={initialValue}
+                                                initialValue={'Bang Minh Nguyen'}
                                             >
-                                                <Input type='text' name='applicant' value={formData.SenderId} readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
+                                                <Input type='text' name='SenderId' value={formData.SenderId} readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                             </Form.Item>
                                         </Col>
                                         {/*Request Department*/}
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Dapartment"
-                                                name="Department"
+                                                name="DepartmentId"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -117,10 +117,9 @@ function AddRequest(): JSX.Element {
                                                 initialValue="1"
                                                 labelCol={{ span: 24 }}
                                             >
-
                                                 <Select
                                                     value={formData.DepartmentId}
-                                                    onChange={(value) => handleSelectChange(value, 'department')}
+                                                    onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                     showSearch
                                                     optionFilterProp="children"
                                                     filterOption={(inputValue, option) =>
@@ -140,7 +139,7 @@ function AddRequest(): JSX.Element {
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="User"
-                                                name="User"
+                                                name="ReceiverId"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -152,7 +151,7 @@ function AddRequest(): JSX.Element {
                                             >
                                                 <Select
                                                     value={formData.SenderId}
-                                                    onChange={(value) => handleSelectChange(value, 'senderUser')}
+                                                    onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                     showSearch
                                                     optionFilterProp="children"
                                                     filterOption={(inputValue, option) =>
@@ -234,7 +233,7 @@ function AddRequest(): JSX.Element {
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Usage time from"
-                                                name="Usagetimefrom"
+                                                name="UsageFrom"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -245,11 +244,11 @@ function AddRequest(): JSX.Element {
                                                 initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
                                             >
                                                 <DatePicker
+                                                    className='add-request-width-formitem'
                                                     value={dayjs(formData.UsageFrom)}
-                                                    onChange={(value) => handleDatePicker(value, 'usageFrom')}
+                                                    onChange={(value) => handleDatePicker(value, 'UsageFrom')}
                                                     showTime
                                                     placeholder='From date time'
-                                                    style={{ width: '100%' }}
                                                 />
                                             </Form.Item>
                                         </Col>
@@ -257,7 +256,7 @@ function AddRequest(): JSX.Element {
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Usage time to"
-                                                name="Usagetimeto"
+                                                name="UsageTo"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -268,15 +267,17 @@ function AddRequest(): JSX.Element {
                                                 initialValue={futureTime} // Giá trị mặc định là thời gian sau 24 giờ
                                             >
                                                 <DatePicker
+                                                    className='add-request-width-formitem'
                                                     value={dayjs(formData.UsageTo)}
-                                                    onChange={(value) => handleDatePicker(value, 'usageTo')}
+                                                    onChange={(value) => handleDatePicker(value, 'UsageTo')}
                                                     showTime
                                                     placeholder='To date time'
-                                                    style={{ width: '100%' }} />
+                                                />
                                             </Form.Item>
                                         </Col>
                                     </Row>
                                     <Row className='row-request'>
+                                        {/*Request Pick time*/}
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Pick time"
@@ -291,13 +292,15 @@ function AddRequest(): JSX.Element {
                                                 initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
                                             >
                                                 <DatePicker
+                                                    className='.add-request-width-formitem'
                                                     value={dayjs(formData.PickTime)}
-                                                    onChange={(value) => handleDatePicker(value, 'pickTime')}
-                                                    showTime placeholder='Pick time'
-                                                    style={{ width: '100%' }}
+                                                    onChange={(value) => handleDatePicker(value, 'PickTime')}
+                                                    showTime
+                                                    placeholder='Pick time'
                                                 />
                                             </Form.Item>
                                         </Col>
+                                        {/*Request Pick location*/}
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Pick location"
@@ -313,6 +316,7 @@ function AddRequest(): JSX.Element {
                                                 <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                             </Form.Item>
                                         </Col>
+                                        {/*Request Destination */}
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Destination "
@@ -329,6 +333,7 @@ function AddRequest(): JSX.Element {
                                                 <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                             </Form.Item>
                                         </Col>
+                                        {/*Request Reason*/}
                                         <Col span={6} className='col-request'>
                                             <Form.Item
                                                 label="Reason"

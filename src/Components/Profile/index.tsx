@@ -7,7 +7,7 @@ const Profile = () => {
     return (
         <RequestLayout profile={profile}>
             {() => (
-                <ContentProfile/>
+               <ContentProfile/>
             )}
         </RequestLayout>
     )

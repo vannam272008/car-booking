@@ -7,6 +7,7 @@ import request from "../../../Utils/request";
 
 import "./detailRequest.css";
 import { useParams } from 'react-router';
+import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 
 function DetailRequest(): JSX.Element {
 
@@ -30,10 +31,12 @@ function DetailRequest(): JSX.Element {
 
     //Get Api
     const [detailData, setDetailData] = useState<any>({});
+    const [attachmentData, setAttachmentData] = useState<any>({})
+    const [workflowData, setWorkflowData] = useState<any>({})
 
     //Data Approver
-    const Approver1: string = 'Approver 1';
-    const Approver2: string = 'Approver 2';
+    // const Approver1: string = 'Approver 1';
+    // const Approver2: string = 'Approver 2';
 
     const profile = false;
 
@@ -43,24 +46,39 @@ function DetailRequest(): JSX.Element {
 
     useEffect(() => {
         const getDetailRequest = async () => {
-            const endpoint = "request/Id=" + requestId;
+            const endpoint = "/request/Id=" + requestId;
             const response = await request.get(endpoint).then((res) => {
-                setDetailData(res.data);
+                setDetailData(res.data.Data);
             }
             );
         }
+        const getAttachmentsRequest = async () => {
+            const endpoint = "/request/attachment/requestId=" + requestId;
+            const response = await request.get(endpoint).then((res) => {
+                setAttachmentData(res.data.Data);
+            }
+            );
+        }
+        const getWokflowRequest = async () => {
+            const endpoint = "/request/workflow/requestId=" + requestId;
+            const response = await request.get(endpoint).then((res) => {
+                setWorkflowData(res.data.Data);
+            }
+            );
+        }
+        getWokflowRequest();
+        getAttachmentsRequest();
         getDetailRequest();
 
     }, [])
-
     //Setup select-adio Yes or No
-
     const onChange = (e: RadioChangeEvent) => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
 
-    // console.log(detailData);
+    console.log(workflowData);
+
 
     return (
         <RequestLayout profile={profile}>
@@ -105,14 +123,17 @@ function DetailRequest(): JSX.Element {
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Usage time from <span className='required'>*</span></label>
-                                        <div>{detailData.UsageFrom}</div>
+                                        <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
                                     </Col>
-                                    <Col span={6} className='col-detail-request'></Col>
+                                    <Col span={6} className='col-detail-request'>
+                                        <label>Usage time to <span className='required'>*</span></label>
+                                        <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
+                                    </Col>
                                 </Row>
                                 <Row className='row-request'>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick time <span className='required'>*</span></label>
-                                        <div>{detailData.PickTime}</div>
+                                        <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
                                     </Col>
                                     <Col span={6} className='col-detail-request'>
                                         <label>Pick location <span className='required'>*</span></label>
@@ -138,19 +159,24 @@ function DetailRequest(): JSX.Element {
                         </div>
                         <div className='Attachment'>
                             <b>Attachment(s)</b>
+                            {/* <div>
+                                <a href={attachmentData.Path}>
+                                    Open File
+                                </a>
+                            </div> */}
                         </div>
                         <div className='list-approvers'>
                             <p>Approvers:</p>
                             <Row>
-                                <Col span={8} className='approver'>
-                                    <label>Approver</label>
-                                    <div>{Approver1}</div>
-                                </Col>
-                                <Col span={8} className='approver'>
-                                    <label>Pho phong IT</label>
-                                    <div>{Approver2}</div>
-                                </Col>
-                                <Col span={8}></Col>
+                                {Array.isArray(workflowData) ? (
+                                    workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
+                                        <Col key={approverData.Id} span={8} className='approver'>
+                                            {approverData.User.FullName}
+                                        </Col>
+                                    ))
+                                ) : (
+                                    <div>No workflow data available.</div>
+                                )}
                             </Row>
                         </div>
                         <Comment />
@@ -158,7 +184,6 @@ function DetailRequest(): JSX.Element {
                 </div>
             )}
         </RequestLayout>
-
     );
 }
 

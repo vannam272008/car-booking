@@ -1,14 +1,14 @@
 import React from 'react';
-import {QRCodeCanvas} from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import { Tabs, Table, Avatar, Typography, Input, Form } from 'antd';
 import { useState, useEffect } from "react";
-import { UserAddOutlined,LeftCircleOutlined,UserOutlined } from '@ant-design/icons';
+import { UserAddOutlined, LeftCircleOutlined, UserOutlined } from '@ant-design/icons';
 import "./profile.css"
 
 const { Title } = Typography;
 
 
-const columns_overview= [
+const columns_overview = [
     {
         dataIndex: 'overview_title',
     },
@@ -17,7 +17,7 @@ const columns_overview= [
     },
 ];
 
-const columns_additional= [
+const columns_additional = [
     {
         dataIndex: 'additional_title',
     },
@@ -86,7 +86,7 @@ const columns_relationship = [
 ];
 
 const dataSource_overview = [
-    {    
+    {
         overview_title: 'Login',
         info: <strong>bangnm@o365.vn</strong>
     },
@@ -96,9 +96,9 @@ const dataSource_overview = [
     },
     {
         overview_title: 'Employee number',
-        info:   <Input
-                    placeholder="Employee number"
-                />
+        info: <Input
+            placeholder="Employee number"
+        />
     },
     {
         overview_title: 'First name',
@@ -179,122 +179,122 @@ const dataSource_overview = [
 ];
 
 const dataSource_additional = [
-    {    
+    {
         additional_title: 'Nation',
         info: ''
     },
-    {    
+    {
         additional_title: 'Phone',
         info: ''
     },
-    {    
+    {
         additional_title: 'ID card number',
         info: ''
     },
-    {    
+    {
         additional_title: 'Date of ID card',
         info: ''
     },
-    {    
+    {
         additional_title: 'Health insurance',
         info: ''
     },
-    {    
+    {
         additional_title: 'Starting date',
         info: ''
     },
-    {    
+    {
         additional_title: 'Starting date offical',
         info: ''
     },
-    {    
+    {
         additional_title: 'Leaving date',
         info: ''
     },
-    {    
+    {
         additional_title: 'Start Date Maternity Leave',
         info: ''
     },
-    {    
+    {
         additional_title: 'Note',
         info: ''
     },
-    {    
-        additional_title:<strong>Literacy</strong>,
+    {
+        additional_title: <strong>Literacy</strong>,
     },
-    {    
+    {
         additional_title: 'Academic level',
         info: ''
     },
-    {    
+    {
         additional_title: 'Specialized qualification',
         info: ''
     },
-    {    
+    {
         additional_title: <strong>Contact Info</strong>,
     },
-    {    
+    {
         additional_title: 'Business phone',
         info: ''
     },
-    {    
+    {
         additional_title: 'Home phone',
         info: ''
     },
-    {    
+    {
         additional_title: 'Personal email',
         info: ''
     },
-    {    
-        additional_title:<strong>Bank account</strong>,
+    {
+        additional_title: <strong>Bank account</strong>,
     },
-    {    
+    {
         additional_title: 'Bank Name',
         info: ''
     },
-    {    
+    {
         additional_title: 'Branch number',
         info: ''
     },
-    {    
+    {
         additional_title: 'Bank brach name',
         info: ''
     },
-    {    
+    {
         additional_title: 'Bank account number',
         info: ''
     },
-    {    
+    {
         additional_title: 'NoteBank Account Name',
         info: ''
     },
-    {    
-        additional_title:<strong>Address</strong>,
+    {
+        additional_title: <strong>Address</strong>,
     },
-    {    
+    {
         additional_title: 'Street',
         info: ''
     },
-    {    
+    {
         additional_title: 'Building / flatnumber',
         info: ''
     },
-    {    
+    {
         additional_title: 'Province / state',
         info: ''
     },
-    {    
+    {
         additional_title: 'Postal code',
         info: ''
     },
-    {    
+    {
         additional_title: 'Country',
         info: ''
-    },   
+    },
 ];
 
 const dataSource_contract = [
-    {    
+    {
         Contract_type: 'input',
         From: 'inputFrom',
         To: 'inputTo',
@@ -305,60 +305,60 @@ const dataSource_contract = [
     }
 ];
 
-const dataSource_family = [ 
-    {    
+const dataSource_family = [
+    {
         Family_title: 'Martial status',
         info: 'Đã kết hôn'
     },
-    {    
+    {
         Family_title: <strong>Emergency contact</strong>,
-    
+
     },
-    {    
+    {
         Family_title: 'Contact name',
         info: 'Nguyễn Thị A'
     },
-    {    
+    {
         Family_title: 'Relationship',
         info: 'Vợ'
     },
-    {    
+    {
         Family_title: 'Phone',
         info: '0876839834'
     },
-    {    
-        Family_title:<strong>Permanent Address</strong> ,
+    {
+        Family_title: <strong>Permanent Address</strong>,
     },
-    {    
+    {
         Family_title: 'Street',
         info: '19'
     },
-    {    
+    {
         Family_title: 'Building / flatnumber',
         info: ''
     },
-    {    
+    {
         Family_title: 'City',
         info: 'Hồ Chí Minh'
     },
-    {    
+    {
         Family_title: 'Province / state',
         info: ''
     },
-    {    
+    {
         Family_title: 'Postal code',
         info: '700000'
     },
-    {    
+    {
         Family_title: 'Country',
         info: 'Việt Nam'
     },
-    
-    
+
+
 ];
 
 const dataSource_relationship = [
-    {    
+    {
         Contact_name: 'input',
         Birth_day: 'input',
         Relationship: 'input',
@@ -373,7 +373,7 @@ const ContentProfile: React.FC = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-        setCurrentTime(new Date());
+            setCurrentTime(new Date());
         }, 1000);
         return () => clearInterval(interval);
     }, []);
@@ -386,63 +386,63 @@ const ContentProfile: React.FC = () => {
         },
         {
             key: '2',
-            label:<strong>Additional</strong>,
-            children:[  <Table pagination={false} dataSource={dataSource_additional} columns={columns_additional}></Table>,
-                        <Title>Contract</Title>,
-                        <Table pagination={false} dataSource={dataSource_contract} columns={columns_contract}></Table>]
+            label: <strong>Additional</strong>,
+            children: [<Table pagination={false} dataSource={dataSource_additional} columns={columns_additional}></Table>,
+            <Title>Contract</Title>,
+            <Table pagination={false} dataSource={dataSource_contract} columns={columns_contract}></Table>]
         },
         {
             key: '3',
             label: <strong>Family</strong>,
-            children: [ <Table pagination={false} dataSource={dataSource_family} columns={columns_family}></Table>,
-                        <Title>Relationships</Title>,
-                        <Table pagination={false} dataSource={dataSource_relationship} columns={columns_relationship}></Table>
+            children: [<Table pagination={false} dataSource={dataSource_family} columns={columns_family}></Table>,
+            <Title>Relationships</Title>,
+            <Table pagination={false} dataSource={dataSource_relationship} columns={columns_relationship}></Table>
             ]
         },
         {
             key: '4',
             label: <strong>Signature</strong>,
-            children: 
-            <div className= "QR_signature" style ={{width:"300px",margin:'auto',border: '2px solid black',padding : '50px 50px 50px 50px'}}>
-                <QRCodeCanvas style = {{height: '200px', width:'200px'}} value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23" />,
-                <p>bangnm@o365.vn</p>
-                <p>{currentTime.toLocaleString()}</p>
-                <h1 style= {{fontFamily:'Monospace'}}>Nguyễn Minh Bằng</h1>
-            </div>,
+            children:
+                <div className="QR_signature" style={{ width: "300px", margin: 'auto', border: '2px solid black', padding: '50px 50px 50px 50px' }}>
+                    <QRCodeCanvas style={{ height: '200px', width: '200px' }} value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23" />,
+                    <p>bangnm@o365.vn</p>
+                    <p>{currentTime.toLocaleString()}</p>
+                    <h1 style={{ fontFamily: 'Monospace' }}>Nguyễn Minh Bằng</h1>
+                </div>,
         }
     ];
-    
-    return(
-        <div className = "content-profile">
-            <div className = "nav-bar-profile">
-                <LeftCircleOutlined style={{ margin:'30px 10px 20px 20px' ,fontSize:'50px'}}/>
-                <span style= {{color:'#8894A1', fontSize:'30px'}}>Return</span>
+
+    return (
+        <div className="content-profile">
+            <div className="nav-bar-profile">
+                <LeftCircleOutlined style={{ margin: '30px 10px 20px 20px', fontSize: '50px' }} />
+                <span style={{ color: '#8894A1', fontSize: '30px' }}>Return</span>
             </div>
-            <div className = "info-user" >
-            <Avatar
-                size={{ xs: 80, sm: 100, md:130, lg: 150, xl: 200, xxl: 250 }}
-                icon={<UserOutlined />}
-            />
-            <Title style={{marginLeft: '50px'}}>Bang Nguyen Minh</Title>
-            <UserAddOutlined
-                style={{ fontSize:'50px',marginLeft:'50px'}} 
-            />
+            <div className="info-user" >
+                <Avatar
+                    size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
+                    icon={<UserOutlined />}
+                />
+                <Title style={{ marginLeft: '50px' }}>Bang Nguyen Minh</Title>
+                <UserAddOutlined
+                    style={{ fontSize: '50px', marginLeft: '50px' }}
+                />
             </div>
-            <div className = "profile-table"> 
-                <div className= "tab-content ">
+            <div className="profile-table">
+                <div className="tab-content ">
                     <Form
-                        
+
                     >
                         <Tabs
-                        style={{ padding: '10px 10px'}}
-                        type="card"
-                        items={label}
+                            style={{ padding: '10px 10px' }}
+                            type="card"
+                            items={label}
                         />
                     </Form>
-                    
+
                 </div>
             </div>
-        </div> 
-    );  
+        </div>
+    );
 };
 export default ContentProfile

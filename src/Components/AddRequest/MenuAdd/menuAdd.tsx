@@ -52,12 +52,16 @@ function MenuAdd({ formData }: MenuAddProps): JSX.Element {
             });
     }, [formData, navigate]);
 
-    console.log(formData);
+    const handleReturn = () => {
+        navigate("/request/carbooking");
+    }
+
+    // console.log(formData);
 
     return (
         <div>
             <Menu mode="horizontal" className='fixed-menu '>
-                <Menu.Item key="return" icon={<ArrowLeftOutlined />}>
+                <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     Return
                 </Menu.Item>
                 <Menu.Item key="savedraft" icon={<SaveOutlined />}>

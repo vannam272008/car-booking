@@ -7,6 +7,7 @@ import Login from './Pages/Login/Login';
 import Profile from './Components/Profile';
 import AddRequest from './Components/AddRequest/AddRequest/addRequest';
 import Register from './Pages/Register/Register';
+import SettingPage from './Pages/Setting/settingPage';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/request/addrequest' element={<AddRequest />} />
       <Route path='/profile' element={<Profile />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/setting" element={<SettingPage />} />
     </Routes>
   );
 }
