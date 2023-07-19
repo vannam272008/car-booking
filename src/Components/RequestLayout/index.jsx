@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import React from 'react';
 import { Layout, theme } from 'antd';
 import AppHeader from '../../Components/AppHeader';
 import AppSider from '../../Components/AppSider';
@@ -20,7 +19,7 @@ const RequestLayout = ({ profile, children }) => {
             <Content>
                 <Layout style={{ backgroundColor: colorBgContainer }}>
                     <AppSider profile={profile} />
-                    <Layout style={{ backgroundColor: colorBgContainer}}>
+                    <Layout style={{ backgroundColor: colorBgContainer }}>
                         <Content style={{ minHeight: 280 }}>
                             {children()}
                         </Content>

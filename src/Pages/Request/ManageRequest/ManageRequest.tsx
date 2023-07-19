@@ -7,6 +7,13 @@ import request from "../../../Utils/request";
 import FilterDropdown from './FilterDropdown/FilterDropdown';
 import { changeFormatDate } from '../../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux';
+import { setTab, setStatus } from '../../../Actions/requestAction';
+import { RootState } from '../../../Reducers/rootReducer';
+import { stat } from 'fs';
+
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 interface RequestType {
   Id: string;
@@ -20,7 +27,9 @@ interface RequestType {
   Status: string;
 }
 
-const ManageRequest: React.FC = () => {
+const ManageRequest = (props: any) => {
+
+  const { tab, status, setStatus } = props
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,12 +37,11 @@ const ManageRequest: React.FC = () => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
-  const [status, setStatus] = useState("");
 
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
       const response = await request.get(url);
 
       setRequestData(response.data.Data);
@@ -45,7 +53,8 @@ const ManageRequest: React.FC = () => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, []);
+  }, [tab, status]);
+
 
   const profile = false;
   return (
@@ -151,4 +160,13 @@ const ManageRequest: React.FC = () => {
   )
 }
 
-export default ManageRequest
+const mapStateToProps = (state: RootState) => ({
+  tab: state.request.tab,
+  status: state.request.status
+})
+
+const mapDispatchToProps = { setTab, setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageRequest)
+
+// export default ManageRequest

@@ -4,7 +4,11 @@ import { Layout, Menu, theme, Space } from 'antd';
 import { Input } from 'antd';
 
 import { FolderOpenOutlined, BarChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
+
+import { connect } from 'react-redux';
 import "./AppSider.scss";
+import { setTab, setStatus } from '../../Actions/requestAction';
+import { RootState } from '../../Reducers/rootReducer';
 
 const { Sider } = Layout;
 
@@ -28,19 +32,20 @@ function getItem(
 
 const AppSider = (props: any) => {
 
+    const { tab, setTab, setStatus } = props
     const items: MenuProps['items'] = [
         getItem('Requests', 'requests', <FolderOpenOutlined />, [
-            getItem('All requests', 'all-request'),
+            getItem('All requests', 'get-all'),
             getItem('Sent to me', 'sent-to-me'),
             getItem('Sent to others', 'sent-to-others'),
             getItem('Shared with me', 'shared-with-me'),
         ]),
 
         getItem('Status', 'status', <BarChartOutlined />, [
-            getItem('Draft', 'draft'),
-            getItem('Approving', 'approving'),
-            getItem('Approved', 'approved'),
-            getItem('Rejected', 'rejected'),
+            getItem('Draft', 'Draft'),
+            getItem('Approving', 'Waiting for approval'),
+            getItem('Approved', 'Approved'),
+            getItem('Rejected', 'Rejected'),
         ]),
 
         getItem('Reports', 'reports', <BarChartOutlined />),
@@ -56,7 +61,15 @@ const AppSider = (props: any) => {
     const [openItem, setOpenItem] = useState('requests');
 
     const handleClick: MenuProps['onClick'] = (e) => {
-        console.log('click ', e);
+        if (e.key !== 'get-all' && e.keyPath[1] === 'requests') {
+            setTab(e.key + '/userId=930a6591-2f5d-4699-a585-18434526e068');
+            setStatus("");
+        }
+        else if (e.keyPath[1] === 'status') {
+            setTab('get-all');
+            setStatus(e.key);
+        }
+        else { setTab(e.key); setStatus("") }
     };
     const [collapsed, setCollapsed] = useState(false);
     const {
@@ -71,7 +84,7 @@ const AppSider = (props: any) => {
                     </Space.Compact>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={[openItem]}
+                        defaultSelectedKeys={[tab]}
                         defaultOpenKeys={['requests']}
                         openKeys={[openItem]}
                         style={{ height: '100%' }}
@@ -86,5 +99,13 @@ const AppSider = (props: any) => {
         </div>
     )
 }
+const mapStateToProps = (state: RootState) => ({
+    tab: state.request.tab,
+    status: state.request.status
+})
 
-export default AppSider;
+const mapDispatchToProps = { setTab, setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppSider);
+
+// export default AppSider
