@@ -6,8 +6,6 @@ import { Input } from 'antd';
 import { FolderOpenOutlined, BarChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import "./AppSider.scss";
 
-
-
 const { Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -27,8 +25,6 @@ function getItem(
         type,
     } as MenuItem;
 }
-
-
 
 const AppSider = (props: any) => {
 

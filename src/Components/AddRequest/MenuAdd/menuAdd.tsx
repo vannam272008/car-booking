@@ -8,7 +8,8 @@ import {
 import './menuAdd.css'
 // import { request } from 'http';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import request from '../../../Utils/request';
+
 
 interface MenuAddProps {
     formData: {
@@ -35,7 +36,7 @@ function MenuAdd({ formData }: MenuAddProps): JSX.Element {
 
 
     const handleSubmit = useCallback(() => {
-        axios.post("http://localhost:63642/api/request/create", formData)
+        request.postForm("/request/create", formData)
             .then((response) => {
                 const data = response.data;
                 if (data) {
