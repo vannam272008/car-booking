@@ -28,6 +28,7 @@ interface DepartmentMember {
 
 const { TabPane } = Tabs;
 
+
 function ContentStructure(): JSX.Element {
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
@@ -36,6 +37,7 @@ function ContentStructure(): JSX.Element {
     const [dataManager, setDataManager] = useState<DepartmentMember[]>([]);
     const [dataSupervisor, setDataSupervisor] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [activeTabKey, setActiveTabKey] = useState<string>('E0187AD8-0766-4300-B937-25B5F778A8B1');
 
 
 
@@ -54,7 +56,7 @@ function ContentStructure(): JSX.Element {
             });
         }
         const getDataDepartmentMember = async () => {
-            const endpoint = "departmentMember/all?page=1&limit=5";
+            const endpoint = `departmentMember/position?departmentId=${activeTabKey}`;
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
                 setLoading(false);
@@ -63,7 +65,7 @@ function ContentStructure(): JSX.Element {
             });
         }
         const getDataByPosition = async (position: string) => {
-            const endpoint = "departmentMember/all?page=1&limit=5";
+            const endpoint = `departmentMember/position?departmentId=${activeTabKey}`;
             await request.get(endpoint).then((res) => {
                 let mData = res.data.Data
                 let d = mData.filter((d: DepartmentMember) => d.Position === position);
@@ -82,7 +84,7 @@ function ContentStructure(): JSX.Element {
         getDataDepartmentMember();
         getDataByPosition('Manager');
         getDataByPosition('Supervisor');
-    }, [])
+    }, [activeTabKey])
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -94,6 +96,11 @@ function ContentStructure(): JSX.Element {
             );
             setFilteredDataDepartment(filteredDepartments);
         }
+    };
+
+    const handleTabClick = (key: string) => {
+        // console.log('Tab clicked:', key);
+        setActiveTabKey(key);
     };
 
     console.log(dataDepartment);
@@ -124,6 +131,7 @@ function ContentStructure(): JSX.Element {
                                 style={{ display: 'flex' }}
                                 tabPosition="left"
                                 className='tabs-col'
+                                onChange={handleTabClick}
                             >
                                 {filteredDataDepartment.map((department) => (
                                     <TabPane className='organizational-structure-content-department' tab={<span><TeamOutlined className='icon-tabs-col-department' />{department.Name}</span>} key={department.Id}>
@@ -152,14 +160,14 @@ function ContentStructure(): JSX.Element {
                                                     dataSource={dataManager.map((data) => ({
                                                         fullname: <div>{data.User.FullName}</div>,
                                                         email: <div>{data.User.Email}</div>,
-                                                        position: <div>{data.User.JobTitle}</div>,
+                                                        jobtitle: <div>{data.User.JobTitle}</div>,
                                                     }))}
                                                     renderItem={(item) => (
                                                         <List.Item>
                                                             <Row style={{ width: '100%' }}>
                                                                 <Col span={8}>{item.fullname}</Col>
                                                                 <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.position}</Col>
+                                                                <Col span={8}>{item.jobtitle}</Col>
                                                             </Row>
                                                         </List.Item>
                                                     )}
@@ -171,14 +179,14 @@ function ContentStructure(): JSX.Element {
                                                     dataSource={dataSupervisor.map((data) => ({
                                                         fullname: <div>{data.User.FullName}</div>,
                                                         email: <div>{data.User.Email}</div>,
-                                                        position: <div>{data.Position}</div>,
+                                                        jobtitle: <div>{data.User.JobTitle}</div>,
                                                     }))}
                                                     renderItem={(item) => (
                                                         <List.Item>
                                                             <Row style={{ width: '100%' }}>
                                                                 <Col span={8}>{item.fullname}</Col>
                                                                 <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.position}</Col>
+                                                                <Col span={8}>{item.jobtitle}</Col>
                                                             </Row>
                                                         </List.Item>
                                                     )}
