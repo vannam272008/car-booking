@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
-import RequestLayout from '../../Components/RequestLayout';
-import request from "../../Utils/request";
+import RequestLayout from '../../../Components/RequestLayout';
+import request from "../../../Utils/request";
 import FilterDropdown from './FilterDropdown/FilterDropdown';
-import { changeFormatDate } from '../../Utils/formatDate';
+import { changeFormatDate } from '../../../Utils/formatDate';
+import { useNavigate } from "react-router-dom";
 
 interface RequestType {
+  Id: string;
   requestCode: string;
   department: object;
   createdBy: object;
@@ -21,16 +23,21 @@ interface RequestType {
 const ManageRequest: React.FC = () => {
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
-  const [theme, setTheme] = useState("");
+  const navigate = useNavigate();
+  const [requestCode, setRequestCode] = useState("");
+  const [createdFrom, setCreatedFrom] = useState("");
+  const [createdTo, setCreatedTo] = useState("");
+  const [senderId, setSenderId] = useState("");
+  const [status, setStatus] = useState("");
 
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const response = await request.get('/request/get-all?page=1&limit=8');
+      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const response = await request.get(url);
+
       setRequestData(response.data.Data);
       setLoading(false);
-
-
     } catch (error) {
       console.error('Error:', error);
     }
@@ -40,24 +47,34 @@ const ManageRequest: React.FC = () => {
     handleGetAllRequest();
   }, []);
 
-  console.log(requestData);
-
   const profile = false;
   return (
     <RequestLayout profile={profile}>
       {() => (
         <div style={{ overflowX: 'hidden' }} className='request'>
-          <div id='navbar'>
-            <div className='title'>car booking</div>
+          <div className='manage-request-navbar'>
+            <div className='manage-request-title'>car booking</div>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
-              <FilterDropdown />
-              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }}><PlusOutlined />Create new</Button>
+              <FilterDropdown
+                onRequestCodeChange={setRequestCode}
+                onCreatedFromChange={setCreatedFrom}
+                onCreatedToChange={setCreatedTo}
+                onSenderIdChange={setSenderId}
+                onStatusChange={setStatus}
+                onApply={handleGetAllRequest}
+              />
+              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
           </div>
-          <div className='content'>
+          <div className='manage-request-content'>
             <Table
               loading={loading}
+              onRow={(record) => ({
+                onDoubleClick: () => {
+                  navigate(`/request/carbooking/detail/${record.Id}`);
+                },
+              })}
               columns={[
                 {
                   title: 'Request Code',
@@ -85,22 +102,22 @@ const ManageRequest: React.FC = () => {
                     let className = '';
                     switch (record.Status) {
                       case 'Rejected':
-                        className = 'rejected';
+                        className = 'manage-request-rejected-status-theme';
                         break;
                       case 'Approved':
-                        className = 'approved';
+                        className = 'manage-request-approved-status-theme';
                         break;
                       case 'Waiting for approval':
-                        className = 'waiting-approval';
+                        className = 'manage-request-waiting-approval-status-theme';
                         break;
                       case 'Done':
-                        className = 'done';
+                        className = 'manage-request-done-status-theme';
                         break;
                       case 'Canceled':
-                        className = 'canceled';
+                        className = 'manage-request-canceled-status-theme';
                         break;
-                      case 'Draf':
-                        className = 'draft';
+                      case 'Draft':
+                        className = 'manage-request-draft-status-theme';
                         break;
                       default:
                         className = '';
@@ -124,7 +141,7 @@ const ManageRequest: React.FC = () => {
                 },
               ]}
               dataSource={requestData}
-              pagination={{ position: ['bottomCenter'] }}
+              pagination={{ pageSize: 20, position: ['bottomCenter'] }}
             />
           </div>
         </div>

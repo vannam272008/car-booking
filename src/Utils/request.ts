@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:63642/api';
 const request = axios.create({
     baseURL: API_URL,
     headers: {
-        'Content-type': 'application/json',
+        'Content-type': 'application/json'
     },
 });
 
@@ -26,6 +26,16 @@ export const post = async (endpoint: string, data = {}) => {
     return await request.post(endpoint, data, {
         headers: {
             Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const postForm = async (endpoint: string, data = {}) => {
+    const token = getToken();
+    return await request.post(endpoint, data, {
+        headers: {
+            Accept: 'multipart/form-data',
             Authorization: `Bearer ${token}`,
         },
     });

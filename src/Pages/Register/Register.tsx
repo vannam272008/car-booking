@@ -1,7 +1,43 @@
-import { Input, Button, Form, Radio, InputNumber } from "antd";
+import { Input, Button, Form, Radio, message, DatePicker } from "antd";
 import "./index.css";
+import { useNavigate } from "react-router-dom";
+import { useCallback } from "react";
+import request from "../../Utils/request";
+
+interface RegisterValues {
+    email: string;
+    username: string;
+    firstname: string;
+    lastname: string;
+    sex: Boolean;
+    birthday: Date;
+    password: string;
+}
 
 const Register = () => {
+    const navigate = useNavigate();
+
+    const handleRegister = useCallback(
+        (values: RegisterValues) => {
+            request
+                .post("/user/register", values)
+                .then((response) => {
+                    const data = response.data;
+                    if (data) {
+                        if (data.Success == false) {
+                            message.error('You have not successfully registered an account!!!');
+                        } else {
+                            message.success('You have successfully registered an account!!!');
+                            navigate("/user/login");
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+        [navigate]
+    );
 
     return (
         <>
@@ -22,6 +58,7 @@ const Register = () => {
                         remember: true,
                     }}
                     autoComplete="off"
+                    onFinish={handleRegister}
                 >
                     <Form.Item
                         name="email"
@@ -79,35 +116,34 @@ const Register = () => {
                         <Input placeholder="Type your lastname" />
                     </Form.Item>
 
-                    <Form.Item name="gender" label="Gender" rules={[
-                        {
-                            required: true,
-                            message: "Please select your gender!",
-                        },
-                    ]}>
+                    <Form.Item
+                        name="sex"
+                        label="Sex"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please select your gender!",
+                            },
+                        ]}
+                    >
                         <Radio.Group>
-                            <Radio value="female">Female</Radio>
-                            <Radio value="male">Male</Radio>
-                            <Radio value="other">Other</Radio>
+                            <Radio value={false}>Female</Radio>
+                            <Radio value={true}>Male</Radio>
                         </Radio.Group>
                     </Form.Item>
 
                     <Form.Item
-                        name="age"
-                        label="Age"
+                        name="birthday"
+                        label="Birthday"
                         rules={[
                             {
                                 required: true,
-                                type: "number",
-                                min: 0,
-                                max: 99,
-                                message: "Age must be a number between 0 and 99",
+                                message: "Please select your birthday!",
                             },
                         ]}
                     >
-                        <InputNumber placeholder="Age" />
+                        <DatePicker />
                     </Form.Item>
-
 
                     <Form.Item
                         label="Password"
