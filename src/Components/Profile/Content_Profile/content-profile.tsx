@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import type { TabsProps } from "antd";
 import { Tabs, Avatar, Upload, Modal, Button } from "antd";
 import { useState, useEffect } from "react";
@@ -19,6 +18,10 @@ import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
+
+interface API {
+  EmployeeNumber: string;
+}
 
 const ContentProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -76,34 +79,21 @@ const ContentProfile: React.FC = () => {
     postal_code_family: "",
     country_family: "",
   });
-  const [datafield, setDataField] = useState([])
+  const [infoAPI, setInfoAPI] =useState<API[]>([]);
 
-  useEffect(() => {
-    request.get('/user/profile/A3F3702C-99DC-4D24-96FD-CEEEE12A39A8')
-      .then(response => {
-        setDataField(response.data.Data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, []);
-
-  // console.log(datafield)
-
-  
   //declare contract
-  const [contractType, setContractType] = useState("");
-  const [contractFrom, setContracFrom] = useState(dayjs());
-  const [contarctTo, setContractTo] = useState(dayjs());
-  const [signningdate, setSigningdate] = useState(dayjs());
-  const [subject, setSubject] = useState("");
-  const [deparment, setDepartment] = useState("");
-  const [contractnote, setContractNote] = useState("");
-  //declare relationship
-  const [contactname, setContactName] = useState("");
-  const [birthday, setBirthday] = useState(dayjs());
-  const [relationship, setRelationship] = useState("");
-  const [relationshipnote, setRelationshipNote] = useState("");
+  // const [contractType, setContractType] = useState("");
+  // const [contractFrom, setContracFrom] = useState(dayjs());
+  // const [contarctTo, setContractTo] = useState(dayjs());
+  // const [signningdate, setSigningdate] = useState(dayjs());
+  // const [subject, setSubject] = useState("");
+  // const [deparment, setDepartment] = useState("");
+  // const [contractnote, setContractNote] = useState("");
+  // //declare relationship
+  // const [contactname, setContactName] = useState("");
+  // const [birthday, setBirthday] = useState(dayjs());
+  // const [relationship, setRelationship] = useState("");
+  // const [relationshipnote, setRelationshipNote] = useState("");
 
   //avatar
   const [imageUrl, setImageUrl] = useState("");
@@ -126,13 +116,10 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-
   const handleDeleteContract = () => {};
-
   const onEditInfo = () => {
     setIsEditing(true);
   };
-
   const onSave = () => {
     setIsEditing(false);
   };
@@ -173,6 +160,20 @@ const ContentProfile: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    const getProfile = async () => {
+      await request.get('/user/profile/A3F3702C-99DC-4D24-96FD-CEEEE12A39A8')
+      .then(response => {
+        setInfoAPI(response.data.Data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+    getProfile();
+  }, []);
+
+  console.log(infoAPI)
   
   return (
     <div className="content-profile">

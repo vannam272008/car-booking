@@ -325,6 +325,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
         dataSource={dataSource_family}
         columns={columns_family}
       ></Table>
+      <br/><br/>
       <Title>Relationships</Title>
       <Table
         pagination={false}
