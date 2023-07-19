@@ -4,7 +4,6 @@ import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
 import RequestLayout from '../../RequestLayout';
 import request from "../../../Utils/request";
-
 import "./detailRequest.css";
 import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';

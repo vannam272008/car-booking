@@ -3,11 +3,11 @@ import ContentProfile from "./content-profile"
 
 const Profile = () => {
     const profile = true;
-    
+
     return (
         <RequestLayout profile={profile}>
             {() => (
-               <ContentProfile/>
+                <ContentProfile />
             )}
         </RequestLayout>
     )
