@@ -1,14 +1,15 @@
 import RequestLayout from "../RequestLayout"
-import ContentProfile from "./content-profile"
+import ContentProfile from "./Content_Profile/content-profile"
 
 const Profile = () => {
     const profile = true;
-    
+
     return (
         <RequestLayout profile={profile}>
             {() => (
-               <ContentProfile/>
+                <ContentProfile />
             )}
+            
         </RequestLayout>
     )
 }
