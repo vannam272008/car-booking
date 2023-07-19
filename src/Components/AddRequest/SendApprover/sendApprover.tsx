@@ -1,9 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons';
 import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space } from 'antd';
 import './sendApprover.css'
+import request from "../../../Utils/request";
+
+interface DepartmentMember {
+    Id: string;
+    User: {
+        FullName: string;
+        Email: string;
+        JobTitle: string;
+    };
+}
 
 function SendApprover(): JSX.Element {
+
+    const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
+
+
+
+    useEffect(() => {
+
+        const getDataDepartmentMember = async () => {
+            const endpoint = "departmentMember/all?page=1&limit=100";
+            await request.get(endpoint).then((res) => {
+                setDataDepartmentMember(res.data.Data);
+            })
+        }
+        getDataDepartmentMember();
+    }, [])
 
     const { Option } = Select;
 
@@ -104,8 +129,14 @@ function SendApprover(): JSX.Element {
                                             option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                         }
                                     >
-                                        <Option value="1">bangnm@o365.vn, Developer</Option>
-                                        <Option value="2">thy@o365.vn, Giám đốc tài chính</Option>
+                                        {dataDepartmentMember.map((departmentMember) => (
+                                            <Option value={departmentMember.Id}>
+                                                <div>
+                                                    <span>{departmentMember.User.Email}</span>
+                                                    <span>{departmentMember.User.JobTitle}</span>
+                                                </div>
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </Form.Item>
                             </Col>
@@ -148,8 +179,14 @@ function SendApprover(): JSX.Element {
                                                 option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                             }
                                         >
-                                            <Option value="1">bangnm@o365.vn, Developer</Option>
-                                            <Option value="2">thy@o365.vn, Giám đốc tài chính</Option>
+                                            {dataDepartmentMember.map((departmentMember) => (
+                                                <Option value={departmentMember.Id}>
+                                                    <div>
+                                                        <span>{departmentMember.User.Email}</span>
+                                                        <span>{departmentMember.User.JobTitle}</span>
+                                                    </div>
+                                                </Option>
+                                            ))}
                                         </Select>
                                     </Form.Item>
                                 </Col>

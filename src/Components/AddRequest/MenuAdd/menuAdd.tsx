@@ -33,8 +33,6 @@ function MenuAdd({ formData }: MenuAddProps): JSX.Element {
 
     const navigate = useNavigate();
 
-
-
     const handleSubmit = useCallback(() => {
         request.postForm("/request/create", formData)
             .then((response) => {

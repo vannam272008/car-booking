@@ -40,14 +40,13 @@ function ContentStructure(): JSX.Element {
     const [activeTabKey, setActiveTabKey] = useState<string>('E0187AD8-0766-4300-B937-25B5F778A8B1');
 
 
-
     useEffect(() => {
         setFilteredDataDepartment(dataDepartment);
     }, [dataDepartment]);
 
     useEffect(() => {
         const getDataDepartment = async () => {
-            const endpoint = "department/all?page=1&limit=5";
+            const endpoint = "department/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
                 setDataDepartment(res.data.Data);
                 setLoading(false);
@@ -103,7 +102,7 @@ function ContentStructure(): JSX.Element {
         setActiveTabKey(key);
     };
 
-    console.log(dataDepartment);
+    console.log(dataDepartmentMember);
 
     return (
         <RequestLayout profile={profile}>
@@ -197,14 +196,14 @@ function ContentStructure(): JSX.Element {
                                                     dataSource={dataDepartmentMember.map((departmentMember) => ({
                                                         fullname: <div>{departmentMember.User.FullName}</div>,
                                                         email: <div>{departmentMember.User.Email}</div>,
-                                                        position: <div>{departmentMember.Position}</div>,
+                                                        jobtitle: <div>{departmentMember.User.JobTitle}</div>,
                                                     }))}
                                                     renderItem={(item) => (
                                                         <List.Item>
                                                             <Row style={{ width: '100%' }}>
                                                                 <Col span={8}>{item.fullname}</Col>
                                                                 <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.position}</Col>
+                                                                <Col span={8}>{item.jobtitle}</Col>
                                                             </Row>
                                                         </List.Item>
                                                     )}
