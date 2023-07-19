@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
-import RequestLayout from '../../Components/RequestLayout';
-import request from "../../Utils/request";
-import FilterDropdown from '../ManageRequest/FilterDropdown/FilterDropdown';
-import { changeFormatDate } from '../../Utils/formatDate';
+import RequestLayout from '../../../Components/RequestLayout';
+import request from "../../../Utils/request";
+import FilterDropdown from './FilterDropdown/FilterDropdown';
+import { changeFormatDate } from '../../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
 
 interface RequestType {
@@ -20,7 +20,7 @@ interface RequestType {
   Status: string;
 }
 
-const SendToMe: React.FC = () => {
+const ManageRequest: React.FC = () => {
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const SendToMe: React.FC = () => {
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = ``;
+      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
       const response = await request.get(url);
 
       setRequestData(response.data.Data);
@@ -151,4 +151,4 @@ const SendToMe: React.FC = () => {
   )
 }
 
-export default SendToMe
+export default ManageRequest

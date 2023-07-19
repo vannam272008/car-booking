@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
-import RequestLayout from '../../Components/RequestLayout';
-import request from "../../Utils/request";
-import FilterDropdown from './FilterDropdown/FilterDropdown';
-import { changeFormatDate } from '../../Utils/formatDate';
+import RequestLayout from '../../../Components/RequestLayout';
+import request from "../../../Utils/request";
+import FilterDropdown from '../../Request/ManageRequest/FilterDropdown/FilterDropdown';
+import { changeFormatDate } from '../../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
 
 interface RequestType {
@@ -20,7 +20,7 @@ interface RequestType {
   Status: string;
 }
 
-const ManageRequest: React.FC = () => {
+const Approved: React.FC = () => {
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,9 +28,9 @@ const ManageRequest: React.FC = () => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("Approved");
 
-  const handleGetAllRequest = async () => {
+  const handleGetApprovedRequest = async () => {
     setLoading(true);
     try {
       const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
@@ -44,7 +44,7 @@ const ManageRequest: React.FC = () => {
   };
 
   useEffect(() => {
-    handleGetAllRequest();
+    handleGetApprovedRequest();
   }, []);
 
   const profile = false;
@@ -52,8 +52,8 @@ const ManageRequest: React.FC = () => {
     <RequestLayout profile={profile}>
       {() => (
         <div style={{ overflowX: 'hidden' }} className='request'>
-          <div className='manage-request-navbar'>
-            <div className='manage-request-title'>car booking</div>
+          <div className='approved-navbar'>
+            <div className='approved-title'>car booking</div>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
               <FilterDropdown
@@ -62,12 +62,12 @@ const ManageRequest: React.FC = () => {
                 onCreatedToChange={setCreatedTo}
                 onSenderIdChange={setSenderId}
                 onStatusChange={setStatus}
-                onApply={handleGetAllRequest}
+                onApply={handleGetApprovedRequest}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
           </div>
-          <div className='manage-request-content'>
+          <div className='approved-content'>
             <Table
               loading={loading}
               onRow={(record) => ({
@@ -102,22 +102,22 @@ const ManageRequest: React.FC = () => {
                     let className = '';
                     switch (record.Status) {
                       case 'Rejected':
-                        className = 'manage-request-rejected-status-theme';
+                        className = 'rejected-status-theme';
                         break;
                       case 'Approved':
-                        className = 'manage-request-approved-status-theme';
+                        className = 'approved-status-theme';
                         break;
                       case 'Waiting for approval':
-                        className = 'manage-request-waiting-approval-status-theme';
+                        className = 'waiting-approval-status-theme';
                         break;
                       case 'Done':
-                        className = 'manage-request-done-status-theme';
+                        className = 'done-status-theme';
                         break;
                       case 'Canceled':
-                        className = 'manage-request-canceled-status-theme';
+                        className = 'canceled-status-theme';
                         break;
                       case 'Draft':
-                        className = 'manage-request-draft-status-theme';
+                        className = 'draft-status-theme';
                         break;
                       default:
                         className = '';
@@ -151,4 +151,4 @@ const ManageRequest: React.FC = () => {
   )
 }
 
-export default ManageRequest
+export default Approved
