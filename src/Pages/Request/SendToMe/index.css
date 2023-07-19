@@ -4,7 +4,7 @@
   text-align: center;
 }
 
-#navbar {
+.send-to-me-navbar {
   background-color: #f5f6fa;
   display: flex;
   justify-content: space-between;
@@ -15,29 +15,29 @@
   margin-top: 64px;
 }
 
-.title {
+.send-to-me-title {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 20px;
   padding: 0 0 0 5px;
 }
 
-.content .ant-table {
+.send-to-me-content .ant-table {
   margin-top: 15px;
   width: 100%;
 }
 
-.content .ant-table-thead .ant-table-cell {
+.send-to-me-content .ant-table-thead .ant-table-cell {
   background-color: #ebeef0;
   color: #a3a6b4;
 }
 
-.content .ant-table-tbody > tr:hover {
+.send-to-me-content .ant-table-tbody > tr:hover {
   background-color: #f4f0f0;
   cursor: pointer;
 }
 
-.content {
+.send-to-me-content {
   position: relative;
   height: calc(100vh - 249px);
   overflow: scroll;
@@ -48,7 +48,7 @@
   margin-right: 15px;
 }
 
-.ant-pagination {
+.send-to-me-content .ant-pagination {
   position: fixed;
   bottom: 0;
   background-color: white;
@@ -56,42 +56,42 @@
   width: 100%;
 }
 
-.ant-pagination .ant-pagination-item-active {
+.send-to-me-content .ant-pagination .ant-pagination-item-active {
   background-color: #337ab7;
   color: white;
 }
 
-.waiting-approval {
+.send-to-me-waiting-approval-status-theme {
   background-color: #2f85ef;
   color: white;
   text-align: center;
 }
 
-.approved {
+.send-to-me-approved-status-theme {
   background-color: #4ba747;
   color: white;
   text-align: center;
 }
 
-.rejected {
+.send-to-me-rejected-status-theme {
   background-color: #ff3030;
   color: white;
   text-align: center;
 }
 
-.canceled {
+.send-to-me-canceled-status-theme {
   background-color: #7a7879;
   color: white;
   text-align: center;
 }
 
-.draft {
+.send-to-me-draft-status-theme {
   background-color: #f5ad5f;
   color: white;
   text-align: center;
 }
 
-.done {
+.send-to-me-done-status-theme {
   background-color: #2a5b28;
   color: white;
   text-align: center;

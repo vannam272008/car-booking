@@ -20,12 +20,11 @@ const Login = () => {
           const data = response.data;
           console.log(data);
           
-          console.log(data);
           if (data) {
             localStorage.setItem("Token", data?.Data);
             if (data.Success == false) {
               message.error(data.Message);
-            }else{
+            } else {
               navigate("/request/carbooking");
             }
           }
