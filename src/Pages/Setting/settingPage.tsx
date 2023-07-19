@@ -3,9 +3,18 @@ import RequestLayout from '../../Components/RequestLayout';
 import { Button, Col, Row } from 'antd';
 import './settingPage.css'
 import { AppleFilled, AppstoreAddOutlined, ContactsFilled, FieldTimeOutlined, ProfileFilled, RadarChartOutlined, SafetyCertificateFilled, ShareAltOutlined, TeamOutlined, ToolFilled, UserOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const profile = true;
 function SettingPage(): JSX.Element {
+    const navigate = useNavigate();
+
+    const handleOrganizationStructure = () => {
+        navigate("/setting/structure");
+    }
+    const handleProflie = () => {
+        navigate("/setting/profile");
+    }
     return (
         <RequestLayout profile={profile}>
             {() => (
@@ -14,10 +23,10 @@ function SettingPage(): JSX.Element {
                     <b style={{ float: 'right', marginRight: '150px' }}> Integration</b>
                     <Row className='setting-page-row'>
                         <Col className='setting-page-col' span={3}>
-                            <Button>Organizational structure<br /><TeamOutlined /></Button>
+                            <Button onClick={handleOrganizationStructure}>Organizational structure<br /><TeamOutlined /></Button>
                         </Col>
                         <Col className='setting-page-col' span={3}>
-                            <Button>Personnal<br /><UserOutlined /></Button>
+                            <Button onClick={handleProflie}>Personnal<br /><UserOutlined /></Button>
                         </Col>
                         <Col span={13}></Col>
                         <Col className='setting-page-col' span={3}>
