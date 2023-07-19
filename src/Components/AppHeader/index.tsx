@@ -1,8 +1,10 @@
-import { Col, Layout, Row, Button, Drawer } from "antd";
+import { Col, Layout, Row, Button, Drawer, message } from "antd";
 import "./AppHeader.scss";
-import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useCallback, useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
+import request from "../../Utils/request";
+import opus_logo from "../../assets/opus_logo.png";
 const { Header } = Layout;
 // const { useToken } = theme;
 
@@ -17,12 +19,18 @@ const { Header } = Layout;
 //     },
 // ];
 
+interface LogoutValues {
+    username: string;
+    password: string;
+}
+
 const AppHeader = () => {
     const avatar = require('../../public/images/logo192.png');
     // const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
+    const navigate = useNavigate();
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
@@ -49,6 +57,29 @@ const AppHeader = () => {
     };
 
     // const pathName = window.location.pathname;
+
+    const handleLogout =
+        (values: LogoutValues) => {
+            request
+                .post("/user/logout", values)
+                .then((response) => {
+                    const data = response.data;
+                    console.log(data);
+                    if (data) {
+                        if (data.Success == false) {
+                            message.error(data.Message);
+                        } else {
+                            localStorage.setItem("Token", "");
+                            localStorage.setItem("Id", "");
+                            navigate("/login");
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        };
+
     return (
         <Header className="mcs-header">
             <Row className="row-header">
@@ -61,12 +92,12 @@ const AppHeader = () => {
 
                     <div onClick={handlePathName}>
                         <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
-                            <p><b>OPUS Solutions</b></p>
+                            <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
                 </Col>
                 <Col span={2} className="col-label">
-                    <p><b>eOffice</b></p>
+                    <p>eOffice</p>
                 </Col>
                 <Col span={18} className="col-function">
                     <div className="group-btn">
@@ -129,13 +160,13 @@ const AppHeader = () => {
                                     <span className="info-email">bangmn@o365.vn</span>
                                 </div>
                                 <div className="content-info">
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                    <NavLink to="/profile" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>My Profile</p>
                                     </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>My Account</p>
                                     </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                    <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>Sign out</p>
                                     </NavLink>
                                 </div>

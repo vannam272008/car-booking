@@ -29,11 +29,12 @@ const SendToOthers: React.FC = () => {
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
   const [status, setStatus] = useState("");
+  const userId = localStorage.getItem("Id")
 
   const handleGetSendToOthersRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/sent-to-others/userId=1119a579-fa8a-4f04-956f-62a00351a3e7?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = `/request/sent-to-others/userId=${userId}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
       const response = await request.get(url);
 
       setRequestData(response.data.Data);

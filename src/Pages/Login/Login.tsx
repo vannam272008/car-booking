@@ -1,6 +1,6 @@
-import { Input, Button, Form, message } from "antd";
+import { Input, Button, Form, message, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import request from "../../Utils/request";
 import "./index.css";
 
@@ -11,97 +11,106 @@ interface LoginValues {
 
 const Login = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogIn = useCallback(
     (values: LoginValues) => {
-      request
-        .post("/user/login", values)
-        .then((response) => {
-          const data = response.data;
-          console.log(data);
-          
-          if (data) {
-            localStorage.setItem("Token", data?.Data);
-            if (data.Success == false) {
-              message.error(data.Message);
-            } else {
-              navigate("/request/carbooking");
+      setLoading(true);
+      setTimeout(() => {
+        request
+          .post("/user/login", values)
+          .then((response) => {
+            const data = response.data;
+            if (data) {
+              localStorage.setItem("Token", data?.Data?.jwtToken);
+              localStorage.setItem("Id", data?.Data?.userInfo.Id);
+              if (data.Success == false) {
+                console.log("Login failed:", data?.Message);
+                message.error(data?.Message);
+              } else {
+                navigate("/request/carbooking");
+              }
             }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }, 500);
     },
     [navigate]
   );
 
   return (
-    <div className="login-page">
-      <h2>Login to your account</h2>
-      <br />
-      <Form
-        className="login-form"
-        name="basic"
-        labelCol={{
-          span: 8,
-        }}
-        wrapperCol={{
-          span: 16,
-        }}
-        style={{
-          maxWidth: 600,
-        }}
-        initialValues={{
-          remember: true,
-        }}
-        autoComplete="off"
-        onFinish={handleLogIn}
-      >
-
-        <Form.Item
-          label="Username"
-          name="username"
-          rules={[
-            {
-              required: true,
-              message: "Please input your username!",
-            },
-          ]}
-        >
-          <Input placeholder="Type your username" />
-        </Form.Item>
-
-        <Form.Item
-          label="Password"
-          name="password"
-          rules={[
-            {
-              required: true,
-              message: "Please input your password!",
-            },
-          ]}
-        >
-          <Input.Password placeholder="Type your password" />
-        </Form.Item>
-
-        <Form.Item
+    <Spin spinning={loading} size="large">
+      <div className="login-page">
+        <h2>Login to your account</h2>
+        <br />
+        <Form
+          className="login-form"
+          name="basic"
+          labelCol={{
+            span: 8,
+          }}
           wrapperCol={{
-            offset: 8,
             span: 16,
           }}
+          style={{
+            maxWidth: 600,
+          }}
+          initialValues={{
+            remember: true,
+          }}
+          autoComplete="off"
+          onFinish={handleLogIn}
         >
-          <Button type="primary" htmlType="submit" id="btn-login">
-            Log In
-          </Button>
-          <Link to={`/register`} style={{ textDecoration: "none" }}>
-            <Button type="primary" htmlType="submit" id="btn-register">
-              Register
+
+          <Form.Item
+            label="Username"
+            name="username"
+            rules={[
+              {
+                required: true,
+                message: "Please input your username!",
+              },
+            ]}
+          >
+            <Input placeholder="Type your username" />
+          </Form.Item>
+
+          <Form.Item
+            label="Password"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Type your password" />
+          </Form.Item>
+
+          <Form.Item
+            wrapperCol={{
+              offset: 8,
+              span: 16,
+            }}
+          >
+            <Button type="primary" htmlType="submit" id="btn-login" loading={loading}>
+              Log In
             </Button>
-          </Link>
-        </Form.Item>
-      </Form>
-    </div>
+            <Link to={`/register`} style={{ textDecoration: "none" }}>
+              <Button type="primary" htmlType="submit" id="btn-register">
+                Register
+              </Button>
+            </Link>
+          </Form.Item>
+        </Form>
+      </div>
+    </Spin>
   );
 };
 

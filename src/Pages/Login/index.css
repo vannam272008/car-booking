@@ -53,3 +53,31 @@
     margin-bottom: 10px;
   }
 }
+
+.ant-spin-dot-item {
+  width: 50px;
+  height: 50px;
+  border-radius: 99rem;
+  position: relative;
+  margin: 0 auto;
+}
+
+.ant-spin-dot-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  border: 4px solid transparent;
+  border-right-color: #ff6bcb;
+  border-bottom-color: #ffa400;
+  animation: circleloading 1s forwards infinite linear;
+}
+
+@keyframes circle-loading {
+  to {
+    transform: rotate(360deg);
+  }
+}

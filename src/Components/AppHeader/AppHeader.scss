@@ -31,7 +31,7 @@
     }
 
     & .col-label {
-        padding-left: 10px;
+        padding-left: 49px;
         width: 100%;
 
 
@@ -39,6 +39,9 @@
             width: 100%;
             color: white;
             display: contents;
+            font-size: 17px;
+            cursor: pointer;
+            font-family: 'Segoe UI';
         }
     }
 
@@ -88,7 +91,8 @@
 
             & span {
                 margin-left: 10px;
-                font-size: 25px;
+                font-size: 28px;
+                font-family: 'Segoe UI';
             }
 
             & .header-btn-close {
@@ -120,12 +124,15 @@
                 & .info-name {
                     margin-left: 10px;
                     float: left;
-                    font-size: 20px;
+                    font-size: 17px;
+                    font-family: 'Segoe UI';
                 }
 
                 & .info-email {
                     margin-left: 10px;
                     font-style: italic;
+                    font-family: 'Segoe UI';
+                    font-size: 14px;
                 }
             }
 
@@ -152,8 +159,12 @@
             & p {
                 color: #4BA747;
                 margin-left: 25px;
+                font-family: 'Segoe UI';
             }
 
+            & p:hover {
+                color: black;
+            }
 
         }
     }

@@ -29,11 +29,12 @@ const SendToMe: React.FC = () => {
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
   const [status, setStatus] = useState("");
+  const userId = localStorage.getItem("Id")
 
   const handleGetSendToMeRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/sent-to-me/userId=1119a579-fa8a-4f04-956f-62a00351a3e7?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = `/request/sent-to-me/userId=${userId}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
       const response = await request.get(url);
 
       setRequestData(response.data.Data);
@@ -46,6 +47,9 @@ const SendToMe: React.FC = () => {
   useEffect(() => {
     handleGetSendToMeRequest();
   }, []);
+
+  console.log(userId);
+  
 
   const profile = false;
   return (
