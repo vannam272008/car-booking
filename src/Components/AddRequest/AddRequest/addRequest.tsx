@@ -15,6 +15,7 @@ interface Department {
 interface DepartmentMember {
     Id: string;
     User: {
+        Id: string;
         FullName: string;
         Email: string;
         JobTitle: string;
@@ -40,12 +41,12 @@ function AddRequest(): JSX.Element {
         const getDataDepartment = async () => {
             const endpoint = "department/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
-                setLoading(false);
                 setDataDepartment(res.data.Data);
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     DepartmentId: res.data.Data[0].Id,
                 }));
+                setLoading(false);
             }).catch(() => {
                 setLoading(true);
             });
@@ -54,6 +55,10 @@ function AddRequest(): JSX.Element {
             const endpoint = "departmentMember/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    ReceiverId: res.data.Data[0].User.Id,
+                }));
                 setLoading(false);
             }).catch(() => {
                 setLoading(true);
@@ -67,7 +72,7 @@ function AddRequest(): JSX.Element {
     const [formData, setFormData] = useState({
         SenderId: "930a6591-2f5d-4699-a585-18434526e068",
         DepartmentId: "",
-        ReceiverId: "930a6591-2f5d-4699-a585-18434526e068",
+        ReceiverId: "",
         Mobile: null as string | null,
         CostCenter: null as string | null,
         TotalPassengers: null as string | null,
@@ -178,7 +183,7 @@ function AddRequest(): JSX.Element {
                                                         }
                                                     >
                                                         {dataDepartment.map((department) => (
-                                                            <Option value={department.Id} >
+                                                            <Option key={department.Id} value={department.Id} >
                                                                 {department.Name}
                                                             </Option>
                                                         ))}
@@ -196,7 +201,7 @@ function AddRequest(): JSX.Element {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={dataDepartment.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
+                                                    initialValue={dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
@@ -209,7 +214,7 @@ function AddRequest(): JSX.Element {
                                                         }
                                                     >
                                                         {dataDepartmentMember.map((departmentMember) => (
-                                                            <Option value={departmentMember.Id}>
+                                                            <Option key={departmentMember.Id} value={departmentMember.User.Id}>
                                                                 <div>
                                                                     <span>{departmentMember.User.FullName} </span>
                                                                     <span>{departmentMember.User.Email} </span>
