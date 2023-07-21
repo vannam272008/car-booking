@@ -7,6 +7,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate.js';
 import request from "../../../Utils/request";
+import { RcFile } from 'antd/es/upload';
 
 interface Department {
     Name: string;
@@ -36,6 +37,7 @@ function AddRequest(): JSX.Element {
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [fileList, setFileList] = useState<RcFile[]>([]);
 
     useEffect(() => {
         const getDataDepartment = async () => {
@@ -82,8 +84,18 @@ function AddRequest(): JSX.Element {
         ApplyNote: false,
         UsageFrom: updateMoment,
         UsageTo: updatefutureTime,
-        PickTime: updateMoment
+        PickTime: updateMoment,
+        ListOfUserId: "402CC321-5899-448B-964D-32CDFF6695DF",
+        Status: "Draftad",
+        files: fileList,
     });
+
+    useEffect(() => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            files: fileList,
+        }));
+    }, [fileList]);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -115,6 +127,13 @@ function AddRequest(): JSX.Element {
             }));
         }
     };
+
+    // useEffect(() => {
+    //     setFormData((prevFormData) => ({
+    //         ...prevFormData,
+    //         [files]: fileList,
+    //     }));
+    //   }, [fileList]);
 
 
     console.log(formData);
@@ -412,7 +431,7 @@ function AddRequest(): JSX.Element {
                                 </div>
                             )}
                         </div>
-                        <SendApprover />
+                        <SendApprover fileList={fileList} setFileList={setFileList} />
                     </div>
                 </div>
             )

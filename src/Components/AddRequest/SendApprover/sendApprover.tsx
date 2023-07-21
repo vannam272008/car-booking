@@ -3,6 +3,8 @@ import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutline
 import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, Spin, Alert } from 'antd';
 import './sendApprover.css'
 import request from "../../../Utils/request";
+// import MenuAdd from '../MenuAdd/menuAdd';
+import { RcFile } from 'antd/es/upload';
 
 interface DepartmentMember {
     Id: string;
@@ -14,11 +16,15 @@ interface DepartmentMember {
     };
 }
 
-function SendApprover(): JSX.Element {
+interface DataFileList {
+    fileList: RcFile[];
+    setFileList: React.Dispatch<React.SetStateAction<RcFile[]>>
+}
+
+function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
@@ -52,11 +58,11 @@ function SendApprover(): JSX.Element {
         setCounterApprover(counterApprover + 1);
     };
 
-    const handleInputChange = (index: number, value: string) => {
-        const newInputs = [...inputs];
-        newInputs[index] = value;
-        setInputs(newInputs);
-    };
+    // const handleInputChange = (index: number, value: string) => {
+    //     const newInputs = [...inputs];
+    //     newInputs[index] = value;
+    //     setInputs(newInputs);
+    // };
 
     const handleDelete = (index: number) => {
         const newInputs = [...inputs];
@@ -82,6 +88,22 @@ function SendApprover(): JSX.Element {
         setEditingIndex(index);
     };
 
+
+
+    const handleBeforeUpload = (file: RcFile) => {
+        setFileList([...fileList, file]);
+        return false;
+    };
+
+    // const handleChange = (info: any) => {
+    //     if (info.file.status === 'done') {
+    //         console.log('File uploaded successfully');
+    //     } else if (info.file.status === 'error') {
+    //         console.error('Failed to upload file');
+    //     }
+    // };
+    // console.log(fileList);
+
     return (
         <div>
             <div className='attention-request' style={{ marginTop: '0', }}>
@@ -95,9 +117,15 @@ function SendApprover(): JSX.Element {
                 <b>Attachment(s)</b>
             </div>
             <div className='reply-upload-comment'>
-                <Upload>
-                    <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>Add attachments</Button>
-                    <span>(Maximum 20MB per file)</span>
+                <Upload
+                    beforeUpload={handleBeforeUpload}
+                    // onChange={handleChange}
+                    fileList={fileList}
+                >
+                    <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
+                        Add attachments
+                    </Button>
+                    <span> (Maximum 20MB per file)</span>
                 </Upload>
             </div>
             <div className='form-approver'>

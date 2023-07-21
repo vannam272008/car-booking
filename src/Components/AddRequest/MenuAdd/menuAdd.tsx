@@ -9,6 +9,7 @@ import './menuAdd.css'
 // import { request } from 'http';
 import { useNavigate } from 'react-router-dom';
 import request from '../../../Utils/request';
+import { RcFile } from 'antd/es/upload';
 
 
 interface MenuAddProps {
@@ -25,7 +26,10 @@ interface MenuAddProps {
         ApplyNote: boolean,
         UsageFrom: string,
         UsageTo: string,
-        PickTime: string
+        PickTime: string,
+        ListOfUserId: string,
+        Status: string,
+        // files: [],
     };
 }
 
