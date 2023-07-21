@@ -1,23 +1,32 @@
-// interface RequestState {
-//     requestList: string[]
-// }
+import { setTab, setStatus } from "../Actions/requestAction";
 
-const initState = {
-    requestList: [],
-    success: true,
+
+type RequestState = {
+    tab: string | null
+    status: string | null
 }
 
-const requestReducer = (state = initState, action: { type: any; payload: any }) => {
+type RequestAction = ReturnType<typeof setTab | typeof setStatus>;
+
+const initState: RequestState = {
+    tab: 'get-all',
+    status: ''
+}
+
+export const requestReducer = (state = initState, action: RequestAction): RequestState => {
     switch (action.type) {
-        case 'SET_REQUEST_LIST':
+        case 'SET_TAB':
             return {
                 ...state,
-                requestList: action.payload,
-                success: false
+                tab: action.payload
+            }
+        case 'SET_STATUS':
+            return {
+                ...state,
+                status: action.payload
             }
         default:
-            return state
+            return state;
     }
 }
 
-export default requestReducer

@@ -98,9 +98,9 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
             </Form.Item>
             <Form.Item name="createdBy" label="Created by" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <Select onChange={value => onSenderIdChange(value)}>
-                    <Select.Option value="">All</Select.Option>
-                    <Select.Option value="1119a579-fa8a-4f04-956f-62a00351a3e7">Manh Nguyen</Select.Option>
-                    <Select.Option value="8c8850cc-09dd-4219-a664-b3a60100b256">Hong Tran</Select.Option>
+                    {/* <Select.Option value="">All</Select.Option>
+                    <Select.Option value=""></Select.Option>
+                    <Select.Option value=""></Select.Option> */}
                 </Select>
             </Form.Item>
             <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>

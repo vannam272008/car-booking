@@ -1,7 +1,7 @@
 import { Input, Button, Form, Radio, message, DatePicker } from "antd";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import request from "../../Utils/request";
 
 interface RegisterValues {
@@ -12,6 +12,7 @@ interface RegisterValues {
     sex: Boolean;
     birthday: Date;
     password: string;
+    employeenumber: string;
 }
 
 const Register = () => {
@@ -127,8 +128,8 @@ const Register = () => {
                         ]}
                     >
                         <Radio.Group>
-                            <Radio value={false}>Female</Radio>
-                            <Radio value={true}>Male</Radio>
+                            <Radio>Female</Radio>
+                            <Radio>Male</Radio>
                         </Radio.Group>
                     </Form.Item>
 
@@ -143,6 +144,19 @@ const Register = () => {
                         ]}
                     >
                         <DatePicker />
+                    </Form.Item>
+
+                    <Form.Item  //Test register
+                        label="Employee number"
+                        name="employeenumber"
+                        rules={[
+                            {
+                                required: true,
+                                message: "Please input your employee number!",
+                            },
+                        ]}
+                    >
+                        <Input placeholder="Type your employee number" />
                     </Form.Item>
 
                     <Form.Item

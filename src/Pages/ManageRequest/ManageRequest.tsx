@@ -2,11 +2,17 @@ import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
-import RequestLayout from '../../../Components/RequestLayout';
-import request from "../../../Utils/request";
+import RequestLayout from '../../Components/RequestLayout';
+import request from "../../Utils/request";
 import FilterDropdown from './FilterDropdown/FilterDropdown';
-import { changeFormatDate } from '../../../Utils/formatDate';
+import { changeFormatDate } from '../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux';
+import { setTab, setStatus } from '../../Actions/requestAction';
+import { RootState } from '../../Reducers/rootReducer';
+
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 interface RequestType {
   Id: string;
@@ -20,7 +26,11 @@ interface RequestType {
   Status: string;
 }
 
-const ManageRequest: React.FC = () => {
+// const { Search } = Input;
+
+const ManageRequest = (props: any) => {
+
+  const { tab, status, setStatus } = props
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,15 +38,15 @@ const ManageRequest: React.FC = () => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
-  const [status, setStatus] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
 
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20&search=`;
       const response = await request.get(url);
 
-      setRequestData(response.data.Data);
+      setRequestData(response.data.Data.ListData) 
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -45,7 +55,18 @@ const ManageRequest: React.FC = () => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, []);
+  }, [tab, status]);
+
+    // // search user
+    // const handleSearch = (event: any) => {
+    //   setSearchQuery(event.target.value);
+    // };
+  
+    // const filteredUsers = requestData.filter(
+    //   (requestData) => 
+    //     requestData.requestCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    // );
+
 
   const profile = false;
   return (
@@ -151,4 +172,13 @@ const ManageRequest: React.FC = () => {
   )
 }
 
-export default ManageRequest
+const mapStateToProps = (state: RootState) => ({
+  tab: state.request.tab,
+  status: state.request.status
+})
+
+const mapDispatchToProps = { setTab, setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageRequest)
+
+// export default ManageRequest

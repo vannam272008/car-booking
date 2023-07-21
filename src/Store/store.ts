@@ -1,11 +1,4 @@
-import requestReducer from "../Reducers/requestReducer";
-import { configureStore, createStore } from "@reduxjs/toolkit";
+import { createStore } from "redux";
+import { rootReducer } from "../Reducers/rootReducer";
 
-
-// export const store = configureStore({
-//     reduder: {
-//         request: requestReducer
-//     }
-// });
-
-export const store = createStore(requestReducer);
+export const store = createStore(rootReducer);
