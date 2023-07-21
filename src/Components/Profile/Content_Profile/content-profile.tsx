@@ -120,22 +120,9 @@ const ContentProfile: React.FC = () => {
     EmployeeType: '',
     Rights: ''
   });
+
   const { userID } = useParams();  
   
-  // useEffect(() => {
-  //   const endpoint = "/user/profile/" + userID;
-  //   const getProfile = async () => {
-  //     await request.get(endpoint)
-  //     .then(response => {
-  //       setInfoAPI(response.data.Data);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  //   }
-  //   getProfile();
-  // }, []);
-
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
@@ -149,7 +136,21 @@ const ContentProfile: React.FC = () => {
     }
     getProfile();
   }, []);
-  
+
+  useEffect(() => {
+    const endpoint = "/user/profile/" + userID;
+    const getProfile = async () => {
+      await request.put(endpoint, infoAPI)
+      .then(response => {
+        console.log(response.data.Data)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+    getProfile();
+  }, []);
+
 
 
 

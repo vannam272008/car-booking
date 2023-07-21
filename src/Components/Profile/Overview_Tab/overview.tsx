@@ -208,7 +208,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                company: e.target.value,
+                Company: e.target.value,
               };
             });
           }}
@@ -228,7 +228,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                unit: e.target.value,
+                Unit: e.target.value,
               };
             });
           }}
@@ -248,7 +248,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                function: e.target.value,
+                Function: e.target.value,
               };
             });
           }}
@@ -268,7 +268,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                sections_teams: e.target.value,
+                SectionsOrTeam: e.target.value,
               };
             });
           }}
@@ -288,7 +288,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                groups: e.target.value,
+                Groups: e.target.value,
               };
             });
           }}
@@ -308,7 +308,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
             setInfoAPI((prev) => {
               return {
                 ...prev,
-                office_location: e.target.value,
+                OfficeLocation: e.target.value,
               };
             });
           }}
