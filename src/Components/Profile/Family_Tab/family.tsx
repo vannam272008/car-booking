@@ -131,7 +131,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       ),
     },
     {
-      Family_title: <strong>Emergency contact</strong>,
+      Family_title: <strong><br/><br/>Emergency contact</strong>,
     },
     {
       Family_title: "Contact name",
@@ -191,7 +191,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       ),
     },
     {
-      Family_title: <strong>Permanent Address</strong>,
+      Family_title: <strong><br/><br/>Permanent Address</strong>,
     },
     {
       Family_title: "Street",
@@ -325,6 +325,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
         dataSource={dataSource_family}
         columns={columns_family}
       ></Table>
+      <br/><br/>
       <Title>Relationships</Title>
       <Table
         pagination={false}

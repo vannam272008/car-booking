@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import type { TabsProps } from "antd";
 
+
 interface SignatureProps {
   isEditing: boolean;
 }
@@ -14,6 +15,28 @@ const { Dragger } = Upload;
 
 const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [items, setItems] = useState(['Herr Von Muellerhoff', 'Dancing Script','Great Vibes','Rochester']);
+
+  const handleShowSignature = () =>{
+      <div
+      className="QR_signature"
+      style={{
+        width: "300px",
+        margin: "auto",
+        border: "2px solid black",
+        padding: "50px 50px 50px 50px",
+      }}
+    >
+      <QRCodeCanvas
+        style={{ height: "200px", width: "200px" }}
+        value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
+      />
+      <p>bangnm@o365.vn</p>
+      <p>{currentTime.toLocaleString()}</p>
+      <h1 style={{ fontFamily: "Monospace" }}></h1>
+    </div>
+  }
+  
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -49,12 +72,21 @@ const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
         <>
           <div>
             <strong>Confirm your Name</strong>
-            <Input placeholder="Confirm your name" />
+            <Input placeholder="Confirm your name" onChange={handleShowSignature}/>
             <strong>Signature Style</strong>
-            <Select
-              placeholder="Choose your signature"
-              style={{ width: "100%" }}
-            />
+            <div>
+              <Select
+                showSearch
+                placeholder="Choose your signature"
+                style={{ width: "100%" }}
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                }
+                options={items.map((value)=>({label: value, value: value }))}
+              />
+            </div>
+            
           </div>
         </>
       ),
