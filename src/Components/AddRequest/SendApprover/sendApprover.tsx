@@ -16,12 +16,19 @@ interface DepartmentMember {
     };
 }
 
-interface DataFileList {
+interface PropsDataList {
     fileList: RcFile[];
-    setFileList: React.Dispatch<React.SetStateAction<RcFile[]>>
+    setFileList: React.Dispatch<React.SetStateAction<RcFile[]>>;
+    applyNote: boolean;
+    setApplyNote: React.Dispatch<React.SetStateAction<boolean>>;
+    listOfUserId: string[];
+    setListOfUserId: React.Dispatch<React.SetStateAction<string[]>>;
+    initiValueUserId: string[];
+    setInitiValueUserId: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
+
+function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -31,6 +38,7 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
             const endpoint = "departmentMember/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
+                setInitiValueUserId(res.data.Data[0].User.Id)
                 setLoading(false);
             }).catch(() => {
                 setLoading(true);
@@ -41,11 +49,11 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
 
     const { Option } = Select;
 
-    const [value, setValue] = useState(2);
+    // const [applyNote, setApplyNote] = useState<DataApplyNote>(false);
 
     const onChange = (e: RadioChangeEvent) => {
-        console.log('radio checked', e.target.value);
-        setValue(e.target.value);
+        // console.log('radio checked', e.target.value);
+        setApplyNote(e.target.value);
     };
 
     const [inputs, setInputs] = useState<string[]>([]);
@@ -88,8 +96,6 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
         setEditingIndex(index);
     };
 
-
-
     const handleBeforeUpload = (file: RcFile) => {
         setFileList([...fileList, file]);
         return false;
@@ -102,15 +108,20 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
     //         console.error('Failed to upload file');
     //     }
     // };
-    // console.log(fileList);
+
+    const handleSelectChange = (value: string) => {
+        setListOfUserId([...listOfUserId, value]);
+    }
+
+    // console.log(initiValueUserId);
 
     return (
         <div>
             <div className='attention-request' style={{ marginTop: '0', }}>
                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
-                <Radio.Group onChange={onChange} value={value}>
-                    <Radio value={1}>Yes</Radio>
-                    <Radio value={2}>No</Radio>
+                <Radio.Group onChange={onChange} value={applyNote}>
+                    <Radio value={true}>Yes</Radio>
+                    <Radio value={false}>No</Radio>
                 </Radio.Group>
             </div>
             <div className='Attachment'>
@@ -163,6 +174,7 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            // onChange={propsInitiValue}
                                             showSearch
                                             optionFilterProp="children"
                                             filterOption={(inputValue, option) =>
@@ -208,10 +220,11 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
                                                     message: 'Select something!',
                                                 },
                                             ]}
-                                            initialValue={dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
+                                            initialValue={'--Select a Approver--'}
                                             labelCol={{ span: 24 }}
                                         >
                                             <Select
+                                                onChange={handleSelectChange}
                                                 showSearch
                                                 optionFilterProp="children"
                                                 filterOption={(inputValue, option) =>
@@ -247,7 +260,7 @@ function SendApprover({ fileList, setFileList }: DataFileList): JSX.Element {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
