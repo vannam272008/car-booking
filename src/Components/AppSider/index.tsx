@@ -11,6 +11,7 @@ import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 
 const { Sider } = Layout;
+const { Search } = Input;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -31,6 +32,7 @@ function getItem(
 }
 
 const AppSider = (props: any) => {
+    const userID = localStorage.getItem("Id")
 
     const { tab, setTab, setStatus } = props
     const items: MenuProps['items'] = [
@@ -62,7 +64,7 @@ const AppSider = (props: any) => {
 
     const handleClick: MenuProps['onClick'] = (e) => {
         if (e.key !== 'get-all' && e.keyPath[1] === 'requests') {
-            setTab(e.key + '/userId=930a6591-2f5d-4699-a585-18434526e068');
+            setTab(e.key + `/userId=${userID}`);
             setStatus("");
         }
         else if (e.keyPath[1] === 'status') {
@@ -80,7 +82,7 @@ const AppSider = (props: any) => {
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
                 <div>
                     <Space.Compact size="large">
-                        <Input addonBefore={<SearchOutlined />} placeholder="..." />
+                        <Search placeholder="Search" />
                     </Space.Compact>
                     <Menu
                         mode="inline"

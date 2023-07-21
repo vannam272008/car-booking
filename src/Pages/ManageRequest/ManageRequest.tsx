@@ -2,11 +2,17 @@ import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
-import RequestLayout from '../../../Components/RequestLayout';
-import request from "../../../Utils/request";
-import FilterDropdown from '../../Request/ManageRequest/FilterDropdown/FilterDropdown';
-import { changeFormatDate } from '../../../Utils/formatDate';
+import RequestLayout from '../../Components/RequestLayout';
+import request from "../../Utils/request";
+import FilterDropdown from './FilterDropdown/FilterDropdown';
+import { changeFormatDate } from '../../Utils/formatDate';
 import { useNavigate } from "react-router-dom";
+import { connect } from 'react-redux';
+import { setTab, setStatus } from '../../Actions/requestAction';
+import { RootState } from '../../Reducers/rootReducer';
+
+
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 interface RequestType {
   Id: string;
@@ -20,7 +26,11 @@ interface RequestType {
   Status: string;
 }
 
-const Approved: React.FC = () => {
+// const { Search } = Input;
+
+const ManageRequest = (props: any) => {
+
+  const { tab, status, setStatus } = props
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -28,15 +38,15 @@ const Approved: React.FC = () => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
-  const [status, setStatus] = useState("Approved");
+  // const [searchQuery, setSearchQuery] = useState("");
 
-  const handleGetApprovedRequest = async () => {
+  const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/get-all?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20`;
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20&search=`;
       const response = await request.get(url);
 
-      setRequestData(response.data.Data);
+      setRequestData(response.data.Data.ListData) 
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -44,16 +54,27 @@ const Approved: React.FC = () => {
   };
 
   useEffect(() => {
-    handleGetApprovedRequest();
-  }, []);
+    handleGetAllRequest();
+  }, [tab, status]);
+
+    // // search user
+    // const handleSearch = (event: any) => {
+    //   setSearchQuery(event.target.value);
+    // };
+  
+    // const filteredUsers = requestData.filter(
+    //   (requestData) => 
+    //     requestData.requestCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    // );
+
 
   const profile = false;
   return (
     <RequestLayout profile={profile}>
       {() => (
         <div style={{ overflowX: 'hidden' }} className='request'>
-          <div className='approved-navbar'>
-            <div className='approved-title'>car booking</div>
+          <div className='manage-request-navbar'>
+            <div className='manage-request-title'>car booking</div>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
               <FilterDropdown
@@ -62,12 +83,12 @@ const Approved: React.FC = () => {
                 onCreatedToChange={setCreatedTo}
                 onSenderIdChange={setSenderId}
                 onStatusChange={setStatus}
-                onApply={handleGetApprovedRequest}
+                onApply={handleGetAllRequest}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
           </div>
-          <div className='approved-content'>
+          <div className='manage-request-content'>
             <Table
               loading={loading}
               onRow={(record) => ({
@@ -102,22 +123,22 @@ const Approved: React.FC = () => {
                     let className = '';
                     switch (record.Status) {
                       case 'Rejected':
-                        className = 'rejected-status-theme';
+                        className = 'manage-request-rejected-status-theme';
                         break;
                       case 'Approved':
-                        className = 'approved-status-theme';
+                        className = 'manage-request-approved-status-theme';
                         break;
                       case 'Waiting for approval':
-                        className = 'waiting-approval-status-theme';
+                        className = 'manage-request-waiting-approval-status-theme';
                         break;
                       case 'Done':
-                        className = 'done-status-theme';
+                        className = 'manage-request-done-status-theme';
                         break;
                       case 'Canceled':
-                        className = 'canceled-status-theme';
+                        className = 'manage-request-canceled-status-theme';
                         break;
                       case 'Draft':
-                        className = 'draft-status-theme';
+                        className = 'manage-request-draft-status-theme';
                         break;
                       default:
                         className = '';
@@ -151,4 +172,13 @@ const Approved: React.FC = () => {
   )
 }
 
-export default Approved
+const mapStateToProps = (state: RootState) => ({
+  tab: state.request.tab,
+  status: state.request.status
+})
+
+const mapDispatchToProps = { setTab, setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageRequest)
+
+// export default ManageRequest

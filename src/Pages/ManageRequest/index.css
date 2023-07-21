@@ -67,10 +67,32 @@
   text-align: center;
 }
 
+.manage-request-waiting-approval-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
+}
+
 .manage-request-approved-status-theme {
   background-color: #4ba747;
   color: white;
   text-align: center;
+}
+
+.manage-request-approved-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
 }
 
 .manage-request-rejected-status-theme {
@@ -79,10 +101,32 @@
   text-align: center;
 }
 
+.manage-request-rejected-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
+}
+
 .manage-request-canceled-status-theme {
   background-color: #7a7879;
   color: white;
   text-align: center;
+}
+
+.manage-request-canceled-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
 }
 
 .manage-request-draft-status-theme {
@@ -91,8 +135,31 @@
   text-align: center;
 }
 
+.manage-request-draft-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
+}
+
 .manage-request-done-status-theme {
   background-color: #2a5b28;
   color: white;
   text-align: center;
 }
+
+.manage-request-done-status-theme::before {
+  content: '';
+  position: absolute;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-top: 11px solid transparent;
+  border-right: 10px solid white;
+  border-bottom: 10px solid transparent;
+}
+

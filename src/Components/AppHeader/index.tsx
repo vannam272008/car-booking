@@ -160,7 +160,7 @@ const AppHeader = () => {
                                     <span className="info-email">bangmn@o365.vn</span>
                                 </div>
                                 <div className="content-info">
-                                    <NavLink to="/profile" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="/setting/profile" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>My Profile</p>
                                     </NavLink>
                                     <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
