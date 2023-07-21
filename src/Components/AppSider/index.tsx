@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import type { MenuProps } from 'antd';
-import { Layout, Menu, theme, Space } from 'antd';
-import { Input } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 
-import { FolderOpenOutlined, BarChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, BarChartOutlined, SettingOutlined } from '@ant-design/icons';
 
 import { connect } from 'react-redux';
 import "./AppSider.scss";
@@ -11,7 +10,6 @@ import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 
 const { Sider } = Layout;
-const { Search } = Input;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -77,13 +75,11 @@ const AppSider = (props: any) => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+    
     return (
         <div className='sider-layout'>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
                 <div>
-                    <Space.Compact size="large">
-                        <Search placeholder="Search" />
-                    </Space.Compact>
                     <Menu
                         mode="inline"
                         defaultSelectedKeys={[tab]}

@@ -2,8 +2,9 @@ import { CaretDownOutlined, FilterOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Dropdown, Input, Select } from "antd";
 import { Form } from "antd";
 import "./index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import request from "../../../Utils/request";
 
 interface FilterDropdownProps {
     onRequestCodeChange: (value: string) => void;
@@ -14,6 +15,12 @@ interface FilterDropdownProps {
     onApply: () => void;
 }
 
+interface User {
+    Id: string;
+    FirstName: string;
+    LastName: string;
+}
+
 const FilterForm: React.FC<FilterDropdownProps> = ({
     onRequestCodeChange,
     onCreatedFromChange,
@@ -22,7 +29,9 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
     onStatusChange,
     onApply,
 }) => {
+
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState<boolean>(true);
     const [createdFrom, setCreatedFrom] = useState(() => {
         const date = dayjs().subtract(1, 'year');
         return date.format('MM/DD/YYYY');
@@ -31,6 +40,7 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
         const date = dayjs();
         return date.format('MM/DD/YYYY');
     });
+    const [dataUser, setDataUser] = useState<User[]>([]);
 
     const handleClear = () => {
         // // Reset filter mà k cần load lại trang
@@ -49,6 +59,20 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
 
         window.location.reload();
     };
+
+    const getAllUser = async () => {
+        const endpoint = "user/all?page=1&limit=100";
+        await request.get(endpoint).then((res) => {
+            setDataUser(res.data.Data);
+            setLoading(false);
+        }).catch(() => {
+            setLoading(true);
+        });
+    }
+
+    useEffect(() => {
+        getAllUser();
+    }, [])
 
     return (
         <Form
@@ -96,15 +120,31 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
                     }}
                 />
             </Form.Item>
-            <Form.Item name="createdBy" label="Created by" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
-                <Select onChange={value => onSenderIdChange(value)}>
-                    {/* <Select.Option value="">All</Select.Option>
-                    <Select.Option value=""></Select.Option>
-                    <Select.Option value=""></Select.Option> */}
+            <Form.Item name="createdBy" label="Created by" initialValue={dataUser.length > 0 ? dataUser[0].FirstName : undefined} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+                <Select
+                    onChange={value => onSenderIdChange(value)}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(inputValue, option) =>
+                        option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+                    }
+                >
+                    <Select.Option value="">All</Select.Option>
+                    {dataUser.map((items) => (
+                        <Select.Option key={items.Id} value={items.Id} >
+                            {`${items.FirstName} ${items.LastName}`}
+                        </Select.Option>
+                    ))}
                 </Select>
             </Form.Item>
             <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
-                <Select onChange={value => onStatusChange(value)}>
+                <Select onChange={value => onStatusChange(value)}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={(inputValue, option) =>
+                        option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+                    }
+                    >
                     <Select.Option value="">All requests</Select.Option>
                     <Select.Option value="Draft">Draft</Select.Option>
                     <Select.Option value="Waiting for approval">Waiting for approval</Select.Option>
