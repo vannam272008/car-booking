@@ -23,7 +23,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/setting" element={<SettingPage />} />
       <Route path="/setting/structure" element={<ContentStructure />} />
-      <Route path='/setting/profile' element={<Profile />} />
+      <Route path="/setting/profile/:userID" element={<Profile />} />
     </Routes>
   );
 }

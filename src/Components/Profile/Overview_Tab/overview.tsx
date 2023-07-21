@@ -2,85 +2,112 @@ import React from "react";
 import { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
 
-interface OverviewProps {
-  isEditing: boolean;
-  info: {
-    employee_number: string;
-    sex: string;
-    birth_day: Dayjs | null;
-    positon: string;
-    company: string;
-    unit: string;
-    function: string;
-    deparment: string;
-    sections_teams: string;
-    groups: string;
-    office_location: string;
-    cost_center: string;
-    rank: string;
-    employee_type: string;
-  };
-  setInfo: React.Dispatch<
-    React.SetStateAction<{
-      employee_number: string;
-      sex: string;
-      birth_day: Dayjs | null;
-      positon: string;
-      company: string;
-      unit: string;
-      function: string;
-      deparment: string;
-      sections_teams: string;
-      groups: string;
-      office_location: string;
-      cost_center: string;
-      rank: string;
-      employee_type: string;
-      nation: string;
-      phone: string;
-      id_card_number: string;
-      dateofidcard: Dayjs | null;
-      placeofidcard: string;
-      health_insurance: string;
-      starting_date: Dayjs | null;
-      Starting_date_official: Dayjs | null;
-      Leaving_date: Dayjs | null;
-      start_date_maternity_leave: Dayjs | null;
-      note: string;
-      academic_level: string;
-      specialized_qualification: string;
-      business_phone: string;
-      home_phone: string;
-      personal_email: string;
-      bank_name: string;
-      branch_number: string;
-      bank_branch_name: string;
-      bank_account_number: string;
-      notebank_account_name: string;
-      street: string;
-      building_flatnumber: string;
-      city: string;
-      province_state: string;
-      postal_code: string;
-      country: string;
-      martial_status: string;
-      contact_name: string;
-      relationship: string;
-      phone_family: string;
-      street_family: string;
-      building_family: string;
-      city_family: string;
-      province_state_family: string;
-      postal_code_family: string;
-      country_family: string;
-    }>
-  >;
+interface API {
+  EmployeeNumber: string;
+  Username: string,
+  Email: string,
+  FirstName: string,
+  LastName: string,
+  Sex: boolean,
+  Birthday: Dayjs | null,
+  JobTitle: string,
+  Company: string,
+  Unit: string,
+  Function: string,
+  SectionsOrTeam: string,
+  Groups: string,
+  OfficeLocation: string,
+  LineManager: string,
+  BelongToDepartments: string,
+  Rank: string,
+  EmployeeType: string,
+  Rights: string
 }
 
-const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
+interface OverviewProps {
+  isEditing: boolean;
+  infoAPI: {
+    EmployeeNumber: string;
+    Username: string,
+    Email: string,
+    FirstName: string,
+    LastName: string,
+    Sex: boolean,
+    Birthday: Dayjs | null,
+    JobTitle: string,
+    Company: string,
+    Unit: string,
+    Function: string,
+    SectionsOrTeam: string,
+    Groups: string,
+    OfficeLocation: string,
+    LineManager: string,
+    BelongToDepartments: string,
+    Rank: string,
+    EmployeeType: string,
+    Rights: string
+  }
+  // setInfo: React.Dispatch<
+  //   React.SetStateAction<{
+  //     employee_number: string;
+  //     sex: string;
+  //     birth_day: Dayjs | null;
+  //     positon: string;
+  //     company: string;
+  //     unit: string;
+  //     function: string;
+  //     deparment: string;
+  //     sections_teams: string;
+  //     groups: string;
+  //     office_location: string;
+  //     cost_center: string;
+  //     rank: string;
+  //     employee_type: string;
+  //     nation: string;
+  //     phone: string;
+  //     id_card_number: string;
+  //     dateofidcard: Dayjs | null;
+  //     placeofidcard: string;
+  //     health_insurance: string;
+  //     starting_date: Dayjs | null;
+  //     Starting_date_official: Dayjs | null;
+  //     Leaving_date: Dayjs | null;
+  //     start_date_maternity_leave: Dayjs | null;
+  //     note: string;
+  //     academic_level: string;
+  //     specialized_qualification: string;
+  //     business_phone: string;
+  //     home_phone: string;
+  //     personal_email: string;
+  //     bank_name: string;
+  //     branch_number: string;
+  //     bank_branch_name: string;
+  //     bank_account_number: string;
+  //     notebank_account_name: string;
+  //     street: string;
+  //     building_flatnumber: string;
+  //     city: string;
+  //     province_state: string;
+  //     postal_code: string;
+  //     country: string;
+  //     martial_status: string;
+  //     contact_name: string;
+  //     relationship: string;
+  //     phone_family: string;
+  //     street_family: string;
+  //     building_family: string;
+  //     city_family: string;
+  //     province_state_family: string;
+  //     postal_code_family: string;
+  //     country_family: string;
+  //   }>>;
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>
+}
+
+const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) => {
   // tab_overview
   const handleDate_birth = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, birth_day: value }));
+    setInfoAPI((prevInfo) => ({ ...prevInfo, Birthday: value }));
   };
 
   const columns_overview = [
@@ -96,11 +123,11 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
   const dataSource_overview = [
     {
       overview_title: "Login",
-      info: <strong>bangnm@o365.vn</strong>,
+      info: <strong>{infoAPI.Username}</strong>,
     },
     {
       overview_title: "Email",
-      info: <strong>bangnm@o365.vn</strong>,
+      info: <strong>{infoAPI.Email}</strong>,
     },
     {
       overview_title: "Employee number",
@@ -108,27 +135,27 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Employee number"
           name="Employee Number"
-          value={info.employee_number}
+          value={infoAPI.EmployeeNumber}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                employee_number: e.target.value,
+                EmployeeNumber: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.employee_number}</strong>
+        <strong>{infoAPI.EmployeeNumber}</strong>
       ),
     },
     {
       overview_title: "First name",
-      info: <strong>Bang</strong>,
+      info: <strong>{infoAPI.FirstName}</strong>,
     },
     {
       overview_title: "Last name",
-      info: <strong>Nguyen Minh</strong>,
+      info: <strong>{infoAPI.LastName}</strong>,
     },
     {
       overview_title: "Sex",
@@ -136,9 +163,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Sex"
           name="sex"
-          value={info.sex}
+          // value={infoAPI.Sex}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 sex: e.target.value,
@@ -147,7 +174,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.sex}</strong>
+        <strong>{infoAPI.Sex}</strong>
       ),
     },
     {
@@ -155,40 +182,20 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
       info: isEditing ? (
         <DatePicker
           className="profile-birth-day-datepicker"
-          value={info.birth_day}
+          value={infoAPI.Birthday}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"
         />
       ) : (
         <strong>
-          {info.birth_day ? info.birth_day.format("DD-MM-YYYY") : ""}
+          {infoAPI.Birthday ? infoAPI.Birthday.format("DD-MM-YYYY") : ""}
         </strong>
       ),
     },
     {
       overview_title: "Job title",
-      info: <strong>Developer</strong>,
-    },
-    {
-      overview_title: "Position",
-      info: isEditing ? (
-        <Input
-          placeholder="Position"
-          name="position"
-          value={info.positon}
-          onChange={(e) => {
-            setInfo((prev) => {
-              return {
-                ...prev,
-                positon: e.target.value,
-              };
-            });
-          }}
-        />
-      ) : (
-        <strong>{info.positon}</strong>
-      ),
+      info: <strong>{infoAPI.JobTitle}</strong>,
     },
     {
       overview_title: "Company",
@@ -196,9 +203,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Company"
           name="company"
-          value={info.company}
+          value={infoAPI.Company}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 company: e.target.value,
@@ -207,7 +214,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.company}</strong>
+        <strong>{infoAPI.Company}</strong>
       ),
     },
     {
@@ -216,9 +223,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Unit"
           name="unit"
-          value={info.unit}
+          value={infoAPI.Unit}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 unit: e.target.value,
@@ -227,7 +234,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.unit}</strong>
+        <strong>{infoAPI.Unit}</strong>
       ),
     },
     {
@@ -236,9 +243,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Function"
           name="function"
-          value={info.function}
+          value={infoAPI.Function}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 function: e.target.value,
@@ -247,27 +254,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.function}</strong>
-      ),
-    },
-    {
-      overview_title: "Department",
-      info: isEditing ? (
-        <Input
-          placeholder="Deparment"
-          name="deparment"
-          value={info.deparment}
-          onChange={(e) => {
-            setInfo((prev) => {
-              return {
-                ...prev,
-                deparment: e.target.value,
-              };
-            });
-          }}
-        />
-      ) : (
-        <strong>{info.deparment}</strong>
+        <strong>{infoAPI.Function}</strong>
       ),
     },
     {
@@ -276,9 +263,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Sections/Teams"
           name="sections_teams"
-          value={info.sections_teams}
+          value={infoAPI.SectionsOrTeam}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 sections_teams: e.target.value,
@@ -287,7 +274,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.sections_teams}</strong>
+        <strong>{infoAPI.SectionsOrTeam}</strong>
       ),
     },
     {
@@ -296,9 +283,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Groups"
           name="groups"
-          value={info.groups}
+          value={infoAPI.Groups}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 groups: e.target.value,
@@ -307,7 +294,7 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.groups}</strong>
+        <strong>{infoAPI.Groups}</strong>
       ),
     },
     {
@@ -316,9 +303,9 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Office location"
           name="office_location"
-          value={info.office_location}
+          value={infoAPI.OfficeLocation}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
                 office_location: e.target.value,
@@ -327,41 +314,16 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
           }}
         />
       ) : (
-        <strong>{info.office_location}</strong>
+        <strong>{infoAPI.OfficeLocation}</strong>
       ),
     },
     {
       overview_title: "Line Manager",
-      info: <strong>Hao Ha Anh</strong>,
+      info: <strong>{infoAPI.LineManager}</strong>,
     },
     {
       overview_title: "Belong to departments",
-      info: (
-        <strong>
-          Cộng tác viên, Dự án test, Hỗ trợ khách hàng, IT/ Technical, Kiểm thử
-          Testing, Test 3, Test Project
-        </strong>
-      ),
-    },
-    {
-      overview_title: "Cost Center",
-      info: isEditing ? (
-        <Input
-          placeholder="Cost Center"
-          name="cost_center"
-          value={info.cost_center}
-          onChange={(e) => {
-            setInfo((prev) => {
-              return {
-                ...prev,
-                cost_center: e.target.value,
-              };
-            });
-          }}
-        />
-      ) : (
-        <strong>{info.cost_center}</strong>
-      ),
+      info: <strong>{infoAPI.BelongToDepartments}</strong>
     },
     {
       overview_title: "Rank",
@@ -369,18 +331,18 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Rank"
           name="rank"
-          value={info.rank}
+          value={infoAPI.Rank}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                rank: e.target.value,
+                Rank: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.rank}</strong>
+        <strong>{infoAPI.Rank}</strong>
       ),
     },
     {
@@ -389,29 +351,23 @@ const Overview: React.FC<OverviewProps> = ({ info, isEditing, setInfo }) => {
         <Input
           placeholder="Employee type"
           name="Employee_type"
-          value={info.employee_type}
+          value={infoAPI.EmployeeType}
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                employee_type: e.target.value,
+                EmployeeType: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.employee_type}</strong>
+        <strong>{infoAPI.EmployeeType}</strong>
       ),
     },
     {
       overview_title: "Rights",
-      info: (
-        <strong>
-          Request Admin, General Viewer, AVN Document Approval Request
-          Reporters, Car Booking Request Admin, AVN Proposal Approval Request
-          Reporters
-        </strong>
-      ),
+      info: <strong>{infoAPI.Rights}</strong>
     },
   ];
 
