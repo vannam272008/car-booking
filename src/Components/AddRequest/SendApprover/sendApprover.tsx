@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons';
-import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, Spin, Alert } from 'antd';
+import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, Spin, Alert, notification } from 'antd';
 import './sendApprover.css'
 import request from "../../../Utils/request";
 // import MenuAdd from '../MenuAdd/menuAdd';
 import { RcFile } from 'antd/es/upload';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface DepartmentMember {
     Id: string;
@@ -108,15 +109,41 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
     //         console.error('Failed to upload file');
     //     }
     // };
+    // const [showAlert, setShowAlert] = useState(false);
+    // const [api, contextHolder] = notification.useNotification();
 
-    const handleSelectChange = (value: string) => {
-        setListOfUserId([...listOfUserId, value]);
+
+    const handleSelectChange = (value: string,) => {
+        if (listOfUserId.indexOf(value) !== -1) {
+            openNotification('topRight');
+        } else {
+            setListOfUserId([...listOfUserId, value]);
+        }
     }
 
-    // console.log(initiValueUserId);
+    const openNotification = (placement: NotificationPlacement) => {
+        notification.info({
+            message: `Approver already exists`,
+            description: 'Approver has been selected before, please choose another Approver',
+            placement,
+        });
+    };
+
+    // useEffect(() => {
+    //     const timeout = setTimeout(() => {
+    //         setShowAlert(false);
+    //     }, 2000);
+
+    //     return () => {
+    //         clearTimeout(timeout);
+    //     };
+    // }, [showAlert]);
+
+    console.log(listOfUserId);
 
     return (
         <div>
+            {/* {contextHolder} */}
             <div className='attention-request' style={{ marginTop: '0', }}>
                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                 <Radio.Group onChange={onChange} value={applyNote}>
@@ -174,7 +201,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
-                                            // onChange={propsInitiValue}
+                                            onChange={handleSelectChange}
                                             showSearch
                                             optionFilterProp="children"
                                             filterOption={(inputValue, option) =>
