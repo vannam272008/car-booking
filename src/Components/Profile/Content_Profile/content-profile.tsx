@@ -99,7 +99,7 @@ const ContentProfile: React.FC = () => {
     country_family: "",
   });
 
-  const [infoAPI, setInfoAPI] =useState<API>({
+  const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: '',
     Username:'' ,
     Email: '',
@@ -120,10 +120,22 @@ const ContentProfile: React.FC = () => {
     EmployeeType: '',
     Rights: ''
   });
-  const { userID } = useParams();
-  console.log(userID);
+  const { userID } = useParams();  
   
-  
+  // useEffect(() => {
+  //   const endpoint = "/user/profile/" + userID;
+  //   const getProfile = async () => {
+  //     await request.get(endpoint)
+  //     .then(response => {
+  //       setInfoAPI(response.data.Data);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+  //   }
+  //   getProfile();
+  // }, []);
+
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
@@ -137,6 +149,8 @@ const ContentProfile: React.FC = () => {
     }
     getProfile();
   }, []);
+  
+
 
 
   //declare contract
