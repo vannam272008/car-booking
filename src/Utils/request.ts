@@ -1,20 +1,25 @@
 import axios from 'axios';
 const API_URL = 'http://localhost:63642/api';
 
-const request = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Content-type': 'application/json'
-    },
-});
-
 const getToken = () => {
     try {
-        return JSON.parse(String(localStorage.getItem('token')));
+        return String(localStorage.getItem('Token'));
     } catch (error) {
         return '';
     }
 };
+
+const token = getToken();
+
+const request = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'Content-type': 'application/json',
+        Authorization: `Bearer ${token}`
+    },
+});
+
+
 
 export const get = async (endpoint: string, options = {}) => {
     // const token = getToken();
@@ -22,7 +27,7 @@ export const get = async (endpoint: string, options = {}) => {
 };
 
 export const post = async (endpoint: string, data = {}) => {
-    const token = getToken();
+    // const token = getToken();
     return await request.post(endpoint, data, {
         headers: {
             Accept: 'application/json',
@@ -32,7 +37,7 @@ export const post = async (endpoint: string, data = {}) => {
 };
 
 export const postForm = async (endpoint: string, data = {}) => {
-    const token = getToken();
+    // const token = getToken();
     return await request.post(endpoint, data, {
         headers: {
             Accept: 'multipart/form-data',
@@ -42,7 +47,7 @@ export const postForm = async (endpoint: string, data = {}) => {
 };
 
 export const put = async (endpoint: string, data = {}) => {
-    const token = getToken();
+    // const token = getToken();
     return await request.put(endpoint, data, {
         headers: {
             Accept: 'application/json',
@@ -52,7 +57,7 @@ export const put = async (endpoint: string, data = {}) => {
 };
 
 export const patch = async (endpoint: string, data = {}) => {
-    const token = getToken();
+    // const token = getToken();
     return await request.patch(endpoint, data, {
         headers: {
             Accept: 'application/json',
@@ -62,7 +67,7 @@ export const patch = async (endpoint: string, data = {}) => {
 };
 
 export const remove = async (endpoint: string, data = {}) => {
-    const token = getToken();
+    // const token = getToken();
     return await request.delete(endpoint, {
         data,
         headers: {
