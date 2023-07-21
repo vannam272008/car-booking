@@ -47,7 +47,7 @@ const ManageRequest = (props: any) => {
       const response = await request.get(url);
 
       console.log(response);
-      
+
       setRequestData(response.data.Data.ListData)
       setLoading(false);
     } catch (error) {
@@ -67,7 +67,7 @@ const ManageRequest = (props: any) => {
           <div className='manage-request-navbar'>
             <div className='manage-request-title'>car booking</div>
             <Space.Compact size="large">
-              <Search placeholder="Search" value={searchQuery} onChange={(e) => {setSearchQuery(e.target.value)}} onSearch={() => handleGetAllRequest()} />
+              <Search placeholder="Search" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value) }} onSearch={() => handleGetAllRequest()} />
             </Space.Compact>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
