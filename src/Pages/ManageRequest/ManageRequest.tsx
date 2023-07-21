@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import "./index.css";
-import { Button, Table, Tooltip } from 'antd';
+import { Button, Input, Space, Table, Tooltip } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import RequestLayout from '../../Components/RequestLayout';
 import request from "../../Utils/request";
@@ -26,7 +26,7 @@ interface RequestType {
   Status: string;
 }
 
-// const { Search } = Input;
+const { Search } = Input;
 
 const ManageRequest = (props: any) => {
 
@@ -38,15 +38,17 @@ const ManageRequest = (props: any) => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20&search=`;
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=1&limit=20&search=${searchQuery}`;
       const response = await request.get(url);
 
-      setRequestData(response.data.Data.ListData) 
+      console.log(response);
+      
+      setRequestData(response.data.Data.ListData)
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -57,17 +59,6 @@ const ManageRequest = (props: any) => {
     handleGetAllRequest();
   }, [tab, status]);
 
-    // // search user
-    // const handleSearch = (event: any) => {
-    //   setSearchQuery(event.target.value);
-    // };
-  
-    // const filteredUsers = requestData.filter(
-    //   (requestData) => 
-    //     requestData.requestCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    // );
-
-
   const profile = false;
   return (
     <RequestLayout profile={profile}>
@@ -75,6 +66,9 @@ const ManageRequest = (props: any) => {
         <div style={{ overflowX: 'hidden' }} className='request'>
           <div className='manage-request-navbar'>
             <div className='manage-request-title'>car booking</div>
+            <Space.Compact size="large">
+              <Search placeholder="Search" value={searchQuery} onChange={(e) => {setSearchQuery(e.target.value)}} onSearch={() => handleGetAllRequest()} />
+            </Space.Compact>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
               <FilterDropdown

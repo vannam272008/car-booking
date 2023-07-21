@@ -1,10 +1,13 @@
 import { Col, Layout, Row, Button, Drawer, message } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import request from "../../Utils/request";
 import opus_logo from "../../assets/opus_logo.png";
+import { useDispatch } from 'react-redux';
+import { setStatus } from '../../Actions/requestAction';
+
 const { Header } = Layout;
 // const { useToken } = theme;
 
@@ -31,6 +34,7 @@ const AppHeader = () => {
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
@@ -71,6 +75,7 @@ const AppHeader = () => {
                         } else {
                             localStorage.setItem("Token", "");
                             localStorage.setItem("Id", "");
+                            dispatch(setStatus(''));
                             navigate("/login");
                         }
                     }
