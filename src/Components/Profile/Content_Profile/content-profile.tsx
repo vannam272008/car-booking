@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import type { TabsProps } from "antd";
 import { Tabs, Avatar, Upload, Modal, Button } from "antd";
 import { useState, useEffect } from "react";
@@ -12,6 +11,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
+import { useParams } from 'react-router-dom';
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
@@ -19,6 +19,28 @@ import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
+
+interface API {
+  EmployeeNumber: string;
+  Username: string,
+  Email: string,
+  FirstName: string,
+  LastName: string,
+  Sex: boolean,
+  Birthday: Dayjs | null,
+  JobTitle: string,
+  Company: string,
+  Unit: string,
+  Function: string,
+  SectionsOrTeam: string,
+  Groups: string,
+  OfficeLocation: string,
+  LineManager: string,
+  BelongToDepartments: string,
+  Rank: string,
+  EmployeeType: string,
+  Rights: string
+}
 
 const ContentProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -76,34 +98,75 @@ const ContentProfile: React.FC = () => {
     postal_code_family: "",
     country_family: "",
   });
-  const [datafield, setDataField] = useState([])
 
+  const [infoAPI, setInfoAPI] = useState<API>({
+    EmployeeNumber: '',
+    Username:'' ,
+    Email: '',
+    FirstName:'',
+    LastName: '',
+    Sex:true,
+    Birthday:null,
+    JobTitle: '',
+    Company: '',
+    Unit: '',
+    Function: '',
+    SectionsOrTeam: '',
+    Groups: '',
+    OfficeLocation: '',
+    LineManager: '',
+    BelongToDepartments: '',
+    Rank: '',
+    EmployeeType: '',
+    Rights: ''
+  });
+
+  const { userID } = useParams();  
+  
   useEffect(() => {
-    request.get('/user/profile/A3F3702C-99DC-4D24-96FD-CEEEE12A39A8')
+    const endpoint = "/user/profile/" + userID;
+    const getProfile = async () => {
+      await request.get(endpoint)
       .then(response => {
-        setDataField(response.data.Data);
+        setInfoAPI(response.data.Data);
       })
       .catch(error => {
         console.error(error);
       });
+    }
+    getProfile();
   }, []);
 
-  // console.log(datafield)
+  useEffect(() => {
+    const endpoint = "/user/profile/" + userID;
+    const getProfile = async () => {
+      await request.put(endpoint, infoAPI)
+      .then(response => {
+        console.log(response.data.Data)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+    getProfile();
+  }, []);
 
-  
+
+
+
   //declare contract
-  const [contractType, setContractType] = useState("");
-  const [contractFrom, setContracFrom] = useState(dayjs());
-  const [contarctTo, setContractTo] = useState(dayjs());
-  const [signningdate, setSigningdate] = useState(dayjs());
-  const [subject, setSubject] = useState("");
-  const [deparment, setDepartment] = useState("");
-  const [contractnote, setContractNote] = useState("");
-  //declare relationship
-  const [contactname, setContactName] = useState("");
-  const [birthday, setBirthday] = useState(dayjs());
-  const [relationship, setRelationship] = useState("");
-  const [relationshipnote, setRelationshipNote] = useState("");
+  // const [contractType, setContractType] = useState("");
+  // const [contractFrom, setContracFrom] = useState(dayjs());
+  // const [contarctTo, setContractTo] = useState(dayjs());
+  // const [signningdate, setSigningdate] = useState(dayjs());
+  // const [subject, setSubject] = useState("");
+  // const [deparment, setDepartment] = useState("");
+  // const [contractnote, setContractNote] = useState("");
+  // //declare relationship
+  // const [contactname, setContactName] = useState("");
+  // const [birthday, setBirthday] = useState(dayjs());
+  // const [relationship, setRelationship] = useState("");
+  // const [relationshipnote, setRelationshipNote] = useState("");
 
   //avatar
   const [imageUrl, setImageUrl] = useState("");
@@ -126,13 +189,10 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-
   const handleDeleteContract = () => {};
-
   const onEditInfo = () => {
     setIsEditing(true);
   };
-
   const onSave = () => {
     setIsEditing(false);
   };
@@ -151,7 +211,7 @@ const ContentProfile: React.FC = () => {
       key: "1",
       label: <strong>Overview</strong>,
       children: (
-        <Overview info={info} isEditing={isEditing} setInfo={setInfo} />
+        <Overview infoAPI={infoAPI} isEditing={isEditing} setInfoAPI={setInfoAPI} />
       ),
     },
     {
@@ -172,7 +232,6 @@ const ContentProfile: React.FC = () => {
       children: <Signature isEditing={isEditing} />,
     },
   ];
-
   
   return (
     <div className="content-profile">
@@ -272,7 +331,7 @@ const ContentProfile: React.FC = () => {
             />
           )}
         </span>
-        <h1 style={{ marginLeft: "50px" }}>Bang Nguyen Minh</h1>
+        <h1 style={{ marginLeft: "50px" }}>{infoAPI.FirstName} {infoAPI.LastName}</h1>
         {isEditing ? null : (
           <UserAddOutlined
             onClick={() => {

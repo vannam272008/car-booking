@@ -66,16 +66,16 @@ const AppSider = (props: any) => {
             setStatus("");
         }
         else if (e.keyPath[1] === 'status') {
-            setTab('get-all');
+            setTab('get-all' + `/userId=${userID}`);
             setStatus(e.key);
         }
-        else { setTab(e.key); setStatus("") }
+        else { setTab(e.key + `/userId=${userID}`); setStatus("") }
     };
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
-    
+
     return (
         <div className='sider-layout'>
             <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>

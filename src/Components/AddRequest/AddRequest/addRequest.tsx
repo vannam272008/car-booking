@@ -38,6 +38,11 @@ function AddRequest(): JSX.Element {
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [fileList, setFileList] = useState<RcFile[]>([]);
+    const [applyNote, setApplyNote] = useState<boolean>(false);
+    const [initiValueUserId, setInitiValueUserId] = useState<string[]>([]);
+    const [listOfUserId, setListOfUserId] = useState<string[]>([]);
+
+
 
     useEffect(() => {
         const getDataDepartment = async () => {
@@ -72,7 +77,7 @@ function AddRequest(): JSX.Element {
 
 
     const [formData, setFormData] = useState({
-        SenderId: "930a6591-2f5d-4699-a585-18434526e068",
+        SenderId: "5260A4CA-52A9-4CFB-B70C-021FB9491312",
         DepartmentId: "",
         ReceiverId: "",
         Mobile: null as string | null,
@@ -85,8 +90,8 @@ function AddRequest(): JSX.Element {
         UsageFrom: updateMoment,
         UsageTo: updatefutureTime,
         PickTime: updateMoment,
-        ListOfUserId: "402CC321-5899-448B-964D-32CDFF6695DF",
-        Status: "Draftad",
+        ListOfUserId: listOfUserId,
+        Status: '',
         files: fileList,
     });
 
@@ -94,8 +99,10 @@ function AddRequest(): JSX.Element {
         setFormData((prevFormData) => ({
             ...prevFormData,
             files: fileList,
+            ApplyNote: applyNote,
+            ListOfUserId: listOfUserId
         }));
-    }, [fileList]);
+    }, [fileList, applyNote, listOfUserId]);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -136,14 +143,13 @@ function AddRequest(): JSX.Element {
     //   }, [fileList]);
 
 
-    console.log(formData);
 
 
     return (
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-request'>
-                    <MenuAdd formData={formData} />
+                    <MenuAdd formData={formData} setFormData={setFormData} />
                     <div className='page-content'>
                         <div className='table-request'>
                             <h2 className='title-request'>CAR BOOKING REQUEST</h2>
@@ -431,7 +437,7 @@ function AddRequest(): JSX.Element {
                                 </div>
                             )}
                         </div>
-                        <SendApprover fileList={fileList} setFileList={setFileList} />
+                        <SendApprover initiValueUserId={initiValueUserId} setInitiValueUserId={setInitiValueUserId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                     </div>
                 </div>
             )
