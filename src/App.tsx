@@ -9,6 +9,7 @@ import Register from './Pages/Register/Register';
 import SettingPage from './Pages/Setting/settingPage';
 import ContentStructure from './Components/OrganizationalStructure/ContentStructure/contentStructure';
 import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
+import AdminPage from './Components/AdminPage';
 
 
 function App() {  
@@ -23,6 +24,7 @@ function App() {
       <Route path="/setting" element={<SettingPage />} />
       <Route path="/setting/structure" element={<ContentStructure />} />
       <Route path="/setting/profile/:userID" element={<Profile />} />
+      <Route path="/admin" element={<AdminPage />} />
     </Routes>
   );
 }
