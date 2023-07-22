@@ -1,0 +1,19 @@
+.ant-layout {
+        & li {
+                padding-left: 5px;
+        }
+
+        & .ant-layout-sider {
+                position: sticky;
+                left: 0;
+                margin-top: 10px;
+        }
+
+        & .ant-layout-sider-trigger {
+                margin-bottom: 29px;
+        }
+}
+.sider-layout{
+        margin-top: 64px;
+        height: calc(100vh - 112px);
+}

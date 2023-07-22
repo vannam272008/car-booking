@@ -1,0 +1,9 @@
+.label-approver{
+    margin-bottom: 10px;
+}
+.label-approver input{
+    border: none;
+}
+.col-request .ant-select-selection-search{
+    line-height: 53px;
+}

@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
+import Home from './Pages/Home';
+import ManageRequest from './Pages/ManageRequest/ManageRequest';
+import Login from './Pages/Login/Login';
+import Profile from './Components/Profile';
+import AddRequest from './Components/AddRequest/AddRequest/addRequest';
+import Register from './Pages/Register/Register';
+import SettingPage from './Pages/Setting/settingPage';
+import ContentStructure from './Components/OrganizationalStructure/ContentStructure/contentStructure';
+import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
 
-function App() {
+
+function App() {  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/request/carbooking" element={<ManageRequest />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
+      <Route path='/request/addrequest' element={<AddRequest />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/setting" element={<SettingPage />} />
+      <Route path="/setting/structure" element={<ContentStructure />} />
+      <Route path="/setting/profile/:userID" element={<Profile />} />
+    </Routes>
   );
 }
 
