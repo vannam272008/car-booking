@@ -82,7 +82,7 @@ const AppSider = (props: any) => {
                 <div>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={[tab]}
+                        defaultSelectedKeys={['get-all']}
                         defaultOpenKeys={['requests']}
                         openKeys={[openItem]}
                         style={{ height: '100%' }}

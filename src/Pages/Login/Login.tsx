@@ -2,6 +2,9 @@ import { Input, Button, Form, message, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
 import request from "../../Utils/request";
+import { connect } from 'react-redux';
+import { setTab, setStatus } from '../../Actions/requestAction';
+import { RootState } from '../../Reducers/rootReducer';
 import "./index.css";
 
 interface LoginValues {
@@ -9,7 +12,8 @@ interface LoginValues {
   password: string;
 }
 
-const Login = () => {
+const Login = (props: any) => {
+  const { setTab } = props;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -30,6 +34,8 @@ const Login = () => {
               } else {
                 navigate("/request/carbooking");
               }
+              // console.log('get-all' + `/userId=${data.Data.userInfo.Id}`);
+              setTab('get-all' + `/userId=${data.Data.userInfo.Id}`);
             }
           })
           .catch((error) => {
@@ -114,4 +120,11 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state: RootState) => ({
+  tab: state.request.tab,
+  status: state.request.status
+})
+
+const mapDispatchToProps = { setTab, setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

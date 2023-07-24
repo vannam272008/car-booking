@@ -140,7 +140,7 @@ const AppHeader = () => {
                         </Drawer>
 
                         <Button className="btn-item"><BellOutlined /></Button>
-                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
                             <Button className="btn-item"><SettingOutlined /></Button>
                         </NavLink>
 

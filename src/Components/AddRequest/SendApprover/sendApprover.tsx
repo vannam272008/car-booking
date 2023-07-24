@@ -57,7 +57,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
         setApplyNote(e.target.value);
     };
 
-    const [inputs, setInputs] = useState<string[]>([]);
+    const [inputs, setInputs] = useState<string[]>(['Initial Input']);
 
     const [counterApprover, setCounterApprover] = useState(1);
 
@@ -75,12 +75,15 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
 
     const handleDelete = (index: number) => {
         const newInputs = [...inputs];
+        const newListOfUser = [...listOfUserId];
+        newListOfUser.splice(index, 1);
+        setListOfUserId(newListOfUser);
         newInputs.splice(index, 1);
         setInputs(newInputs);
     };
 
     const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>(['Pho Phong IT']);
 
     const handleInputChangeApprover = (index: number, value: string) => {
         const newApprovers = [...labelApprovers];
@@ -112,22 +115,39 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
     // const [showAlert, setShowAlert] = useState(false);
     // const [api, contextHolder] = notification.useNotification();
 
+    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
 
-    const handleSelectChange = (value: string,) => {
+
+    const handleSelectChange = (index: number, value: string) => {
         if (listOfUserId.indexOf(value) !== -1) {
             openNotification('topRight');
         } else {
-            setListOfUserId([...listOfUserId, value]);
+            const temporaryList = { ...selectedApprovers, [index]: value };
+            const finalSelectedUserId = Object.values(temporaryList) as string[];
+            setListOfUserId(finalSelectedUserId);
+            setSelectedApprovers(temporaryList);
         }
     }
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
-            message: `Approver already exists`,
+            message: <strong>Approver already exists</strong>,
             description: 'Approver has been selected before, please choose another Approver',
             placement,
         });
     };
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    const handleSearch = (inputValue: string) => {
+        setSearchValue(inputValue);
+    };
+
+    const filteredData = dataDepartmentMember.filter(
+        (departmentMember) =>
+            departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
     // useEffect(() => {
     //     const timeout = setTimeout(() => {
@@ -139,7 +159,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
     //     };
     // }, [showAlert]);
 
-    console.log(listOfUserId);
+    // console.log(listOfUserId);
 
     return (
         <div>
@@ -180,46 +200,6 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
                         </Spin>) : (
                         <Form>
                             <Row gutter={16}>
-                                <Col span={8} className='col-request'>
-                                    <Form.Item
-                                        label={
-                                            <div>
-                                                Pho phong IT
-                                                <span><Button type="link" icon={<DeleteOutlined />} /></span>
-                                                <span><Button type="link" icon={<EditOutlined />} /></span>
-                                                <span><Button type="link" icon={<DragOutlined />} /></span>
-                                            </div>
-                                        }
-                                        name="Approver"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Select something!',
-                                            },
-                                        ]}
-                                        initialValue={dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
-                                        labelCol={{ span: 24 }}
-                                    >
-                                        <Select
-                                            onChange={handleSelectChange}
-                                            showSearch
-                                            optionFilterProp="children"
-                                            filterOption={(inputValue, option) =>
-                                                option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                                            }
-                                        >
-                                            {dataDepartmentMember.map((departmentMember) => (
-                                                <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                    <div>
-                                                        <span>{departmentMember.User.FullName} </span>
-                                                        <span>{departmentMember.User.Email} </span>
-                                                        <span>{departmentMember.User.JobTitle}</span>
-                                                    </div>
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
                                 {inputs.map((input, index) => (
                                     <Col span={8} key={index} className='col-request '>
                                         <Form.Item
@@ -251,17 +231,16 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
                                             labelCol={{ span: 24 }}
                                         >
                                             <Select
-                                                onChange={handleSelectChange}
+                                                onChange={(value) => handleSelectChange(index, value)}
                                                 showSearch
                                                 optionFilterProp="children"
-                                                filterOption={(inputValue, option) =>
-                                                    option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                                                }
+                                                filterOption={false}
+                                                onSearch={handleSearch}
                                             >
-                                                {dataDepartmentMember.map((departmentMember) => (
+                                                {filteredData.map((departmentMember) => (
                                                     <Option key={departmentMember.Id} value={departmentMember.User.Id}>
                                                         <div>
-                                                            <span>{departmentMember.User.FullName} </span>
+                                                            <span>{departmentMember.User.FullName}</span>
                                                             <span>{departmentMember.User.Email} </span>
                                                             <span>{departmentMember.User.JobTitle}</span>
                                                         </div>

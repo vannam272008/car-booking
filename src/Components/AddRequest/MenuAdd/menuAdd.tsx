@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import { Menu, message } from 'antd';
+import { Alert, Menu, message, notification } from 'antd';
 import {
     ArrowLeftOutlined,
     SaveOutlined,
-    SendOutlined
+    SendOutlined,
+    WarningOutlined
 } from '@ant-design/icons';
 import './menuAdd.css'
 // import { request } from 'http';
 import { useNavigate } from 'react-router-dom';
 import request from '../../../Utils/request';
 import { RcFile } from 'antd/es/upload';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 
 interface MenuAddProps {
@@ -57,10 +59,14 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     const navigate = useNavigate();
 
     const handleSaveDraft = () => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            Status: 'Draft'
-        }));
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                Status: 'Draft'
+            }));
+        } else {
+            openNotification('topRight');
+        }
     };
     useEffect(() => {
         if (formData.Status.length > 0) {
@@ -83,23 +89,37 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     }, [formData, navigate])
 
     const handleSubmit = () => {
-        request.postForm("/request/create", formData)
-            .then((response) => {
-                const data = response.data;
-                if (data) {
-                    localStorage.setItem("Data", data?.Data);
-                    if (data.Success === false) {
-                        message.error(data.Message);
-                    } else {
-                        navigate("/request/carbooking");
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null) {
+            request.postForm("/request/create", formData)
+                .then((response) => {
+                    const data = response.data;
+                    if (data) {
+                        localStorage.setItem("Data", data?.Data);
+                        if (data.Success === false) {
+                            message.error(data.Message);
+                        } else {
+                            navigate("/request/carbooking");
+                        }
                     }
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            openNotification('topRight');
+        }
     }
 
+
+    const openNotification = (placement: NotificationPlacement) => {
+        notification.info({
+            message: <strong>Failed action</strong>,
+            description: 'Please fill in all the information in the form and and do the action again',
+            placement,
+            icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+
+        });
+    };
 
     const handleReturn = () => {
         navigate("/request/carbooking");
