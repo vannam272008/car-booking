@@ -13,14 +13,13 @@ interface LoginValues {
 }
 
 const Login = (props: any) => {
-  const { setTab } = props;
+  const { tab, setTab } = props;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const handleLogIn = useCallback(
     (values: LoginValues) => {
       setLoading(true);
-      setTimeout(() => {
         request
           .post("/user/login", values)
           .then((response) => {
@@ -44,10 +43,11 @@ const Login = (props: any) => {
           .finally(() => {
             setLoading(false);
           });
-      }, 500);
     },
     [navigate]
   );
+
+  console.log(tab);
 
   return (
     <Spin spinning={loading} size="large">
