@@ -1,6 +1,6 @@
 import React from "react";
 import type { TabsProps } from "antd";
-import { Tabs, Avatar, Upload, Modal, Button } from "antd";
+import { Tabs, Upload, Avatar, Modal, Button } from "antd";
 import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
@@ -11,7 +11,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
@@ -22,24 +22,24 @@ import request from "../../../Utils/request";
 
 interface API {
   EmployeeNumber: string;
-  Username: string,
-  Email: string,
-  FirstName: string,
-  LastName: string,
-  Sex: boolean,
-  Birthday: Dayjs | null,
-  JobTitle: string,
-  Company: string,
-  Unit: string,
-  Function: string,
-  SectionsOrTeam: string,
-  Groups: string,
-  OfficeLocation: string,
-  LineManager: string,
-  BelongToDepartments: string,
-  Rank: string,
-  EmployeeType: string,
-  Rights: string
+  Username: string;
+  Email: string;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: Dayjs | null;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
 }
 
 const ContentProfile: React.FC = () => {
@@ -100,59 +100,59 @@ const ContentProfile: React.FC = () => {
   });
 
   const [infoAPI, setInfoAPI] = useState<API>({
-    EmployeeNumber: '',
-    Username:'' ,
-    Email: '',
-    FirstName:'',
-    LastName: '',
-    Sex:true,
-    Birthday:null,
-    JobTitle: '',
-    Company: '',
-    Unit: '',
-    Function: '',
-    SectionsOrTeam: '',
-    Groups: '',
-    OfficeLocation: '',
-    LineManager: '',
-    BelongToDepartments: '',
-    Rank: '',
-    EmployeeType: '',
-    Rights: ''
+    EmployeeNumber: "",
+    Username: "",
+    Email: "",
+    FirstName: "",
+    LastName: "",
+    Sex: true,
+    Birthday: null,
+    JobTitle: "",
+    Company: "",
+    Unit: "",
+    Function: "",
+    SectionsOrTeam: "",
+    Groups: "",
+    OfficeLocation: "",
+    LineManager: "",
+    BelongToDepartments: "",
+    Rank: "",
+    EmployeeType: "",
+    Rights: "",
   });
 
-  const { userID } = useParams();  
-  
+  const { userID } = useParams();
+
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
-      await request.get(endpoint)
-      .then(response => {
-        setInfoAPI(response.data.Data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      await request
+        .get(endpoint)
+        .then((response) => {
+          setInfoAPI(response.data.Data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getProfile();
   }, []);
 
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
-      await request.put(endpoint, infoAPI)
-      .then(response => {
-        console.log(response.data.Data)
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      await request
+        .put(endpoint, infoAPI)
+        .then((response) => {
+          // console.log(response.data.Data)
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getProfile();
   }, []);
-
-
-
+  console.log(infoAPI);
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -211,7 +211,11 @@ const ContentProfile: React.FC = () => {
       key: "1",
       label: <strong>Overview</strong>,
       children: (
-        <Overview infoAPI={infoAPI} isEditing={isEditing} setInfoAPI={setInfoAPI} />
+        <Overview
+          infoAPI={infoAPI}
+          isEditing={isEditing}
+          setInfoAPI={setInfoAPI}
+        />
       ),
     },
     {
@@ -229,10 +233,10 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} />,
+      children: <Signature isEditing={isEditing} infoAPI={infoAPI} />,
     },
   ];
-  
+
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
@@ -331,7 +335,10 @@ const ContentProfile: React.FC = () => {
             />
           )}
         </span>
-        <h1 style={{ marginLeft: "50px" }}>{infoAPI.FirstName} {infoAPI.LastName}</h1>
+        <div></div>
+        <h1 style={{ marginLeft: "50px" }}>
+          {infoAPI.FirstName} {infoAPI.LastName}
+        </h1>
         {isEditing ? null : (
           <UserAddOutlined
             onClick={() => {

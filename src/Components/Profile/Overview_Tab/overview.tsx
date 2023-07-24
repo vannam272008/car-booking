@@ -27,7 +27,7 @@ interface API {
 interface OverviewProps {
   isEditing: boolean;
   infoAPI: {
-    EmployeeNumber: string;
+    EmployeeNumber: string,
     Username: string,
     Email: string,
     FirstName: string,
@@ -358,6 +358,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
                 ...prev,
                 EmployeeType: e.target.value,
               };
+              
             });
           }}
         />
@@ -367,7 +368,24 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
     },
     {
       overview_title: "Rights",
-      info: <strong>{infoAPI.Rights}</strong>
+      info: isEditing ? (
+        <Input
+          placeholder="Rights"
+          name="rights"
+          value={infoAPI.Rights}
+          onChange={(e) => {
+            setInfoAPI((prev) => {
+              return {
+                ...prev,
+                Rights: e.target.value,
+              };
+              
+            });
+          }}
+        />
+      ) : (
+        <strong>{infoAPI.Rights}</strong>
+      ),
     },
   ];
 
