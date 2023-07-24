@@ -13,41 +13,44 @@ interface LoginValues {
 }
 
 const Login = (props: any) => {
-  const { setTab } = props;
+  const { tab, setTab } = props;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('token');
 
   const handleLogIn = useCallback(
     (values: LoginValues) => {
       setLoading(true);
-      setTimeout(() => {
-        request
-          .post("/user/login", values)
-          .then((response) => {
-            const data = response.data;
-            if (data) {
-              localStorage.setItem("Token", data?.Data?.jwtToken);
-              localStorage.setItem("Id", data?.Data?.userInfo.Id);
-              if (data.Success == false) {
-                console.log("Login failed:", data?.Message);
-                message.error(data?.Message);
-              } else {
-                navigate("/request/carbooking");
-              }
-              // console.log('get-all' + `/userId=${data.Data.userInfo.Id}`);
-              setTab('get-all' + `/userId=${data.Data.userInfo.Id}`);
+      if (token) {
+        navigate('/request/carbooking');
+      }
+      request
+        .post("/user/login", values)
+        .then((response) => {
+          const data = response.data;
+          if (data) {
+            localStorage.setItem("Token", data?.Data?.jwtToken);
+            localStorage.setItem("Id", data?.Data?.userInfo.Id);
+            if (data.Success == false) {
+              console.log("Login failed:", data?.Message);
+              message.error(data?.Message);
+            } else {
+              navigate("/request/carbooking");
+              window.location.reload();
             }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }, 500);
+            // setTab('get-all' + `/userId=${data.Data.userInfo.Id}`);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     },
     [navigate]
   );
+
 
   return (
     <Spin spinning={loading} size="large">

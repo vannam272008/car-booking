@@ -62,14 +62,14 @@ const AppSider = (props: any) => {
 
     const handleClick: MenuProps['onClick'] = (e) => {
         if (e.key !== 'get-all' && e.keyPath[1] === 'requests') {
-            setTab(e.key + `/userId=${userID}`);
+            setTab(e.key);
             setStatus("");
         }
         else if (e.keyPath[1] === 'status') {
-            setTab('get-all' + `/userId=${userID}`);
+            setTab('get-all');
             setStatus(e.key);
         }
-        else { setTab(e.key + `/userId=${userID}`); setStatus("") }
+        else { setTab(e.key); setStatus("") }
     };
     const [collapsed, setCollapsed] = useState(false);
     const {
@@ -82,7 +82,7 @@ const AppSider = (props: any) => {
                 <div>
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['get-all']}
+                        defaultSelectedKeys={[tab]}
                         defaultOpenKeys={['requests']}
                         openKeys={[openItem]}
                         style={{ height: '100%' }}

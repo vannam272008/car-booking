@@ -22,7 +22,8 @@ const request = axios.create({
 
 
 export const get = async (endpoint: string, options = {}) => {
-    // const token = getToken();
+    const token = getToken();
+    console.log(token);
     return await request.get(endpoint);
 };
 

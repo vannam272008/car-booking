@@ -11,14 +11,14 @@ import ContentStructure from './Components/OrganizationalStructure/ContentStruct
 import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
 import MenuEdit from './Components/EditRequest/MenuEdit/menuEdit';
 
-
 function App() {
+  const token = localStorage.getItem("Token");
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/request/carbooking" element={<ManageRequest />} />
       <Route path="/login" element={<Login />} />
       <Route path="/request/carbooking/edit" element={<MenuEdit />} />
+      <Route path="/request/carbooking" element={<ManageRequest />} />
       <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
       <Route path='/request/addrequest' element={<AddRequest />} />
       <Route path="/register" element={<Register />} />

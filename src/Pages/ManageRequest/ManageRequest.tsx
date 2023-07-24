@@ -14,6 +14,12 @@ import { RootState } from '../../Reducers/rootReducer';
 
 // type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
+type CustomPaginationProps = {
+  currentPage: number;
+  totalPage: number;
+  onChange: (page: number) => void;
+};
+
 interface RequestType {
   Id: string;
   requestCode: string;
@@ -28,6 +34,29 @@ interface RequestType {
 
 const { Search } = Input;
 
+const CustomPagination = ({ currentPage, totalPage, onChange }: CustomPaginationProps) => {
+  const pageNumbers = [];
+  for (let i = 1; i <= totalPage; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <div>
+      <button onClick={() => onChange(currentPage - 1)} disabled={currentPage === 1}>
+        Previous
+      </button>
+      {pageNumbers.map((number) => (
+        <button key={number} onClick={() => onChange(number)}>
+          {number}
+        </button>
+      ))}
+      <button onClick={() => onChange(currentPage + 1)} disabled={currentPage === totalPage}>
+        Next
+      </button>
+    </div>
+  );
+};
+
 const ManageRequest = (props: any) => {
 
   const { tab, status, setStatus } = props
@@ -39,25 +68,18 @@ const ManageRequest = (props: any) => {
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState<number>(1);
-  const userID = localStorage.getItem("Id");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
 
-  const handleGetAllRequest = async () => {
+  const handleGetAllRequest = async (page: number) => {
     setLoading(true);
     try {
-      const url = `/request/${tab == '' ? `get-all/userId=${userID}` : tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+      console.log(url);
       const response = await request.get(url);
-
-      for (let i = 1; i < response.data.Data.TotalPage; i++) {
-        if (response.data.Data.ListData.length < 20) {
-          setPage(1)
-        }
-        else {
-          setPage(i)
-        }
-      }
-
       setRequestData(response.data.Data.ListData)
+      setTotalPage(response.data.Data.TotalPage)
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
@@ -65,11 +87,12 @@ const ManageRequest = (props: any) => {
   };
 
   useEffect(() => {
-    handleGetAllRequest();
-  }, [tab, status, page]);
+    handleGetAllRequest(currentPage);
+  }, [tab, status]);
+  // }, [tab, status, page]);
 
   const profile = false;
-  console.log(requestData);
+  console.log("tab: " + tab, requestData);
   return (
     <RequestLayout profile={profile}>
       {() => (
@@ -77,7 +100,12 @@ const ManageRequest = (props: any) => {
           <div className='manage-request-navbar'>
             <div className='manage-request-title'>car booking</div>
             <Space.Compact size="large">
-              <Search placeholder="Search" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value) }} onSearch={() => handleGetAllRequest()} />
+              <Search
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value) }}
+                onSearch={() => handleGetAllRequest(currentPage)}
+              />
             </Space.Compact>
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
@@ -87,7 +115,7 @@ const ManageRequest = (props: any) => {
                 onCreatedToChange={setCreatedTo}
                 onSenderIdChange={setSenderId}
                 onStatusChange={setStatus}
-                onApply={handleGetAllRequest}
+                onApply={() => handleGetAllRequest(currentPage)}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
@@ -166,8 +194,18 @@ const ManageRequest = (props: any) => {
                 },
               ]}
               dataSource={requestData}
-              pagination={{ pageSize: 20, position: ['bottomCenter'] }}
+              pagination={{ position: ['bottomCenter'] }}
             />
+
+            <CustomPagination
+              currentPage={currentPage}
+              totalPage={totalPage}
+              onChange={(page) => {
+                handleGetAllRequest(page);
+                setCurrentPage(page);
+              }}
+            />
+
           </div>
         </div>
       )}

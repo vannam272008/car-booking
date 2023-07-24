@@ -5,8 +5,9 @@ import { useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import request from "../../Utils/request";
 import opus_logo from "../../assets/opus_logo.png";
-import { useDispatch } from 'react-redux';
-import { setStatus } from '../../Actions/requestAction';
+import { connect } from 'react-redux';
+import { RootState } from '../../Reducers/rootReducer';
+import { setTab, setStatus } from "../../Actions/requestAction";
 
 const { Header } = Layout;
 // const { useToken } = theme;
@@ -27,14 +28,15 @@ interface LogoutValues {
     password: string;
 }
 
-const AppHeader = () => {
+const AppHeader = (props: any) => {
+    const userID = localStorage.getItem("Id");
+    const { tab, status, setTab, setStatus } = props;
     const avatar = require('../../public/images/logo192.png');
     // const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
@@ -50,6 +52,10 @@ const AppHeader = () => {
         setOpenHelp(false);
     }
 
+    const handleClickMyProfile = () => {
+        navigate('/setting/profile/' + userID);
+    }
+
     // const contentStyle = {
     //     backgroundColor: token.colorBgElevated,
     //     borderRadius: token.borderRadiusLG,
@@ -62,28 +68,32 @@ const AppHeader = () => {
 
     // const pathName = window.location.pathname;
 
-    const handleLogout =
-        (values: LogoutValues) => {
-            request
-                .post("/user/logout", values)
-                .then((response) => {
-                    const data = response.data;
-                    console.log(data);
-                    if (data) {
-                        if (data.Success == false) {
-                            message.error(data.Message);
-                        } else {
-                            localStorage.setItem("Token", "");
-                            localStorage.setItem("Id", "");
-                            dispatch(setStatus(''));
-                            navigate("/login");
-                        }
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        };
+    const handleLogout = () => {
+        localStorage.clear();
+        setStatus('');
+        setTab('get-all');
+        navigate("/login");
+    }
+    // (values: LogoutValues) => {
+    //     request
+    //         .post("/user/logout", values)
+    //         .then((response) => {
+    //             const data = response.data;
+    //             console.log(data);
+    //             if (data) {
+    //                 if (data.Success == false) {
+    //                     message.error(data.Message);
+    //                 } else {
+    //                     localStorage.clear();
+    //                     dispatch(setStatus(''));
+    //                     navigate("/login");
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // };
 
     return (
         <Header className="mcs-header">
@@ -165,13 +175,13 @@ const AppHeader = () => {
                                     <span className="info-email">bangmn@o365.vn</span>
                                 </div>
                                 <div className="content-info">
-                                    <NavLink to="/setting/profile" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
                                         <p>My Profile</p>
-                                    </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    </div>
+                                    <div className='my-profile' style={{ textDecoration: 'none' }}>
                                         <p>My Account</p>
-                                    </NavLink>
-                                    <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    </div>
+                                    <NavLink to="/login" onClick={() => handleLogout()} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>Sign out</p>
                                     </NavLink>
                                 </div>
@@ -183,5 +193,11 @@ const AppHeader = () => {
         </Header >
     )
 }
+const mapStateToProps = (state: RootState) => ({
+    tab: state.request.tab,
+    status: state.request.status
+});
 
-export default AppHeader;
+const mapDispatchToProps = { setTab, setStatus };
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
