@@ -64,92 +64,81 @@
     }
 }
 
-.ant-drawer-content-wrapper{
-        height: calc(100vh - 93px); 
+.ant-drawer-content-wrapper {
+    height: calc(100vh - 93px);
 }
 
 .dropdown-help {
-        // display: block;
-        // top: 50px;
-        width: 320px;
-        // height: calc(100vh - 31113px);
-        background-color: #fff;
-        border: 1px solid #c8c8c8;
-        margin-top: 62px;
+    // display: block;
+    // top: 50px;
+    width: 320px;
+    // height: calc(100vh - 31113px);
+    background-color: #fff;
+    border: 1px solid #c8c8c8;
+    margin-top: 62px;
 
-        & .title-dropdown{
+    & .title-dropdown {
+        font-size: 28px;
+        font-weight: 400;
+        padding: 5px 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    & .title-dropdown {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+        padding-top: 5px;
+
+        & span {
+            margin-left: 10px;
             font-size: 28px;
-            font-weight: 400;
-            padding: 5px 15px;
-            border-bottom: 1px solid #ddd;
+            font-family: 'Segoe UI';
         }
 
-        & .title-dropdown {
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 5px;
-            padding-top: 5px;
+        & .header-btn-close {
+            font-size: 20px;
+            margin-left: 5px;
+            margin-right: 5px;
+            border: none;
+            background-color: white;
+            color: black;
+            float: right;
+        }
+    }
 
-            & span {
+    & .content-dropdown {
+        display: block;
+        margin-top: 10px;
+
+
+
+
+        & .account-info {
+            & img {
                 margin-left: 10px;
-                font-size: 28px;
+                float: left;
+                width: 64px;
+                height: 64px;
+            }
+
+            & .info-name {
+                margin-left: 10px;
+                float: left;
+                font-size: 17px;
                 font-family: 'Segoe UI';
             }
 
-            & .header-btn-close {
-                font-size: 20px;
-                margin-left: 5px;
-                margin-right: 5px;
-                border: none;
-                background-color: white;
-                color: black;
-                float: right;
+            & .info-email {
+                margin-left: 10px;
+                font-style: italic;
+                font-family: 'Segoe UI';
+                font-size: 14px;
             }
         }
 
-        & .content-dropdown {
-            display: block;
-            margin-top: 10px;
-
-
-
-
-            & .account-info {
-                & img {
-                    margin-left: 10px;
-                    float: left;
-                    width: 64px;
-                    height: 64px;
-                }
-
-                & .info-name {
-                    margin-left: 10px;
-                    float: left;
-                    font-size: 17px;
-                    font-family: 'Segoe UI';
-                }
-
-                & .info-email {
-                    margin-left: 10px;
-                    font-style: italic;
-                    font-family: 'Segoe UI';
-                    font-size: 14px;
-                }
-            }
-
-            .content-info {
-                border-top: 1px solid #ddd;
-                margin-top: 20px;
-
-                & span {
-                    font-size: 20px;
-                    margin-left: 10px;
-                }
-
-                & p {
-                    color: #4BA747;
-                    margin-left: 25px;
-                }
-            }
+        .content-info {
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
 
             & span {
                 font-size: 20px;
@@ -159,15 +148,30 @@
             & p {
                 color: #4BA747;
                 margin-left: 25px;
-                font-family: 'Segoe UI';
             }
 
-            & p:hover {
-                color: black;
+            & .my-profile {
+                cursor: pointer;
             }
-
         }
+
+        & span {
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        & p {
+            color: #4BA747;
+            margin-left: 25px;
+            font-family: 'Segoe UI';
+        }
+
+        & p:hover {
+            color: black;
+        }
+
     }
+}
 
 // .logo {
 //     width: 200px;

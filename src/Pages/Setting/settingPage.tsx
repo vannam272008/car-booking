@@ -7,13 +7,14 @@ import { useNavigate } from 'react-router-dom';
 
 const profile = true;
 function SettingPage(): JSX.Element {
+    const userID = localStorage.getItem("Id");
     const navigate = useNavigate();
 
     const handleOrganizationStructure = () => {
         navigate("/setting/structure");
     }
     const handleProflie = () => {
-        navigate("/setting/profile");
+        navigate("/setting/profile/" + userID);
     }
     return (
         <RequestLayout profile={profile}>

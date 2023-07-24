@@ -11,7 +11,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
@@ -43,6 +43,7 @@ interface API {
 }
 
 const ContentProfile: React.FC = () => {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   // set array info fields
   const [info, setInfo] = useState({
@@ -172,7 +173,7 @@ const ContentProfile: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [onOk, setOnOk] = useState<Boolean>(false)
 
-  const handleOk = () =>{
+  const handleOk = () => {
     setOnOk(true);
     setVisible(false);
   };
@@ -184,7 +185,7 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-  const handleDeleteContract = () => {};
+  const handleDeleteContract = () => { };
   const onEditInfo = () => {
     setIsEditing(true);
   };
@@ -200,6 +201,10 @@ const ContentProfile: React.FC = () => {
   const handleCloseModal = () => {
     setVisible(false);
   };
+
+  const handleReturnSetting = () => {
+    navigate('/setting')
+  }
 
   let label: TabsProps["items"] = [
     {
@@ -253,10 +258,13 @@ const ContentProfile: React.FC = () => {
             </span>
           </>
         ) : null}
-        <LeftCircleOutlined
-          style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
-        />
-        <span style={{ color: "#8894A1", fontSize: "15px" }}>Return</span>
+        <div onClick={handleReturnSetting} style={{ cursor: "pointer" }}>
+          <LeftCircleOutlined
+            style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
+          />
+          <span style={{ color: "#8894A1", fontSize: "15px" }}>Return</span>
+        </div>
+
       </div>
       <div className="info-user">
         <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
@@ -306,7 +314,7 @@ const ContentProfile: React.FC = () => {
             <div className="Upload-Avatar">
               <Upload
                 fileList={fileList}
-                onChange={({file})=> handleFileChange(file.originFileObj as RcFile)}
+                onChange={({ file }) => handleFileChange(file.originFileObj as RcFile)}
                 showUploadList={true}
               >
                 <Button shape="circle" icon={<EditOutlined />} />
@@ -315,7 +323,7 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          { onOk ? (
+          {onOk ? (
             <Avatar
               className="avatar"
               size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}

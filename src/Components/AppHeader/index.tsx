@@ -29,6 +29,7 @@ interface LogoutValues {
 }
 
 const AppHeader = (props: any) => {
+    const userID = localStorage.getItem("Id");
     const { tab, status, setTab, setStatus } = props;
     const avatar = require('../../public/images/logo192.png');
     // const { token } = useToken();
@@ -49,6 +50,10 @@ const AppHeader = (props: any) => {
     const handleClickProfile = () => {
         setOpenProfile(!openProfile);
         setOpenHelp(false);
+    }
+
+    const handleClickMyProfile = () => {
+        navigate('/setting/profile/' + userID);
     }
 
     // const contentStyle = {
@@ -170,12 +175,12 @@ const AppHeader = (props: any) => {
                                     <span className="info-email">bangmn@o365.vn</span>
                                 </div>
                                 <div className="content-info">
-                                    <NavLink to="/setting/profile" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
                                         <p>My Profile</p>
-                                    </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    </div>
+                                    <div className='my-profile' style={{ textDecoration: 'none' }}>
                                         <p>My Account</p>
-                                    </NavLink>
+                                    </div>
                                     <NavLink to="/login" onClick={() => handleLogout()} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>Sign out</p>
                                     </NavLink>
