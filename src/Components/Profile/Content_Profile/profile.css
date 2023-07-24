@@ -33,3 +33,10 @@
     padding-left: 15px;
     margin-bottom: 50px;
 }
+.btn{
+    border: none;
+    background-color: transparent;
+    white-space: normal;
+    outline: none;
+    color: inherit;
+}

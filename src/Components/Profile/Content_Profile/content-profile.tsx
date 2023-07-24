@@ -171,7 +171,7 @@ const ContentProfile: React.FC = () => {
   //avatar
   const [imageUrl, setImageUrl] = useState<String>("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [onOk, setOnOk] = useState<Boolean>(false)
+  const [onOk, setOnOk] = useState<Boolean>(false);
 
   const handleOk = () => {
     setOnOk(true);
@@ -185,7 +185,7 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-  const handleDeleteContract = () => { };
+  const handleDeleteContract = () => {};
   const onEditInfo = () => {
     setIsEditing(true);
   };
@@ -196,6 +196,7 @@ const ContentProfile: React.FC = () => {
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
+    setOnOk(false);
   };
 
   const handleCloseModal = () => {
@@ -203,8 +204,8 @@ const ContentProfile: React.FC = () => {
   };
 
   const handleReturnSetting = () => {
-    navigate('/setting')
-  }
+    navigate("/setting");
+  };
 
   let label: TabsProps["items"] = [
     {
@@ -242,29 +243,36 @@ const ContentProfile: React.FC = () => {
       <div className="nav-bar-profile">
         {isEditing ? (
           <>
-            <SaveOutlined
-              onClick={() => {
-                onSave();
-              }}
-              style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
-            />
-            <span
-              onClick={() => {
-                onSave();
-              }}
-              style={{ color: "#8894A1", fontSize: "15px" }}
+            <Button
+              className="btn"
+              style={{ margin: "30px 0px 20px 25px" }}
+              icon={
+                <SaveOutlined
+                  onClick={() => {
+                    onSave();
+                  }}
+                  style={{ fontSize: "30px " }}
+                />
+              }
             >
               Save
-            </span>
+            </Button>
           </>
         ) : null}
-        <div onClick={handleReturnSetting} style={{ cursor: "pointer" }}>
-          <LeftCircleOutlined
-            style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
-          />
-          <span style={{ color: "#8894A1", fontSize: "15px" }}>Return</span>
-        </div>
-
+        <Button
+          className="btn"
+          style={{ margin: "30px 10px 20px 5px" }}
+          icon={
+            <LeftCircleOutlined
+              onClick={handleReturnSetting}
+              style={{
+                fontSize: "30px",
+              }}
+            />
+          }
+        >
+          Return
+        </Button>
       </div>
       <div className="info-user">
         <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
@@ -314,8 +322,9 @@ const ContentProfile: React.FC = () => {
             <div className="Upload-Avatar">
               <Upload
                 fileList={fileList}
-                onChange={({ file }) => handleFileChange(file.originFileObj as RcFile)}
-                showUploadList={true}
+                onChange={({ file }) =>
+                  handleFileChange(file.originFileObj as RcFile)
+                }
               >
                 <Button shape="circle" icon={<EditOutlined />} />
               </Upload>
@@ -343,11 +352,17 @@ const ContentProfile: React.FC = () => {
           {infoAPI.FirstName} {infoAPI.LastName}
         </h1>
         {isEditing ? null : (
-          <UserAddOutlined
-            onClick={() => {
-              onEditInfo();
-            }}
-            style={{ fontSize: "50px", marginLeft: "50px" }}
+          <Button
+            className="btn"
+            style={{ marginLeft: "50px" }}
+            icon={
+              <UserAddOutlined
+                onClick={() => {
+                  onEditInfo();
+                }}
+                style={{ fontSize: "50px"}}
+              />
+            }
           />
         )}
       </div>
