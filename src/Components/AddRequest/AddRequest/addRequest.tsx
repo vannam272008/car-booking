@@ -90,7 +90,7 @@ function AddRequest(): JSX.Element {
         UsageFrom: updateMoment,
         UsageTo: updatefutureTime,
         PickTime: updateMoment,
-        ListOfUserId: listOfUserId,
+        ListOfUserId: initiValueUserId.length > 0 ? initiValueUserId : listOfUserId,
         Status: '',
         files: fileList,
     });
@@ -135,15 +135,29 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    // useEffect(() => {
-    //     setFormData((prevFormData) => ({
-    //         ...prevFormData,
-    //         [files]: fileList,
-    //     }));
-    //   }, [fileList]);
+    useEffect(() => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ListOfUserId: initiValueUserId,
+        }));
+    }, [initiValueUserId]);
+
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    const handleSearch = (inputValue: string) => {
+        setSearchValue(inputValue);
+    };
+
+    const filteredData = dataDepartmentMember.filter(
+        (departmentMember) =>
+            departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+            departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
 
 
+    console.log(formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -234,11 +248,10 @@ function AddRequest(): JSX.Element {
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                         showSearch
                                                         optionFilterProp="children"
-                                                        filterOption={(inputValue, option) =>
-                                                            option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                                                        }
+                                                        filterOption={false}
+                                                        onSearch={handleSearch}
                                                     >
-                                                        {dataDepartmentMember.map((departmentMember) => (
+                                                        {filteredData.map((departmentMember) => (
                                                             <Option key={departmentMember.Id} value={departmentMember.User.Id}>
                                                                 <div>
                                                                     <span>{departmentMember.User.FullName} </span>
