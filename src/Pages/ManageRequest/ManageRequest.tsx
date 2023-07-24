@@ -75,7 +75,8 @@ const ManageRequest = (props: any) => {
   const handleGetAllRequest = async (page: number) => {
     setLoading(true);
     try {
-      const url = `/request/${tab == '' ? `get-all/userId=${userID}` : tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+      console.log(tab);
+      const url = `/request/${tab === '' || tab === null ? `get-all/userId=${userID}` : tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
       const response = await request.get(url);
       setRequestData(response.data.Data.ListData)
       setTotalPage(response.data.Data.TotalPage)
@@ -91,7 +92,7 @@ const ManageRequest = (props: any) => {
   // }, [tab, status, page]);
 
   const profile = false;
-  console.log(requestData);
+  console.log(tab);
   return (
     <RequestLayout profile={profile}>
       {() => (
