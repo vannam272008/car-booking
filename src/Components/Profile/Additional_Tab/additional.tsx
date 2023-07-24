@@ -93,6 +93,7 @@ interface AdditionalProps {
     }>
   >;
 }
+
 const Additional: React.FC<AdditionalProps> = ({
   isEditing,
   setInfo,
@@ -335,7 +336,13 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: <strong><br/><br/>Literacy</strong>,
+      additional_title: (
+        <strong>
+          <br />
+          <br />
+          Literacy
+        </strong>
+      ),
     },
     {
       additional_title: "Academic level",
@@ -376,7 +383,13 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: <strong><br/><br/>Contact Info</strong>,
+      additional_title: (
+        <strong>
+          <br />
+          <br />
+          Contact Info
+        </strong>
+      ),
     },
     {
       additional_title: "Business phone",
@@ -436,7 +449,13 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: <strong><br/><br/>Bank account</strong>,
+      additional_title: (
+        <strong>
+          <br />
+          <br />
+          Bank account
+        </strong>
+      ),
     },
     {
       additional_title: "Bank Name",
@@ -534,7 +553,13 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: <strong><br/><br/>Address</strong>,
+      additional_title: (
+        <strong>
+          <br />
+          <br />
+          Address
+        </strong>
+      ),
     },
     {
       additional_title: "Street",

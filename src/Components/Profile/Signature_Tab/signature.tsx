@@ -31,7 +31,6 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
     setSelectedFont(value);
   };
 
-  // console.log(img_preview)
   const handleFileChange = (file: RcFile) => {
     const objectUrl = URL.createObjectURL(file);
     setImg_Preview(objectUrl);
@@ -62,6 +61,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
                   value={signature}
                   onChange={(e) => {
                     setSignature(e.target.value);
+                    setImg_Preview("");
                   }}
                   style={{ width: "95%" }}
                   maxLength={50}
@@ -156,16 +156,10 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
       />
       <p>{infoAPI.Email}</p>
       <p>{currentTime.toLocaleString()}</p>
-      {signature ? (
-        <>
-          <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
-            {signature}
-          </h1>
-        </>
-      ) : (
+      {img_preview ? (
         <>
           <Image
-            src={img_preview}
+            src={img_preview || ""}
             alt="upload image"
             style={{
               minWidth: "200px",
@@ -174,6 +168,12 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
               maxHeight: "150px",
             }}
           />
+        </>
+      ) : (
+        <>
+          <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
+            {signature}
+          </h1>
         </>
       )}
     </div>

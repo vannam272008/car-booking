@@ -152,7 +152,6 @@ const ContentProfile: React.FC = () => {
     };
     getProfile();
   }, []);
-  console.log(infoAPI);
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -169,22 +168,18 @@ const ContentProfile: React.FC = () => {
   // const [relationshipnote, setRelationshipNote] = useState("");
 
   //avatar
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<String>("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const [onOk, setOnOk] = useState<Boolean>(false)
+
+  const handleOk = () =>{
+    setOnOk(true);
+    setVisible(false);
   };
 
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    setImageUrl(src);
+  const handleFileChange = (file: RcFile) => {
+    const objectUrl = URL.createObjectURL(file);
+    setImageUrl(objectUrl);
   };
 
   // visible avatar
@@ -285,6 +280,7 @@ const ContentProfile: React.FC = () => {
           title="Upload and Edit Avatar"
           open={visible}
           onCancel={handleCloseModal}
+          onOk={handleOk}
           centered={true}
           bodyStyle={{ alignItems: "centered" }}
         >
@@ -298,7 +294,7 @@ const ContentProfile: React.FC = () => {
             {imageUrl ? (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={<img src={imageUrl} alt="avatar" />}
+                src={imageUrl}
               />
             ) : (
               <Avatar
@@ -310,8 +306,7 @@ const ContentProfile: React.FC = () => {
             <div className="Upload-Avatar">
               <Upload
                 fileList={fileList}
-                onPreview={onPreview}
-                onChange={onChange}
+                onChange={({file})=> handleFileChange(file.originFileObj as RcFile)}
                 showUploadList={true}
               >
                 <Button shape="circle" icon={<EditOutlined />} />
@@ -320,12 +315,12 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          {imageUrl ? (
+          { onOk ? (
             <Avatar
               className="avatar"
               size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
               icon={<UserOutlined />}
-              src={<img src={imageUrl} alt="avatar" />}
+              src={imageUrl}
             />
           ) : (
             <Avatar
