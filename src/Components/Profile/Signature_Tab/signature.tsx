@@ -1,42 +1,42 @@
-import React from "react";
-import { Input, Select, Tabs, Upload, message } from "antd";
+import React, { ChangeEvent, useState, useEffect } from "react";
+import { Input, Select, Tabs, Upload, Image, Col, Row } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import type { UploadProps } from "antd";
-import { useState, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import type { TabsProps } from "antd";
-
+import "./signature.css";
+import { RcFile } from "antd/lib/upload";
 
 interface SignatureProps {
   isEditing: boolean;
+  infoAPI: {
+    Email: string;
+  };
 }
 
 const { Dragger } = Upload;
 
-const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [items, setItems] = useState(['Herr Von Muellerhoff', 'Dancing Script','Great Vibes','Rochester']);
+const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [fonts] = useState<string[]>([
+    "Great Vibes",
+    "Dancing Script",
+    "Pacifico",
+    "Caveat",
+  ]);
+  const [signature, setSignature] = useState<string>("");
+  const [selectedFont, setSelectedFont] = useState<string>("");
+  const [img_preview, setImg_Preview] = useState<string | undefined>();
 
-  const handleShowSignature = () =>{
-      <div
-      className="QR_signature"
-      style={{
-        width: "300px",
-        margin: "auto",
-        border: "2px solid black",
-        padding: "50px 50px 50px 50px",
-      }}
-    >
-      <QRCodeCanvas
-        style={{ height: "200px", width: "200px" }}
-        value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
-      />
-      <p>bangnm@o365.vn</p>
-      <p>{currentTime.toLocaleString()}</p>
-      <h1 style={{ fontFamily: "Monospace" }}></h1>
-    </div>
-  }
-  
+  const handleChangeSelect = (value: string) => {
+    setSelectedFont(value);
+  };
+
+  const handleFileChange = (file: RcFile) => {
+    const objectUrl = URL.createObjectURL(file);
+    setImg_Preview(objectUrl);
+    setSignature("");
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -44,50 +44,61 @@ const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const props: UploadProps = {
-    name: "file",
-    multiple: true,
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (status === "done") {
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
-  };
-
   const signature_tab: TabsProps["items"] = [
     {
       key: "1",
       label: "Type signature",
       children: (
         <>
-          <div>
-            <strong>Confirm your Name</strong>
-            <Input placeholder="Confirm your name" onChange={handleShowSignature}/>
-            <strong>Signature Style</strong>
-            <div>
-              <Select
-                showSearch
-                placeholder="Choose your signature"
-                style={{ width: "100%" }}
-                optionFilterProp="children"
-                filterOption={(input, option) =>
-                  (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                }
-                options={items.map((value)=>({label: value, value: value }))}
-              />
-            </div>
-            
-          </div>
+          <Row>
+            <Col span={12}>
+              <strong>Confirm your Name</strong>
+              <div>
+                <Input
+                  aria-required
+                  showCount
+                  placeholder="Confirm your name"
+                  value={signature}
+                  onChange={(e) => {
+                    setSignature(e.target.value);
+                    setImg_Preview("");
+                  }}
+                  style={{ width: "95%" }}
+                  maxLength={50}
+                />
+              </div>
+            </Col>
+            <Col span={12}>
+              <strong>Signature Style</strong>
+              <div>
+                <Select
+                  showSearch
+                  placeholder="Choose your signature"
+                  style={{ width: "95%" }}
+                  onChange={handleChangeSelect}
+                  options={fonts.map((value) => ({
+                    label: value,
+                    value: value,
+                  }))}
+                />
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            {signature ? (
+              <div className="QR_signature">
+                <QRCodeCanvas
+                  style={{ height: "200px", width: "200px" }}
+                  value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
+                />
+                <p>{infoAPI.Email}</p>
+                <p>{currentTime.toLocaleString()}</p>
+                <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
+                  {signature}
+                </h1>
+              </div>
+            ) : null}
+          </Row>
         </>
       ),
     },
@@ -95,14 +106,42 @@ const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
       key: "2",
       label: "Upload your own",
       children: (
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">
-            Click or drag file to this area to upload
-          </p>
-        </Dragger>
+        <>
+          <Dragger
+            listType="picture-card"
+            showUploadList={false}
+            onChange={({ file }) =>
+              handleFileChange(file.originFileObj as RcFile)
+            }
+          >
+            <p className="ant-upload-drag-icon">
+              <InboxOutlined />
+            </p>
+            <p className="ant-upload-text">
+              Click or drag file to this area to upload
+            </p>
+          </Dragger>
+          {img_preview ? (
+            <div className="QR_signature">
+              <QRCodeCanvas
+                style={{ height: "200px", width: "200px" }}
+                value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
+              />
+              <p>{infoAPI.Email}</p>
+              <p>{currentTime.toLocaleString()}</p>
+              <Image
+                src={img_preview}
+                alt="upload image"
+                style={{
+                  minWidth: "200px",
+                  maxWidth: "500px",
+                  minHeight: "50px",
+                  maxHeight: "150px",
+                }}
+              />
+            </div>
+          ) : null}
+        </>
       ),
     },
   ];
@@ -110,22 +149,33 @@ const Signature: React.FC<SignatureProps> = ({ isEditing }) => {
   return isEditing ? (
     <Tabs type="card" items={signature_tab} />
   ) : (
-    <div
-      className="QR_signature"
-      style={{
-        width: "300px",
-        margin: "auto",
-        border: "2px solid black",
-        padding: "50px 50px 50px 50px",
-      }}
-    >
+    <div className="QR_signature">
       <QRCodeCanvas
         style={{ height: "200px", width: "200px" }}
         value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
       />
-      <p>bangnm@o365.vn</p>
+      <p>{infoAPI.Email}</p>
       <p>{currentTime.toLocaleString()}</p>
-      <h1 style={{ fontFamily: "Monospace" }}>Nguyễn Minh Bằng</h1>
+      {img_preview ? (
+        <>
+          <Image
+            src={img_preview || ""}
+            alt="upload image"
+            style={{
+              minWidth: "200px",
+              maxWidth: "500px",
+              minHeight: "50px",
+              maxHeight: "150px",
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
+            {signature}
+          </h1>
+        </>
+      )}
     </div>
   );
 };

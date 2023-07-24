@@ -1,6 +1,6 @@
 import React from "react";
 import type { TabsProps } from "antd";
-import { Tabs, Avatar, Upload, Modal, Button } from "antd";
+import { Tabs, Upload, Avatar, Modal, Button } from "antd";
 import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
@@ -11,7 +11,7 @@ import {
   EditOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
@@ -22,24 +22,24 @@ import request from "../../../Utils/request";
 
 interface API {
   EmployeeNumber: string;
-  Username: string,
-  Email: string,
-  FirstName: string,
-  LastName: string,
-  Sex: boolean,
-  Birthday: Dayjs | null,
-  JobTitle: string,
-  Company: string,
-  Unit: string,
-  Function: string,
-  SectionsOrTeam: string,
-  Groups: string,
-  OfficeLocation: string,
-  LineManager: string,
-  BelongToDepartments: string,
-  Rank: string,
-  EmployeeType: string,
-  Rights: string
+  Username: string;
+  Email: string;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: Dayjs | null;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
 }
 
 const ContentProfile: React.FC = () => {
@@ -100,59 +100,58 @@ const ContentProfile: React.FC = () => {
   });
 
   const [infoAPI, setInfoAPI] = useState<API>({
-    EmployeeNumber: '',
-    Username:'' ,
-    Email: '',
-    FirstName:'',
-    LastName: '',
-    Sex:true,
-    Birthday:null,
-    JobTitle: '',
-    Company: '',
-    Unit: '',
-    Function: '',
-    SectionsOrTeam: '',
-    Groups: '',
-    OfficeLocation: '',
-    LineManager: '',
-    BelongToDepartments: '',
-    Rank: '',
-    EmployeeType: '',
-    Rights: ''
+    EmployeeNumber: "",
+    Username: "",
+    Email: "",
+    FirstName: "",
+    LastName: "",
+    Sex: true,
+    Birthday: null,
+    JobTitle: "",
+    Company: "",
+    Unit: "",
+    Function: "",
+    SectionsOrTeam: "",
+    Groups: "",
+    OfficeLocation: "",
+    LineManager: "",
+    BelongToDepartments: "",
+    Rank: "",
+    EmployeeType: "",
+    Rights: "",
   });
 
-  const { userID } = useParams();  
-  
+  const { userID } = useParams();
+
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
-      await request.get(endpoint)
-      .then(response => {
-        setInfoAPI(response.data.Data);
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      await request
+        .get(endpoint)
+        .then((response) => {
+          setInfoAPI(response.data.Data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getProfile();
   }, []);
 
   useEffect(() => {
     const endpoint = "/user/profile/" + userID;
     const getProfile = async () => {
-      await request.put(endpoint, infoAPI)
-      .then(response => {
-        console.log(response.data.Data)
-      })
-      .catch(error => {
-        console.error(error);
-      });
-    }
+      await request
+        .put(endpoint, infoAPI)
+        .then((response) => {
+          // console.log(response.data.Data)
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
     getProfile();
   }, []);
-
-
-
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -169,22 +168,18 @@ const ContentProfile: React.FC = () => {
   // const [relationshipnote, setRelationshipNote] = useState("");
 
   //avatar
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState<String>("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const [onOk, setOnOk] = useState<Boolean>(false)
+
+  const handleOk = () =>{
+    setOnOk(true);
+    setVisible(false);
   };
 
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    setImageUrl(src);
+  const handleFileChange = (file: RcFile) => {
+    const objectUrl = URL.createObjectURL(file);
+    setImageUrl(objectUrl);
   };
 
   // visible avatar
@@ -211,7 +206,11 @@ const ContentProfile: React.FC = () => {
       key: "1",
       label: <strong>Overview</strong>,
       children: (
-        <Overview infoAPI={infoAPI} isEditing={isEditing} setInfoAPI={setInfoAPI} />
+        <Overview
+          infoAPI={infoAPI}
+          isEditing={isEditing}
+          setInfoAPI={setInfoAPI}
+        />
       ),
     },
     {
@@ -229,10 +228,10 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} />,
+      children: <Signature isEditing={isEditing} infoAPI={infoAPI} />,
     },
   ];
-  
+
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
@@ -281,6 +280,7 @@ const ContentProfile: React.FC = () => {
           title="Upload and Edit Avatar"
           open={visible}
           onCancel={handleCloseModal}
+          onOk={handleOk}
           centered={true}
           bodyStyle={{ alignItems: "centered" }}
         >
@@ -294,7 +294,7 @@ const ContentProfile: React.FC = () => {
             {imageUrl ? (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={<img src={imageUrl} alt="avatar" />}
+                src={imageUrl}
               />
             ) : (
               <Avatar
@@ -306,8 +306,7 @@ const ContentProfile: React.FC = () => {
             <div className="Upload-Avatar">
               <Upload
                 fileList={fileList}
-                onPreview={onPreview}
-                onChange={onChange}
+                onChange={({file})=> handleFileChange(file.originFileObj as RcFile)}
                 showUploadList={true}
               >
                 <Button shape="circle" icon={<EditOutlined />} />
@@ -316,12 +315,12 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          {imageUrl ? (
+          { onOk ? (
             <Avatar
               className="avatar"
               size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
               icon={<UserOutlined />}
-              src={<img src={imageUrl} alt="avatar" />}
+              src={imageUrl}
             />
           ) : (
             <Avatar
@@ -331,7 +330,10 @@ const ContentProfile: React.FC = () => {
             />
           )}
         </span>
-        <h1 style={{ marginLeft: "50px" }}>{infoAPI.FirstName} {infoAPI.LastName}</h1>
+        <div></div>
+        <h1 style={{ marginLeft: "50px" }}>
+          {infoAPI.FirstName} {infoAPI.LastName}
+        </h1>
         {isEditing ? null : (
           <UserAddOutlined
             onClick={() => {
