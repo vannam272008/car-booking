@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 
@@ -6,9 +7,13 @@ import { useNavigate } from "react-router";
 const Home = () => {
   const userID = localStorage.getItem("Id");
   const navigate = useNavigate();
-  if (userID == null || userID) {
-    navigate('/login');
-  }
+
+  useEffect(() => {
+    if (userID == null || userID) {
+      navigate('/login');
+    }
+  }, [userID, navigate])
+
   // const [page, setPage] = useState(1);
   // const [limit, setLimit] = useState(10);
   // useEffect(() => {

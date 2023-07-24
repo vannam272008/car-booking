@@ -70,13 +70,13 @@ const ManageRequest = (props: any) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const userID = localStorage.getItem("Id");
 
   const handleGetAllRequest = async (page: number) => {
     setLoading(true);
     try {
-      console.log(tab);
-      const url = `/request/${tab === '' || tab === null ? `get-all/userId=${userID}` : tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+      console.log(url);
       const response = await request.get(url);
       setRequestData(response.data.Data.ListData)
       setTotalPage(response.data.Data.TotalPage)
@@ -92,7 +92,7 @@ const ManageRequest = (props: any) => {
   // }, [tab, status, page]);
 
   const profile = false;
-  console.log(tab);
+  console.log("tab: " + tab, requestData);
   return (
     <RequestLayout profile={profile}>
       {() => (

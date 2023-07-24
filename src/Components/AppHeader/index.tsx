@@ -29,7 +29,7 @@ interface LogoutValues {
 }
 
 const AppHeader = (props: any) => {
-    const {tab, status, setTab, setStatus} = props;
+    const { tab, status, setTab, setStatus } = props;
     const avatar = require('../../public/images/logo192.png');
     // const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
@@ -65,30 +65,30 @@ const AppHeader = (props: any) => {
 
     const handleLogout = () => {
         localStorage.clear();
-        setStatus(null);
-        setTab(null);
+        setStatus('');
+        setTab('get-all');
         navigate("/login");
     }
-        // (values: LogoutValues) => {
-        //     request
-        //         .post("/user/logout", values)
-        //         .then((response) => {
-        //             const data = response.data;
-        //             console.log(data);
-        //             if (data) {
-        //                 if (data.Success == false) {
-        //                     message.error(data.Message);
-        //                 } else {
-        //                     localStorage.clear();
-        //                     dispatch(setStatus(''));
-        //                     navigate("/login");
-        //                 }
-        //             }
-        //         })
-        //         .catch((error) => {
-        //             console.log(error);
-        //         });
-        // };
+    // (values: LogoutValues) => {
+    //     request
+    //         .post("/user/logout", values)
+    //         .then((response) => {
+    //             const data = response.data;
+    //             console.log(data);
+    //             if (data) {
+    //                 if (data.Success == false) {
+    //                     message.error(data.Message);
+    //                 } else {
+    //                     localStorage.clear();
+    //                     dispatch(setStatus(''));
+    //                     navigate("/login");
+    //                 }
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log(error);
+    //         });
+    // };
 
     return (
         <Header className="mcs-header">

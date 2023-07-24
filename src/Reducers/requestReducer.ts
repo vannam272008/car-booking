@@ -9,7 +9,7 @@ type RequestState = {
 type RequestAction = ReturnType<typeof setTab | typeof setStatus>;
 
 const initState: RequestState = {
-    tab: '',
+    tab: 'get-all',
     status: ''
 }
 
