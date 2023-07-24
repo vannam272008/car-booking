@@ -12,7 +12,7 @@ import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+// type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 interface RequestType {
   Id: string;
@@ -39,23 +39,24 @@ const ManageRequest = (props: any) => {
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState<number>();
+  const [page, setPage] = useState<number>(1);
+  const userID = localStorage.getItem("Id");
 
   const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+      const url = `/request/${tab == '' ? `get-all/userId=${userID}` : tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
       const response = await request.get(url);
 
       for (let i = 1; i < response.data.Data.TotalPage; i++) {
-        if(response.data.Data.ListData.length < 20){
+        if (response.data.Data.ListData.length < 20) {
           setPage(1)
         }
-        else{
+        else {
           setPage(i)
         }
       }
-      
+
       setRequestData(response.data.Data.ListData)
       setLoading(false);
     } catch (error) {
@@ -68,6 +69,7 @@ const ManageRequest = (props: any) => {
   }, [tab, status, page]);
 
   const profile = false;
+  console.log(requestData);
   return (
     <RequestLayout profile={profile}>
       {() => (
