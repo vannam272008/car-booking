@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons';
-import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, Spin, Alert, notification } from 'antd';
+import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, notification } from 'antd';
 import './sendApprover.css'
 import request from "../../../Utils/request";
 // import MenuAdd from '../MenuAdd/menuAdd';
@@ -24,25 +24,22 @@ interface PropsDataList {
     setApplyNote: React.Dispatch<React.SetStateAction<boolean>>;
     listOfUserId: string[];
     setListOfUserId: React.Dispatch<React.SetStateAction<string[]>>;
-    initiValueUserId: string[];
-    setInitiValueUserId: React.Dispatch<React.SetStateAction<string[]>>;
+
 }
 
 
-function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
+function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    // const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
             const endpoint = "departmentMember/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
-                setDataDepartmentMember(res.data.Data);
-                setInitiValueUserId(res.data.Data[0].User.Id)
-                setLoading(false);
+                setDataDepartmentMember(res.data.Data.ListData);
             }).catch(() => {
-                setLoading(true);
+                // setLoading(true);
             });
         }
         getDataDepartmentMember();
@@ -142,13 +139,19 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
         setSearchValue(inputValue);
     };
 
-    const filteredData = dataDepartmentMember.filter(
-        (departmentMember) =>
-            departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-    );
 
+    const filteredData = () => {
+        if (dataDepartmentMember.length > 0) {
+            return dataDepartmentMember.filter(
+                (departmentMember) =>
+                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        }
+        else return [];
+
+    };
     // useEffect(() => {
     //     const timeout = setTimeout(() => {
     //         setShowAlert(false);
@@ -159,7 +162,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
     //     };
     // }, [showAlert]);
 
-    // console.log(listOfUserId);
+    console.log(listOfUserId);
 
     return (
         <div>
@@ -177,7 +180,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
             <div className='reply-upload-comment'>
                 <Upload
                     beforeUpload={handleBeforeUpload}
-                    // onChange={handleChange}
+                    accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                     fileList={fileList}
                 >
                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
@@ -189,7 +192,7 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
             <div className='form-approver'>
                 <h6>Send to approvers</h6>
                 <div className='add-approvers'>
-                    {loading ? ( // Nếu đang tải dữ liệu, hiển thị spinner
+                    {/* {loading ? ( // Nếu đang tải dữ liệu, hiển thị spinner
                         <Spin style={{ height: '100vh' }} tip="Loading..." size="large">
                             <Alert
                                 style={{ width: '100%', textAlign: 'center' }}
@@ -197,73 +200,73 @@ function SendApprover({ initiValueUserId, setInitiValueUserId, fileList, setFile
                                 description="There are some issues happening, please wait a moment or you can try reloading the page"
                                 type="info"
                             />
-                        </Spin>) : (
-                        <Form>
-                            <Row gutter={16}>
-                                {inputs.map((input, index) => (
-                                    <Col span={8} key={index} className='col-request '>
-                                        <Form.Item
-                                            label={
-                                                <div className='label-approver'>
-                                                    {editingIndex === index ? (
-                                                        <Space>
-                                                            <Input value={labelApprovers[index]} onChange={(e) => handleInputChangeApprover(index, e.target.value)} />
-                                                            <Button type="link" onClick={() => handleSave(index)} icon={<SaveOutlined />} />
-                                                        </Space>
-                                                    ) : (
-                                                        <Space>
-                                                            <span>{labelApprovers[index]}</span>
-                                                            <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
-                                                            <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
-                                                            <Button type="link" icon={<DragOutlined />} />
-                                                        </Space>
-                                                    )}
-                                                </div>
-                                            }
-                                            name={`Approver${index}`}
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: 'Select something!',
-                                                },
-                                            ]}
-                                            initialValue={'--Select a Approver--'}
-                                            labelCol={{ span: 24 }}
+                        </Spin>) : ( */}
+                    <Form>
+                        <Row gutter={16}>
+                            {inputs.map((input, index) => (
+                                <Col span={8} key={index} className='col-request '>
+                                    <Form.Item
+                                        label={
+                                            <div className='label-approver'>
+                                                {editingIndex === index ? (
+                                                    <Space>
+                                                        <Input value={labelApprovers[index]} onChange={(e) => handleInputChangeApprover(index, e.target.value)} />
+                                                        <Button type="link" onClick={() => handleSave(index)} icon={<SaveOutlined />} />
+                                                    </Space>
+                                                ) : (
+                                                    <Space>
+                                                        <span>{labelApprovers[index]}</span>
+                                                        <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
+                                                        <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
+                                                        <Button type="link" icon={<DragOutlined />} />
+                                                    </Space>
+                                                )}
+                                            </div>
+                                        }
+                                        name={`Approver${index}`}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Select something!',
+                                            },
+                                        ]}
+                                        initialValue={'--Select a Approver--'}
+                                        labelCol={{ span: 24 }}
+                                    >
+                                        <Select
+                                            onChange={(value) => handleSelectChange(index, value)}
+                                            showSearch
+                                            optionFilterProp="children"
+                                            filterOption={false}
+                                            onSearch={handleSearch}
                                         >
-                                            <Select
-                                                onChange={(value) => handleSelectChange(index, value)}
-                                                showSearch
-                                                optionFilterProp="children"
-                                                filterOption={false}
-                                                onSearch={handleSearch}
-                                            >
-                                                {filteredData.map((departmentMember) => (
-                                                    <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                        <div>
-                                                            <span>{departmentMember.User.FullName}</span>
-                                                            <span>{departmentMember.User.Email} </span>
-                                                            <span>{departmentMember.User.JobTitle}</span>
-                                                        </div>
-                                                    </Option>
-                                                ))}
-                                            </Select>
-                                        </Form.Item>
-                                    </Col>
-                                ))}
-                                <Col span={8} className='btn-add-approver'>
-                                    <Button
-                                        type="primary"
-                                        onClick={handleAddInput}
-                                        style={{
-                                            backgroundColor: 'rgb(47,133,239)',
-                                            color: 'white'
-                                        }}>
-                                        Add
-                                    </Button>
+                                            {filteredData().map((departmentMember) => (
+                                                <Option key={departmentMember.Id} value={departmentMember.User.Id}>
+                                                    <div>
+                                                        <span>{departmentMember.User.FullName} </span>
+                                                        <span>{departmentMember.User.Email} </span>
+                                                        <span>{departmentMember.User.JobTitle} </span>
+                                                    </div>
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
                                 </Col>
-                            </Row>
-                        </Form>
-                    )}
+                            ))}
+                            <Col span={8} className='btn-add-approver'>
+                                <Button
+                                    type="primary"
+                                    onClick={handleAddInput}
+                                    style={{
+                                        backgroundColor: 'rgb(47,133,239)',
+                                        color: 'white'
+                                    }}>
+                                    Add
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                    {/* )} */}
                 </div>
             </div>
         </div >

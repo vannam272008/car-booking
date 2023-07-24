@@ -37,7 +37,8 @@ function ContentStructure(): JSX.Element {
     const [dataManager, setDataManager] = useState<DepartmentMember[]>([]);
     const [dataSupervisor, setDataSupervisor] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [activeTabKey, setActiveTabKey] = useState<string>('E0187AD8-0766-4300-B937-25B5F778A8B1');
+    // const senderId = localStorage.getItem("Id")
+    const [activeTabKey, setActiveTabKey] = useState<string>('4540FEF6-8DDF-4F26-BFD4-5D3F3EED07DF');
 
 
     useEffect(() => {
@@ -48,8 +49,7 @@ function ContentStructure(): JSX.Element {
         const getDataDepartment = async () => {
             const endpoint = "department/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
-                setDataDepartment(res.data.Data);
-                setLoading(false);
+                setDataDepartment(res.data.Data.ListData);
             }).catch(() => {
                 setLoading(true);
             });
@@ -58,7 +58,6 @@ function ContentStructure(): JSX.Element {
             const endpoint = `departmentMember/position?departmentId=${activeTabKey}`;
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
-                setLoading(false);
             }).catch(() => {
                 setLoading(true);
             });
@@ -74,16 +73,17 @@ function ContentStructure(): JSX.Element {
                 else if (position === 'Supervisor') {
                     setDataSupervisor(d);
                 }
-                setLoading(false);
             }).catch(() => {
                 setLoading(true);
             });
         }
+        setLoading(false);
         getDataDepartment();
         getDataDepartmentMember();
         getDataByPosition('Manager');
         getDataByPosition('Supervisor');
     }, [activeTabKey])
+
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
@@ -102,7 +102,7 @@ function ContentStructure(): JSX.Element {
         setActiveTabKey(key);
     };
 
-    console.log(dataDepartmentMember);
+    // console.log(dataDepartmentMember);
 
     return (
         <RequestLayout profile={profile}>

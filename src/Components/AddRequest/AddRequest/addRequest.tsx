@@ -39,41 +39,69 @@ function AddRequest(): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [fileList, setFileList] = useState<RcFile[]>([]);
     const [applyNote, setApplyNote] = useState<boolean>(false);
-    const [initiValueUserId, setInitiValueUserId] = useState<string[]>([]);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const senderId = localStorage.getItem("Id")
 
+    // useEffect(() => {
+    //     const getDataDepartment = async () => {
+    //         const endpoint = "department/all?page=1&limit=100";
+    //         await request.get(endpoint).then((res) => {
+    //             setDataDepartment(res.data.Data.ListData);
+    //             setFormData((prevFormData) => ({
+    //                 ...prevFormData,
+    //                 DepartmentId: res.data.Data.ListData[0].Id,
+    //             }));
+    //         }).catch(() => {
+    //             setLoading(true);
+    //         });
+    //     }
+    //     const getDataDepartmentMember = async () => {
+    //         const endpoint = "departmentMember/all?page=1&limit=100";
+    //         await request.get(endpoint).then((res) => {
+    //             setDataDepartmentMember(res.data.Data.ListData);
+    //             setFormData((prevFormData) => ({
+    //                 ...prevFormData,
+    //                 ReceiverId: res.data.Data.ListData[0].User.Id,
+    //             }));
+    //         }).catch(() => {
+    //             setLoading(true);
+    //         });
+    //     }
+    //     setLoading(false);
+    //     getDataDepartmentMember();
+    //     getDataDepartment();
+    // }, [])
 
     useEffect(() => {
-        const getDataDepartment = async () => {
-            const endpoint = "department/all?page=1&limit=100";
-            await request.get(endpoint).then((res) => {
-                setDataDepartment(res.data.Data);
+        const fetchData = async () => {
+            try {
+                // Fetch data from the first API
+                const departmentEndpoint = "department/all?page=1&limit=100";
+                const departmentRes = await request.get(departmentEndpoint);
+                setDataDepartment(departmentRes.data.Data.ListData);
+
+                // Fetch data from the second API
+                const departmentMemberEndpoint = "departmentMember/all?page=1&limit=100";
+                const departmentMemberRes = await request.get(departmentMemberEndpoint);
+                setDataDepartmentMember(departmentMemberRes.data.Data.ListData);
+
+                // Update form data based on the fetched data
                 setFormData((prevFormData) => ({
                     ...prevFormData,
-                    DepartmentId: res.data.Data[0].Id,
+                    DepartmentId: departmentRes.data.Data.ListData[0].Id,
+                    ReceiverId: departmentMemberRes.data.Data.ListData[0].User.Id,
                 }));
+
+                // Set loading to false since data fetching is completed
                 setLoading(false);
-            }).catch(() => {
+            } catch (error) {
+                // Handle errors if needed
                 setLoading(true);
-            });
-        }
-        const getDataDepartmentMember = async () => {
-            const endpoint = "departmentMember/all?page=1&limit=100";
-            await request.get(endpoint).then((res) => {
-                setDataDepartmentMember(res.data.Data);
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    ReceiverId: res.data.Data[0].User.Id,
-                }));
-                setLoading(false);
-            }).catch(() => {
-                setLoading(true);
-            });
-        }
-        getDataDepartmentMember();
-        getDataDepartment();
-    }, [])
+            }
+        };
+
+        fetchData();
+    }, []);
 
 
 
@@ -91,7 +119,7 @@ function AddRequest(): JSX.Element {
         UsageFrom: updateMoment,
         UsageTo: updatefutureTime,
         PickTime: updateMoment,
-        ListOfUserId: initiValueUserId.length > 0 ? initiValueUserId : listOfUserId,
+        ListOfUserId: listOfUserId,
         Status: '',
         files: fileList,
     });
@@ -137,47 +165,56 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    useEffect(() => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            ListOfUserId: initiValueUserId,
-        }));
-    }, [initiValueUserId]);
-
     const [searchValue, setSearchValue] = useState<string>('');
 
     const handleSearch = (inputValue: string) => {
         setSearchValue(inputValue);
     };
 
-    const filteredData = dataDepartmentMember.filter(
-        (departmentMember) =>
-            departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-            departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    const filteredData = () => {
+        if (dataDepartmentMember.length > 0) {
+            return dataDepartmentMember.filter(
+                (departmentMember) =>
+                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        }
+        else return [];
+
+    };
+
+    const getFullNameIfContainsSenderId = (dataDepartmentMember: DepartmentMember[], senderId: string | null) => {
+        const userWithSenderId = dataDepartmentMember.find(
+            (departmentMember) => departmentMember?.User.Id === senderId
+        );
+        // console.log(userWithSenderId);
+
+        return userWithSenderId?.User.FullName;
+    };
 
 
-
-    console.log(formData);
+    // console.log(dataDepartmentMember);
 
     return (
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-request'>
                     <MenuAdd formData={formData} setFormData={setFormData} />
-                    <div className='page-content'>
-                        <div className='table-request'>
-                            <h2 className='title-request'>CAR BOOKING REQUEST</h2>
-                            {loading ? ( // Nếu đang tải dữ liệu, hiển thị spinner
-                                <Spin style={{ height: '100vh' }} tip="Loading..." size="large">
-                                    <Alert
-                                        style={{ width: '100%', textAlign: 'center' }}
-                                        message="Loading..."
-                                        description="There are some issues happening, please wait a moment or you can try reloading the page"
-                                        type="info"
-                                    />
-                                </Spin>) : (
+                    {loading
+                        ?
+                        (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                            <Alert
+                                style={{ width: '100%', textAlign: 'center' }}
+                                message="Loading..."
+                                description="There are some issues happening, please wait a moment or you can try reloading the page"
+                                type="info"
+                            />
+                        </Spin>)
+                        :
+                        (<div className='page-content'>
+                            <div className='table-request'>
+                                <h2 className='title-request'>CAR BOOKING REQUEST</h2>
                                 <div className='table-content'>
                                     <Form
                                         className='form-add-request'
@@ -195,7 +232,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={'Bang Minh Nguyen'}
+                                                    initialValue={getFullNameIfContainsSenderId(dataDepartmentMember, senderId)}
                                                 >
                                                     <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                                 </Form.Item>
@@ -253,7 +290,7 @@ function AddRequest(): JSX.Element {
                                                         filterOption={false}
                                                         onSearch={handleSearch}
                                                     >
-                                                        {filteredData.map((departmentMember) => (
+                                                        {filteredData().map((departmentMember) => (
                                                             <Option key={departmentMember.Id} value={departmentMember.User.Id}>
                                                                 <div>
                                                                     <span>{departmentMember.User.FullName} </span>
@@ -450,10 +487,11 @@ function AddRequest(): JSX.Element {
                                         </Row>
                                     </Form>
                                 </div>
-                            )}
-                        </div>
-                        <SendApprover initiValueUserId={initiValueUserId} setInitiValueUserId={setInitiValueUserId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
-                    </div>
+                            </div>
+                            <SendApprover fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                        </div>)
+                    }
+
                 </div>
             )
             }
