@@ -16,7 +16,7 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface MenuAddProps {
     formData: {
-        SenderId: string,
+        SenderId: string | null,
         DepartmentId: string,
         ReceiverId: string,
         Mobile: string | null,
@@ -34,7 +34,7 @@ interface MenuAddProps {
         files: RcFile[],
     },
     setFormData: React.Dispatch<React.SetStateAction<{
-        SenderId: string;
+        SenderId: string | null;
         DepartmentId: string;
         ReceiverId: string;
         Mobile: string | null;

@@ -41,7 +41,7 @@ function AddRequest(): JSX.Element {
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [initiValueUserId, setInitiValueUserId] = useState<string[]>([]);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
-
+    const senderId = localStorage.getItem("Id")
 
 
     useEffect(() => {
@@ -76,8 +76,9 @@ function AddRequest(): JSX.Element {
     }, [])
 
 
+
     const [formData, setFormData] = useState({
-        SenderId: "5260A4CA-52A9-4CFB-B70C-021FB9491312",
+        SenderId: senderId as string | null,
         DepartmentId: "",
         ReceiverId: "",
         Mobile: null as string | null,
@@ -100,9 +101,10 @@ function AddRequest(): JSX.Element {
             ...prevFormData,
             files: fileList,
             ApplyNote: applyNote,
-            ListOfUserId: listOfUserId
+            ListOfUserId: listOfUserId,
+            SenderId: senderId,
         }));
-    }, [fileList, applyNote, listOfUserId]);
+    }, [fileList, applyNote, listOfUserId, senderId]);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -195,7 +197,7 @@ function AddRequest(): JSX.Element {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={'Bang Minh Nguyen'}
                                                 >
-                                                    <Input type='text' name='SenderId' value={formData.SenderId} readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
+                                                    <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Department*/}
