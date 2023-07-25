@@ -1,8 +1,8 @@
 import { User, Department, Role } from './interfaces'
-export const userSampleData: User[] = [
+/* export const userSampleData: User[] = [
     {
-        id: 1,
-        email: 'user1@example.com',
+        Id: 1,
+        Email: 'user1@example.com',
         roles: ['Admin', 'Editor'],
         departments: ['HR', 'Finance'],
     },
@@ -12,7 +12,7 @@ export const userSampleData: User[] = [
         roles: ['Viewer'],
         departments: ['IT'],
     },
-];
+]; */
 
 export const departmentSampleData: Department[] = [
     {

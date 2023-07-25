@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Select, Input, Row, Col } from 'antd';
+import { Table, Button, Modal, Form, Typography, Select, Input, Row, Col, message, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Role, RoleFormProps } from '../interfaces'
-import { roleSampleData } from '../sampleData';
+import { Role, RoleFormProps } from '../Utils/interfaces'
+import { roleSampleData } from '../Utils/sampleData';
+import * as util from '../Utils'
+import axios from 'axios';
+import { resetRole } from '../Utils';
 
 const RoleManage: React.FC = () => {
+
+  message.config(util.messageConfig)
   const columns = [
     {
       title: 'Id',
@@ -32,33 +37,86 @@ const RoleManage: React.FC = () => {
     },
   ];
 
-  const resetRole = {
-    Id: '',
-    Title: ''
-  }
-  const [roles, setRoles] = useState<Role[]>(roleSampleData);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<Role>(resetRole);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<Role>();
 
+  const getRoles = async () => {
+    let res = await axios.get('http://localhost:63642/api/role/all?page=1&limit=10')
+    console.log('>>check res role:', res)
+    res.data.Success ? setRoles(res.data.Data.ListData) : setRoles([])
+  }
+
   useEffect(() => {
-    form.resetFields()
-  }, [selectedRole])
+    getRoles()
+  }, [])
 
   const handleAdd = () => {
-    setSelectedRole(resetRole);
+    setAction(util.ACTION_HANDLE.ADD)
+    setSelectedRole(null);
     setIsModalVisible(true);
   };
 
   const handleEdit = (d: Role) => {
+    setAction(util.ACTION_HANDLE.EDIT)
     setSelectedRole(d);
     setIsModalVisible(true);
   };
 
-  const handleDelete = (id: string) => {
-    const updatedRoles = roles.filter((d) => d.Id !== id);
-    setRoles(updatedRoles);
+  const handleDelete = async (id: string) => {
+    let res = await axios.delete(`http://localhost:63642/api/role/delete/${id}`)
+    /* const updatedRoles = roles.filter((d) => d.Id !== id);
+    setRoles(updatedRoles); */
+    if (res.data.Success) {
+      message.success('Delete success !')
+      setIsModalVisible(false)
+      getRoles()
+    } else {
+      message.error(res.data.Message)
+    }
   };
+
+  const handleSave = async (role: Role) => {
+    console.log('>>check role data from form:', role);
+    console.log('>>selected role:', selectedRole);
+
+    if (action === util.ACTION_HANDLE.ADD) {
+      if (!role.Title) return message.error('Missing title !')
+      /* var roleWithMaxId = roles.reduce((a, b) => a.Id > b.Id ? a : b);
+      console.log('roleWithMaxId:', roleWithMaxId);
+      role.Id = (+roleWithMaxId.Id + 1).toString();
+      setRoles([...roles, role]) */
+      let res = await axios.post('http://localhost:63642/api/role/add', { Title: role.Title })
+      if (res.data.Success) {
+        message.success('Add success !')
+        setIsModalVisible(false)
+        getRoles()
+      } else {
+        message.error(res.data.Message)
+      }
+    } else if (action === util.ACTION_HANDLE.EDIT) {
+      if (!role.Title) return message.error('Missing title !')
+      console.log(role.Id);
+      
+      let res = await axios.put(`http://localhost:63642/api/role/edit/${role.Id}`, { Title: role.Title })
+
+      /* var existRole = roles.filter(r => r.Id !== role.Id)
+      setRoles([...existRole, role].sort((a, b) => {
+        var x = a.Id
+        var y = b.Id
+        return x < y ? -1 : x > y ? 1 : 0;
+      })) */
+      if (res.data.Success) {
+        message.success('Edit success !')
+        setIsModalVisible(false)
+        getRoles()
+      } else {
+        message.error(res.data.Message)
+      }
+    }
+  }
 
   return (
     <div>
@@ -69,23 +127,29 @@ const RoleManage: React.FC = () => {
       <Table dataSource={roles} columns={columns} rowKey="Id" />
 
       <Modal
-        title={selectedRole ? <Typography.Title level={2}>Edit Role</Typography.Title> : <Typography.Title level={2}>Add Role</Typography.Title>}
+        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Role</Typography.Title> : <Typography.Title level={2}>Add Role</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
-          setSelectedRole(resetRole)
+          setSelectedRole(null)
           setIsModalVisible(false);
         }}
         closable={true}
         maskClosable={false}
+        footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <DepartmentForm initialValues={selectedRole ? selectedRole : resetRole} form={form} />
+        <RoleForm initialValues={selectedRole ? selectedRole : resetRole} onSave={handleSave} form={form} />
       </Modal>
     </div>
   );
 };
 
-const DepartmentForm: React.FC<RoleFormProps> = ({ initialValues, form }) => {
+const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
+  const handleSubmit = () => {
+    form.validateFields().then((values) => {
+      onSave(values as Role);
+    });
+  };
 
   useEffect(() => {
     console.log('useEffect run');
@@ -98,24 +162,22 @@ const DepartmentForm: React.FC<RoleFormProps> = ({ initialValues, form }) => {
   }
 
   return (
-    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '400px', marginTop: '40px' }}>
-      <Form.Item>
-        <Button onClick={handleFormReset} style={{ marginLeft: 8 }}>
+    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '400px', marginTop: '24px'}}>
+      <Form.Item label="Id" name="Id" hidden>
+        <Input />
+      </Form.Item>
+      <Form.Item label="Title" name="Title">
+        <Input />
+      </Form.Item>
+      {/* save */}
+      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+        <Button type="primary" onClick={handleSubmit} style={{marginRight: '12px'}}>
+          Save
+        </Button>
+        <Button onClick={handleFormReset} style={{marginLeft: '12px'}}>
           Reset
         </Button>
       </Form.Item>
-      <Row gutter={24}>
-        <Col span={5}>
-          <Form.Item label="Id" name="Id">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={19}>
-          <Form.Item label="Title" name="Title">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
     </Form>
   )
 }
