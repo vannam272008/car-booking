@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, Menu, message, notification } from 'antd';
+import { Menu, message, notification } from 'antd';
 import {
     ArrowLeftOutlined,
     SaveOutlined,
@@ -16,7 +16,7 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface MenuAddProps {
     formData: {
-        SenderId: string,
+        SenderId: string | null,
         DepartmentId: string,
         ReceiverId: string,
         Mobile: string | null,
@@ -34,7 +34,7 @@ interface MenuAddProps {
         files: RcFile[],
     },
     setFormData: React.Dispatch<React.SetStateAction<{
-        SenderId: string;
+        SenderId: string | null;
         DepartmentId: string;
         ReceiverId: string;
         Mobile: string | null;
@@ -59,13 +59,14 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     const navigate = useNavigate();
 
     const handleSaveDraft = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null) {
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 Status: 'Draft'
             }));
-        } else {
-            openNotification('topRight');
+        }
+        else {
+            openNotification('topRight')
         }
     };
     useEffect(() => {
@@ -89,7 +90,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     }, [formData, navigate])
 
     const handleSubmit = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null) {
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
             request.postForm("/request/create", formData)
                 .then((response) => {
                     const data = response.data;

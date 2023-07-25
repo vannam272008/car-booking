@@ -7,6 +7,7 @@ import request from "../../../Utils/request";
 import "./detailRequest.css";
 import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
+import { FileTextOutlined } from '@ant-design/icons';
 
 function DetailRequest(): JSX.Element {
 
@@ -30,7 +31,7 @@ function DetailRequest(): JSX.Element {
 
     //Get Api
     const [detailData, setDetailData] = useState<any>({});
-    const [attachmentData, setAttachmentData] = useState<any>({})
+    const [attachmentData, setAttachmentData] = useState<any[]>([])
     const [workflowData, setWorkflowData] = useState<any>({})
 
     //Data Approver
@@ -46,21 +47,21 @@ function DetailRequest(): JSX.Element {
     useEffect(() => {
         const getDetailRequest = async () => {
             const endpoint = "/request/Id=" + requestId;
-            const response = await request.get(endpoint).then((res) => {
+            await request.get(endpoint).then((res) => {
                 setDetailData(res.data.Data);
             }
             );
         }
         const getAttachmentsRequest = async () => {
             const endpoint = "/request/attachment/requestId=" + requestId;
-            const response = await request.get(endpoint).then((res) => {
+            await request.get(endpoint).then((res) => {
                 setAttachmentData(res.data.Data);
             }
             );
         }
         const getWokflowRequest = async () => {
             const endpoint = "/request/workflow/requestId=" + requestId;
-            const response = await request.get(endpoint).then((res) => {
+            await request.get(endpoint).then((res) => {
                 setWorkflowData(res.data.Data);
             }
             );
@@ -69,21 +70,21 @@ function DetailRequest(): JSX.Element {
         getAttachmentsRequest();
         getDetailRequest();
 
-    }, [])
+    }, [requestId])
     //Setup select-adio Yes or No
     const onChange = (e: RadioChangeEvent) => {
         console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
 
-    console.log(workflowData);
+    console.log(attachmentData);
 
 
     return (
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    <MenuRequest />
+                    <MenuRequest requestStatus={detailData.Status} />
                     <div className='info-detail-request'>
                         <div className='info-basic-detail-request'>
                             <p>Request Code: {detailData.RequestCode}</p>
@@ -158,11 +159,19 @@ function DetailRequest(): JSX.Element {
                         </div>
                         <div className='Attachment'>
                             <b>Attachment(s)</b>
-                            {/* <div>
-                                <a href={attachmentData.Path}>
-                                    Open File
-                                </a>
-                            </div> */}
+                            <div>
+                                {Array.isArray(attachmentData) ? (
+                                    attachmentData.map((attachment: { Id: number; Path: string; }) => (
+                                        <div key={attachment.Id} className='approver'>
+                                            <span><FileTextOutlined /> </span>
+                                            <span>{attachment.Path.substring(39)} </span>
+                                            <span>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div>No attachment data available.</div>
+                                )}
+                            </div>
                         </div>
                         <div className='list-approvers'>
                             <p>Approvers:</p>
@@ -181,8 +190,9 @@ function DetailRequest(): JSX.Element {
                         <Comment />
                     </div>
                 </div>
-            )}
-        </RequestLayout>
+            )
+            }
+        </RequestLayout >
     );
 }
 

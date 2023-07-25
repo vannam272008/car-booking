@@ -2,9 +2,6 @@ import { Input, Button, Form, message, Spin } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useState } from "react";
 import request from "../../Utils/request";
-import { connect } from 'react-redux';
-import { setTab, setStatus } from '../../Actions/requestAction';
-import { RootState } from '../../Reducers/rootReducer';
 import "./index.css";
 
 interface LoginValues {
@@ -12,11 +9,10 @@ interface LoginValues {
   password: string;
 }
 
-const Login = (props: any) => {
-  const { tab, setTab } = props;
+const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('Token');
 
   const handleLogIn = useCallback(
     (values: LoginValues) => {
@@ -31,7 +27,7 @@ const Login = (props: any) => {
           if (data) {
             localStorage.setItem("Token", data?.Data?.jwtToken);
             localStorage.setItem("Id", data?.Data?.userInfo.Id);
-            if (data.Success == false) {
+            if (data.Success === false) {
               console.log("Login failed:", data?.Message);
               message.error(data?.Message);
             } else {
@@ -48,7 +44,7 @@ const Login = (props: any) => {
           setLoading(false);
         });
     },
-    [navigate]
+    [navigate, token]
   );
 
 
@@ -123,11 +119,10 @@ const Login = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: RootState) => ({
-  tab: state.request.tab,
-  status: state.request.status
-})
+// const mapStateToProps = (state: RootState) => ({
+//   userInfo: state.request.userInfo
+// })
 
-const mapDispatchToProps = { setTab, setStatus }
+// const mapDispatchToProps = { setUserInfo }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default Login

@@ -9,21 +9,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (userID == null || userID) {
+    if (userID === null || userID === undefined) {
       navigate('/login');
     }
   }, [userID, navigate])
 
-  // const [page, setPage] = useState(1);
-  // const [limit, setLimit] = useState(10);
-  // useEffect(() => {
-  //   const endpoint = "/request/get-all?page=" + page + "&limit=" + limit;
-  //   const response = request.get(endpoint).then((res) => {
-  //     console.log(res.data);
-  //   }
-  //   );
-
-  // }, [page, limit])
   return <>Home</>
 }
 

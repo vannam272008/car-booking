@@ -22,8 +22,6 @@ const request = axios.create({
 
 
 export const get = async (endpoint: string, options = {}) => {
-    const token = getToken();
-    console.log(token);
     return await request.get(endpoint);
 };
 
@@ -39,7 +37,7 @@ export const post = async (endpoint: string, data = {}) => {
 
 export const postForm = async (endpoint: string, data = {}) => {
     // const token = getToken();
-    return await request.post(endpoint, data, {
+    return await request.postForm(endpoint, data, {
         headers: {
             Accept: 'multipart/form-data',
             Authorization: `Bearer ${token}`,
@@ -52,6 +50,16 @@ export const put = async (endpoint: string, data = {}) => {
     return await request.put(endpoint, data, {
         headers: {
             Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+};
+
+export const putForm = async (endpoint: string, data = {}) => {
+    // const token = getToken();
+    return await request.putForm(endpoint, data, {
+        headers: {
+            Accept: 'multipart/form-data',
             Authorization: `Bearer ${token}`,
         },
     });

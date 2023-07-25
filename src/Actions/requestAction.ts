@@ -1,3 +1,5 @@
+
+
 export const setTab = (tab: string) => {
     return {
         type: 'SET_TAB',
@@ -9,5 +11,12 @@ export const setStatus = (status: string) => {
     return {
         type: 'SET_STATUS',
         payload: status
+    }
+}
+
+export const setUserInfo = (userInfo: any) => {
+    return {
+        type: 'SET_STATUS',
+        payload: userInfo
     }
 }
