@@ -1,6 +1,5 @@
 import React from 'react';
 import EditRequest from '../EditRequest/editRequest';
-import EditSendApprover from '../EditSendApprover/editSendApprover';
 import { Menu } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined, SaveOutlined, SendOutlined } from '@ant-design/icons';
 import RequestLayout from '../../RequestLayout';
@@ -36,7 +35,6 @@ function MenuEdit() {
                         </Menu.Item>
                     </Menu>
                     <EditRequest />
-                    <EditSendApprover />
                 </div>
             )}
         </RequestLayout >
