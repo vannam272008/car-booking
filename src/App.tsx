@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Home from './Pages/Home';
 import ManageRequest from './Pages/ManageRequest/ManageRequest';
@@ -11,22 +11,37 @@ import ContentStructure from './Components/OrganizationalStructure/ContentStruct
 import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
 import MenuEdit from './Components/EditRequest/MenuEdit/menuEdit';
 import AdminPage from './Components/AdminPage';
+import { useEffect, useState } from 'react';
+import request from './Utils/request';
+import PageNotFound from './Pages/404';
 
 function App() {
-  const token = localStorage.getItem("Token");
+  const userId = localStorage.getItem("Id");
+
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      {userId !== null ? (
+        <>
+          <Route path="/" element={<Home />} />
+          <Route path="/request/carbooking/edit/:requestId" element={<MenuEdit />} />
+          <Route path="/request/carbooking" element={<ManageRequest />} />
+          <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
+          <Route path='/request/addrequest' element={<AddRequest />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/setting" element={<SettingPage />} />
+          <Route path="/setting/structure" element={<ContentStructure />} />
+          <Route path="/setting/profile/:userID" element={<Profile />} />
+          <Route path="/setting/admin" element={<AdminPage />} />
+          <Route path="*" element={<PageNotFound />}></Route>
+        </>
+      ) : <>
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="*" element={<PageNotFound />}></Route>
+      </>
+      }
+
       <Route path="/login" element={<Login />} />
-      <Route path="/request/carbooking/edit/:requestId" element={<MenuEdit />} />
-      <Route path="/request/carbooking" element={<ManageRequest />} />
-      <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
-      <Route path='/request/addrequest' element={<AddRequest />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/setting" element={<SettingPage />} />
-      <Route path="/setting/structure" element={<ContentStructure />} />
-      <Route path="/setting/profile/:userID" element={<Profile />} />
-      <Route path="/setting/admin" element={<AdminPage />} />
+
     </Routes>
   );
 }
