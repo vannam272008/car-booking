@@ -76,7 +76,6 @@ const ManageRequest = (props: any) => {
     try {
 
       const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
-      console.log(url);
       const response = await request.get(url);
       setRequestData(response.data.Data.ListData)
       setTotalPage(response.data.Data.TotalPage)
@@ -92,7 +91,6 @@ const ManageRequest = (props: any) => {
   // }, [tab, status, page]);
 
   const profile = false;
-  console.log("tab: " + tab, requestData);
   return (
     <RequestLayout profile={profile}>
       {() => (
@@ -125,7 +123,12 @@ const ManageRequest = (props: any) => {
               loading={loading}
               onRow={(record) => ({
                 onDoubleClick: () => {
-                  navigate(`/request/carbooking/detail/${record.Id}`);
+                  if (record.Status === 'Rejected') {
+                    navigate(`/request/carbooking/edit/${record.Id}`);
+                  }
+                  else {
+                    navigate(`/request/carbooking/detail/${record.Id}`);
+                  }
                 },
               })}
               columns={[

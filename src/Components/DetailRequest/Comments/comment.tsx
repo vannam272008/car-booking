@@ -40,13 +40,13 @@ function Comment(): JSX.Element {
     useEffect(() => {
         const getDetailRequest = async () => {
             const endpoint = "/request/Id=" + requestId;
-            const response = await request.get(endpoint).then((res) => {
+            await request.get(endpoint).then((res) => {
                 setDetailData(res.data.Data);
             }
             );
         }
         getDetailRequest();
-    }, [])
+    }, [requestId])
 
 
     const handleSaveComment = () => {
@@ -89,6 +89,8 @@ function Comment(): JSX.Element {
         setReplyToCommentId(commentId);
     };
 
+    console.log(detailData);
+
     return (
         <div className='comments-detail-request'>
             <div className='title-comment'>
@@ -128,8 +130,8 @@ function Comment(): JSX.Element {
                             <Avatar size={40} icon={<UserOutlined />} />
                         </Col>
                         <Col span={18}>
-                            <span className="comment-author">{comment.author}</span>
-                            <span className="comment-date">{comment.datetime}</span>
+                            <span className="comment-author">{detailData.SenderUser ? detailData.SenderUser.FullName : "No Name"}</span>
+                            <span className="comment-date">{detailData.Created ? detailData.Created : "No Data"}</span>
                             <div className="comment-content"><span>Submit the request </span>{detailData.RequestCode}<span> for approval</span></div>
                         </Col>
                         {!showReplyForm && (
