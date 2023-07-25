@@ -1,7 +1,7 @@
 import React from "react";
 import { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
-
+import { RcFile } from "antd/es/upload/interface";
 interface API {
   EmployeeNumber: string;
   Username: string,
@@ -21,7 +21,8 @@ interface API {
   BelongToDepartments: string,
   Rank: string,
   EmployeeType: string,
-  Rights: string
+  Rights: string,
+  AvatarPath: RcFile | null;
 }
 
 interface OverviewProps {
@@ -46,8 +47,8 @@ interface OverviewProps {
     Rank: string,
     EmployeeType: string,
     Rights: string
+    
   }
-  // setInfo: React.Dispatch<
   //   React.SetStateAction<{
   //     employee_number: string;
   //     sex: string;
@@ -101,6 +102,7 @@ interface OverviewProps {
   //     postal_code_family: string;
   //     country_family: string;
   //   }>>;
+  // setInfoAPI: React.Dispatch<React.SetStateAction<API>>
   setInfoAPI: React.Dispatch<React.SetStateAction<API>>
 }
 
@@ -379,7 +381,6 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
                 ...prev,
                 Rights: e.target.value,
               };
-              
             });
           }}
         />

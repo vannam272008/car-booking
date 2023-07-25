@@ -24,6 +24,7 @@ interface API {
   EmployeeNumber: string;
   Username: string;
   Email: string;
+  AvatarPath: RcFile | null;
   FirstName: string;
   LastName: string;
   Sex: boolean;
@@ -99,11 +100,14 @@ const ContentProfile: React.FC = () => {
     postal_code_family: "",
     country_family: "",
   });
-
+  //avatar
+  const [image, setImage] = useState<RcFile>();
+  
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
     Username: "",
     Email: "",
+    AvatarPath: image!,
     FirstName: "",
     LastName: "",
     Sex: true,
@@ -139,20 +143,20 @@ const ContentProfile: React.FC = () => {
     getProfile();
   }, []);
 
-  useEffect(() => {
-    const endpoint = "/user/profile/" + userID;
-    const getProfile = async () => {
-      await request
-        .put(endpoint, infoAPI)
-        .then((response) => {
-          // console.log(response.data.Data)
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
-    getProfile();
-  }, []);
+  // useEffect(() => {
+  //   const endpoint = "/user/profile/" + userID;
+  //   const getProfile = async () => {
+  //     await request
+  //       .put(endpoint, infoAPI)
+  //       .then((response) => {
+  //         // console.log(response.data.Data)
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+  //   };
+  //   getProfile();
+  // }, []);
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -168,24 +172,20 @@ const ContentProfile: React.FC = () => {
   // const [relationship, setRelationship] = useState("");
   // const [relationshipnote, setRelationshipNote] = useState("");
 
-  //avatar
-  const [imageUrl, setImageUrl] = useState<String>("");
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [onOk, setOnOk] = useState<Boolean>(false)
-
+  const [onOk, setOnOk] = useState<Boolean>(false);
+  
   const handleOk = () => {
     setOnOk(true);
     setVisible(false);
   };
 
   const handleFileChange = (file: RcFile) => {
-    const objectUrl = URL.createObjectURL(file);
-    setImageUrl(objectUrl);
+    setImage(file);
   };
-
+  console.log(image)
   // visible avatar
   const [visible, setVisible] = useState(false);
-  const handleDeleteContract = () => { };
+  const handleDeleteContract = () => {};
   const onEditInfo = () => {
     setIsEditing(true);
   };
@@ -196,6 +196,7 @@ const ContentProfile: React.FC = () => {
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
+    setOnOk(false);
   };
 
   const handleCloseModal = () => {
@@ -203,8 +204,8 @@ const ContentProfile: React.FC = () => {
   };
 
   const handleReturnSetting = () => {
-    navigate('/setting')
-  }
+    navigate("/setting");
+  };
 
   let label: TabsProps["items"] = [
     {
@@ -242,29 +243,36 @@ const ContentProfile: React.FC = () => {
       <div className="nav-bar-profile">
         {isEditing ? (
           <>
-            <SaveOutlined
-              onClick={() => {
-                onSave();
-              }}
-              style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
-            />
-            <span
-              onClick={() => {
-                onSave();
-              }}
-              style={{ color: "#8894A1", fontSize: "15px" }}
+            <Button
+              className="btn"
+              style={{ margin: "20px 0px 20px 25px" }}
+              icon={
+                <SaveOutlined
+                  onClick={() => {
+                    onSave();
+                  }}
+                  style={{ fontSize: "30px " }}
+                />
+              }
             >
               Save
-            </span>
+            </Button>
           </>
         ) : null}
-        <div onClick={handleReturnSetting} style={{ cursor: "pointer" }}>
-          <LeftCircleOutlined
-            style={{ margin: "30px 10px 20px 20px", fontSize: "30px" }}
-          />
-          <span style={{ color: "#8894A1", fontSize: "15px" }}>Return</span>
-        </div>
-
+        <Button
+          className="btn"
+          style={{ margin: "20px 10px 20px 5px" }}
+          icon={
+            <LeftCircleOutlined
+              onClick={handleReturnSetting}
+              style={{
+                fontSize: "30px",
+              }}
+            />
+          }
+        >
+          Return
+        </Button>
       </div>
       <div className="info-user">
         <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
@@ -272,7 +280,6 @@ const ContentProfile: React.FC = () => {
             className="btn-camera"
             size="middle"
             shape="round"
-            // style={{margin:"0px -20px 0px 0px"}}
             icon={
               <CameraOutlined
                 style={{
@@ -299,10 +306,11 @@ const ContentProfile: React.FC = () => {
               alignItems: "center",
             }}
           >
-            {imageUrl ? (
+            {image ? (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={imageUrl}
+                src={URL.createObjectURL(image)}
+                // src = {URL.createObjectURL((infoAPI.AvatarPath!))}
               />
             ) : (
               <Avatar
@@ -313,9 +321,10 @@ const ContentProfile: React.FC = () => {
 
             <div className="Upload-Avatar">
               <Upload
-                fileList={fileList}
-                onChange={({ file }) => handleFileChange(file.originFileObj as RcFile)}
-                showUploadList={true}
+                showUploadList={false}
+                onChange={({ file }) =>
+                  handleFileChange(file.originFileObj as RcFile)
+                }
               >
                 <Button shape="circle" icon={<EditOutlined />} />
               </Upload>
@@ -328,7 +337,7 @@ const ContentProfile: React.FC = () => {
               className="avatar"
               size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
               icon={<UserOutlined />}
-              src={imageUrl}
+              src={URL.createObjectURL(image!)}
             />
           ) : (
             <Avatar
@@ -343,11 +352,17 @@ const ContentProfile: React.FC = () => {
           {infoAPI.FirstName} {infoAPI.LastName}
         </h1>
         {isEditing ? null : (
-          <UserAddOutlined
-            onClick={() => {
-              onEditInfo();
-            }}
-            style={{ fontSize: "50px", marginLeft: "50px" }}
+          <Button
+            className="btn"
+            style={{ marginLeft: "50px" }}
+            icon={
+              <UserAddOutlined
+                onClick={() => {
+                  onEditInfo();
+                }}
+                style={{ fontSize: "50px" }}
+              />
+            }
           />
         )}
       </div>
