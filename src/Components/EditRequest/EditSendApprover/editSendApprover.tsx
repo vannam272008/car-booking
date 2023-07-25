@@ -1,10 +1,12 @@
-import { Col, Input, Row, Form, Select, DatePicker, Spin, Alert } from 'antd';
+import { Upload, Col, Input, Row, Form, Select, DatePicker, Spin, Alert, Radio, Button, RadioChangeEvent } from 'antd';
 import './editSendApprover.css'
 import { ChangeEvent, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate.js';
 import request from "../../../Utils/request";
 import { RcFile } from 'antd/es/upload';
+import { UploadOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
 
 interface Department {
     Name: string;
@@ -25,42 +27,41 @@ function EditSendApprover() {
 
     const { Option } = Select;
 
-    const futureTime = dayjs().add(24, 'hours');
-    const usageMoment = dayjs();
-    const updatefutureTime = changeFormatDatePostRequest(futureTime);
-    const updateMoment = changeFormatDatePostRequest(usageMoment);
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [fileList, setFileList] = useState<RcFile[]>([]);
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
-    const senderId = localStorage.getItem("Id")
+    const { requestId } = useParams();
+
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch data from the first API
+
                 const departmentEndpoint = "department/all?page=1&limit=100";
                 const departmentRes = await request.get(departmentEndpoint);
                 setDataDepartment(departmentRes.data.Data.ListData);
 
-                // Fetch data from the second API
                 const departmentMemberEndpoint = "departmentMember/all?page=1&limit=100";
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
                 setDataDepartmentMember(departmentMemberRes.data.Data.ListData);
 
-                // Update form data based on the fetched data
+                const detailsDataEndpoint = "/request/Id=" + requestId;
+                const detailsDataRes = await request.get(detailsDataEndpoint);
+                setDetailData(detailsDataRes.data.Data);
+                setApplyNote(detailsDataRes.data.Data.ApplyNote);
+
+
                 setFormData((prevFormData) => ({
                     ...prevFormData,
-                    DepartmentId: departmentRes.data.Data.ListData[0].Id,
-                    ReceiverId: departmentMemberRes.data.Data.ListData[0].User.Id,
+                    DepartmentId: detailsDataRes.data.Data.Department.Id,
+                    ReceiverId: detailsDataRes.data.Data.ReceiveUser.Id,
                 }));
 
-                // Set loading to false since data fetching is completed
                 setLoading(false);
             } catch (error) {
-                // Handle errors if needed
                 setLoading(true);
             }
         };
@@ -68,24 +69,27 @@ function EditSendApprover() {
         fetchData();
     }, []);
 
-
+    const [detailData, setDetailData] = useState<any>({});
+    const usageFrom = changeFormatDatePostRequest(detailData.UsageFrom);
+    const usageTo = changeFormatDatePostRequest(detailData.UsageTo);
+    const pickTime = changeFormatDatePostRequest(detailData.PickTime);
 
     const [formData, setFormData] = useState({
-        SenderId: senderId as string | null,
+        SenderId: "",
         DepartmentId: "",
         ReceiverId: "",
-        Mobile: null as string | null,
-        CostCenter: null as string | null,
-        TotalPassengers: null as string | null,
-        PickLocation: '',
-        Destination: '',
-        Reason: '',
+        Mobile: "",
+        CostCenter: "",
+        TotalPassengers: "",
+        PickLocation: "",
+        Destination: "",
+        Reason: "",
         ApplyNote: false,
-        UsageFrom: updateMoment,
-        UsageTo: updatefutureTime,
-        PickTime: updateMoment,
+        UsageFrom: "",
+        UsageTo: "",
+        PickTime: "",
         ListOfUserId: listOfUserId,
-        Status: '',
+        Status: "",
         files: fileList,
     });
 
@@ -95,9 +99,18 @@ function EditSendApprover() {
             files: fileList,
             ApplyNote: applyNote,
             ListOfUserId: listOfUserId,
-            SenderId: senderId,
+            Mobile: detailData.Mobile,
+            CostCenter: detailData.CostCenter,
+            TotalPassengers: detailData.TotalPassengers,
+            PickLocation: detailData.PickLocation,
+            Destination: detailData.Destination,
+            Reason: detailData.Reason,
+            SenderId: detailData.SenderUser ? detailData.SenderUser.Id : undefined,
+            UsageFrom: usageFrom,
+            UsageTo: usageTo,
+            PickTime: pickTime,
         }));
-    }, [fileList, applyNote, listOfUserId, senderId]);
+    }, [usageFrom, usageTo, pickTime, detailData.SenderUser, fileList, applyNote, listOfUserId, detailData.Mobile, detailData.CostCenter, detailData.TotalPassengers, detailData.PickLocation, detailData.Destination, detailData.Reason]);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -107,10 +120,6 @@ function EditSendApprover() {
             ...prevFormData,
             [name]: value,
         }));
-
-        // if (name === 'applicant') {
-        //     setInitialValue(value);
-        // }
     };
 
     const handleSelectChange = (value: string, field: string) => {
@@ -149,17 +158,16 @@ function EditSendApprover() {
 
     };
 
-    const getFullNameIfContainsSenderId = (dataDepartmentMember: DepartmentMember[], senderId: string | null) => {
-        const userWithSenderId = dataDepartmentMember.find(
-            (departmentMember) => departmentMember?.User.Id === senderId
-        );
-        // console.log(userWithSenderId);
-
-        return userWithSenderId?.User.FullName;
+    const onChange = (e: RadioChangeEvent) => {
+        setApplyNote(e.target.value);
     };
 
+    const handleBeforeUpload = (file: RcFile) => {
+        setFileList([...fileList, file]);
+        return false;
+    };
 
-    // console.log(dataDepartmentMember);
+    console.log(formData);
 
     return (
         <div className='page-request'>
@@ -194,7 +202,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
-                                            initialValue={getFullNameIfContainsSenderId(dataDepartmentMember, senderId)}
+                                            initialValue={detailData.SenderUser ? detailData.SenderUser.FullName : undefined}
                                         >
                                             <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                         </Form.Item>
@@ -210,7 +218,7 @@ function EditSendApprover() {
                                                     message: 'Select something!',
                                                 },
                                             ]}
-                                            initialValue={dataDepartment.length > 0 ? dataDepartment[0].Name : undefined}
+                                            initialValue={detailData.Department ? detailData.Department.Name : undefined}
                                             labelCol={{ span: 24 }}
                                         >
                                             <Select
@@ -241,11 +249,11 @@ function EditSendApprover() {
                                                     message: 'Select something!',
                                                 },
                                             ]}
-                                            initialValue={dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
+                                            initialValue={detailData.ReceiveUser ? detailData.ReceiveUser.FullName + ' ' + detailData.ReceiveUser.Email + ' ' + detailData.ReceiveUser.JobTitle : undefined}
                                             labelCol={{ span: 24 }}
                                         >
                                             <Select
-                                                value={formData.SenderId}
+                                                value={formData.ReceiverId}
                                                 onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                 showSearch
                                                 optionFilterProp="children"
@@ -280,6 +288,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.Mobile ? detailData.Mobile : undefined}
                                         >
                                             <Input type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                         </Form.Item>
@@ -302,6 +311,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
                                         >
                                             <Input type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                         </Form.Item>
@@ -318,10 +328,11 @@ function EditSendApprover() {
                                                 },
                                                 {
                                                     pattern: /^[0-9]*$/,
-                                                    message: 'Mobile must be a number',
+                                                    message: 'Total passengers must be a number',
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
                                         >
                                             <Input type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                         </Form.Item>
@@ -338,7 +349,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
-                                            initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
+                                            initialValue={dayjs(usageFrom)} // Giá trị mặc định là thời gian hiện tại
                                         >
                                             <DatePicker
                                                 className='add-request-width-formitem'
@@ -361,7 +372,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
-                                            initialValue={futureTime} // Giá trị mặc định là thời gian sau 24 giờ
+                                            initialValue={dayjs(usageTo)}
                                         >
                                             <DatePicker
                                                 className='add-request-width-formitem'
@@ -386,7 +397,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
-                                            initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
+                                            initialValue={dayjs(pickTime)}
                                         >
                                             <DatePicker
                                                 className='.add-request-width-formitem'
@@ -409,6 +420,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.PickLocation ? detailData.PickLocation : undefined}
                                         >
                                             <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                         </Form.Item>
@@ -426,6 +438,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.Destination ? detailData.Destination : undefined}
                                         >
                                             <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                         </Form.Item>
@@ -442,6 +455,7 @@ function EditSendApprover() {
                                                 },
                                             ]}
                                             labelCol={{ span: 24 }}
+                                            initialValue={detailData.Reason ? detailData.Reason : undefined}
                                         >
                                             <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                         </Form.Item>
@@ -450,9 +464,32 @@ function EditSendApprover() {
                             </Form>
                         </div>
                     </div>
-                </div>)
-            }
+                    <div className='attention-request' style={{ marginTop: '0', }}>
+                        <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
+                        <Radio.Group onChange={onChange} value={applyNote}>
+                            <Radio value={true}>Yes</Radio>
+                            <Radio value={false}>No</Radio>
+                        </Radio.Group>
+                    </div>
+                    <div className='Attachment'>
+                        <b>Attachment(s)</b>
+                    </div>
+                    <div className='reply-upload-comment'>
+                        <Upload
+                            beforeUpload={handleBeforeUpload}
+                            accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
+                            fileList={fileList}
+                        >
+                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
+                                Add attachments
+                            </Button>
+                            <span> (Maximum 20MB per file)</span>
+                        </Upload>
+                    </div>
+                </div>
 
+                )
+            }
         </div>
     );
 }
