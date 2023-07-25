@@ -16,6 +16,10 @@ function SettingPage(): JSX.Element {
     const handleProflie = () => {
         navigate("/setting/profile/" + userID);
     }
+
+    const handleAdmin = () => {
+        navigate("/setting/admin");
+    }
     return (
         <RequestLayout profile={profile}>
             {() => (
@@ -64,7 +68,7 @@ function SettingPage(): JSX.Element {
                     <b>Car Booking</b>
                     <Row className='setting-page-row'>
                         <Col className='setting-page-col' span={3}>
-                            <Button>Permission<br /><SafetyCertificateFilled /></Button>
+                            <Button onClick={handleAdmin}>Permission<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>Document approval</b>
