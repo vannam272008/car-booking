@@ -63,7 +63,7 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
     const getAllUser = async () => {
         const endpoint = "user/all?page=1&limit=100";
         await request.get(endpoint).then((res) => {
-            setDataUser(res.data.Data);
+            setDataUser(res.data.Data.ListData);
             setLoading(false);
         }).catch(() => {
             setLoading(true);
@@ -144,7 +144,7 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
                     filterOption={(inputValue, option) =>
                         option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                     }
-                    >
+                >
                     <Select.Option value="">All requests</Select.Option>
                     <Select.Option value="Draft">Draft</Select.Option>
                     <Select.Option value="Waiting for approval">Waiting for approval</Select.Option>

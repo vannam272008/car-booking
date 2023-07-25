@@ -1,7 +1,7 @@
-import { Input, Button, Form, Radio, message, DatePicker } from "antd";
+import { Input, Button, Form, Radio, message, DatePicker, Select } from "antd";
 import "./index.css";
 import { useNavigate } from "react-router-dom";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import request from "../../Utils/request";
 
 interface RegisterValues {
@@ -15,8 +15,15 @@ interface RegisterValues {
     employeenumber: string;
 }
 
+interface Role {
+    Id: number;
+    Title: string;
+}
+
 const Register = () => {
     const navigate = useNavigate();
+    const [dataRole, setDataRole] = useState<Role[]>([]);
+    const [loading, setLoading] = useState(false);
 
     const handleRegister = useCallback(
         (values: RegisterValues) => {
@@ -39,6 +46,20 @@ const Register = () => {
         },
         [navigate]
     );
+
+    const getAllRole = async () => {
+        const endpoint = "role/all?page=1&limit=5";
+        await request.get(endpoint).then((res) => {
+            setDataRole(res.data.Data.ListData);
+            setLoading(false);
+        }).catch(() => {
+            setLoading(true);
+        });
+    }
+
+    useEffect(() => {
+        getAllRole();
+    }, [])
 
     return (
         <>
@@ -118,7 +139,7 @@ const Register = () => {
                     </Form.Item>
 
                     <Form.Item
-                        name="sex"
+                        name="Sex"
                         label="Sex"
                         rules={[
                             {
@@ -128,8 +149,8 @@ const Register = () => {
                         ]}
                     >
                         <Radio.Group>
-                            <Radio>Female</Radio>
-                            <Radio>Male</Radio>
+                            <Radio value={true}>Male</Radio>
+                            <Radio value={false}>Female</Radio>
                         </Radio.Group>
                     </Form.Item>
 
@@ -146,7 +167,32 @@ const Register = () => {
                         <DatePicker />
                     </Form.Item>
 
-                    <Form.Item  //Test register
+                    <Form.Item 
+                    name="role" 
+                    label="Role" 
+                    rules={[
+                        {
+                            required: true,
+                            message: "Please select your role!",
+                        },
+                    ]}
+                    initialValue={dataRole.length > 0 ? dataRole[0].Title : undefined}>
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(inputValue, option) =>
+                                option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+                            }
+                        >
+                            {dataRole.map((items) => (
+                                <Select.Option key={items.Id} value={items.Id} >
+                                    {`${items.Title}`}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
+                    {/* <Form.Item  //Test register
                         label="Employee number"
                         name="employeenumber"
                         rules={[
@@ -157,7 +203,7 @@ const Register = () => {
                         ]}
                     >
                         <Input placeholder="Type your employee number" />
-                    </Form.Item>
+                    </Form.Item> */}
 
                     <Form.Item
                         label="Password"
