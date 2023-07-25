@@ -1,7 +1,7 @@
-import { Col, Layout, Row, Button, Drawer, message } from "antd";
+import { Col, Layout, Row, Button, Drawer } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import request from "../../Utils/request";
 import opus_logo from "../../assets/opus_logo.png";
@@ -23,19 +23,24 @@ const { Header } = Layout;
 //     },
 // ];
 
-interface LogoutValues {
-    username: string;
-    password: string;
-}
+// interface LogoutValues {
+//     username: string;
+//     password: string;
+// }
 
 const AppHeader = (props: any) => {
     const userID = localStorage.getItem("Id");
-    const { tab, status, setTab, setStatus } = props;
+    const { setTab, setStatus } = props;
     const avatar = require('../../public/images/logo192.png');
     // const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
+    const [userLoginInfo, setUserLoginInfo] = useState({
+        FullName: "",
+        AvatarPath: "",
+        Email: ""
+    });
     const navigate = useNavigate();
 
     const handlePathName = () => {
@@ -74,6 +79,20 @@ const AppHeader = (props: any) => {
         setTab('get-all');
         navigate("/login");
     }
+
+    useEffect(() => {
+        request.get("/user/profile/" + userID)
+            .then((res) => {
+                setUserLoginInfo({
+                    FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
+                    AvatarPath: res.data.Data.AvatarPath,
+                    Email: res.data.Data.Email
+                })
+            })
+            .catch((e) => {
+                console.log(e.response.Data);
+            })
+    }, [userID])
     // (values: LogoutValues) => {
     //     request
     //         .post("/user/logout", values)
@@ -94,7 +113,6 @@ const AppHeader = (props: any) => {
     //             console.log(error);
     //         });
     // };
-
     return (
         <Header className="mcs-header">
             <Row className="row-header">
@@ -170,9 +188,9 @@ const AppHeader = (props: any) => {
                             <div className="content-dropdown">
                                 <div className="account-info">
                                     <img src={String(avatar)} alt="avatar"></img>
-                                    <span className="info-name">Bang Nguyen Minh</span>
+                                    <span className="info-name">{userLoginInfo.FullName}</span>
                                     <br />
-                                    <span className="info-email">bangmn@o365.vn</span>
+                                    <span className="info-email">{userLoginInfo.Email}</span>
                                 </div>
                                 <div className="content-info">
                                     <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
