@@ -2,6 +2,7 @@ import { Col, Row, Form, Select, Button, Radio, RadioChangeEvent } from 'antd';
 import Input from 'rc-input';
 import React, { useState } from 'react';
 import './doneRequest.css'
+import { SaveFilled } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -121,7 +122,7 @@ function DoneRequest() {
                         <Col span={18}></Col>
                         <Col span={6}>
                             <Form.Item>
-                                <Button className='done-request-feedback-btn'>Submit</Button>
+                                <Button icon={<SaveFilled />} className='done-request-feedback-btn'>Submit</Button>
                             </Form.Item>
                         </Col>
                     </Row>

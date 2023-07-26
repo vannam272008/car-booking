@@ -41,7 +41,36 @@ function AddRequest(): JSX.Element {
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const senderId = localStorage.getItem("Id")
-    const [activeTabKey, setActiveTabKey] = useState<string>('4540FEF6-8DDF-4F26-BFD4-5D3F3EED07DF');
+    const [activeTabKey, setActiveTabKey] = useState<string>("");
+    const [userLoginName, setUserLoginName] = useState("");
+    const [formData, setFormData] = useState({
+        SenderId: senderId as string | null,
+        DepartmentId: "",
+        ReceiverId: "",
+        Mobile: null as string | null,
+        CostCenter: null as string | null,
+        TotalPassengers: null as string | null,
+        PickLocation: '',
+        Destination: '',
+        Reason: '',
+        ApplyNote: false,
+        UsageFrom: updateMoment,
+        UsageTo: updatefutureTime,
+        PickTime: updateMoment,
+        ListOfUserId: listOfUserId,
+        Status: '',
+        files: fileList,
+    });
+
+    useEffect(() => {
+        request.get("/user/profile/" + senderId)
+            .then((res) => {
+                setUserLoginName(res.data.Data.FirstName + " " + res.data.Data.LastName);
+            })
+            .catch((e) => {
+                console.log(e.response.Data);
+            })
+    }, [senderId])
 
     // useEffect(() => {
     //     const getDataDepartment = async () => {
@@ -72,59 +101,59 @@ function AddRequest(): JSX.Element {
     //     getDataDepartmentMember();
     //     getDataDepartment();
     // }, [])
+    useEffect(() => {
+
+    }, [])
 
     useEffect(() => {
+        setLoading(true);
+        const getAllDepartments = async () => {
+            const departmentEndpoint = "department/all?page=1&limit=100";
+            await request.get(departmentEndpoint)
+                .then((res) => {
+                    setDataDepartment(res.data.Data.ListData);
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        DepartmentId: res.data.Data.ListData[0].Id,
+                    }));
+                    // Fetch data from the second API
+                })
+        }
+
+
         const fetchData = async () => {
             try {
                 // Fetch data from the first API
-                const departmentEndpoint = "department/all?page=1&limit=100";
-                const departmentRes = await request.get(departmentEndpoint);
-                setDataDepartment(departmentRes.data.Data.ListData);
-
-                // Fetch data from the second API
-                const departmentMemberEndpoint = `departmentMember/position?departmentId=${activeTabKey}`;
-                const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data);
-
-
-                // Update form data based on the fetched data
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    DepartmentId: departmentRes.data.Data.ListData[0].Id,
-                    ReceiverId: departmentMemberRes.data.Data[0].User.Id,
-                }));
+                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
+                request.get(departmentMemberEndpoint).then((res) => {
+                    setDataDepartmentMember(res.data.Data);
+                    // Update form data based on the fetched data
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        ReceiverId: res.data.Data[0].User.Id,
+                    }));
+                    setLoading(false);
+                })
 
                 // Set loading to false since data fetching is completed
-                setLoading(false);
+
             } catch (error) {
                 // Handle errors if needed
                 setLoading(true);
             }
         };
 
-        fetchData();
-    }, [activeTabKey]);
+        if (formData.DepartmentId === "") {
+            getAllDepartments();
+        } else {
+            fetchData();
+        }
+
+    }, [formData.DepartmentId]);
 
 
 
-    const [formData, setFormData] = useState({
-        SenderId: senderId as string | null,
-        DepartmentId: "",
-        ReceiverId: "",
-        Mobile: null as string | null,
-        CostCenter: null as string | null,
-        TotalPassengers: null as string | null,
-        PickLocation: '',
-        Destination: '',
-        Reason: '',
-        ApplyNote: false,
-        UsageFrom: updateMoment,
-        UsageTo: updatefutureTime,
-        PickTime: updateMoment,
-        ListOfUserId: listOfUserId,
-        Status: '',
-        files: fileList,
-    });
+
 
     useEffect(() => {
         setFormData((prevFormData) => ({
@@ -136,10 +165,9 @@ function AddRequest(): JSX.Element {
         }));
     }, [fileList, applyNote, listOfUserId, senderId]);
 
-
     // useEffect(() => {
     //     setActiveTabKey(dataDepartment && !activeTabKey ? dataDepartment[0].Id : activeTabKey);
-    // }, [dataDepartment, activeTabKey])
+    // }, [])
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -156,7 +184,6 @@ function AddRequest(): JSX.Element {
             ...prevFormData,
             [field]: value,
         }));
-        setActiveTabKey(value);
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -195,8 +222,6 @@ function AddRequest(): JSX.Element {
         return userWithSenderId?.User.FullName;
     };
 
-
-    // console.log(activeTabKey);
     return (
         <RequestLayout profile={profile}>
             {() => (
@@ -233,7 +258,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={getFullNameIfContainsSenderId(dataDepartmentMember, senderId)}
+                                                    initialValue={userLoginName}
                                                 >
                                                     <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                                 </Form.Item>
@@ -249,7 +274,7 @@ function AddRequest(): JSX.Element {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={dataDepartment.length > 0 ? dataDepartment[0].Name : undefined}
+                                                    initialValue={dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
@@ -308,6 +333,7 @@ function AddRequest(): JSX.Element {
                                                 <Form.Item
                                                     label="Mobile"
                                                     name="Mobile"
+                                                    initialValue={formData.Mobile}
                                                     rules={[
                                                         {
                                                             required: true,
@@ -330,6 +356,7 @@ function AddRequest(): JSX.Element {
                                                 <Form.Item
                                                     label="Cost Center"
                                                     name="CostCenter"
+                                                    initialValue={formData.CostCenter}
                                                     rules={[
                                                         {
                                                             required: true,
@@ -350,6 +377,7 @@ function AddRequest(): JSX.Element {
                                                 <Form.Item
                                                     label="Total passengers"
                                                     name="Totalpassengers"
+                                                    initialValue={formData.TotalPassengers}
                                                     rules={[
                                                         {
                                                             required: true,
@@ -377,7 +405,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
+                                                    initialValue={formData.UsageFrom === "" ? dayjs() : dayjs(formData.UsageFrom)} // Giá trị mặc định là thời gian hiện tại
                                                 >
                                                     <DatePicker
                                                         className='add-request-width-formitem'
@@ -448,6 +476,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
+                                                    initialValue={formData.PickLocation}
                                                 >
                                                     <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -465,6 +494,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
+                                                    initialValue={formData.Destination}
                                                 >
                                                     <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -481,6 +511,7 @@ function AddRequest(): JSX.Element {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
+                                                    initialValue={formData.Reason}
                                                 >
                                                     <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                                 </Form.Item>

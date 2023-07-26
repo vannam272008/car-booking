@@ -165,7 +165,6 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     }
 
     console.log(formData);
-
     return (
         <div>
             <Menu mode="horizontal" className='fixed-menu '>
