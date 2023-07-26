@@ -70,7 +70,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
         }
     };
     useEffect(() => {
-        if (formData.Status.length > 0) {
+        if (formData.Status.length > 0 && formData.Status === "Draft") {
             request.postForm("/request/create", formData)
                 .then((response) => {
                     const data = response.data;
@@ -82,12 +82,31 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
                             navigate("/request/carbooking");
                         }
                     }
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        SenderId: "",
+                        DepartmentId: "",
+                        ReceiverId: "",
+                        Mobile: "",
+                        CostCenter: "",
+                        TotalPassengers: "",
+                        PickLocation: '',
+                        Destination: '',
+                        Reason: '',
+                        ApplyNote: false,
+                        UsageFrom: "",
+                        UsageTo: "",
+                        PickTime: "",
+                        ListOfUserId: [],
+                        Status: "",
+                        files: [],
+                    }));
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         }
-    }, [formData, navigate])
+    }, [formData, navigate, setFormData])
 
     const handleSubmit = () => {
         if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
@@ -106,6 +125,25 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
                 .catch((error) => {
                     console.log(error);
                 });
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                SenderId: "",
+                DepartmentId: "",
+                ReceiverId: "",
+                Mobile: "",
+                CostCenter: "",
+                TotalPassengers: "",
+                PickLocation: '',
+                Destination: '',
+                Reason: '',
+                ApplyNote: false,
+                UsageFrom: "",
+                UsageTo: "",
+                PickTime: "",
+                ListOfUserId: [],
+                Status: "",
+                files: [],
+            }));
         } else {
             openNotification('topRight');
         }

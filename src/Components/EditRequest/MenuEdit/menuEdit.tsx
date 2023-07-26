@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import request from '../../../Utils/request';
+import { useParams } from 'react-router';
 
 
 
@@ -50,6 +51,8 @@ interface MenuAddProps {
 function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     const navigate = useNavigate();
+    const { requestId } = useParams();
+
 
     const handleSaveDraft = () => {
         if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
@@ -64,7 +67,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     };
     useEffect(() => {
         if (formData.Status.length > 0) {
-            request.postForm("/request/create", formData)
+            request.putForm("/request/Id=" + requestId, formData)
                 .then((response) => {
                     const data = response.data;
                     if (data) {
@@ -75,12 +78,31 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                             navigate("/request/carbooking");
                         }
                     }
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        SenderId: "",
+                        DepartmentId: "",
+                        ReceiverId: "",
+                        Mobile: "",
+                        CostCenter: "",
+                        TotalPassengers: "",
+                        PickLocation: '',
+                        Destination: '',
+                        Reason: '',
+                        ApplyNote: false,
+                        UsageFrom: "",
+                        UsageTo: "",
+                        PickTime: "",
+                        ListOfUserId: [],
+                        Status: "",
+                        files: [],
+                    }));
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         }
-    }, [formData, navigate])
+    }, [formData, navigate, setFormData, requestId])
 
     const handleReturn = () => {
         navigate("/request/carbooking");
