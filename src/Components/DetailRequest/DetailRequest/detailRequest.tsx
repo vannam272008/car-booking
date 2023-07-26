@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Radio, RadioChangeEvent } from 'antd';
+import DoneRequest from '../DoneRequest/doneRequest';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
 import RequestLayout from '../../RequestLayout';
@@ -42,7 +43,6 @@ function DetailRequest(): JSX.Element {
 
     const { requestId } = useParams();
 
-    const [value, setValue] = useState(!!detailData.ApplyNote);
 
     useEffect(() => {
         const getDetailRequest = async () => {
@@ -71,13 +71,17 @@ function DetailRequest(): JSX.Element {
         getDetailRequest();
 
     }, [requestId])
+
+    const [value, setValue] = useState(!detailData.ApplyNote);
+
+
     //Setup select-adio Yes or No
     const onChange = (e: RadioChangeEvent) => {
-        console.log('radio checked', e.target.value);
+        // console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
 
-    console.log(attachmentData);
+    // console.log(attachmentData);
 
 
     return (
@@ -157,6 +161,7 @@ function DetailRequest(): JSX.Element {
                                 <Radio value={false}>No</Radio>
                             </Radio.Group>
                         </div>
+                        <DoneRequest />
                         <div className='Attachment'>
                             <b>Attachment(s)</b>
                             <div>

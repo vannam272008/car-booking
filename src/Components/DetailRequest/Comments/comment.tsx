@@ -89,7 +89,7 @@ function Comment(): JSX.Element {
         setReplyToCommentId(commentId);
     };
 
-    console.log(detailData);
+    // console.log(detailData);
 
     return (
         <div className='comments-detail-request'>
