@@ -1,6 +1,6 @@
 import React from "react";
 import type { TabsProps } from "antd";
-import { Tabs, Upload, Avatar, Modal, Button } from "antd";
+import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
 import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
@@ -163,14 +163,17 @@ const ContentProfile: React.FC = () => {
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
-    await request.put(endpoint,infoAPI).then((response) => {
-      console.log("infoAPI:",infoAPI)
-      console.log("response.data.Data:",response.data.Data);
-    })
-    .catch ((error) => {
-      console.error(error);
-    })
+    const res = await request.putForm(endpoint,infoAPI,config);
+    console.log("infoAPI:",infoAPI)
+    console.log("response",res)
+      if (res.data.Success) {
+        message.success('Edit success !')
+       
+      } else {
+        message.error(res.data.Message)
+      }
   };
+
 
   //declare contract
   // const [contractType, setContractType] = useState("");
