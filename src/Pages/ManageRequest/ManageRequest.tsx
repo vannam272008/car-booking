@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Input, Space, Table, Tooltip, message } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
@@ -35,21 +35,25 @@ const ManageRequest = (props: any) => {
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [requestCode, setRequestCode] = useState("");
-  const [createdFrom, setCreatedFrom] = useState("");
-  const [createdTo, setCreatedTo] = useState("");
-  const [senderId, setSenderId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("");
+  // const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
+  const [filter, setFilter] = useState({
+    requestCode: "",
+    createdFrom: "",
+    createdTo: "",
+    senderId: "",
+    filterStatus: ""
+  })
 
 
   const handleGetAllRequest = () => {
     setLoading(true);
     try {
-      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
+      const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
+      console.log(url);
       request.get(url)
         .then((res) => {
           setRequestData(res.data.Data.ListData);
@@ -76,10 +80,10 @@ const ManageRequest = (props: any) => {
 
   const onApply = () => {
     setLoading(false);
-    console.log("hello");
-    setCurrentPage(1);
-    setStatus(filterStatus);
-    handleGetAllRequest();
+    // console.log("hello");
+    // setCurrentPage(1);
+    setStatus(filter.filterStatus);
+    // handleGetAllRequest();
   }
 
   const handleClear = () => {
@@ -91,11 +95,19 @@ const ManageRequest = (props: any) => {
       createdBy: "All",
       status: "All requests",
     });
-    setRequestCode("");
-    setCreatedFrom("");
-    setCreatedTo("");
-    setSenderId("");
-    setFilterStatus("");
+    setFilter({
+      requestCode: "",
+      createdFrom: "",
+      createdTo: "",
+      senderId: "",
+      filterStatus: ""
+    })
+    setStatus("");
+    // setRequestCode("");
+    // setCreatedFrom("");
+    // setCreatedTo("");
+    // setSenderId("");
+    // setFilterStatus("");
   };
 
   const handleOnClickExport = () => {
@@ -111,9 +123,11 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, status, currentPage]);
+  }, [tab, filter, status, currentPage, searchQuery]);
 
   const profile = false;
+
+  console.log(filter);
   return (
     <RequestLayout profile={profile}>
       {() => (
@@ -133,12 +147,8 @@ const ManageRequest = (props: any) => {
               <FilterDropdown
                 handleClear={handleClear}
                 form={form}
+                setFilter={setFilter}
                 setLoading={setLoading}
-                onRequestCodeChange={setRequestCode}
-                onCreatedFromChange={setCreatedFrom}
-                onCreatedToChange={setCreatedTo}
-                onSenderIdChange={setSenderId}
-                onStatusChange={setFilterStatus}
                 onApply={onApply}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>

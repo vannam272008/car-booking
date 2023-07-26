@@ -84,7 +84,7 @@ function DetailRequest(): JSX.Element {
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    <MenuRequest requestStatus={detailData.Status} />
+                    <MenuRequest requestStatus={detailData.Status} requestCode={detailData.RequestCode} />
                     <div className='info-detail-request'>
                         <div className='info-basic-detail-request'>
                             <p>Request Code: {detailData.RequestCode}</p>

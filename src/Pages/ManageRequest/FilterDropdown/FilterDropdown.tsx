@@ -5,17 +5,23 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import request from "../../../Utils/request";
+import { RootState } from "../../../Reducers/rootReducer";
+import { setStatus } from "../../../Actions/requestAction";
+import { connect } from "react-redux";
 
 interface FilterDropdownProps {
-    onRequestCodeChange: (value: string) => void;
-    onCreatedFromChange: (value: string) => void;
-    onCreatedToChange: (value: string) => void;
-    onSenderIdChange: (value: string) => void;
-    onStatusChange: (value: string) => void;
     setLoading: (value: boolean) => void;
     handleClear: () => void;
     onApply: () => void;
+    setFilter: React.Dispatch<React.SetStateAction<{
+        requestCode: string;
+        createdFrom: string;
+        createdTo: string;
+        senderId: string;
+        filterStatus: string;
+    }>>;
     form: FormInstance<any>;
+    setStatus: any;
 }
 
 interface User {
@@ -25,14 +31,11 @@ interface User {
 }
 
 const FilterForm: React.FC<FilterDropdownProps> = ({
-    onRequestCodeChange,
-    onCreatedFromChange,
-    onCreatedToChange,
-    onSenderIdChange,
-    onStatusChange,
+    setFilter,
     setLoading,
     handleClear,
     form,
+    setStatus,
     onApply,
 }) => {
 
@@ -47,26 +50,41 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
         return date.format('MM/DD/YYYY');
     };
     const [dataUser, setDataUser] = useState<User[]>([]);
+    const [FormcreatedFrom, FormsetCreatedFrom] = useState("");
+    const [FormcreatedTo, formSetCreatedTo] = useState("");
 
 
-
-    const getAllUser = async () => {
-        const endpoint = "user/all?page=1&limit=100";
-        await request.get(endpoint).then((res) => {
-            setDataUser(res.data.Data.ListData);
-            setLoading(false);
-        }).catch(() => {
-            setLoading(true);
-        });
+    const handleSetFormFilter = (values: any) => {
+        setFilter((prevFilter) => ({
+            ...prevFilter,
+            requestCode: values.requestCode === undefined ? "" : values.requestCode,
+            createdFrom: FormcreatedFrom,
+            createdTo: FormcreatedTo,
+            senderId: values.createdBy === "All" ? "" : values.createdBy,
+            filterStatus: values.status === "All requests" ? "" : values.status
+        }))
+        setStatus(values.status === "All requests" ? "" : values.status);
     }
 
+
+
     useEffect(() => {
+        const getAllUser = async () => {
+            const endpoint = "user/all?page=1&limit=100";
+            await request.get(endpoint).then((res) => {
+                setDataUser(res.data.Data.ListData);
+                setLoading(false);
+            }).catch(() => {
+                setLoading(true);
+            });
+        }
         getAllUser();
-    }, [])
+    }, [setLoading])
 
     return (
         <Form
             form={form}
+            onFinish={(values) => handleSetFormFilter(values)}
             className="filter-form"
             initialValues={{ createdBy: "All", status: "All requests" }}
         >
@@ -99,20 +117,24 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
                 <hr style={{ border: "1px solid gray" }} />
             </Form.Item>
             <Form.Item name="requestCode" label="Request Code" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
-                <Input placeholder='Key words...' onChange={e => onRequestCodeChange(e.target.value)} />
+                <Input placeholder='Key words...'
+                    onChange={e => setFilter((prevFilter) => ({
+                        ...prevFilter,
+                        requestCode: e.target.value
+                    }))} />
             </Form.Item>
             <Form.Item name="created" label="Created" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <DatePicker.RangePicker
                     defaultValue={[dayjs(createdFrom()), dayjs(createdTo())]}
                     onChange={(_, dateString) => {
-                        onCreatedFromChange(dateString[0]);
-                        onCreatedToChange(dateString[1]);
+                        FormsetCreatedFrom(dateString[0]);
+                        formSetCreatedTo(dateString[1]);
                     }}
                 />
             </Form.Item>
             <Form.Item name="createdBy" label="Created by" initialValue={dataUser.length > 0 ? dataUser[0].FirstName : undefined} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <Select
-                    onChange={value => onSenderIdChange(value)}
+                    // onChange={value => onSenderIdChange(value)}
                     showSearch
                     optionFilterProp="children"
                     filterOption={(inputValue, option) =>
@@ -128,7 +150,8 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
                 </Select>
             </Form.Item>
             <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
-                <Select onChange={value => onStatusChange(value)}
+                <Select
+                    // onChange={value => onStatusChange(value)}
                     showSearch
                     optionFilterProp="children"
                     filterOption={(inputValue, option) =>
@@ -149,13 +172,10 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
 };
 
 const FilterDropdown: React.FC<FilterDropdownProps> = ({
-    onRequestCodeChange,
-    onCreatedFromChange,
-    onCreatedToChange,
-    onSenderIdChange,
-    onStatusChange,
+    setFilter,
     setLoading,
     handleClear,
+    setStatus,
     form,
     onApply,
 }) => {
@@ -163,14 +183,11 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         <Dropdown
             overlay={
                 <FilterForm
+                    setStatus={setStatus}
+                    setFilter={setFilter}
                     form={form}
                     handleClear={handleClear}
                     setLoading={setLoading}
-                    onRequestCodeChange={onRequestCodeChange}
-                    onCreatedFromChange={onCreatedFromChange}
-                    onCreatedToChange={onCreatedToChange}
-                    onSenderIdChange={onSenderIdChange}
-                    onStatusChange={onStatusChange}
                     onApply={onApply}
                 />
             }
@@ -185,4 +202,10 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     );
 };
 
-export default FilterDropdown;
+const mapStateToProps = (state: RootState) => ({
+    status: state.request.status
+})
+
+const mapDispatchToProps = { setStatus }
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterDropdown)
