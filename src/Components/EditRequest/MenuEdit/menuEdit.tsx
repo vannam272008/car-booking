@@ -53,20 +53,8 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     const navigate = useNavigate();
     const { requestId } = useParams();
 
-
-    const handleSaveDraft = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                Status: 'Draft'
-            }));
-        }
-        else {
-            openNotification('topRight')
-        }
-    };
-    useEffect(() => {
-        if (formData.Status.length > 0) {
+    const handleReSubmit = () => {
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
             request.putForm("/request/Id=" + requestId, formData)
                 .then((response) => {
                     const data = response.data;
@@ -78,31 +66,85 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                             navigate("/request/carbooking");
                         }
                     }
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        SenderId: "",
-                        DepartmentId: "",
-                        ReceiverId: "",
-                        Mobile: "",
-                        CostCenter: "",
-                        TotalPassengers: "",
-                        PickLocation: '',
-                        Destination: '',
-                        Reason: '',
-                        ApplyNote: false,
-                        UsageFrom: "",
-                        UsageTo: "",
-                        PickTime: "",
-                        ListOfUserId: [],
-                        Status: "",
-                        files: [],
-                    }));
                 })
                 .catch((error) => {
                     console.log(error);
                 });
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                SenderId: "",
+                DepartmentId: "",
+                ReceiverId: "",
+                Mobile: "",
+                CostCenter: "",
+                TotalPassengers: "",
+                PickLocation: '',
+                Destination: '',
+                Reason: '',
+                ApplyNote: false,
+                UsageFrom: "",
+                UsageTo: "",
+                PickTime: "",
+                ListOfUserId: [],
+                Status: "",
+                files: [],
+            }));
+        } else {
+            openNotification('topRight');
         }
-    }, [formData, navigate, setFormData, requestId])
+    }
+
+
+
+    // const handleReSubmit = () => {
+    //     if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
+    //         setFormData((prevFormData) => ({
+    //             ...prevFormData,
+    //             Status: 'Draft'
+    //         }));
+    //     }
+    //     else {
+    //         openNotification('topRight')
+    //     }
+    // };
+    // useEffect(() => {
+    //     if (formData.Status.length > 0 && formData.Status === 'Draft') {
+    //         request.putForm("/request/Id=" + requestId, formData)
+    //             .then((response) => {
+    //                 const data = response.data;
+    //                 if (data) {
+    //                     localStorage.setItem("Data", data?.Data);
+    //                     if (data.Success === false) {
+    //                         message.error(data.Message);
+    //                     } else {
+    //                         navigate("/request/carbooking");
+    //                     }
+    //                 }
+    //                 setFormData((prevFormData) => ({
+    //                     ...prevFormData,
+    //                     SenderId: "",
+    //                     DepartmentId: "",
+    //                     ReceiverId: "",
+    //                     Mobile: "",
+    //                     CostCenter: "",
+    //                     TotalPassengers: "",
+    //                     PickLocation: '',
+    //                     Destination: '',
+    //                     Reason: '',
+    //                     ApplyNote: false,
+    //                     UsageFrom: "",
+    //                     UsageTo: "",
+    //                     PickTime: "",
+    //                     ListOfUserId: [],
+    //                     Status: "",
+    //                     files: [],
+    //                 }));
+    //             })
+    //             .catch((error) => {
+    //                 console.log(error);
+    //             });
+    //     }
+    // }, [formData, navigate, setFormData, requestId])
 
     const handleReturn = () => {
         navigate("/request/carbooking");
@@ -127,10 +169,10 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 <Menu.Item key="delete" icon={<DeleteOutlined />}>
                     Delete
                 </Menu.Item>
-                <Menu.Item onClick={handleSaveDraft} key="savedraft" icon={<SaveOutlined />}>
+                {/* <Menu.Item onClick={handleSaveDraft} key="savedraft" icon={<SaveOutlined />}>
                     Save draft
-                </Menu.Item>
-                <Menu.Item key="submit" icon={<SendOutlined />}>
+                </Menu.Item> */}
+                <Menu.Item onClick={handleReSubmit} key="submit" icon={<SendOutlined />}>
                     Re-Submit
                 </Menu.Item>
             </Menu>
