@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import "./index.css";
-import { Button, Input, Space, Table, Tooltip } from 'antd';
+import { Button, Input, Space, Table, Tooltip, message } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
 import RequestLayout from '../../Components/RequestLayout';
 import request from "../../Utils/request";
@@ -10,15 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
-
+import { Pagination } from 'antd';
+import CommonUtils from '../../Utils/CommonUtils';
 
 // type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-
-type CustomPaginationProps = {
-  currentPage: number;
-  totalPage: number;
-  onChange: (page: number) => void;
-};
 
 interface RequestType {
   Id: string;
@@ -34,29 +29,6 @@ interface RequestType {
 
 const { Search } = Input;
 
-const CustomPagination = ({ currentPage, totalPage, onChange }: CustomPaginationProps) => {
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPage; i++) {
-    pageNumbers.push(i);
-  }
-
-  return (
-    <div>
-      <button onClick={() => onChange(currentPage - 1)} disabled={currentPage === 1}>
-        Previous
-      </button>
-      {pageNumbers.map((number) => (
-        <button key={number} onClick={() => onChange(number)}>
-          {number}
-        </button>
-      ))}
-      <button onClick={() => onChange(currentPage + 1)} disabled={currentPage === totalPage}>
-        Next
-      </button>
-    </div>
-  );
-};
-
 const ManageRequest = (props: any) => {
 
   const { tab, status, setStatus } = props
@@ -69,26 +41,49 @@ const ManageRequest = (props: any) => {
   const [senderId, setSenderId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
+  const [total, setTotal] = useState(0);
 
-  const handleGetAllRequest = async (page: number) => {
+  const handleGetAllRequest = async () => {
     setLoading(true);
     try {
-
-      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${page}&limit=20&search=${searchQuery}`;
+      const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
       const response = await request.get(url);
-      setRequestData(response.data.Data.ListData)
-      setTotalPage(response.data.Data.TotalPage)
+
+      setRequestData(response.data.Data.ListData);
+      setTotal(response.data.Data.TotalPage);
       setLoading(false);
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+
+    setRequestCode(requestCode);
+    setCreatedFrom(createdFrom);
+    setCreatedTo(createdTo);
+    setSenderId(senderId);
+    setStatus(status);
+    setSearchQuery(searchQuery);
+
+    handleGetAllRequest();
+  };
+
+  const handleOnClickExport = () => {
+    if (requestData.length != 0) {
+      if (status != "") {
+        CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
+      }
+      CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
+    } else {
+      message.error("No data to export excel!!!");
+    }
+  }
+
   useEffect(() => {
-    handleGetAllRequest(currentPage);
+    handleGetAllRequest();
   }, [tab, status]);
-  // }, [tab, status, page]);
 
   const profile = false;
   return (
@@ -102,18 +97,18 @@ const ManageRequest = (props: any) => {
                 placeholder="Search"
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value) }}
-                onSearch={() => handleGetAllRequest(currentPage)}
+                onSearch={() => handleGetAllRequest()}
               />
             </Space.Compact>
             <div>
-              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
+              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
               <FilterDropdown
                 onRequestCodeChange={setRequestCode}
                 onCreatedFromChange={setCreatedFrom}
                 onCreatedToChange={setCreatedTo}
                 onSenderIdChange={setSenderId}
                 onStatusChange={setStatus}
-                onApply={() => handleGetAllRequest(currentPage)}
+                onApply={() => handleGetAllRequest()}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
@@ -197,18 +192,13 @@ const ManageRequest = (props: any) => {
                 },
               ]}
               dataSource={requestData}
-              pagination={{ position: ['bottomCenter'] }}
             />
-
-            <CustomPagination
-              currentPage={currentPage}
-              totalPage={totalPage}
-              onChange={(page) => {
-                handleGetAllRequest(page);
-                setCurrentPage(page);
-              }}
+            <Pagination
+              current={currentPage}
+              pageSize={20}
+              total={total}
+              onChange={handlePageChange}
             />
-
           </div>
         </div>
       )}

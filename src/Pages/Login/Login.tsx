@@ -107,11 +107,11 @@ const Login = () => {
             <Button type="primary" htmlType="submit" id="btn-login" loading={loading}>
               Log In
             </Button>
-            <Link to={`/register`} style={{ textDecoration: "none" }}>
+            {/* <Link to={`/register`} style={{ textDecoration: "none" }}>
               <Button type="primary" htmlType="submit" id="btn-register">
                 Register
               </Button>
-            </Link>
+            </Link> */}
           </Form.Item>
         </Form>
       </div>
