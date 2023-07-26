@@ -49,8 +49,8 @@
 }
 
 .manage-request-content .ant-pagination {
+  bottom: 30px;
   position: fixed;
-  bottom: 0;
   background-color: white;
   padding: 30px;
   width: 100%;
