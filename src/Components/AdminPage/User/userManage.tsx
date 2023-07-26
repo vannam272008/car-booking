@@ -84,12 +84,12 @@ const UserManage: React.FC = () => {
       let usersData: User[] = res.data.Data.ListData
       usersData.forEach(user => {
         user.AvatarPath = `http://localhost:63642/${user.AvatarPath}`
-        axios.get(`http://localhost:63642/api/userRole/roles-uid/${user.Id}`)
+        axios.get(`http://localhost:63642/api/userRole/roles-list/${user.Id}`)
           .then(data => user.Roles = data.data.Data)
         axios.get(`http://localhost:63642/api/departmentMember/departments-uid/${user.Id}`)
           .then(data => user.Departments = data.data.Data)
       })
-      console.log('update usersData:', usersData);
+      console.log('>>update usersData:', usersData);
 
       // let roles: string[] = []
       // usersData.Roles = roles

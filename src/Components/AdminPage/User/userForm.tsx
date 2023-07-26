@@ -129,12 +129,12 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       {action === ACTION_HANDLE.ADD &&
         <Row gutter={12}>
           <Col span={24}>
-            <Form.Item label="" name="">
+            <Form.Item label="">
               <img src={tempUrl ? `http://localhost:63642/${tempUrl}` : initialValues.AvatarPath} alt="" width={90} height={90} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="" name="">
+            <Form.Item label="">
               <Upload {...uploadConfig} fileList={listFiles} onChange={handleImageChange}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
@@ -144,12 +144,12 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       {action === ACTION_HANDLE.EDIT &&
         <Row gutter={12}>
           <Col span={24}>
-            <Form.Item label="" name="">
+            <Form.Item label="">
               <img src={tempUrl ? `http://localhost:63642/${tempUrl}` : initialValues.AvatarPath} alt="" width={90} height={90} style={{ borderRadius: '50%' }} />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label="" name="">
+            <Form.Item label="">
               <Upload {...uploadConfig} fileList={listFiles} onChange={handleImageChange}>
                 <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
