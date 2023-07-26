@@ -41,6 +41,7 @@ function AddRequest(): JSX.Element {
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const senderId = localStorage.getItem("Id")
+    const [activeTabKey, setActiveTabKey] = useState<string>('4540FEF6-8DDF-4F26-BFD4-5D3F3EED07DF');
 
     // useEffect(() => {
     //     const getDataDepartment = async () => {
@@ -81,15 +82,16 @@ function AddRequest(): JSX.Element {
                 setDataDepartment(departmentRes.data.Data.ListData);
 
                 // Fetch data from the second API
-                const departmentMemberEndpoint = "departmentMember/all?page=1&limit=100";
+                const departmentMemberEndpoint = `departmentMember/position?departmentId=${activeTabKey}`;
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data.ListData);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+
 
                 // Update form data based on the fetched data
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     DepartmentId: departmentRes.data.Data.ListData[0].Id,
-                    ReceiverId: departmentMemberRes.data.Data.ListData[0].User.Id,
+                    ReceiverId: departmentMemberRes.data.Data[0].User.Id,
                 }));
 
                 // Set loading to false since data fetching is completed
@@ -101,7 +103,7 @@ function AddRequest(): JSX.Element {
         };
 
         fetchData();
-    }, []);
+    }, [activeTabKey]);
 
 
 
@@ -134,6 +136,11 @@ function AddRequest(): JSX.Element {
         }));
     }, [fileList, applyNote, listOfUserId, senderId]);
 
+
+    // useEffect(() => {
+    //     setActiveTabKey(dataDepartment && !activeTabKey ? dataDepartment[0].Id : activeTabKey);
+    // }, [dataDepartment, activeTabKey])
+
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
         const { name, value } = event.target;
@@ -142,10 +149,6 @@ function AddRequest(): JSX.Element {
             ...prevFormData,
             [name]: value,
         }));
-
-        // if (name === 'applicant') {
-        //     setInitialValue(value);
-        // }
     };
 
     const handleSelectChange = (value: string, field: string) => {
@@ -153,6 +156,7 @@ function AddRequest(): JSX.Element {
             ...prevFormData,
             [field]: value,
         }));
+        setActiveTabKey(value);
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -188,14 +192,11 @@ function AddRequest(): JSX.Element {
         const userWithSenderId = dataDepartmentMember.find(
             (departmentMember) => departmentMember?.User.Id === senderId
         );
-        // console.log(userWithSenderId);
-
         return userWithSenderId?.User.FullName;
     };
 
 
-    // console.log(dataDepartmentMember);
-
+    // console.log(activeTabKey);
     return (
         <RequestLayout profile={profile}>
             {() => (

@@ -9,12 +9,9 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface DepartmentMember {
     Id: string;
-    User: {
-        FullName: string;
-        Email: string;
-        JobTitle: string;
-        Id: string;
-    };
+    FullName: string;
+    Email: string;
+    JobTitle: string;
 }
 
 interface PropsDataList {
@@ -35,9 +32,9 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
-            const endpoint = "departmentMember/all?page=1&limit=100";
+            const endpoint = "/userRole/all-approvers";
             await request.get(endpoint).then((res) => {
-                setDataDepartmentMember(res.data.Data.ListData);
+                setDataDepartmentMember(res.data.Data);
             }).catch(() => {
                 // setLoading(true);
             });
@@ -60,7 +57,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
 
     const handleAddInput = () => {
         setInputs([...inputs, '']);
-        setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
+        setLabelApprovers([...labelApprovers, `Approver ${counterApprover + 1}`]);
         setCounterApprover(counterApprover + 1);
     };
 
@@ -80,7 +77,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     };
 
     const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>(['Pho Phong IT']);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>([`Approver ${counterApprover}`]);
 
     const handleInputChangeApprover = (index: number, value: string) => {
         const newApprovers = [...labelApprovers];
@@ -144,9 +141,9 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
             )
         }
         else return [];
@@ -241,11 +238,11 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                             onSearch={handleSearch}
                                         >
                                             {filteredData().map((departmentMember) => (
-                                                <Option key={departmentMember.Id} value={departmentMember.User.Id}>
+                                                <Option key={departmentMember.Id} value={departmentMember.Id}>
                                                     <div>
-                                                        <span>{departmentMember.User.FullName} </span>
-                                                        <span>{departmentMember.User.Email} </span>
-                                                        <span>{departmentMember.User.JobTitle} </span>
+                                                        <span>{departmentMember.FullName} </span>
+                                                        <span>{departmentMember.Email} </span>
+                                                        <span>{departmentMember.JobTitle} </span>
                                                     </div>
                                                 </Option>
                                             ))}
