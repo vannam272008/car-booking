@@ -46,7 +46,6 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                 const workflowDataRes = await request.get(workflowDataEndpoint);
                 setListOfUserId([...listOfUserId, ...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)]);
                 setWorkflowData(workflowDataRes.data.Data);
-                setInputs([...inputs, ...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)])
 
             } catch (error) {
                 // Handle errors if needed
@@ -76,7 +75,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
     };
 
     const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>(['Pho Phong IT']);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
 
     const handleInputChangeApprover = (index: number, value: string) => {
         const newApprovers = [...labelApprovers];
@@ -93,19 +92,19 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
         setEditingIndex(index);
     };
 
-    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
-
 
     const handleSelectChange = (index: number, value: string) => {
-        if (listOfUserId.indexOf(value) !== -1) {
-            openNotification('topRight');
-        } else {
-            const temporaryList = { ...selectedApprovers, [index]: value };
-            const finalSelectedUserId = Object.values(temporaryList) as string[];
-            setListOfUserId(finalSelectedUserId);
-            setSelectedApprovers(temporaryList);
+        if (Array.isArray(listOfUserId)) {
+            if (listOfUserId.indexOf(value) !== -1) {
+                openNotification('topRight');
+            } else {
+                const newListOfUser = [...listOfUserId];
+                newListOfUser[index] = value;
+                setListOfUserId(newListOfUser);
+            }
         }
     }
+
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
@@ -133,6 +132,12 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
         else return [];
 
     };
+
+    useEffect(() => {
+        setInputs(listOfUserId);
+        setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
+        setCounterApprover(counterApprover + 1);
+    }, [listOfUserId]);
 
     // console.log('hello', workflowData);
 
@@ -170,7 +175,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                                 message: 'Select something!',
                                             },
                                         ]}
-                                        initialValue={'--Select a Approver--'}
+                                        initialValue={workflowData[index] && workflowData[index].User ? (workflowData[index].User.FullName + ' ' + workflowData[index].User.Email + ' ' + workflowData[index].User.JobTitle) : '--Select a Approver--'}
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select

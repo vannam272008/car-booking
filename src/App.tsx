@@ -9,11 +9,11 @@ import Register from './Pages/Register/Register';
 import SettingPage from './Pages/Setting/settingPage';
 import ContentStructure from './Components/OrganizationalStructure/ContentStructure/contentStructure';
 import DetailRequest from './Components/DetailRequest/DetailRequest/detailRequest';
-import MenuEdit from './Components/EditRequest/MenuEdit/menuEdit';
 import AdminPage from './Components/AdminPage';
 import { useEffect, useState } from 'react';
 import request from './Utils/request';
 import PageNotFound from './Pages/404';
+import EditRequest from './Components/EditRequest/EditRequest/editRequest';
 
 function App() {
   const userId = localStorage.getItem("Id");
@@ -23,7 +23,7 @@ function App() {
       {userId !== null ? (
         <>
           <Route path="/" element={<Home />} />
-          <Route path="/request/carbooking/edit/:requestId" element={<MenuEdit />} />
+          <Route path="/request/carbooking/edit/:requestId" element={<EditRequest />} />
           <Route path="/request/carbooking" element={<ManageRequest />} />
           <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
           <Route path='/request/addrequest' element={<AddRequest />} />
