@@ -102,7 +102,6 @@ interface OverviewProps {
   //     postal_code_family: string;
   //     country_family: string;
   //   }>>;
-  // setInfoAPI: React.Dispatch<React.SetStateAction<API>>
   setInfoAPI: React.Dispatch<React.SetStateAction<API>>
 }
 

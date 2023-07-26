@@ -44,6 +44,19 @@ interface API {
 }
 
 const ContentProfile: React.FC = () => {
+  const jwt_admin =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDdXJJZCI6IjAwMDZhZTNlLWUxMWItNDQ3OS1iNWVkLWRmZjJmNzQxM2JhNyIsIlVzZXJuYW1lIjoiYWRtaW4wMDAxIiwiUGFzc3dvcmQiOiIxMjM0NTYiLCJuYmYiOjE2OTAyODA0MjAsImV4cCI6MTY5MDM2NjgyMCwiaWF0IjoxNjkwMjgwNDIwLCJpc3MiOiJjYXJib29raW5naXNzdWVyIiwiYXVkIjoiY2FyYm9va2luZ2F1ZGllbmNlIn0.sGih02nlo_M64fffiXHgSn2LrrYdUcqP2v1U14utVwA";
+  const uploadConfig = {
+    action: "http://localhost:63642/api/file/upload-temp",
+    headers: {
+      Authorization: `Bearer ${jwt_admin}`,
+    },
+  };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwt_admin}`,
+    },
+  };
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   // set array info fields
@@ -102,7 +115,7 @@ const ContentProfile: React.FC = () => {
   });
   //avatar
   const [image, setImage] = useState<RcFile>();
-  
+
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
     Username: "",
@@ -143,20 +156,14 @@ const ContentProfile: React.FC = () => {
     getProfile();
   }, []);
 
-  // useEffect(() => {
-  //   const endpoint = "/user/profile/" + userID;
-  //   const getProfile = async () => {
-  //     await request
-  //       .put(endpoint, infoAPI)
-  //       .then((response) => {
-  //         // console.log(response.data.Data)
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-  //   };
-  //   getProfile();
-  // }, []);
+  // const handleUpdate = async () => {
+  //   try {
+  //     const endpoint = "/user/edit/" + userID;
+  //     const response = await request.put(endpoint, infoAPI);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -173,16 +180,21 @@ const ContentProfile: React.FC = () => {
   // const [relationshipnote, setRelationshipNote] = useState("");
 
   const [onOk, setOnOk] = useState<Boolean>(false);
-  
-  const handleOk = () => {
+
+  const handleOk = async () => {
     setOnOk(true);
     setVisible(false);
+
+    const formData = new FormData();
+    formData.append("fileName", image ? image.name : "");
+    formData.append("userId", userID ? userID : "");
+    await request.postForm("/file/upload-finish", formData, config);
   };
 
   const handleFileChange = (file: RcFile) => {
     setImage(file);
   };
-  console.log(image)
+
   // visible avatar
   const [visible, setVisible] = useState(false);
   const handleDeleteContract = () => {};
@@ -191,6 +203,7 @@ const ContentProfile: React.FC = () => {
   };
   const onSave = () => {
     setIsEditing(false);
+    // handleUpdate();
   };
 
   // handle Modal
@@ -246,14 +259,10 @@ const ContentProfile: React.FC = () => {
             <Button
               className="btn"
               style={{ margin: "20px 0px 20px 25px" }}
-              icon={
-                <SaveOutlined
-                  onClick={() => {
-                    onSave();
-                  }}
-                  style={{ fontSize: "30px " }}
-                />
-              }
+              onClick={() => {
+                onSave();
+              }}
+              icon={<SaveOutlined style={{ fontSize: "30px " }} />}
             >
               Save
             </Button>
@@ -262,9 +271,9 @@ const ContentProfile: React.FC = () => {
         <Button
           className="btn"
           style={{ margin: "20px 10px 20px 5px" }}
+          onClick={handleReturnSetting}
           icon={
             <LeftCircleOutlined
-              onClick={handleReturnSetting}
               style={{
                 fontSize: "30px",
               }}
@@ -321,6 +330,7 @@ const ContentProfile: React.FC = () => {
 
             <div className="Upload-Avatar">
               <Upload
+                {...uploadConfig}
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -355,14 +365,10 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            icon={
-              <UserAddOutlined
-                onClick={() => {
-                  onEditInfo();
-                }}
-                style={{ fontSize: "50px" }}
-              />
-            }
+            onClick={() => {
+              onEditInfo();
+            }}
+            icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}
       </div>
