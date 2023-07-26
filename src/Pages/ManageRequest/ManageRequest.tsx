@@ -83,7 +83,7 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, status]);
+  }, [tab, status, currentPage]);
 
   const profile = false;
   return (
