@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import "./index.css";
 import { Button, Input, Space, Table, Tooltip, message } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { connect } from 'react-redux';
 import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
-import { Pagination } from 'antd';
+import { Pagination, Form } from 'antd';
 import CommonUtils from '../../Utils/CommonUtils';
 
 // type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
@@ -40,18 +40,24 @@ const ManageRequest = (props: any) => {
   const [createdTo, setCreatedTo] = useState("");
   const [senderId, setSenderId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [form] = Form.useForm();
 
-  const handleGetAllRequest = async () => {
+
+  const handleGetAllRequest = () => {
     setLoading(true);
     try {
       const url = `/request/${tab}?requestCode=${requestCode}&createdFrom=${createdFrom}&createdTo=${createdTo}&senderId=${senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
-      const response = await request.get(url);
-
-      setRequestData(response.data.Data.ListData);
-      setTotal(response.data.Data.TotalPage);
-      setLoading(false);
+      request.get(url)
+        .then((res) => {
+          setRequestData(res.data.Data.ListData);
+          setTotal(res.data.Data.TotalPage);
+          setLoading(false);
+        }).catch((e) => {
+          console.log(e);
+        })
     } catch (error) {
       console.error('Error:', error);
     }
@@ -60,19 +66,41 @@ const ManageRequest = (props: any) => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
 
-    setRequestCode(requestCode);
-    setCreatedFrom(createdFrom);
-    setCreatedTo(createdTo);
-    setSenderId(senderId);
-    setStatus(status);
+    // setRequestCode(requestCode);
+    // setCreatedFrom(createdFrom);
+    // setCreatedTo(createdTo);
+    // setSenderId(senderId);
+    // setStatus(status);
     setSearchQuery(searchQuery);
+  };
 
+  const onApply = () => {
+    setLoading(false);
+    console.log("hello");
+    setCurrentPage(1);
+    setStatus(filterStatus);
     handleGetAllRequest();
+  }
+
+  const handleClear = () => {
+    setLoading(true);
+    // Reset filter mà k cần load lại trang
+    form.setFieldsValue({
+      requestCode: undefined,
+      created: undefined,
+      createdBy: "All",
+      status: "All requests",
+    });
+    setRequestCode("");
+    setCreatedFrom("");
+    setCreatedTo("");
+    setSenderId("");
+    setFilterStatus("");
   };
 
   const handleOnClickExport = () => {
-    if (requestData.length != 0) {
-      if (status != "") {
+    if (requestData.length !== 0) {
+      if (status !== "") {
         CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
       }
       CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
@@ -83,7 +111,7 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, status]);
+  }, [tab, status, currentPage]);
 
   const profile = false;
   return (
@@ -103,18 +131,22 @@ const ManageRequest = (props: any) => {
             <div>
               <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
               <FilterDropdown
+                handleClear={handleClear}
+                form={form}
+                setLoading={setLoading}
                 onRequestCodeChange={setRequestCode}
                 onCreatedFromChange={setCreatedFrom}
                 onCreatedToChange={setCreatedTo}
                 onSenderIdChange={setSenderId}
-                onStatusChange={setStatus}
-                onApply={() => handleGetAllRequest()}
+                onStatusChange={setFilterStatus}
+                onApply={onApply}
               />
               <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
             </div>
           </div>
           <div className='manage-request-content'>
             <Table
+              rowKey={(record) => record.Id}
               loading={loading}
               onRow={(record) => ({
                 onDoubleClick: () => {
@@ -192,11 +224,12 @@ const ManageRequest = (props: any) => {
                 },
               ]}
               dataSource={requestData}
+              pagination={false}
             />
             <Pagination
               current={currentPage}
               pageSize={20}
-              total={total}
+              total={total * 20}
               onChange={handlePageChange}
             />
           </div>

@@ -1,5 +1,5 @@
 import { CaretDownOutlined, FilterOutlined } from "@ant-design/icons";
-import { Button, DatePicker, Dropdown, Input, Select } from "antd";
+import { Button, DatePicker, Dropdown, FormInstance, Input, Select } from "antd";
 import { Form } from "antd";
 import "./index.css";
 import { useEffect, useState } from "react";
@@ -12,7 +12,10 @@ interface FilterDropdownProps {
     onCreatedToChange: (value: string) => void;
     onSenderIdChange: (value: string) => void;
     onStatusChange: (value: string) => void;
+    setLoading: (value: boolean) => void;
+    handleClear: () => void;
     onApply: () => void;
+    form: FormInstance<any>;
 }
 
 interface User {
@@ -27,38 +30,25 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
     onCreatedToChange,
     onSenderIdChange,
     onStatusChange,
+    setLoading,
+    handleClear,
+    form,
     onApply,
 }) => {
 
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [createdFrom, setCreatedFrom] = useState(() => {
+
+    // const [loading, setLoading] = useState<boolean>(true);
+    const createdFrom = () => {
         const date = dayjs().subtract(1, 'year');
         return date.format('MM/DD/YYYY');
-    });
-    const [createdTo, setCreatedTo] = useState(() => {
+    };
+    const createdTo = () => {
         const date = dayjs();
         return date.format('MM/DD/YYYY');
-    });
+    };
     const [dataUser, setDataUser] = useState<User[]>([]);
 
-    const handleClear = () => {
-        // // Reset filter mà k cần load lại trang
-        // form.setFieldsValue({ 
-        //     requestCode: undefined,
-        //     created: undefined,
-        //     createdBy: "All",
-        //     status: "All requests",
-        // });
-        // onRequestCodeChange("");
-        // onCreatedFromChange("");
-        // onCreatedToChange("");
-        // onSenderIdChange("");
-        // onStatusChange("");
-        // onApply();
 
-        window.location.reload();
-    };
 
     const getAllUser = async () => {
         const endpoint = "user/all?page=1&limit=100";
@@ -113,7 +103,7 @@ const FilterForm: React.FC<FilterDropdownProps> = ({
             </Form.Item>
             <Form.Item name="created" label="Created" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <DatePicker.RangePicker
-                    defaultValue={[dayjs(createdFrom), dayjs(createdTo)]}
+                    defaultValue={[dayjs(createdFrom()), dayjs(createdTo())]}
                     onChange={(_, dateString) => {
                         onCreatedFromChange(dateString[0]);
                         onCreatedToChange(dateString[1]);
@@ -164,12 +154,18 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     onCreatedToChange,
     onSenderIdChange,
     onStatusChange,
+    setLoading,
+    handleClear,
+    form,
     onApply,
 }) => {
     return (
         <Dropdown
             overlay={
                 <FilterForm
+                    form={form}
+                    handleClear={handleClear}
+                    setLoading={setLoading}
                     onRequestCodeChange={onRequestCodeChange}
                     onCreatedFromChange={onCreatedFromChange}
                     onCreatedToChange={onCreatedToChange}

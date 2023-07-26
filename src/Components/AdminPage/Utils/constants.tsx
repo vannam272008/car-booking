@@ -6,7 +6,7 @@ export const ACTION_HANDLE = {
     ADD: 'ADD',
 }
 
-export const jwt_admin = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDdXJJZCI6IjNmOGVmNjQwLTQ4OTUtNGYwNi05OWU4LWE4MjlkMjVhMzVjMSIsIlVzZXJuYW1lIjoiYWRtaW4wMDAxIiwiUGFzc3dvcmQiOiIxMjM0NTYiLCJuYmYiOjE2OTAyMjY2ODAsImV4cCI6MTY5MDMxMzA4MCwiaWF0IjoxNjkwMjI2NjgwLCJpc3MiOiJjYXJib29raW5naXNzdWVyIiwiYXVkIjoiY2FyYm9va2luZ2F1ZGllbmNlIn0.E5cHbNCqIpPPtTIKcIbFIIRUA8sJ_uQZPFEoEyp7OfE'
+export const jwt_admin = localStorage.getItem("Token");
 
 export const messageConfig = {
     top: 25,

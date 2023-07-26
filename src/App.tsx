@@ -22,7 +22,7 @@ function App() {
     <Routes>
       {userId !== null ? (
         <>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/request/carbooking" />} />
           <Route path="/request/carbooking/edit/:requestId" element={<EditRequest />} />
           <Route path="/request/carbooking" element={<ManageRequest />} />
           <Route path="/request/carbooking/detail/:requestId" element={<DetailRequest />} />
