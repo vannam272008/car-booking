@@ -206,8 +206,6 @@ function MenuRequest(props: any): JSX.Element {
                     <Input className='menu-after-btn-forward'></Input>
                 </Modal>
                 <Menu.Item key="ellipsis" icon={<EllipsisOutlined />} />
-                <Dropdown menu={{ items }}>
-                </Dropdown>
             </Menu>
         </div>
     );
