@@ -164,7 +164,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
         navigate("/request/carbooking");
     }
 
-    // console.log(formData);
+    console.log(formData);
 
     return (
         <div>

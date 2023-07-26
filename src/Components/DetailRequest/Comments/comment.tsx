@@ -4,6 +4,7 @@ import './comment.css'
 import { useEffect, useState } from 'react';
 import request from "../../../Utils/request";
 import { useParams } from 'react-router';
+import { async } from 'q';
 
 interface CommentItem {
     author: string;
@@ -48,6 +49,20 @@ function Comment(): JSX.Element {
         getDetailRequest();
     }, [requestId])
 
+    useEffect(() => {
+        const getAllCommentsByRequest = async () => {
+            const endpoint = "/request/comment/requestId=" + requestId;
+            await request.get(endpoint)
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
+        }
+        getAllCommentsByRequest();
+    }, [])
+
 
     const handleSaveComment = () => {
         if (newComment) {
@@ -89,7 +104,7 @@ function Comment(): JSX.Element {
         setReplyToCommentId(commentId);
     };
 
-    console.log(detailData);
+    // console.log(detailData);
 
     return (
         <div className='comments-detail-request'>

@@ -10,6 +10,7 @@ import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import request from '../../../Utils/request';
+import RequestLayout from '../../RequestLayout';
 
 const UserManage: React.FC = () => {
   let config = {
@@ -169,21 +170,21 @@ const UserManage: React.FC = () => {
         message.error(res.data.Message)
       }
     } else if (action === util.ACTION_HANDLE.EDIT) {
-      if(file) {
+      if (file) {
         const formData = new FormData();
         formData.append('fileName', file.name);
         formData.append('userId', user.Id);
         let resUpload = await axios.post('http://localhost:63642/api/file/upload-finish', formData, config)
         console.log('resUpload:', resUpload);
-        if(!resUpload.data.Success) {
+        if (!resUpload.data.Success) {
           return message.error(resUpload.data.Message)
         }
         user.AvatarPath = resUpload.data.Data
       }
-      
+
       let res = await axios.put(`http://localhost:63642/api/user/edit/${user.Id}`, user, config)
       console.log('check res edit of admin:', res);
-      
+
       if (res.data.Success) {
         message.success('Edit success !')
         await getUsers()
@@ -199,6 +200,7 @@ const UserManage: React.FC = () => {
     /* var data = await deleteFilesTemp()
     console.log('data del temp files:', data) */
   }
+  const profile = true
 
   return (
     <div>

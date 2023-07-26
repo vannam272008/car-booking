@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, MenuProps } from 'antd';
+import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, MenuProps, notification } from 'antd';
 import './menu.css'
 import {
     ArrowLeftOutlined,
@@ -10,12 +10,14 @@ import {
     CheckOutlined,
     CloseOutlined,
     DeliveredProcedureOutlined,
-    EllipsisOutlined
+    EllipsisOutlined,
+    WarningOutlined
 } from '@ant-design/icons';
 // import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import request from '../../../Utils/request';
+import { NotificationPlacement } from 'antd/es/notification/interface';
 
 interface ActionRequest {
     action: string,
@@ -25,18 +27,22 @@ interface ActionRequest {
 function MenuRequest(props: any): JSX.Element {
 
     const { Option } = Select;
-    const { requestStatus } = props;
+    const { requestStatus, requestCode } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
     const [isModalOpenShare, setIsModalOpenShare] = useState(false);
     const [isModalOpenForward, setIsModalOpenForward] = useState(false);
     const [checkBoxDelete, SetCheckBoxDelete] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const { requestId } = useParams();
     const [actionRequest, setActionRequest] = useState<ActionRequest>({
         action: "",
         Note: ""
     })
+    const [comment, setComment] = useState({
+        comment: "",
+    });
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -64,7 +70,8 @@ function MenuRequest(props: any): JSX.Element {
                 navigate("/request/carbooking");
             })
             .catch((e) => {
-                console.log(e.response.data.Message);
+                setErrorMessage(e.response.data.Message);
+                openNotification('topRight');
             })
         setIsModalOpenDelete(false);
     }
@@ -79,13 +86,19 @@ function MenuRequest(props: any): JSX.Element {
 
     // Action Request
     const putActionRequest = () => {
-        request.putForm("/request/action/Id=" + requestId, actionRequest)
-            .then(() => {
-                navigate("/request/carbooking");
-            })
-            .catch((e) => {
-                console.log(e.response.data.Message);
-            })
+        const putAction = () => {
+            request.putForm("/request/action/Id=" + requestId, actionRequest)
+                .then(() => {
+                    request.post("/request/comment/requestId=" + requestId, comment)
+                    navigate("/request/carbooking");
+                })
+                .catch((e) => {
+                    setErrorMessage(e.response.data.Message);
+                    openNotification('topRight');
+                })
+        }
+
+        putAction();
     }
     const handleApprove = () => {
         putActionRequest();
@@ -125,6 +138,16 @@ function MenuRequest(props: any): JSX.Element {
             key: '0',
         },
     ];
+
+    const openNotification = (placement: NotificationPlacement) => {
+        notification.info({
+            message: <strong>Failed action</strong>,
+            description: errorMessage,
+            placement,
+            icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+
+        });
+    };
 
     return (
         <div>
@@ -174,7 +197,13 @@ function MenuRequest(props: any): JSX.Element {
                                 <Button onClick={handleClose}>Close</Button>
                             </div>
                         }>
-                            <Input className='menu-after-btn-input' onChange={(e) => { setActionRequest({ action: "Approved", Note: e.target.value }) }} />
+                            <Input className='menu-after-btn-input' onChange={(e) => {
+                                setActionRequest({ action: "Approved", Note: e.target.value });
+                                setComment((prevComment) => ({
+                                    ...prevComment,
+                                    comment: "Request" + requestCode + "has been approved\nNote:" + e.target.value
+                                }));
+                            }} />
                         </Modal>
                         <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
                             Reject
