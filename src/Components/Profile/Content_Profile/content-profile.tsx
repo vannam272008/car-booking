@@ -13,14 +13,14 @@ import {
 import "./profile.css";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs, { Dayjs } from "dayjs";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { RcFile } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
 import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 
-interface API {
+interface API { 
   EmployeeNumber: string;
   Username: string;
   Email: string;
@@ -156,14 +156,21 @@ const ContentProfile: React.FC = () => {
     getProfile();
   }, []);
 
-  // const handleUpdate = async () => {
-  //   try {
-  //     const endpoint = "/user/edit/" + userID;
-  //     const response = await request.put(endpoint, infoAPI);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
+  const onSave = () => {
+    setIsEditing(false);
+    handleUpdateInfo();
+  };
+
+  const handleUpdateInfo = async () => {
+    const endpoint = "/user/edit-post-file/" + userID;
+    await request.put(endpoint,infoAPI).then((response) => {
+      console.log("infoAPI:",infoAPI)
+      console.log("response.data.Data:",response.data.Data);
+    })
+    .catch ((error) => {
+      console.error(error);
+    })
+  };
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -201,11 +208,7 @@ const ContentProfile: React.FC = () => {
   const onEditInfo = () => {
     setIsEditing(true);
   };
-  const onSave = () => {
-    setIsEditing(false);
-    // handleUpdate();
-  };
-
+  
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
