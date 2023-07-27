@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Radio, RadioChangeEvent } from 'antd';
+import { Row, Col, Radio, RadioChangeEvent, Spin, Alert } from 'antd';
 import DoneRequest from '../DoneRequest/doneRequest';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
@@ -35,6 +35,7 @@ function DetailRequest(): JSX.Element {
     const [detailData, setDetailData] = useState<any>({});
     const [attachmentData, setAttachmentData] = useState<any[]>([])
     const [workflowData, setWorkflowData] = useState<any>({})
+    const [loading, setLoading] = useState(true);
     const [showFeedback, setShowFeedback] = useState<string>('')
 
     //Data Approver
@@ -72,8 +73,8 @@ function DetailRequest(): JSX.Element {
         getWokflowRequest();
         getAttachmentsRequest();
         getDetailRequest();
-
-    }, [requestId])
+        setLoading(false);
+    }, [requestId, loading])
 
     const [value, setValue] = useState(!detailData.ApplyNote);
 
@@ -94,117 +95,127 @@ function DetailRequest(): JSX.Element {
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    <MenuRequest requestStatus={detailData.Status} requestCode={detailData.RequestCode} />
-                    <div className='info-detail-request'>
-                        <div className='info-basic-detail-request'>
-                            <p>Request Code: {detailData.RequestCode}</p>
-                            <p>Created at: {detailData.Created}</p>
-                            <p>Status: {detailData.Status}</p>
-                        </div>
-                        <div className='main-detail-request'>
-                            <h2 className='title-detail-request'>CAR BOOKING REQUEST</h2>
-                            <div className='content-detail-request'>
-                                <Row className='row-detail-request'>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Applicant <span className='required'>*</span></label>
-                                        <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Department <span className='required'>*</span></label>
-                                        <div>{detailData.Department ? detailData.Department.Name : ""}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>User <span className='required'>*</span></label>
-                                        <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""} </div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Mobile <span className='required'>*</span></label>
-                                        <div>{detailData.Mobile}</div>
-                                    </Col>
-                                </Row>
-                                <Row className='row-request'>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Cost Center <span className='required'>*</span></label>
-                                        <div>{detailData.CostCenter}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Total passengers <span className='required'>*</span></label>
-                                        <div>{detailData.TotalPassengers}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Usage time from <span className='required'>*</span></label>
-                                        <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Usage time to <span className='required'>*</span></label>
-                                        <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
-                                    </Col>
-                                </Row>
-                                <Row className='row-request'>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Pick time <span className='required'>*</span></label>
-                                        <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Pick location <span className='required'>*</span></label>
-                                        <div>{detailData.PickLocation}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Destination <span className='required'>*</span></label>
-                                        <div>{detailData.Destination}</div>
-                                    </Col>
-                                    <Col span={6} className='col-detail-request'>
-                                        <label>Reason <span className='required'>*</span></label>
-                                        <div>{detailData.Reason}</div>
-                                    </Col>
-                                </Row>
+                    {loading ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                        <Alert
+                            style={{ width: '100%', textAlign: 'center' }}
+                            message="Loading..."
+                            description="There are some issues happening, please wait a moment or you can try reloading the page"
+                            type="info"
+                        />
+                    </Spin>)
+                        : <>
+                            <MenuRequest requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
+                            <div className='info-detail-request'>
+                                <div className='info-basic-detail-request'>
+                                    <p>Request Code: {detailData.RequestCode}</p>
+                                    <p>Created at: {detailData.Created}</p>
+                                    <p>Status: {detailData.Status}</p>
+                                </div>
+                                <div className='main-detail-request'>
+                                    <h2 className='title-detail-request'>CAR BOOKING REQUEST</h2>
+                                    <div className='content-detail-request'>
+                                        <Row className='row-detail-request'>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Applicant <span className='required'>*</span></label>
+                                                <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Department <span className='required'>*</span></label>
+                                                <div>{detailData.Department ? detailData.Department.Name : ""}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>User <span className='required'>*</span></label>
+                                                <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""} </div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Mobile <span className='required'>*</span></label>
+                                                <div>{detailData.Mobile}</div>
+                                            </Col>
+                                        </Row>
+                                        <Row className='row-request'>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Cost Center <span className='required'>*</span></label>
+                                                <div>{detailData.CostCenter}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Total passengers <span className='required'>*</span></label>
+                                                <div>{detailData.TotalPassengers}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Usage time from <span className='required'>*</span></label>
+                                                <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Usage time to <span className='required'>*</span></label>
+                                                <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
+                                            </Col>
+                                        </Row>
+                                        <Row className='row-request'>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Pick time <span className='required'>*</span></label>
+                                                <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Pick location <span className='required'>*</span></label>
+                                                <div>{detailData.PickLocation}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Destination <span className='required'>*</span></label>
+                                                <div>{detailData.Destination}</div>
+                                            </Col>
+                                            <Col span={6} className='col-detail-request'>
+                                                <label>Reason <span className='required'>*</span></label>
+                                                <div>{detailData.Reason}</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </div>
+                                <div className='attention-detail-request'>
+                                    <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
+                                    <Radio.Group onChange={onChange} value={value}>
+                                        <Radio value={true}>Yes</Radio>
+                                        <Radio value={false}>No</Radio>
+                                    </Radio.Group>
+                                </div>
+                                {showFeedback === 'Approved' ? (
+                                    <DoneRequest />
+                                ) : showFeedback === 'Done' ? (
+                                    <InfoFeedback />
+                                ) : null}
+                                <div className='Attachment'>
+                                    <b>Attachment(s)</b>
+                                    <div>
+                                        {Array.isArray(attachmentData) ? (
+                                            attachmentData.map((attachment: { Id: number; Path: string; }) => (
+                                                <div key={attachment.Id} className='approver' >
+                                                    <span><FileTextOutlined /> </span>
+                                                    {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
+                                                    <span>{attachment.Path.substring(39)} </span>
+                                                    <span>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No attachment data available.</div>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className='list-approvers'>
+                                    <p>Approvers:</p>
+                                    <Row>
+                                        {Array.isArray(workflowData) ? (
+                                            workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
+                                                <Col key={approverData.Id} span={8} className='approver'>
+                                                    {approverData.User.FullName}
+                                                </Col>
+                                            ))
+                                        ) : (
+                                            <div>No workflow data available.</div>
+                                        )}
+                                    </Row>
+                                </div>
+                                <Comment />
                             </div>
-                        </div>
-                        <div className='attention-detail-request'>
-                            <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
-                            <Radio.Group onChange={onChange} value={value}>
-                                <Radio value={true}>Yes</Radio>
-                                <Radio value={false}>No</Radio>
-                            </Radio.Group>
-                        </div>
-                        {showFeedback === 'Approved' ? (
-                            <DoneRequest />
-                        ) : showFeedback === 'Done' ? (
-                            <InfoFeedback />
-                        ) : null}
-                        <div className='Attachment'>
-                            <b>Attachment(s)</b>
-                            <div>
-                                {Array.isArray(attachmentData) ? (
-                                    attachmentData.map((attachment: { Id: number; Path: string; }) => (
-                                        <div key={attachment.Id} className='approver' >
-                                            <span><FileTextOutlined /> </span>
-                                            {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
-                                            <span>{attachment.Path.substring(39)} </span>
-                                            <span>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div>No attachment data available.</div>
-                                )}
-                            </div>
-                        </div>
-                        <div className='list-approvers'>
-                            <p>Approvers:</p>
-                            <Row>
-                                {Array.isArray(workflowData) ? (
-                                    workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
-                                        <Col key={approverData.Id} span={8} className='approver'>
-                                            {approverData.User.FullName}
-                                        </Col>
-                                    ))
-                                ) : (
-                                    <div>No workflow data available.</div>
-                                )}
-                            </Row>
-                        </div>
-                        <Comment />
-                    </div>
+                        </>}
                 </div>
             )
             }

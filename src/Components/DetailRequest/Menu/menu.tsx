@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, MenuProps, notification } from 'antd';
+import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification } from 'antd';
 import './menu.css'
 import {
     ArrowLeftOutlined,
@@ -28,7 +28,7 @@ interface ActionRequest {
 function MenuRequest(props: any): JSX.Element {
 
     const { Option } = Select;
-    const { requestStatus, requestCode } = props;
+    const { requestStatus, requestCode, setLoading } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
@@ -91,8 +91,9 @@ function MenuRequest(props: any): JSX.Element {
         const putAction = () => {
             request.putForm("/request/action/Id=" + requestId, actionRequest)
                 .then(() => {
-                    request.post("/request/comment/requestId=" + requestId, comment)
-                    navigate("/request/carbooking");
+                    request.postForm("/request/comment/requestId=" + requestId, comment)
+                    setLoading(true);
+                    navigate("/request/carbooking/detail/" + requestId);
                 })
                 .catch((e) => {
                     setErrorMessage(e.response.data.Message);
@@ -122,6 +123,19 @@ function MenuRequest(props: any): JSX.Element {
         }
     };
     const handleCancelClick = () => {
+        const putAction = () => {
+            request.putForm("/request/action/cancel/Id=" + requestId, actionRequest)
+                .then(() => {
+                    request.postForm("/request/comment/requestId=" + requestId, comment);
+                    setLoading(true);
+                    navigate("/request/carbooking/detail/" + requestId);
+                })
+                .catch((e) => {
+                    setErrorMessage(e.response.data.Message);
+                    openNotification('topRight');
+                })
+        }
+        putAction();
         setShowCancel(false);
     };
 
@@ -143,16 +157,16 @@ function MenuRequest(props: any): JSX.Element {
         navigate("/request/carbooking");
     }
 
-    const items: MenuProps['items'] = [
-        {
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    1st menu item
-                </a>
-            ),
-            key: '0',
-        },
-    ];
+    // const items: MenuProps['items'] = [
+    //     {
+    //         label: (
+    //             <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+    //                 1st menu item
+    //             </a>
+    //         ),
+    //         key: '0',
+    //     },
+    // ];
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
@@ -166,7 +180,6 @@ function MenuRequest(props: any): JSX.Element {
     const downloadFilePdf = async () => {
         await request.get('/file/pdf-request/' + requestId)
             .then((res) => {
-                console.log(res);
             })
 
     }
@@ -223,7 +236,7 @@ function MenuRequest(props: any): JSX.Element {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
-                                    comment: "Request" + requestCode + "has been approved\nNote:" + e.target.value
+                                    comment: "Request " + requestCode + " has been approved   - Note: " + e.target.value
                                 }));
                             }} />
                         </Modal>
@@ -236,7 +249,14 @@ function MenuRequest(props: any): JSX.Element {
                                 <Button onClick={handleClose}>Close</Button>
                             </div>
                         }>
-                            <Input className='menu-after-btn-input' onChange={(e) => { setActionRequest({ action: "Rejected", Note: e.target.value }) }} />
+                            <Input className='menu-after-btn-input'
+                                onChange={(e) => {
+                                    setActionRequest({ action: "Rejected", Note: e.target.value });
+                                    setComment((prevComment) => ({
+                                        ...prevComment,
+                                        comment: "Request " + requestCode + " has been rejected   - Note: " + e.target.value
+                                    }));
+                                }} />
                         </Modal>
                     </>
                 )}
@@ -256,11 +276,19 @@ function MenuRequest(props: any): JSX.Element {
                     </Select>
                     <Input className='menu-after-btn-forward'></Input>
                 </Modal>
-                <Dropdown overlay={menu} trigger={['click']}>
-                    {!showCancel && (
-                        <Menu.Item onClick={handleMenuClick} key="ellipsis" icon={<EllipsisOutlined />} />
-                    )}
-                </Dropdown>
+                {requestStatus === 'Approved' &&
+                    <Dropdown overlay={menu} trigger={['click']}
+                        onOpenChange={() => {
+                            setActionRequest({ action: "Canceled", Note: "Canceled" });
+                            setComment((prevComment) => ({
+                                ...prevComment,
+                                comment: "Request " + requestCode + " has been canceled    - Note: Canceled"
+                            }));
+                        }}>
+                        {!showCancel && (
+                            <Menu.Item onClick={handleMenuClick} key="ellipsis" icon={<EllipsisOutlined />} />
+                        )}
+                    </Dropdown>}
             </Menu>
         </div>
     );

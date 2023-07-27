@@ -1,160 +1,194 @@
-import { CommentOutlined, UserOutlined, UploadOutlined, SelectOutlined } from '@ant-design/icons';
-import { Input, Button, Avatar, Row, Col, Upload, } from 'antd';
+import { CommentOutlined, UserOutlined, UploadOutlined } from '@ant-design/icons';
+import { Input, Button, Avatar, Row, Col, Upload, Spin, Alert, } from 'antd';
 import './comment.css'
 import { useEffect, useState } from 'react';
 import request from "../../../Utils/request";
 import { useParams } from 'react-router';
-import { async } from 'q';
 
 interface CommentItem {
-    author: string;
-    content: string;
-    datetime: string;
-    id: string;
+    Account: {
+        FullName: string | null
+    },
+    Content: string | null,
+    Created: string,
+    Id: string,
 }
+
+
 
 function Comment(): JSX.Element {
 
-    const [detailData, setDetailData] = useState<any>({});
+    // const [detailData, setDetailData] = useState<any>({});
 
     const { requestId } = useParams();
 
     const [newComment, setNewComment] = useState('');
 
-    const [newReply, setNewReply] = useState('');
+    // const [newReply, setNewReply] = useState('');
 
-    const [showReplyForm, setShowReplyForm] = useState(false);
+    // const [showReplyForm, setShowReplyForm] = useState(false);
 
-    const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
+    // const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
 
     const [comments, setComments] = useState<CommentItem[]>([
         {
-            author: 'Bang Minh Nguyen',
-            content: '',
-            datetime: '04/07/2023 09:33 AM',
-            id: '04/07/2023 09:33 AM',
+            Account: {
+                FullName: ""
+            },
+            Content: "",
+            Created: "",
+            Id: ""
         },
     ]);
+    const [loading, setLoading] = useState(true);
 
-    const [replyComments, setReplyComments] = useState<CommentItem[]>([]);
 
-    useEffect(() => {
-        const getDetailRequest = async () => {
-            const endpoint = "/request/Id=" + requestId;
-            await request.get(endpoint).then((res) => {
-                setDetailData(res.data.Data);
-            }
-            );
-        }
-        getDetailRequest();
-    }, [requestId])
+
+    // useEffect(() => {
+    //     const getDetailRequest = async () => {
+    //         const endpoint = "/request/Id=" + requestId;
+    //         await request.get(endpoint).then((res) => {
+    //             setDetailData(res.data.Data);
+    //         }
+    //         );
+    //     }
+    //     getDetailRequest();
+    // }, [requestId])
 
     useEffect(() => {
         const getAllCommentsByRequest = async () => {
             const endpoint = "/request/comment/requestId=" + requestId;
             await request.get(endpoint)
                 .then((res) => {
-                    console.log(res.data);
+                    setComments(res.data.Data);
+                    setLoading(false);
                 })
                 .catch((e) => {
                     console.log(e);
                 })
         }
         getAllCommentsByRequest();
-    }, [])
+    }, [loading, requestId])
 
-
-    const handleSaveComment = () => {
-        if (newComment) {
-            const comment: CommentItem = {
-                author: 'Bang Minh Nguyen',
-                content: newComment,
-                datetime: new Date().toLocaleString(),
-                id: new Date().toLocaleString(),
-            };
-            setShowReplyForm(false);
-            setComments([...comments, comment]);
+    const handlePostComment = () => {
+        request.postForm("/request/comment/requestId=" + requestId, { comment: newComment }).then((res) => {
+            setLoading(true);
             setNewComment('');
-            // setReplyToCommentId(null);
-            // console.log(comments);
-        }
-    };
-
-    const handleSaveReply = () => {
-        if (newReply) {
-            const replyComment: CommentItem = {
-                author: 'Bang Minh Nguyen',
-                content: newReply,
-                datetime: new Date().toLocaleString(),
-                id: new Date().toLocaleString(),
-            };
-            setShowReplyForm(false);
-            setReplyComments([...replyComments, replyComment]);
-            setNewReply('');
-            setReplyToCommentId(null);
-        }
+            // setComments((prevComments) => ({
+            //     ...prevComments,
+            //     Account: {
+            //         FullName: res.data.Data.Account.FullName
+            //     },
+            //     Content: res.data.Data.Content,
+            //     Created: res.data.Data.Created,
+            //     Id: res.data.Data.Id
+            // }))
+        }).catch((e) => { console.log(e); });
     }
 
-    const handleCancelComment = () => {
-        setShowReplyForm(false);
-    }
+    // const handleSaveComment = () => {
+    //     if (newComment) {
+    //         const comment: CommentItem = {
+    //             Account: {
+    //                 FullName: 
+    //             }
+    //             content: newComment,
+    //             datetime: new Date().toLocaleString(),
+    //             id: new Date().toLocaleString(),
+    //         };
+    //         setShowReplyForm(false);
+    //         setComments([...comments, comment]);
+    //         setNewComment('');
+    //         // setReplyToCommentId(null);
+    //         // console.log(comments);
+    //     }
+    // };
 
-    const handleReplyClick = (commentId: string) => {
-        setShowReplyForm(true);
-        setReplyToCommentId(commentId);
-    };
+    // const handleSaveReply = () => {
+    //     if (newReply) {
+    //         const replyComment: CommentItem = {
+    //             author: 'Bang Minh Nguyen',
+    //             content: newReply,
+    //             datetime: new Date().toLocaleString(),
+    //             id: new Date().toLocaleString(),
+    //         };
+    //         setShowReplyForm(false);
+    //         setReplyComments([...replyComments, replyComment]);
+    //         setNewReply('');
+    //         setReplyToCommentId(null);
+    //     }
+    // }
 
-    // console.log(detailData);
+    // const handleCancelComment = () => {
+    //     setShowReplyForm(false);
+    // }
+
+    // const handleReplyClick = (commentId: string) => {
+    //     setShowReplyForm(true);
+    //     setReplyToCommentId(commentId);
+    // };
+
 
     return (
         <div className='comments-detail-request'>
-            <div className='title-comment'>
-                <CommentOutlined className='icon-comment' />
-                <span> Comments</span>
-            </div>
-            {!showReplyForm && (
-                <div>
-                    <Row className='row-comment-box'>
-                        <Col span={1}>
-                            <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
-                        </Col>
-                        <Col span={6}>
-                            <Input.TextArea
-                                className='input-comment'
-                                placeholder='Write a comment...'
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                            />
-                        </Col>
-                        <Col span={1}></Col>
-                        <Col span={2}>
-                            <Button className='btn-comment' type="primary" onClick={handleSaveComment}>Save</Button>
-                        </Col>
-                    </Row>
-                    <Upload className='upload-comment'>
-                        <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>Add attachments</Button>
-                        <span> (Maximum 20MB per file)</span>
-                    </Upload>
-                </div>
-            )}
-
-            <div className='comments-detail-request'>
-                {comments.map((comment, index) => (
-                    <Row className='list-comment' key={comment.id}>
-                        <Col span={2} className="comment-avatar">
-                            <Avatar size={40} icon={<UserOutlined />} />
-                        </Col>
-                        <Col span={18}>
-                            <span className="comment-author">{detailData.SenderUser ? detailData.SenderUser.FullName : "No Name"}</span>
-                            <span className="comment-date">{detailData.Created ? detailData.Created : "No Data"}</span>
-                            <div className="comment-content"><span>Submit the request </span>{detailData.RequestCode}<span> for approval</span></div>
-                        </Col>
-                        {!showReplyForm && (
-                            <Col span={2} className='comment-reply'>
-                                <Button icon={<SelectOutlined />} onClick={() => handleReplyClick(comment.id)}></Button>
+            {loading ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                <Alert
+                    style={{ width: '100%', textAlign: 'center' }}
+                    message="Loading..."
+                    description="There are some issues happening, please wait a moment or you can try reloading the page"
+                    type="info"
+                />
+            </Spin>)
+                : <>
+                    <div className='title-comment'>
+                        <CommentOutlined className='icon-comment' />
+                        <span> Comments</span>
+                    </div>
+                    <div>
+                        <Row className='row-comment-box'>
+                            <Col span={1}>
+                                <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
                             </Col>
-                        )}
-                        {showReplyForm && replyToCommentId === comment.id && (
+                            <Col span={6}>
+                                <Input.TextArea
+                                    className='input-comment'
+                                    placeholder='Write a comment...'
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                />
+                            </Col>
+                            <Col span={1}></Col>
+                            <Col span={2}>
+                                <Button className='btn-comment' type="primary"
+                                    onClick={handlePostComment}
+                                >Save</Button>
+                            </Col>
+                        </Row>
+                        <Upload className='upload-comment'>
+                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>Add attachments</Button>
+                            <span> (Maximum 20MB per file)</span>
+                        </Upload>
+                    </div>
+
+                    <div className='comments-detail-request'>
+                        {comments.map((comment) => (
+                            <Row className='list-comment' key={comment.Id}>
+                                <Col span={2} className="comment-avatar">
+                                    <Avatar size={40} icon={<UserOutlined />} />
+                                </Col>
+                                <Col span={18}>
+                                    <span className="comment-author">{comment.Account ? comment.Account.FullName : "No Name"}</span>
+                                    <span className="comment-date">{comment.Created ? comment.Created : "No Data"}</span>
+                                    <div className="comment-content"><span>{comment.Content}</span></div>
+                                </Col>
+                                {/* {!showReplyForm && (
+                                    <Col span={2} className='comment-reply'>
+                                        <Button icon={<SelectOutlined />}
+                                        // onClick={() => handleReplyClick(comment.Id)}
+                                        ></Button>
+                                    </Col>
+                                )} */}
+                                {/* {showReplyForm && replyToCommentId === comment.id && (
                             <div className='reply-comment'>
                                 <div className='reply-row'>
                                     <span className="comment-avatar">
@@ -182,8 +216,8 @@ function Comment(): JSX.Element {
                                     </Upload>
                                 </div>
                             </div>
-                        )}
-                        <div>
+                        )} */}
+                                {/* <div>
                             {replyComments.map((replyComment, index) => (
                                 <Row className='reply-comment-row' key={replyComment.id}>
                                     <Col span={2} className="comment-avatar">
@@ -196,10 +230,13 @@ function Comment(): JSX.Element {
                                     </Col>
                                 </Row>
                             ))}
-                        </div>
-                    </Row>
-                ))}
-            </div>
+                        </div> */}
+                            </Row>
+                        ))}
+                    </div>
+                </>
+            }
+
         </div >
     );
 }
