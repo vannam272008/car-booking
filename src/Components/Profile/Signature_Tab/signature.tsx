@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Input, Select, Tabs, Upload, Image, Col, Row } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
@@ -86,22 +86,23 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
     "Pacifico",
     "Caveat",
   ]);
-  const [signature, setSignature] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<string>("");
   const [img_preview, setImg_Preview] = useState<string | undefined>();
-
-  // const setSignatureforinfoApi = () =>{
-  //   infoAPI.Signature = signature
-  // }
 
   const handleChangeSelect = (value: string) => {
     setSelectedFont(value);
   };
 
+  
   const handleFileChange = (file: RcFile) => {
     const objectUrl = URL.createObjectURL(file);
     setImg_Preview(objectUrl);
-    setSignature("");
+    // setSignature("");
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      Signature:"",
+    }));
+  
   };
 
   useEffect(() => {
@@ -132,8 +133,11 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
                         ...prev,
                         Signature: e.target.value,
                       };
+                      
                     });
+                    setImg_Preview('');
                   }}
+                 
                   style={{ width: "95%" }}
                   maxLength={50}
                 />

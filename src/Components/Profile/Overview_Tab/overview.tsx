@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { Moment } from "moment";
+import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
 import { RcFile } from "antd/es/upload/interface";
@@ -164,7 +163,6 @@ const Overview: React.FC<OverviewProps> = ({
       ) : (
         <strong>{infoAPI.FirstName}</strong>
       )
-      
     },
     {
       overview_title: "Last name",

@@ -12,7 +12,6 @@ import {
 } from "@ant-design/icons";
 import "./profile.css";
 import { useNavigate, useParams } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
 import type { RcFile } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
 import Additional from "../Additional_Tab/additional";
