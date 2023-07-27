@@ -6,16 +6,79 @@ import type { TabsProps } from "antd";
 import "./signature.css";
 import { RcFile } from "antd/lib/upload";
 
+interface API {
+  EmployeeNumber: string;
+  Username: string;
+  Email: string;
+  AvatarPath: RcFile | null;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: string;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
+}
+
 interface SignatureProps {
   isEditing: boolean;
   infoAPI: {
     Email: string;
+    Signature: string;
   };
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 
 const { Dragger } = Upload;
 
-const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
+const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [fonts] = useState<string[]>([
     "Great Vibes",
@@ -26,6 +89,10 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
   const [signature, setSignature] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<string>("");
   const [img_preview, setImg_Preview] = useState<string | undefined>();
+
+  // const setSignatureforinfoApi = () =>{
+  //   infoAPI.Signature = signature
+  // }
 
   const handleChangeSelect = (value: string) => {
     setSelectedFont(value);
@@ -43,7 +110,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
+ 
   const signature_tab: TabsProps["items"] = [
     {
       key: "1",
@@ -58,10 +125,14 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
                   aria-required
                   showCount
                   placeholder="Confirm your name"
-                  value={signature}
+                  value={infoAPI.Signature}
                   onChange={(e) => {
-                    setSignature(e.target.value);
-                    setImg_Preview("");
+                    setInfoAPI((prev) => {
+                      return {
+                        ...prev,
+                        Signature: e.target.value,
+                      };
+                    });
                   }}
                   style={{ width: "95%" }}
                   maxLength={50}
@@ -85,7 +156,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
             </Col>
           </Row>
           <Row>
-            {signature ? (
+            {infoAPI.Signature ? (
               <div className="QR_signature">
                 <QRCodeCanvas
                   style={{ height: "200px", width: "200px" }}
@@ -94,7 +165,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
                 <p>{infoAPI.Email}</p>
                 <p>{currentTime.toLocaleString()}</p>
                 <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
-                  {signature}
+                  {infoAPI.Signature}
                 </h1>
               </div>
             ) : null}
@@ -172,7 +243,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI }) => {
       ) : (
         <>
           <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
-            {signature}
+            {infoAPI.Signature}
           </h1>
         </>
       )}

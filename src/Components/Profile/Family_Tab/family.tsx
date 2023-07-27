@@ -1,5 +1,5 @@
 import React from "react";
-import { Dayjs } from "dayjs";
+import { useState } from "react";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload/interface";
@@ -85,6 +85,7 @@ const { Title } = Typography;
 
 const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
   //tab_family
+  const [edit_family, setEditFamily] = useState(false);
   const columns_family = [
     {
       dataIndex: "Family_title",
@@ -113,7 +114,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => {setEditFamily(true)}} /> : null,
       dataIndex: "action",
     },
   ];
@@ -341,11 +342,11 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
 
   let dataSource_relationship = [
     {
-      Contact_name: <Input />,
-      Birth_day: <DatePicker />,
-      Relationship: <Input />,
-      Note: <Input />,
-      action: <DeleteFilled />,
+      Contact_name:isEditing ?(edit_family ? <Input /> : null ): (null),
+      Birth_day: isEditing ?(edit_family ? <DatePicker /> : null): (null),
+      Relationship:isEditing ?(edit_family ?  <Input /> : null): (null),
+      Note:isEditing ?(edit_family ?  <Input /> : null): (null),
+      action:isEditing ?(edit_family ? <DeleteFilled /> : null): (null) ,
     },
   ];
   return (

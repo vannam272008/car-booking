@@ -188,7 +188,7 @@ const Additional: React.FC<AdditionalProps> = ({
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => {setEdit_Contract(true)}} /> : null,
       dataIndex: "action",
     },
   ];
@@ -326,6 +326,7 @@ const Additional: React.FC<AdditionalProps> = ({
           style={{ width: "100%" }}
           onChange={handleDate_start_date_official}
           placeholder="Starting date offical"
+          format="YYYY-MM-DD"
         />
       ) : (infoAPI.StartingDateOfficial === null ? (
         infoAPI.StartingDateOfficial
@@ -731,14 +732,14 @@ const Additional: React.FC<AdditionalProps> = ({
 
   let dataSource_contract = [
     {
-      Contract_type: edit_contract ? <Input /> : null,
-      From: edit_contract ? <DatePicker /> : null,
-      To: edit_contract ? <DatePicker /> : null,
-      Signing_date: edit_contract ? <DatePicker /> : null,
-      Subject: edit_contract ? <Input /> : null,
-      Department: edit_contract ? <Input /> : null,
-      Note: edit_contract ? <Input /> : null,
-      action: edit_contract ? <DeleteFilled onClick={() => {}} /> : null,
+      Contract_type: isEditing ? (edit_contract ? <Input /> : null):( null) ,
+      From: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
+      To: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
+      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null):( null),
+      Subject: isEditing ? (edit_contract ? <Input /> : null):( null),
+      Department: isEditing ? (edit_contract ? <Input /> : null):( null),
+      Note: isEditing ? (edit_contract ? <Input /> : null):( null),
+      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => {}} /> : null):( null),
     },
   ];
   return (

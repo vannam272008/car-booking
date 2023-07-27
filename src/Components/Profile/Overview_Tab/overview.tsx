@@ -131,6 +131,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Employee number"
           name="Employee Number"
           value={infoAPI.EmployeeNumber}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -146,11 +147,44 @@ const Overview: React.FC<OverviewProps> = ({
     },
     {
       overview_title: "First name",
-      info: <strong>{infoAPI.FirstName}</strong>,
+      info:isEditing ? (
+        <Input
+          placeholder="First name"
+          name= "First name"
+          value={infoAPI.FirstName}
+          onChange={(e) => {
+            setInfoAPI((prev) => {
+              return {
+                ...prev,
+                FirstName: e.target.value,
+              };
+            });
+          }}
+        />
+      ) : (
+        <strong>{infoAPI.FirstName}</strong>
+      )
+      
     },
     {
       overview_title: "Last name",
-      info: <strong>{infoAPI.LastName}</strong>,
+      info: isEditing ? (
+        <Input
+          placeholder="Last Name"
+          name="Last Name"
+          value={infoAPI.LastName}
+          onChange={(e) => {
+            setInfoAPI((prev) => {
+              return {
+                ...prev,
+                LastName: e.target.value,
+              };
+            });
+          }}
+        />
+      ) : (
+        <strong>{infoAPI.LastName}</strong>
+      ),
     },
     {
       overview_title: "Sex",
@@ -159,6 +193,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Sex"
           name="sex"
           // value={infoAPI.Sex}
+          disabled = {true}
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {

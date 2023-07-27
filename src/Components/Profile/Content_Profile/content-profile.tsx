@@ -190,7 +190,7 @@ const ContentProfile: React.FC = () => {
     } else {
       message.error(res.data.Message);
     }
-    console.log("Date of ID card: ", infoAPI)
+    console.log("signature: ", infoAPI.Signature)
   };
 
   //declare contract
@@ -225,28 +225,32 @@ const ContentProfile: React.FC = () => {
 
   // visible avatar
   const [visible, setVisible] = useState(false);
-  const handleDeleteContract = () => {};
+  // const handleDeleteContract = () => {};
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
       Birthday: infoAPI.Birthday.substring(0, 10),
     }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   LeavingDate: infoAPI.LeavingDate.substring(0, 10),
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   StartingDate: infoAPI.StartingDate.substring(0, 10),
-    // }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      LeavingDate: infoAPI.LeavingDate.substring(0, 10),
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDate: infoAPI.StartingDate.substring(0, 10),
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDateOfficial: infoAPI.StartingDateOfficial.substring(0, 10),
+    }));
     setIsEditing(true);
   };
  
@@ -301,7 +305,7 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} infoAPI={infoAPI} />,
+      children: <Signature isEditing={isEditing} infoAPI={infoAPI} setInfoAPI={setInfoAPI}/>,
     },
   ];
 
