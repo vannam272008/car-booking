@@ -13,8 +13,6 @@ import { RootState } from '../../Reducers/rootReducer';
 import { Pagination, Form } from 'antd';
 import CommonUtils from '../../Utils/CommonUtils';
 
-// type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
-
 interface RequestType {
   Id: string;
   requestCode: string;
@@ -36,7 +34,6 @@ const ManageRequest = (props: any) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  // const [filterStatus, setFilterStatus] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
@@ -51,20 +48,15 @@ const ManageRequest = (props: any) => {
 
   const handleGetAllRequest = () => {
     setLoading(true);
-    try {
-      const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
-      console.log(url);
-      request.get(url)
-        .then((res) => {
-          setRequestData(res.data.Data.ListData);
-          setTotal(res.data.Data.TotalPage);
-          setLoading(false);
-        }).catch((e) => {
-          console.log(e);
-        })
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
+    request.get(url)
+      .then((res) => {
+        setRequestData(res.data.Data.ListData);
+        setTotal(res.data.Data.TotalPage);
+        setLoading(false);
+      }).catch((e) => {
+        console.log(e);
+      })
   };
 
   const handlePageChange = (page: number) => {
@@ -75,15 +67,12 @@ const ManageRequest = (props: any) => {
     // setCreatedTo(createdTo);
     // setSenderId(senderId);
     // setStatus(status);
-    setSearchQuery(searchQuery);
+    // setSearchQuery(searchQuery);
   };
 
   const onApply = () => {
     setLoading(false);
-    // console.log("hello");
-    // setCurrentPage(1);
     setStatus(filter.filterStatus);
-    // handleGetAllRequest();
   }
 
   const handleClear = () => {
@@ -103,11 +92,6 @@ const ManageRequest = (props: any) => {
       filterStatus: ""
     })
     setStatus("");
-    // setRequestCode("");
-    // setCreatedFrom("");
-    // setCreatedTo("");
-    // setSenderId("");
-    // setFilterStatus("");
   };
 
   const handleOnClickExport = () => {
@@ -123,11 +107,9 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, filter, status, currentPage, searchQuery]);
+  }, [tab, filter, status, currentPage]);
 
   const profile = false;
-
-  console.log(filter);
   return (
     <RequestLayout profile={profile}>
       {() => (
@@ -258,5 +240,3 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = { setTab, setStatus }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageRequest)
-
-// export default ManageRequest

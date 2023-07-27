@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer } from "antd";
+import { Col, Layout, Row, Button, Drawer, message } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,29 +10,16 @@ import { RootState } from '../../Reducers/rootReducer';
 import { setTab, setStatus } from "../../Actions/requestAction";
 
 const { Header } = Layout;
-// const { useToken } = theme;
 
-// const items: MenuProps['items'] = [
-//     {
-//         key: '1',
-//         label: (
-//             <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-//                 1st menu item
-//             </a>
-//         ),   
-//     },
-// ];
-
-// interface LogoutValues {
-//     username: string;
-//     password: string;
-// }
+interface LogoutValues {
+    username: string;
+    password: string;
+}
 
 const AppHeader = (props: any) => {
     const userID = localStorage.getItem("Id");
     const { setTab, setStatus } = props;
     const avatar = require('../../public/images/logo192.png');
-    // const { token } = useToken();
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
@@ -61,24 +48,9 @@ const AppHeader = (props: any) => {
         navigate('/setting/profile/' + userID);
     }
 
-    // const contentStyle = {
-    //     backgroundColor: token.colorBgElevated,
-    //     borderRadius: token.borderRadiusLG,
-    //     boxShadow: token.boxShadowSecondary,
-    // };
-
     const onClose = () => {
         setOpenHelp(!openHelp);
     };
-
-    // const pathName = window.location.pathname;
-
-    const handleLogout = () => {
-        localStorage.clear();
-        setStatus('');
-        setTab('get-all');
-        navigate("/login");
-    }
 
     useEffect(() => {
         request.get("/user/profile/" + userID)
@@ -93,26 +65,30 @@ const AppHeader = (props: any) => {
                 console.log(e.response.Data);
             })
     }, [userID])
-    // (values: LogoutValues) => {
-    //     request
-    //         .post("/user/logout", values)
-    //         .then((response) => {
-    //             const data = response.data;
-    //             console.log(data);
-    //             if (data) {
-    //                 if (data.Success == false) {
-    //                     message.error(data.Message);
-    //                 } else {
-    //                     localStorage.clear();
-    //                     dispatch(setStatus(''));
-    //                     navigate("/login");
-    //                 }
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         });
-    // };
+
+    const handleLogout =
+        (values: LogoutValues) => {
+            request
+                .get("/user/logout")
+                .then((response) => {
+                    const data = response.data;
+                    console.log(response);
+                    if (data) {
+                        if (data.Success == false) {
+                            message.error(data.Message);
+                        } else {
+                            localStorage.clear();
+                            setStatus('');
+                            setTab('get-all');
+                            navigate("/login");
+                        }
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        };
+
     return (
         <Header className="mcs-header">
             <Row className="row-header">
@@ -199,7 +175,7 @@ const AppHeader = (props: any) => {
                                     <div className='my-profile' style={{ textDecoration: 'none' }}>
                                         <p>My Account</p>
                                     </div>
-                                    <NavLink to="/login" onClick={() => handleLogout()} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                         <p>Sign out</p>
                                     </NavLink>
                                 </div>
