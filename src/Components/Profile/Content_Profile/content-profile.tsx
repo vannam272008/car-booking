@@ -28,7 +28,7 @@ interface API {
   FirstName: string;
   LastName: string;
   Sex: boolean;
-  Birthday: Dayjs | null;
+  Birthday: string;
   JobTitle: string;
   Company: string;
   Unit: string;
@@ -44,8 +44,7 @@ interface API {
 }
 
 const ContentProfile: React.FC = () => {
-  const jwt_admin =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJDdXJJZCI6IjAwMDZhZTNlLWUxMWItNDQ3OS1iNWVkLWRmZjJmNzQxM2JhNyIsIlVzZXJuYW1lIjoiYWRtaW4wMDAxIiwiUGFzc3dvcmQiOiIxMjM0NTYiLCJuYmYiOjE2OTAyODA0MjAsImV4cCI6MTY5MDM2NjgyMCwiaWF0IjoxNjkwMjgwNDIwLCJpc3MiOiJjYXJib29raW5naXNzdWVyIiwiYXVkIjoiY2FyYm9va2luZ2F1ZGllbmNlIn0.sGih02nlo_M64fffiXHgSn2LrrYdUcqP2v1U14utVwA";
+  const jwt_admin = localStorage.getItem("Token");
   const uploadConfig = {
     action: "http://localhost:63642/api/file/upload-temp",
     headers: {
@@ -124,7 +123,7 @@ const ContentProfile: React.FC = () => {
     FirstName: "",
     LastName: "",
     Sex: true,
-    Birthday: null,
+    Birthday: "",
     JobTitle: "",
     Company: "",
     Unit: "",
@@ -163,12 +162,10 @@ const ContentProfile: React.FC = () => {
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
-    const res = await request.putForm(endpoint,infoAPI,config);
-    console.log("infoAPI:",infoAPI)
-    console.log("response",res)
+    const res = await request.putForm(endpoint,infoAPI,config)
       if (res.data.Success) {
         message.success('Edit success !')
-       
+        console.log(res)
       } else {
         message.error(res.data.Message)
       }
@@ -209,6 +206,9 @@ const ContentProfile: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const handleDeleteContract = () => {};
   const onEditInfo = () => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo, Birthday: infoAPI.Birthday.substring(0,10)
+    }));
     setIsEditing(true);
   };
   
@@ -257,6 +257,8 @@ const ContentProfile: React.FC = () => {
     },
   ];
 
+  console.log("info:", infoAPI);
+
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
@@ -290,7 +292,8 @@ const ContentProfile: React.FC = () => {
         </Button>
       </div>
       <div className="info-user">
-        <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
+        {isEditing?(
+          <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
           <Button
             className="btn-camera"
             size="middle"
@@ -306,6 +309,8 @@ const ContentProfile: React.FC = () => {
             onClick={handleOpenModal}
           />
         </span>
+        ):null}
+        
         <Modal
           title="Upload and Edit Avatar"
           open={visible}

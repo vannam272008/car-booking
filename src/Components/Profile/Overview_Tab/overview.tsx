@@ -1,7 +1,9 @@
-import React from "react";
-import { Dayjs } from "dayjs";
-import { Input, Table, DatePicker } from "antd";
+import React, { useEffect } from "react";
+import { Moment } from 'moment';
+import dayjs, { Dayjs } from "dayjs";
+import { Input, Table, DatePicker,  } from "antd";
 import { RcFile } from "antd/es/upload/interface";
+
 interface API {
   EmployeeNumber: string;
   Username: string,
@@ -9,7 +11,7 @@ interface API {
   FirstName: string,
   LastName: string,
   Sex: boolean,
-  Birthday: Dayjs | null,
+  Birthday: string,
   JobTitle: string,
   Company: string,
   Unit: string,
@@ -34,7 +36,7 @@ interface OverviewProps {
     FirstName: string,
     LastName: string,
     Sex: boolean,
-    Birthday: Dayjs | null,
+    Birthday: string,
     JobTitle: string,
     Company: string,
     Unit: string,
@@ -47,70 +49,25 @@ interface OverviewProps {
     Rank: string,
     EmployeeType: string,
     Rights: string
-    
   }
-  //   React.SetStateAction<{
-  //     employee_number: string;
-  //     sex: string;
-  //     birth_day: Dayjs | null;
-  //     positon: string;
-  //     company: string;
-  //     unit: string;
-  //     function: string;
-  //     deparment: string;
-  //     sections_teams: string;
-  //     groups: string;
-  //     office_location: string;
-  //     cost_center: string;
-  //     rank: string;
-  //     employee_type: string;
-  //     nation: string;
-  //     phone: string;
-  //     id_card_number: string;
-  //     dateofidcard: Dayjs | null;
-  //     placeofidcard: string;
-  //     health_insurance: string;
-  //     starting_date: Dayjs | null;
-  //     Starting_date_official: Dayjs | null;
-  //     Leaving_date: Dayjs | null;
-  //     start_date_maternity_leave: Dayjs | null;
-  //     note: string;
-  //     academic_level: string;
-  //     specialized_qualification: string;
-  //     business_phone: string;
-  //     home_phone: string;
-  //     personal_email: string;
-  //     bank_name: string;
-  //     branch_number: string;
-  //     bank_branch_name: string;
-  //     bank_account_number: string;
-  //     notebank_account_name: string;
-  //     street: string;
-  //     building_flatnumber: string;
-  //     city: string;
-  //     province_state: string;
-  //     postal_code: string;
-  //     country: string;
-  //     martial_status: string;
-  //     contact_name: string;
-  //     relationship: string;
-  //     phone_family: string;
-  //     street_family: string;
-  //     building_family: string;
-  //     city_family: string;
-  //     province_state_family: string;
-  //     postal_code_family: string;
-  //     country_family: string;
-  //   }>>;
   setInfoAPI: React.Dispatch<React.SetStateAction<API>>
 }
 
 const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) => {
   // tab_overview
-  const handleDate_birth = (value: Dayjs | null) => {
-    setInfoAPI((prevInfo) => ({ ...prevInfo, Birthday: value }));
+  
+  const handleDate_birth = (date: Dayjs | null, dateString: string) => {
+    setInfoAPI((prevInfo) => ({ ...prevInfo, Birthday: dateString.substring(0,10)}));
   };
 
+  useEffect(() => {
+    console.log("hello")
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo, Birthday: infoAPI.Birthday.substring(0,10)
+    }));
+  }, [])
+
+  
   const columns_overview = [
     {
       dataIndex: "overview_title",
@@ -182,15 +139,15 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
-          className="profile-birth-day-datepicker"
-          value={infoAPI.Birthday}
+          value={infoAPI.Birthday === null ? dayjs() : dayjs(infoAPI.Birthday)}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"
+          format="YYYY-MM-DD"
         />
       ) : (
         <strong>
-          {infoAPI.Birthday ? infoAPI.Birthday.format("DD-MM-YYYY") : ""}
+          {infoAPI.Birthday.substring(0,10)}
         </strong>
       ),
     },
@@ -244,7 +201,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
         <Input
           placeholder="Function"
           name="function"
-          value={infoAPI.Function}
+          value={infoAPI.Function }
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
