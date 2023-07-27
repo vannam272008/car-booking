@@ -148,6 +148,13 @@ function MenuRequest(props: any): JSX.Element {
 
         });
     };
+    const downloadFilePdf = async () => {
+        await request.get('/file/pdf-request/' + requestId)
+            .then((res) => {
+                console.log(res);
+            })
+
+    }
 
     return (
         <div>
@@ -155,7 +162,7 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     Return
                 </Menu.Item>
-                <Menu.Item key="download" icon={<FilePdfOutlined />}>
+                <Menu.Item onClick={downloadFilePdf} key="download" icon={<FilePdfOutlined />}>
                     Download file
                 </Menu.Item>
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>

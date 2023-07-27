@@ -82,7 +82,10 @@ function DetailRequest(): JSX.Element {
     };
 
     // console.log(attachmentData);
-
+    // const handleDownloadFile = (attachment: string) => {
+    //     console.log(attachment);
+    //     window = attachment;
+    // }
 
     return (
         <RequestLayout profile={profile}>
@@ -167,8 +170,9 @@ function DetailRequest(): JSX.Element {
                             <div>
                                 {Array.isArray(attachmentData) ? (
                                     attachmentData.map((attachment: { Id: number; Path: string; }) => (
-                                        <div key={attachment.Id} className='approver'>
+                                        <div key={attachment.Id} className='approver' >
                                             <span><FileTextOutlined /> </span>
+                                            {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
                                             <span>{attachment.Path.substring(39)} </span>
                                             <span>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
                                         </div>
