@@ -114,11 +114,13 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
                 .then((response) => {
                     const data = response.data;
                     if (data) {
+                        const comment = "Submit the request " + data.Data.RequestCode + " for approval";
+                        request.postForm("/request/comment/requestId=" + data.Data.Id, { comment });
                         localStorage.setItem("Data", data?.Data);
                         if (data.Success === false) {
                             message.error(data.Message);
                         } else {
-                            navigate("/request/carbooking");
+                            navigate("/request/carbooking/detail/" + data.Data.Id);
                         }
                     }
                 })
@@ -163,8 +165,6 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     const handleReturn = () => {
         navigate("/request/carbooking");
     }
-
-    console.log(formData);
 
     return (
         <div>
