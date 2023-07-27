@@ -3,9 +3,9 @@ import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutline
 import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, notification } from 'antd';
 import './sendApprover.css'
 import request from "../../../Utils/request";
-// import MenuAdd from '../MenuAdd/menuAdd';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import { UploadFile } from 'antd/lib/upload';
 
 interface DepartmentMember {
     Id: string;
@@ -28,7 +28,6 @@ interface PropsDataList {
 function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
-    // const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
@@ -61,12 +60,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setCounterApprover(counterApprover + 1);
     };
 
-    // const handleInputChange = (index: number, value: string) => {
-    //     const newInputs = [...inputs];
-    //     newInputs[index] = value;
-    //     setInputs(newInputs);
-    // };
-
     const handleDelete = (index: number) => {
         const newInputs = [...inputs];
         const newListOfUser = [...listOfUserId];
@@ -98,16 +91,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setFileList([...fileList, file]);
         return false;
     };
-
-    // const handleChange = (info: any) => {
-    //     if (info.file.status === 'done') {
-    //         console.log('File uploaded successfully');
-    //     } else if (info.file.status === 'error') {
-    //         console.error('Failed to upload file');
-    //     }
-    // };
-    // const [showAlert, setShowAlert] = useState(false);
-    // const [api, contextHolder] = notification.useNotification();
 
     const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
 
@@ -147,23 +130,16 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             )
         }
         else return [];
-
     };
-    // useEffect(() => {
-    //     const timeout = setTimeout(() => {
-    //         setShowAlert(false);
-    //     }, 2000);
 
-    //     return () => {
-    //         clearTimeout(timeout);
-    //     };
-    // }, [showAlert]);
-
-    // console.log(listOfUserId);
+    const handleRemoveFile = (file: UploadFile<any>) => {
+        // Filter out the file to be removed from the fileList
+        const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(updatedFileList);
+    };
 
     return (
         <div>
-            {/* {contextHolder} */}
             <div className='attention-request' style={{ marginTop: '0', }}>
                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                 <Radio.Group onChange={onChange} value={applyNote}>
@@ -174,11 +150,12 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             <div className='Attachment'>
                 <b>Attachment(s)</b>
             </div>
-            <div className='reply-upload-comment'>
+            <div className='reply-upload-comment' style={{ width: 'fit-content' }}>
                 <Upload
                     beforeUpload={handleBeforeUpload}
                     accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                     fileList={fileList}
+                    onRemove={handleRemoveFile}
                 >
                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
                         Add attachments
@@ -189,15 +166,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             <div className='form-approver'>
                 <h6>Send to approvers</h6>
                 <div className='add-approvers'>
-                    {/* {loading ? ( // Nếu đang tải dữ liệu, hiển thị spinner
-                        <Spin style={{ height: '100vh' }} tip="Loading..." size="large">
-                            <Alert
-                                style={{ width: '100%', textAlign: 'center' }}
-                                message="Loading..."
-                                description="There are some issues happening, please wait a moment or you can try reloading the page"
-                                type="info"
-                            />
-                        </Spin>) : ( */}
                     <Form>
                         <Row gutter={16}>
                             {inputs.map((input, index) => (
@@ -263,7 +231,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                             </Col>
                         </Row>
                     </Form>
-                    {/* )} */}
                 </div>
             </div>
         </div >

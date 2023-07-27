@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate.js';
 import request from "../../../Utils/request";
-import { RcFile } from 'antd/es/upload';
+import { RcFile, UploadFile } from 'antd/es/upload';
 import { UploadOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 import EditSendApprover from '../EditSendApprover/editSendApprover';
@@ -185,6 +185,12 @@ function EditRequest() {
         setFileList([...fileList, file]);
         return false;
     };
+    const handleRemoveFile = (file: UploadFile<any>) => {
+        // Filter out the file to be removed from the fileList
+        const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
+        setFileList(updatedFileList);
+    };
+
     const profile = false;
 
     // console.log(formData);
@@ -497,11 +503,12 @@ function EditRequest() {
                             <div className='Attachment'>
                                 <b>Attachment(s)</b>
                             </div>
-                            <div className='reply-upload-comment'>
+                            <div className='reply-upload-comment' style={{ width: 'fit-content' }}>
                                 <Upload
                                     beforeUpload={handleBeforeUpload}
                                     accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                                     fileList={fileList}
+                                    onRemove={handleRemoveFile}
                                 >
                                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
                                         Add attachments
