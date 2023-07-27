@@ -45,7 +45,6 @@ const ManageRequest = (props: any) => {
     filterStatus: ""
   })
 
-
   const handleGetAllRequest = () => {
     setLoading(true);
     const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
@@ -223,12 +222,20 @@ const ManageRequest = (props: any) => {
               pageSize={20}
               total={total * 20}
               onChange={handlePageChange}
+              itemRender={(page, type, originalElement) => {
+                if (type === 'prev') {
+                  return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+                }
+                if (type === 'next') {
+                  return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+                }
+                return originalElement;
+              }}
             />
           </div>
         </div>
       )}
     </RequestLayout>
-
   )
 }
 

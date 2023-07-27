@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer, message } from "antd";
+import { Col, Layout, Row, Button, Drawer, message, Badge } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import opus_logo from "../../assets/opus_logo.png";
 import { connect } from 'react-redux';
 import { RootState } from '../../Reducers/rootReducer';
 import { setTab, setStatus } from "../../Actions/requestAction";
+import Feedback from "../Feedback/Feedback";
 
 const { Header } = Layout;
 
@@ -126,24 +127,24 @@ const AppHeader = (props: any) => {
                                 <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
                             </div>
                             <div className="content-dropdown">
-                                <span><b>Opus Helpdesk</b></span>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
+                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Introduction</p>
                                 </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
-                                    <p>Feedbacks & Suggest idea</p>
-                                </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <Feedback />
+                                <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Open ticket</p>
                                 </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Help</p>
                                 </NavLink>
                             </div>
                             {/* </div> */}
                         </Drawer>
 
-                        <Button className="btn-item"><BellOutlined /></Button>
+                        <Badge count={3000}>
+                            <BellOutlined style={{ fontSize: '24px', color: 'white' }} />
+                        </Badge>
                         <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
                             <Button className="btn-item"><SettingOutlined /></Button>
                         </NavLink>

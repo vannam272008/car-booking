@@ -60,6 +60,9 @@
                 margin-left: 10px;
             }
 
+            & .btn-item:hover {
+                background-color: green;
+            }
         }
     }
 }
