@@ -174,7 +174,7 @@ const ContentProfile: React.FC = () => {
         });
     };
     getProfile();
-  }, []);
+  }, [userID]);
 
   const onSave = () => {
     setIsEditing(false);
