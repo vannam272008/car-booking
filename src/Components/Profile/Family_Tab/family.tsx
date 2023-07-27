@@ -2,80 +2,88 @@ import React from "react";
 import { Dayjs } from "dayjs";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
+import { RcFile } from "antd/es/upload/interface";
+
+interface API {
+  EmployeeNumber: string;
+  Username: string;
+  Email: string;
+  AvatarPath: RcFile | null;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: string;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
+}
 
 interface FamilyProps {
   isEditing: boolean;
-  info: {
-    martial_status: string;
-    contact_name: string;
-    relationship: string;
-    phone_family: string;
-    street_family: string;
-    building_family: string;
-    city_family: string;
-    province_state_family: string;
-    postal_code_family: string;
-    country_family: string;
+  infoAPI: {
+    MartialStatus: string;
+    ContactName: string;
+    Relationship: string;
+    PhoneR: string;
+    StreetR: string;
+    FlatNumberR: string;
+    CityR: string;
+    ProvinceR: string;
+    PostalCodeR: string;
+    CountryR: string;
   };
-  setInfo: React.Dispatch<
-    React.SetStateAction<{
-      employee_number: string;
-      sex: string;
-      birth_day: Dayjs | null;
-      positon: string;
-      company: string;
-      unit: string;
-      function: string;
-      deparment: string;
-      sections_teams: string;
-      groups: string;
-      office_location: string;
-      cost_center: string;
-      rank: string;
-      employee_type: string;
-      nation: string;
-      phone: string;
-      id_card_number: string;
-      dateofidcard: Dayjs | null;
-      placeofidcard: string;
-      health_insurance: string;
-      starting_date: Dayjs | null;
-      Starting_date_official: Dayjs | null;
-      Leaving_date: Dayjs | null;
-      start_date_maternity_leave: Dayjs | null;
-      note: string;
-      academic_level: string;
-      specialized_qualification: string;
-      business_phone: string;
-      home_phone: string;
-      personal_email: string;
-      bank_name: string;
-      branch_number: string;
-      bank_branch_name: string;
-      bank_account_number: string;
-      notebank_account_name: string;
-      street: string;
-      building_flatnumber: string;
-      city: string;
-      province_state: string;
-      postal_code: string;
-      country: string;
-      martial_status: string;
-      contact_name: string;
-      relationship: string;
-      phone_family: string;
-      street_family: string;
-      building_family: string;
-      city_family: string;
-      province_state_family: string;
-      postal_code_family: string;
-      country_family: string;
-    }>
-  >;
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 const { Title } = Typography;
 
-const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
+const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
   //tab_family
   const columns_family = [
     {
@@ -116,40 +124,48 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Martial status"
+          value={infoAPI.MartialStatus}
           name="Martial_status"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                martial_status: e.target.value,
+                MartialStatus: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.martial_status}</strong>
+        <strong>{infoAPI.MartialStatus}</strong>
       ),
     },
     {
-      Family_title: <strong><br/><br/>Emergency contact</strong>,
+      Family_title: (
+        <strong>
+          <br />
+          <br />
+          Emergency contact
+        </strong>
+      ),
     },
     {
       Family_title: "Contact name",
       info: isEditing ? (
         <Input
           placeholder="Contact name"
+          value={infoAPI.ContactName}
           name="Contact_name"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                contact_name: e.target.value,
+                ContactName: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.contact_name}</strong>
+        <strong>{infoAPI.ContactName}</strong>
       ),
     },
     {
@@ -157,18 +173,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Relationship"
+          value={infoAPI.Relationship}
           name="Relationship"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                relationship: e.target.value,
+                Relationship: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.relationship}</strong>
+        <strong>{infoAPI.Relationship}</strong>
       ),
     },
     {
@@ -176,40 +193,48 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Phone"
+          value={infoAPI.PhoneR}
           name="Phone"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                phone_family: e.target.value,
+                PhoneR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.phone_family}</strong>
+        <strong>{infoAPI.PhoneR}</strong>
       ),
     },
     {
-      Family_title: <strong><br/><br/>Permanent Address</strong>,
+      Family_title: (
+        <strong>
+          <br />
+          <br />
+          Permanent Address
+        </strong>
+      ),
     },
     {
       Family_title: "Street",
       info: isEditing ? (
         <Input
           placeholder="Street"
+          value={infoAPI.StreetR}
           name="Street"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                street: e.target.value,
+                StreetR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.street_family}</strong>
+        <strong>{infoAPI.StreetR}</strong>
       ),
     },
     {
@@ -217,18 +242,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Building / flatnumber"
+          value={infoAPI.FlatNumberR}
           name="Building / flatnumber"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                building_family: e.target.value,
+                FlatNumberR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.building_family}</strong>
+        <strong>{infoAPI.FlatNumberR}</strong>
       ),
     },
     {
@@ -236,18 +262,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="City"
+          value={infoAPI.CityR}
           name="City"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                city_family: e.target.value,
+                CityR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.city_family}</strong>
+        <strong>{infoAPI.CityR}</strong>
       ),
     },
     {
@@ -255,18 +282,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Province / state"
+          value={infoAPI.ProvinceR}
           name="Province_state"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                province_state: e.target.value,
+                ProvinceR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.province_state_family}</strong>
+        <strong>{infoAPI.ProvinceR}</strong>
       ),
     },
     {
@@ -274,18 +302,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Postal code"
+          value={infoAPI.PostalCodeR}
           name="Postal code"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                postal_code: e.target.value,
+                PostalCodeR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.postal_code_family}</strong>
+        <strong>{infoAPI.PostalCodeR}</strong>
       ),
     },
     {
@@ -293,18 +322,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
       info: isEditing ? (
         <Input
           placeholder="Country"
+          value={infoAPI.CountryR}
           name="Country"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                country_family: e.target.value,
+                CountryR: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.country_family}</strong>
+        <strong>{infoAPI.CountryR}</strong>
       ),
     },
   ];
@@ -325,7 +355,8 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfo, info }) => {
         dataSource={dataSource_family}
         columns={columns_family}
       ></Table>
-      <br/><br/>
+      <br />
+      <br />
       <Title>Relationships</Title>
       <Table
         pagination={false}

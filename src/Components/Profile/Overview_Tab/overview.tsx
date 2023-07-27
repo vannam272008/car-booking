@@ -1,73 +1,110 @@
 import React, { useEffect } from "react";
-import { Moment } from 'moment';
+import { Moment } from "moment";
 import dayjs, { Dayjs } from "dayjs";
-import { Input, Table, DatePicker,  } from "antd";
+import { Input, Table, DatePicker } from "antd";
 import { RcFile } from "antd/es/upload/interface";
 
 interface API {
   EmployeeNumber: string;
-  Username: string,
-  Email: string,
-  FirstName: string,
-  LastName: string,
-  Sex: boolean,
-  Birthday: string,
-  JobTitle: string,
-  Company: string,
-  Unit: string,
-  Function: string,
-  SectionsOrTeam: string,
-  Groups: string,
-  OfficeLocation: string,
-  LineManager: string,
-  BelongToDepartments: string,
-  Rank: string,
-  EmployeeType: string,
-  Rights: string,
+  Username: string;
+  Email: string;
   AvatarPath: RcFile | null;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: string;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
 }
 
 interface OverviewProps {
   isEditing: boolean;
   infoAPI: {
-    EmployeeNumber: string,
-    Username: string,
-    Email: string,
-    FirstName: string,
-    LastName: string,
-    Sex: boolean,
-    Birthday: string,
-    JobTitle: string,
-    Company: string,
-    Unit: string,
-    Function: string,
-    SectionsOrTeam: string,
-    Groups: string,
-    OfficeLocation: string,
-    LineManager: string,
-    BelongToDepartments: string,
-    Rank: string,
-    EmployeeType: string,
-    Rights: string
-  }
-  setInfoAPI: React.Dispatch<React.SetStateAction<API>>
+    EmployeeNumber: string;
+    Username: string;
+    Email: string;
+    FirstName: string;
+    LastName: string;
+    Sex: boolean;
+    Birthday: string;
+    JobTitle: string;
+    Company: string;
+    Unit: string;
+    Function: string;
+    SectionsOrTeam: string;
+    Groups: string;
+    OfficeLocation: string;
+    LineManager: string;
+    BelongToDepartments: string;
+    Rank: string;
+    EmployeeType: string;
+    Rights: string;
+  };
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 
-const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) => {
+const Overview: React.FC<OverviewProps> = ({
+  infoAPI,
+  isEditing,
+  setInfoAPI,
+}) => {
   // tab_overview
-  
+
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
-    setInfoAPI((prevInfo) => ({ ...prevInfo, Birthday: dateString.substring(0,10)}));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      Birthday: dateString.substring(0, 10),
+    }));
   };
 
-  useEffect(() => {
-    console.log("hello")
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo, Birthday: infoAPI.Birthday.substring(0,10)
-    }));
-  }, [])
-
-  
   const columns_overview = [
     {
       dataIndex: "overview_title",
@@ -146,9 +183,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
           format="YYYY-MM-DD"
         />
       ) : (
-        <strong>
-          {infoAPI.Birthday.substring(0,10)}
-        </strong>
+        <strong>{infoAPI.Birthday.substring(0, 10)}</strong>
       ),
     },
     {
@@ -201,7 +236,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
         <Input
           placeholder="Function"
           name="function"
-          value={infoAPI.Function }
+          value={infoAPI.Function}
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -281,7 +316,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
     },
     {
       overview_title: "Belong to departments",
-      info: <strong>{infoAPI.BelongToDepartments}</strong>
+      info: <strong>{infoAPI.BelongToDepartments}</strong>,
     },
     {
       overview_title: "Rank",
@@ -316,7 +351,6 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
                 ...prev,
                 EmployeeType: e.target.value,
               };
-              
             });
           }}
         />

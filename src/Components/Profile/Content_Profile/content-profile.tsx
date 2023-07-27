@@ -20,7 +20,7 @@ import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 
-interface API { 
+interface API {
   EmployeeNumber: string;
   Username: string;
   Email: string;
@@ -41,6 +41,44 @@ interface API {
   Rank: string;
   EmployeeType: string;
   Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
 }
 
 const ContentProfile: React.FC = () => {
@@ -58,60 +96,6 @@ const ContentProfile: React.FC = () => {
   };
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  // set array info fields
-  const [info, setInfo] = useState({
-    employee_number: "",
-    sex: "",
-    birth_day: null as Dayjs | null,
-    positon: "",
-    company: "",
-    unit: "",
-    function: "",
-    deparment: "",
-    sections_teams: "",
-    groups: "",
-    office_location: "",
-    cost_center: "",
-    rank: "",
-    employee_type: "",
-    nation: "",
-    phone: "",
-    id_card_number: "",
-    dateofidcard: null as Dayjs | null,
-    placeofidcard: "",
-    health_insurance: "",
-    starting_date: null as Dayjs | null,
-    Starting_date_official: null as Dayjs | null,
-    Leaving_date: null as Dayjs | null,
-    start_date_maternity_leave: null as Dayjs | null,
-    note: "",
-    academic_level: "",
-    specialized_qualification: "",
-    business_phone: "",
-    home_phone: "",
-    personal_email: "",
-    bank_name: "",
-    branch_number: "",
-    bank_branch_name: "",
-    bank_account_number: "",
-    notebank_account_name: "",
-    street: "",
-    building_flatnumber: "",
-    city: "",
-    province_state: "",
-    postal_code: "",
-    country: "",
-    martial_status: "",
-    contact_name: "",
-    relationship: "",
-    phone_family: "",
-    street_family: "",
-    building_family: "",
-    city_family: "",
-    province_state_family: "",
-    postal_code_family: "",
-    country_family: "",
-  });
   //avatar
   const [image, setImage] = useState<RcFile>();
 
@@ -136,6 +120,44 @@ const ContentProfile: React.FC = () => {
     Rank: "",
     EmployeeType: "",
     Rights: "",
+    Nation: "",
+    Phone: "",
+    IdCardNumber: "",
+    DateOfIdCard: "",
+    PlaceOfIdCard: "",
+    HealthInsurance: "",
+    StartingDate: "",
+    StartingDateOfficial: "",
+    LeavingDate: "",
+    StartDateMaternityLeave: "",
+    Note: "",
+    AcademicLevel: "",
+    Qualification: "",
+    BusinessPhone: "",
+    HomePhone: "",
+    PersonalEmail: "",
+    BankName: "",
+    BankBranchNumber: "",
+    BankBranchName: "",
+    BankAccountNumber: "",
+    BankAccountName: "",
+    Street: "",
+    FlatNumber: "",
+    City: "",
+    Province: "",
+    PostalCode: "",
+    Country: "",
+    MartialStatus: "",
+    ContactName: "",
+    Relationship: "",
+    PhoneR: "",
+    StreetR: "",
+    FlatNumberR: "",
+    CityR: "",
+    ProvinceR: "",
+    PostalCodeR: "",
+    CountryR: "",
+    Signature: "",
   });
 
   const { userID } = useParams();
@@ -162,15 +184,14 @@ const ContentProfile: React.FC = () => {
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
-    const res = await request.putForm(endpoint,infoAPI,config)
-      if (res.data.Success) {
-        message.success('Edit success !')
-        console.log(res)
-      } else {
-        message.error(res.data.Message)
-      }
+    const res = await request.putForm(endpoint, infoAPI, config);
+    if (res.data.Success) {
+      message.success("Edit success !");
+    } else {
+      message.error(res.data.Message);
+    }
+    console.log("Date of ID card: ", infoAPI)
   };
-
 
   //declare contract
   // const [contractType, setContractType] = useState("");
@@ -207,11 +228,28 @@ const ContentProfile: React.FC = () => {
   const handleDeleteContract = () => {};
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
-      ...prevInfo, Birthday: infoAPI.Birthday.substring(0,10)
+      ...prevInfo,
+      Birthday: infoAPI.Birthday.substring(0, 10),
     }));
+    // setInfoAPI((prevInfo) => ({
+    //   ...prevInfo,
+    //   StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
+    // }));
+    // setInfoAPI((prevInfo) => ({
+    //   ...prevInfo,
+    //   LeavingDate: infoAPI.LeavingDate.substring(0, 10),
+    // }));
+    // setInfoAPI((prevInfo) => ({
+    //   ...prevInfo,
+    //   DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
+    // }));
+    // setInfoAPI((prevInfo) => ({
+    //   ...prevInfo,
+    //   StartingDate: infoAPI.StartingDate.substring(0, 10),
+    // }));
     setIsEditing(true);
   };
-  
+ 
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
@@ -242,13 +280,23 @@ const ContentProfile: React.FC = () => {
       key: "2",
       label: <strong>Additional</strong>,
       children: (
-        <Additional info={info} isEditing={isEditing} setInfo={setInfo} />
+        <Additional
+          infoAPI={infoAPI}
+          isEditing={isEditing}
+          setInfoAPI={setInfoAPI}
+        />
       ),
     },
     {
       key: "3",
       label: <strong>Family</strong>,
-      children: <Family info={info} isEditing={isEditing} setInfo={setInfo} />,
+      children: (
+        <Family
+          infoAPI={infoAPI}
+          isEditing={isEditing}
+          setInfoAPI={setInfoAPI}
+        />
+      ),
     },
     {
       key: "4",
@@ -256,8 +304,6 @@ const ContentProfile: React.FC = () => {
       children: <Signature isEditing={isEditing} infoAPI={infoAPI} />,
     },
   ];
-
-  console.log("info:", infoAPI);
 
   return (
     <div className="content-profile">
@@ -270,7 +316,7 @@ const ContentProfile: React.FC = () => {
               onClick={() => {
                 onSave();
               }}
-              icon={<SaveOutlined style={{ fontSize: "30px " }} />}
+              icon={<SaveOutlined style={{ fontSize: "30px" }} />}
             >
               Save
             </Button>
@@ -292,25 +338,25 @@ const ContentProfile: React.FC = () => {
         </Button>
       </div>
       <div className="info-user">
-        {isEditing?(
+        {isEditing ? (
           <span style={{ margin: "120px -50px 0px 0px", zIndex: 1 }}>
-          <Button
-            className="btn-camera"
-            size="middle"
-            shape="round"
-            icon={
-              <CameraOutlined
-                style={{
-                  fontSize: "25px",
-                  color: "rgba(0, 0, 0, 0.25)",
-                }}
-              />
-            }
-            onClick={handleOpenModal}
-          />
-        </span>
-        ):null}
-        
+            <Button
+              className="btn-camera"
+              size="middle"
+              shape="round"
+              icon={
+                <CameraOutlined
+                  style={{
+                    fontSize: "25px",
+                    color: "rgba(0, 0, 0, 0.25)",
+                  }}
+                />
+              }
+              onClick={handleOpenModal}
+            />
+          </span>
+        ) : null}
+
         <Modal
           title="Upload and Edit Avatar"
           open={visible}
@@ -330,7 +376,6 @@ const ContentProfile: React.FC = () => {
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={URL.createObjectURL(image)}
-                // src = {URL.createObjectURL((infoAPI.AvatarPath!))}
               />
             ) : (
               <Avatar
