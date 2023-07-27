@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer, message } from "antd";
+import { Col, Layout, Row, Button, Drawer, message, Badge } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -142,7 +142,9 @@ const AppHeader = (props: any) => {
                             {/* </div> */}
                         </Drawer>
 
-                        <Button className="btn-item"><BellOutlined /></Button>
+                        <Badge count={3000}>
+                            <BellOutlined style={{ fontSize: '24px', color: 'white' }} />
+                        </Badge>
                         <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
                             <Button className="btn-item"><SettingOutlined /></Button>
                         </NavLink>
