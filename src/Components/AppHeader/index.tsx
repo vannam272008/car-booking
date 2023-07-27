@@ -142,8 +142,8 @@ const AppHeader = (props: any) => {
                             {/* </div> */}
                         </Drawer>
 
-                        <Badge count={3000}>
-                            <BellOutlined style={{ fontSize: '24px', color: 'white' }} />
+                        <Badge count={3000} style={{zIndex: '9999'}}>
+                            <Button className="btn-item"><BellOutlined style={{ fontSize: '24px', color: 'white' }} /></Button>
                         </Badge>
                         <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
                             <Button className="btn-item"><SettingOutlined /></Button>
