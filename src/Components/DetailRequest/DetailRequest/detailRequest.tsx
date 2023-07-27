@@ -9,6 +9,7 @@ import "./detailRequest.css";
 import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 import { FileTextOutlined } from '@ant-design/icons';
+import InfoFeedback from '../InfoFeedback/infoFeedback';
 
 function DetailRequest(): JSX.Element {
 
@@ -165,6 +166,7 @@ function DetailRequest(): JSX.Element {
                             </Radio.Group>
                         </div>
                         <DoneRequest />
+                        <InfoFeedback />
                         <div className='Attachment'>
                             <b>Attachment(s)</b>
                             <div>
