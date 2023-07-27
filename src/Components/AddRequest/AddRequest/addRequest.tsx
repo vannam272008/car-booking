@@ -189,6 +189,8 @@ function AddRequest(): JSX.Element {
         return userWithSenderId?.User.FullName;
     };
 
+    console.log(formData);
+
     return (
         <RequestLayout profile={profile}>
             {() => (

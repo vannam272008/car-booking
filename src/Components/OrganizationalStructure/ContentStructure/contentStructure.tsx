@@ -38,7 +38,7 @@ function ContentStructure(): JSX.Element {
     const [dataSupervisor, setDataSupervisor] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     // const senderId = localStorage.getItem("Id")
-    const [activeTabKey, setActiveTabKey] = useState<string>('4540FEF6-8DDF-4F26-BFD4-5D3F3EED07DF');
+    const [activeTabKey, setActiveTabKey] = useState<string>();
 
 
     useEffect(() => {
@@ -50,6 +50,7 @@ function ContentStructure(): JSX.Element {
             const endpoint = "department/all?page=1&limit=100";
             await request.get(endpoint).then((res) => {
                 setDataDepartment(res.data.Data.ListData);
+                setActiveTabKey(!activeTabKey ? res.data.Data.ListData[0].Id : activeTabKey);
             }).catch(() => {
                 setLoading(true);
             });
@@ -62,6 +63,7 @@ function ContentStructure(): JSX.Element {
                 setLoading(true);
             });
         }
+        console.log('hello', activeTabKey);
         const getDataByPosition = async (position: string) => {
             const endpoint = `departmentMember/position?departmentId=${activeTabKey}`;
             await request.get(endpoint).then((res) => {
@@ -83,7 +85,6 @@ function ContentStructure(): JSX.Element {
         getDataByPosition('Manager');
         getDataByPosition('Supervisor');
     }, [activeTabKey])
-
 
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target;
