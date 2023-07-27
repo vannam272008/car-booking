@@ -36,6 +36,7 @@ function DetailRequest(): JSX.Element {
     const [attachmentData, setAttachmentData] = useState<any[]>([])
     const [workflowData, setWorkflowData] = useState<any>({})
     const [loading, setLoading] = useState(true);
+    const [showFeedback, setShowFeedback] = useState<string>('')
 
     //Data Approver
     // const Approver1: string = 'Approver 1';
@@ -51,6 +52,7 @@ function DetailRequest(): JSX.Element {
             const endpoint = "/request/Id=" + requestId;
             await request.get(endpoint).then((res) => {
                 setDetailData(res.data.Data);
+                setShowFeedback(res.data.Data.Status);
             }
             );
         }
@@ -175,8 +177,11 @@ function DetailRequest(): JSX.Element {
                                         <Radio value={false}>No</Radio>
                                     </Radio.Group>
                                 </div>
-                                <DoneRequest />
-                                <InfoFeedback />
+                                {showFeedback === 'Approved' ? (
+                                    <DoneRequest />
+                                ) : showFeedback === 'Done' ? (
+                                    <InfoFeedback />
+                                ) : null}
                                 <div className='Attachment'>
                                     <b>Attachment(s)</b>
                                     <div>
@@ -211,7 +216,6 @@ function DetailRequest(): JSX.Element {
                                 <Comment />
                             </div>
                         </>}
-
                 </div>
             )
             }
