@@ -54,23 +54,23 @@ function DoneRequest() {
 
     const onFinish = (values: any) => {
         values.RequestId = requestId;
-        console.log(values);
+        console.log("hello", values);
         // if (values !== null) {
-        // request.postForm("/request/vehicle/create", values)
-        //     .then((response) => {
-        //         const data = response.data;
-        //         if (data) {
-        //             localStorage.setItem("Data", data?.Data);
-        //             if (data.Success === false) {
-        //                 message.error(data.Message);
-        //             } else {
-        //                 navigate("/request/carbooking");
+        //     request.postForm("/request/vehicle/create", values)
+        //         .then((response) => {
+        //             const data = response.data;
+        //             if (data) {
+        //                 localStorage.setItem("Data", data?.Data);
+        //                 if (data.Success === false) {
+        //                     message.error(data.Message);
+        //                 } else {
+        //                     navigate("/request/carbooking");
+        //                 }
         //             }
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log(error);
-        //     });
+        //         })
+        //         .catch((error) => {
+        //             console.log(error);
+        //         });
         // } else {
         //     message.error('Fail');
         // }
@@ -145,7 +145,7 @@ function DoneRequest() {
                             <Col span={6} className='col-request'>
                                 <Form.Item
                                     label="Rotation"
-                                    name="RotationId"
+                                    name="RotaionId"
                                     labelCol={{ span: 24 }}
                                 >
                                     <Select

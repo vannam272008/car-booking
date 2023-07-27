@@ -11,7 +11,8 @@ import {
     CloseOutlined,
     DeliveredProcedureOutlined,
     EllipsisOutlined,
-    WarningOutlined
+    WarningOutlined,
+    CloseCircleFilled
 } from '@ant-design/icons';
 // import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useNavigate } from 'react-router';
@@ -43,6 +44,7 @@ function MenuRequest(props: any): JSX.Element {
     const [comment, setComment] = useState({
         comment: "",
     });
+    const [showCancel, setShowCancel] = useState(false);
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -113,6 +115,19 @@ function MenuRequest(props: any): JSX.Element {
     const handleForward = () => {
         setIsModalOpenForward(true);
     };
+
+    const handleMenuClick = (e: any) => {
+        if (e.key === 'ellipsis') {
+            setShowCancel(true);
+        }
+    };
+    const handleCancelClick = () => {
+        setShowCancel(false);
+    };
+
+    const menu = (
+        <Button icon={<CloseCircleFilled />} onClick={handleCancelClick}>Cancel request</Button>
+    );
 
     const handleClose = () => {
         setIsModalOpenDelete(false);
@@ -241,7 +256,11 @@ function MenuRequest(props: any): JSX.Element {
                     </Select>
                     <Input className='menu-after-btn-forward'></Input>
                 </Modal>
-                <Menu.Item key="ellipsis" icon={<EllipsisOutlined />} />
+                <Dropdown overlay={menu} trigger={['click']}>
+                    {!showCancel && (
+                        <Menu.Item onClick={handleMenuClick} key="ellipsis" icon={<EllipsisOutlined />} />
+                    )}
+                </Dropdown>
             </Menu>
         </div>
     );
