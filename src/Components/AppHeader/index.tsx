@@ -8,6 +8,7 @@ import opus_logo from "../../assets/opus_logo.png";
 import { connect } from 'react-redux';
 import { RootState } from '../../Reducers/rootReducer';
 import { setTab, setStatus } from "../../Actions/requestAction";
+import Feedback from "../Feedback/Feedback";
 
 const { Header } = Layout;
 
@@ -126,17 +127,15 @@ const AppHeader = (props: any) => {
                                 <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
                             </div>
                             <div className="content-dropdown">
-                                <span><b>Opus Helpdesk</b></span>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
+                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Introduction</p>
                                 </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
-                                    <p>Feedbacks & Suggest idea</p>
-                                </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <Feedback />
+                                <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Open ticket</p>
                                 </NavLink>
-                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                                <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
                                     <p>Help</p>
                                 </NavLink>
                             </div>
