@@ -85,12 +85,15 @@ function DetailRequest(): JSX.Element {
         setValue(e.target.value);
     };
 
+    const handleDownloadFile = (attachmentPath: string) => {
+        window.open(`http://localhost:63642/${attachmentPath}`);
+    }
+
     // console.log(attachmentData);
     // const handleDownloadFile = (attachment: string) => {
     //     console.log(attachment);
     //     window = attachment;
     // }
-    console.log(attachmentData);
 
     return (
         <RequestLayout profile={profile}>
@@ -179,7 +182,7 @@ function DetailRequest(): JSX.Element {
                                     </Radio.Group>
                                 </div>
                                 {showFeedback === 'Approved' ? (
-                                    <DoneRequest />
+                                    <DoneRequest requestCode={detailData.RequestCode} />
                                 ) : showFeedback === 'Done' ? (
                                     <InfoFeedback />
                                 ) : null}
@@ -188,7 +191,7 @@ function DetailRequest(): JSX.Element {
                                     <div>
                                         {Array.isArray(attachmentData) ? (
                                             attachmentData.map((attachment: { Id: number; Path: string; }) => (
-                                                <div key={attachment.Id} className='approver' >
+                                                <div key={attachment.Id} className='approver' onClick={() => { handleDownloadFile(attachment.Path) }}>
                                                     <span><FileTextOutlined /> </span>
                                                     {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
                                                     <span>{attachment.Path.substring(39)} </span>

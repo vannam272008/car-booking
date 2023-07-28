@@ -233,7 +233,7 @@ function MenuRequest(props: any): JSX.Element {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
-                                    comment: "Request " + requestCode + " has been approved   - Note: " + e.target.value
+                                    comment: "Request " + requestCode + " has been Approved  - Note: " + e.target.value
                                 }));
                             }} />
                         </Modal>
@@ -251,7 +251,7 @@ function MenuRequest(props: any): JSX.Element {
                                     setActionRequest({ action: "Rejected", Note: e.target.value });
                                     setComment((prevComment) => ({
                                         ...prevComment,
-                                        comment: "Request " + requestCode + " has been rejected   - Note: " + e.target.value
+                                        comment: "Request " + requestCode + " has been Rejected   - Note: " + e.target.value
                                     }));
                                 }} />
                         </Modal>

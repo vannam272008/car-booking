@@ -9,14 +9,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
-function DoneRequest() {
+function DoneRequest(props: any) {
 
+    const { requestCode } = props;
     const [checkFeedback, setCheckFeedback] = useState<boolean>(true);
     const [dataRotation, setDataRotation] = useState<any>({});
     const [dataDriver, setDataDriver] = useState<any>({})
     const { requestId } = useParams();
     const [departmentDetail, setDepartmentDetail] = useState<any>({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [comment, setComment] = useState({
+        comment: "",
+    });
 
 
 
@@ -57,6 +61,11 @@ function DoneRequest() {
     const navigate = useNavigate();
 
     const onFinish = (values: any) => {
+        console.log(values.Note);
+        setComment((prevComment) => ({
+            ...prevComment,
+            comment: "Request " + requestCode + " has been Done  - Note: " + values.Note === undefined ? "No Note" : values.Note
+        }));
         values.RequestId = requestId;
         values.Type = checkFeedback;
         console.log("hello", values);
@@ -64,6 +73,7 @@ function DoneRequest() {
             .then((response) => {
                 const data = response.data;
                 if (data) {
+                    request.postForm("/request/comment/requestId=" + requestId, comment)
                     localStorage.setItem("Data", data?.Data);
                     if (data.Success === false) {
                         message.error(data.Message);
