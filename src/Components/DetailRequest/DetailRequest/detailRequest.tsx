@@ -90,6 +90,7 @@ function DetailRequest(): JSX.Element {
     //     console.log(attachment);
     //     window = attachment;
     // }
+    console.log(attachmentData);
 
     return (
         <RequestLayout profile={profile}>

@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
-import { Form, Select, Button, Row, Col, Input, Space, notification, Spin, Alert } from 'antd';
+import { Form, Select, Button, Row, Col, Input, Space, notification } from 'antd';
 import request from "../../../Utils/request";
 // import MenuAdd from '../MenuAdd/menuAdd';
-import { RcFile } from 'antd/es/upload';
+// import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { useParams } from 'react-router-dom';
-import { workerData } from 'worker_threads';
 
 interface DepartmentMember {
     Id: string;
-    User: {
-        FullName: string;
-        Email: string;
-        JobTitle: string;
-        Id: string;
-    };
+    FullName: string;
+    Email: string;
+    JobTitle: string;
 }
 
 interface PropsDataList {
@@ -38,9 +34,10 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
         const fetchData = async () => {
             try {
                 // Fetch data from the second API
-                const departmentMemberEndpoint = "departmentMember/all?page=1&limit=100";
+                const departmentMemberEndpoint = "/userRole/all-approvers";
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data.ListData);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+                console.log(departmentMemberRes.data.Data);
 
                 const workflowDataEndpoint = "/request/workflow/requestId=" + requestId;
                 const workflowDataRes = await request.get(workflowDataEndpoint);
@@ -124,13 +121,12 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
             )
         }
         else return [];
-
     };
 
     useEffect(() => {
@@ -186,11 +182,11 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                             onSearch={handleSearch}
                                         >
                                             {filteredData().map((departmentMember) => (
-                                                <Option key={departmentMember.Id} value={departmentMember.User.Id}>
+                                                <Option key={departmentMember.Id} value={departmentMember.Id}>
                                                     <div>
-                                                        <span>{departmentMember.User.FullName} </span>
-                                                        <span>{departmentMember.User.Email} </span>
-                                                        <span>{departmentMember.User.JobTitle} </span>
+                                                        <span>{departmentMember.FullName} </span>
+                                                        <span>{departmentMember.Email} </span>
+                                                        <span>{departmentMember.JobTitle} </span>
                                                     </div>
                                                 </Option>
                                             ))}

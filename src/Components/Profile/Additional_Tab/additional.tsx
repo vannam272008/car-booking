@@ -1,123 +1,152 @@
 import React from "react";
 import { useState } from "react";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
+import { RcFile } from "antd/es/upload/interface";
+
+interface API {
+  EmployeeNumber: string;
+  Username: string;
+  Email: string;
+  AvatarPath: RcFile | null;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: string;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
+}
 
 const { Title } = Typography;
 
 interface AdditionalProps {
   isEditing: boolean;
-  info: {
-    nation: string;
-    phone: string;
-    id_card_number: string;
-    dateofidcard: Dayjs | null;
-    placeofidcard: string;
-    health_insurance: string;
-    starting_date: Dayjs | null;
-    Starting_date_official: Dayjs | null;
-    Leaving_date: Dayjs | null;
-    start_date_maternity_leave: Dayjs | null;
-    note: string;
-    academic_level: string;
-    specialized_qualification: string;
-    business_phone: string;
-    home_phone: string;
-    personal_email: string;
-    bank_name: string;
-    branch_number: string;
-    bank_branch_name: string;
-    bank_account_number: string;
-    notebank_account_name: string;
-    street: string;
-    building_flatnumber: string;
-    city: string;
-    province_state: string;
-    postal_code: string;
-    country: string;
+  infoAPI: {
+    Nation: string;
+    Phone: string;
+    IdCardNumber: string;
+    DateOfIdCard: string;
+    PlaceOfIdCard: string;
+    HealthInsurance: string;
+    StartingDate: string;
+    StartingDateOfficial: string;
+    LeavingDate: string;
+    StartDateMaternityLeave: string;
+    Note: string;
+    AcademicLevel: string;
+    Qualification: string;
+    BusinessPhone: string;
+    HomePhone: string;
+    PersonalEmail: string;
+    BankName: string;
+    BankBranchNumber: string;
+    BankBranchName: string;
+    BankAccountNumber: string;
+    BankAccountName: string;
+    Street: string;
+    FlatNumber: string;
+    City: string;
+    Province: string;
+    PostalCode: string;
+    Country: string;
   };
-  setInfo: React.Dispatch<
-    React.SetStateAction<{
-      employee_number: string;
-      sex: string;
-      birth_day: Dayjs | null;
-      positon: string;
-      company: string;
-      unit: string;
-      function: string;
-      deparment: string;
-      sections_teams: string;
-      groups: string;
-      office_location: string;
-      cost_center: string;
-      rank: string;
-      employee_type: string;
-      nation: string;
-      phone: string;
-      id_card_number: string;
-      dateofidcard: Dayjs | null;
-      placeofidcard: string;
-      health_insurance: string;
-      starting_date: Dayjs | null;
-      Starting_date_official: Dayjs | null;
-      Leaving_date: Dayjs | null;
-      start_date_maternity_leave: Dayjs | null;
-      note: string;
-      academic_level: string;
-      specialized_qualification: string;
-      business_phone: string;
-      home_phone: string;
-      personal_email: string;
-      bank_name: string;
-      branch_number: string;
-      bank_branch_name: string;
-      bank_account_number: string;
-      notebank_account_name: string;
-      street: string;
-      building_flatnumber: string;
-      city: string;
-      province_state: string;
-      postal_code: string;
-      country: string;
-      martial_status: string;
-      contact_name: string;
-      relationship: string;
-      phone_family: string;
-      street_family: string;
-      building_family: string;
-      city_family: string;
-      province_state_family: string;
-      postal_code_family: string;
-      country_family: string;
-    }>
-  >;
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 
 const Additional: React.FC<AdditionalProps> = ({
+  infoAPI,
   isEditing,
-  setInfo,
-  info,
+  setInfoAPI,
 }) => {
   const [edit_contract, setEdit_Contract] = useState(false);
-  const handlestart_date_maternity_leave = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, start_date_maternity_leave: value }));
+
+  const handlestart_date_maternity_leave = (
+    date: Dayjs | null,
+    dateString: string
+  ) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartDateMaternityLeave: dateString,
+    }));
   };
-  const handleleaving_date = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, Leaving_date: value }));
+  const handleleaving_date = (date: Dayjs | null, dateString: string) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      LeavingDate: dateString,
+    }));
   };
-  const handleDate_Id_card = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, dateofidcard: value }));
+  const handleDate_Id_card = (date: Dayjs | null, dateString: string) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      DateOfIdCard: dateString,
+    }));
   };
 
-  const handleDate_start_date = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, starting_date: value }));
+  const handleDate_start_date = (date: Dayjs | null, dateString: string) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDate: dateString,
+    }));
   };
 
-  const handleDate_start_date_official = (value: Dayjs | null) => {
-    setInfo((prevInfo) => ({ ...prevInfo, Starting_date_official: value }));
+  const handleDate_start_date_official = (
+    date: Dayjs | null,
+    dateString: string
+  ) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDateOfficial: dateString,
+    }));
   };
-
   // tab additional
   const columns_additional = [
     {
@@ -159,7 +188,7 @@ const Additional: React.FC<AdditionalProps> = ({
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => {setEdit_Contract(true)}} /> : null,
       dataIndex: "action",
     },
   ];
@@ -170,18 +199,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Nation"
+          value={infoAPI.Nation}
           name="nation"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                nation: e.target.value,
+                Nation: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.nation}</strong>
+        <strong>{infoAPI.Nation}</strong>
       ),
     },
     {
@@ -189,18 +219,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Phone"
+          value={infoAPI.Phone}
           name="phone"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                phone: e.target.value,
+                Phone: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.phone}</strong>
+        <strong>{infoAPI.Phone}</strong>
       ),
     },
     {
@@ -208,131 +239,157 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="ID card number"
+          value={infoAPI.IdCardNumber}
           name="id_card_number"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                id_card_number: e.target.value,
+                IdCardNumber: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.id_card_number}</strong>
+        <strong>{infoAPI.IdCardNumber}</strong>
       ),
     },
     {
       additional_title: "Date of ID card",
       info: isEditing ? (
         <DatePicker
-          value={info.dateofidcard}
+          value={
+            infoAPI.DateOfIdCard === null
+              ? dayjs()
+              : dayjs(infoAPI.DateOfIdCard)
+          }
           style={{ width: "100%" }}
           onChange={handleDate_Id_card}
           placeholder="Date of ID card"
+          format="YYYY-MM-DD"
         />
-      ) : info.dateofidcard ? (
-        info.dateofidcard.format("DD-MM-YYYY")
+      ) : (infoAPI.DateOfIdCard === null ? (
+        infoAPI.DateOfIdCard
       ) : (
-        ""
-      ),
+        infoAPI.DateOfIdCard.substring(0,10)
+      ))
     },
     {
       additional_title: "Health insurance",
       info: isEditing ? (
         <Input
           placeholder="Health insurance"
+          value={infoAPI.HealthInsurance}
           name="health insurance"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                health_insurance: e.target.value,
+                HealthInsurance: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.health_insurance}</strong>
+        <strong>{infoAPI.HealthInsurance}</strong>
       ),
     },
     {
       additional_title: "Starting date",
       info: isEditing ? (
         <DatePicker
-          value={info.starting_date}
+          value={
+            infoAPI.StartingDate === null
+              ? dayjs()
+              : dayjs(infoAPI.StartingDate)
+          }
           style={{ width: "100%" }}
           onChange={handleDate_start_date}
           placeholder="Starting date"
+          format="YYYY-MM-DD"
         />
-      ) : info.starting_date ? (
-        info.starting_date.format("DD-MM-YYYY")
+      ) : (infoAPI.StartingDate === null ? (
+        infoAPI.StartingDate
       ) : (
-        ""
-      ),
+        infoAPI.StartingDate.substring(0, 10)
+      ))
     },
     {
       additional_title: "Starting date offical",
       info: isEditing ? (
         <DatePicker
-          value={info.Starting_date_official}
+          value={
+            infoAPI.StartingDateOfficial === null
+              ? dayjs()
+              : dayjs(infoAPI.StartingDateOfficial)
+          }
           style={{ width: "100%" }}
           onChange={handleDate_start_date_official}
           placeholder="Starting date offical"
+          format="YYYY-MM-DD"
         />
-      ) : info.Starting_date_official ? (
-        info.Starting_date_official.format("DD-MM-YYYY")
+      ) : (infoAPI.StartingDateOfficial === null ? (
+        infoAPI.StartingDateOfficial
       ) : (
-        ""
-      ),
+        infoAPI.StartingDateOfficial.substring(0, 10)
+      ))
     },
     {
       additional_title: "Leaving date",
       info: isEditing ? (
         <DatePicker
-          value={info.Leaving_date}
+          value={
+            infoAPI.LeavingDate === null ? dayjs() : dayjs(infoAPI.LeavingDate)
+          }
           style={{ width: "100%" }}
           onChange={handleleaving_date}
           placeholder="Leaving date"
+          format="YYYY-MM-DD"
         />
-      ) : info.Leaving_date ? (
-        info.Leaving_date.format("DD-MM-YYYY")
+      ) : (infoAPI.LeavingDate === null ? (
+        infoAPI.LeavingDate
       ) : (
-        ""
-      ),
+        infoAPI.LeavingDate.substring(0, 10)
+      ))
     },
     {
       additional_title: "Start Date Maternity Leave",
       info: isEditing ? (
         <DatePicker
-          value={info.start_date_maternity_leave}
+          value={
+            infoAPI.StartDateMaternityLeave === null
+              ? dayjs()
+              : dayjs(infoAPI.StartDateMaternityLeave)
+          }
           style={{ width: "100%" }}
           onChange={handlestart_date_maternity_leave}
           placeholder="Start Date Maternity Leave"
+          format="YYYY-MM-DD"
         />
-      ) : info.start_date_maternity_leave ? (
-        info.start_date_maternity_leave.format("DD-MM-YYYY")
+      ) : (infoAPI.StartDateMaternityLeave === null ? (
+        infoAPI.StartDateMaternityLeave
       ) : (
-        ""
-      ),
+        infoAPI.StartDateMaternityLeave.substring(0, 10)
+      ))
     },
     {
       additional_title: "Note",
       info: isEditing ? (
         <Input
           placeholder="Note"
+          value={infoAPI.Note}
           name="Note"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                note: e.target.value,
+                Note: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.note}</strong>
+        <strong>{infoAPI.Note}</strong>
       ),
     },
     {
@@ -349,18 +406,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Academic level"
+          value={infoAPI.AcademicLevel}
           name="Academic_level"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                academic_level: e.target.value,
+                AcademicLevel: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.academic_level}</strong>
+        <strong>{infoAPI.AcademicLevel}</strong>
       ),
     },
     {
@@ -368,18 +426,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Specialized qualification"
+          value={infoAPI.Qualification}
           name="Specialized qualification"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                specialized_qualification: e.target.value,
+                Qualification: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.specialized_qualification}</strong>
+        <strong>{infoAPI.Qualification}</strong>
       ),
     },
     {
@@ -396,18 +455,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Business phone"
+          value={infoAPI.BusinessPhone}
           name="Business_phone"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                business_phone: e.target.value,
+                BusinessPhone: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.business_phone}</strong>
+        <strong>{infoAPI.BusinessPhone}</strong>
       ),
     },
     {
@@ -415,18 +475,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Home phone"
+          value={infoAPI.HomePhone}
           name="home_phone"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                home_phone: e.target.value,
+                HomePhone: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.home_phone}</strong>
+        <strong>{infoAPI.HomePhone}</strong>
       ),
     },
     {
@@ -434,18 +495,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Personal email"
+          value={infoAPI.PersonalEmail}
           name="personal_email"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                personal_email: e.target.value,
+                PersonalEmail: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.personal_email}</strong>
+        <strong>{infoAPI.PersonalEmail}</strong>
       ),
     },
     {
@@ -462,18 +524,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Bank Name"
+          value={infoAPI.BankName}
           name="Bank_Name"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                bank_name: e.target.value,
+                BankName: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.bank_name}</strong>
+        <strong>{infoAPI.BankName}</strong>
       ),
     },
     {
@@ -481,18 +544,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Branch number"
+          value={infoAPI.BankBranchNumber}
           name="branch_number"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                branch_number: e.target.value,
+                BankBranchNumber: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.branch_number}</strong>
+        <strong>{infoAPI.BankBranchNumber}</strong>
       ),
     },
     {
@@ -500,18 +564,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Bank brach name"
+          value={infoAPI.BankBranchName}
           name="Bank brach name"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                bank_branch_name: e.target.value,
+                BankBranchName: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.bank_branch_name}</strong>
+        <strong>{infoAPI.BankBranchName}</strong>
       ),
     },
     {
@@ -519,18 +584,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Bank account number"
+          value={infoAPI.BankAccountNumber}
           name="Bank account number"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                bank_account_number: e.target.value,
+                BankAccountNumber: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.bank_account_number}</strong>
+        <strong>{infoAPI.BankAccountNumber}</strong>
       ),
     },
     {
@@ -538,18 +604,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="NoteBank Account Name"
+          value={infoAPI.BankAccountName}
           name="NoteBank_Account_Name"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                notebank_account_name: e.target.value,
+                BankAccountName: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.notebank_account_name}</strong>
+        <strong>{infoAPI.BankAccountName}</strong>
       ),
     },
     {
@@ -566,18 +633,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Street"
+          value={infoAPI.Street}
           name="street"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                street: e.target.value,
+                Street: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.street}</strong>
+        <strong>{infoAPI.Street}</strong>
       ),
     },
     {
@@ -585,18 +653,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Building / flatnumber"
+          value={infoAPI.FlatNumber}
           name="Building_flatnumber"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                building_flatnumber: e.target.value,
+                FlatNumber: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.building_flatnumber}</strong>
+        <strong>{infoAPI.FlatNumber}</strong>
       ),
     },
     {
@@ -604,18 +673,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Province / state"
+          value={infoAPI.Province}
           name="Province / state"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                province_state: e.target.value,
+                Province: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.province_state}</strong>
+        <strong>{infoAPI.Province}</strong>
       ),
     },
     {
@@ -623,18 +693,19 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Postal code"
+          value={infoAPI.PostalCode}
           name="Postal_code"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                postal_code: e.target.value,
+                PostalCode: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.postal_code}</strong>
+        <strong>{infoAPI.PostalCode}</strong>
       ),
     },
     {
@@ -642,32 +713,33 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Country"
+          value={infoAPI.Country}
           name="country"
           onChange={(e) => {
-            setInfo((prev) => {
+            setInfoAPI((prev) => {
               return {
                 ...prev,
-                country: e.target.value,
+                Country: e.target.value,
               };
             });
           }}
         />
       ) : (
-        <strong>{info.country}</strong>
+        <strong>{infoAPI.Country}</strong>
       ),
     },
   ];
 
   let dataSource_contract = [
     {
-      Contract_type: edit_contract ? <Input /> : null,
-      From: edit_contract ? <DatePicker /> : null,
-      To: edit_contract ? <DatePicker /> : null,
-      Signing_date: edit_contract ? <DatePicker /> : null,
-      Subject: edit_contract ? <Input /> : null,
-      Department: edit_contract ? <Input /> : null,
-      Note: edit_contract ? <Input /> : null,
-      action: edit_contract ? <DeleteFilled onClick={() => {}} /> : null,
+      Contract_type: isEditing ? (edit_contract ? <Input /> : null):( null) ,
+      From: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
+      To: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
+      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null):( null),
+      Subject: isEditing ? (edit_contract ? <Input /> : null):( null),
+      Department: isEditing ? (edit_contract ? <Input /> : null):( null),
+      Note: isEditing ? (edit_contract ? <Input /> : null):( null),
+      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => {}} /> : null):( null),
     },
   ];
   return (

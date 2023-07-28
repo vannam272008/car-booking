@@ -1,114 +1,108 @@
-import React from "react";
-import { Dayjs } from "dayjs";
+import React, { useEffect } from "react";
+import { Moment } from "moment";
+import dayjs, { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
 import { RcFile } from "antd/es/upload/interface";
+
 interface API {
   EmployeeNumber: string;
-  Username: string,
-  Email: string,
-  FirstName: string,
-  LastName: string,
-  Sex: boolean,
-  Birthday: Dayjs | null,
-  JobTitle: string,
-  Company: string,
-  Unit: string,
-  Function: string,
-  SectionsOrTeam: string,
-  Groups: string,
-  OfficeLocation: string,
-  LineManager: string,
-  BelongToDepartments: string,
-  Rank: string,
-  EmployeeType: string,
-  Rights: string,
+  Username: string;
+  Email: string;
   AvatarPath: RcFile | null;
+  FirstName: string;
+  LastName: string;
+  Sex: boolean;
+  Birthday: string;
+  JobTitle: string;
+  Company: string;
+  Unit: string;
+  Function: string;
+  SectionsOrTeam: string;
+  Groups: string;
+  OfficeLocation: string;
+  LineManager: string;
+  BelongToDepartments: string;
+  Rank: string;
+  EmployeeType: string;
+  Rights: string;
+  Nation: string;
+  Phone: string;
+  IdCardNumber: string;
+  DateOfIdCard: string;
+  PlaceOfIdCard: string;
+  HealthInsurance: string;
+  StartingDate: string;
+  StartingDateOfficial: string;
+  LeavingDate: string;
+  StartDateMaternityLeave: string;
+  Note: string;
+  AcademicLevel: string;
+  Qualification: string;
+  BusinessPhone: string;
+  HomePhone: string;
+  PersonalEmail: string;
+  BankName: string;
+  BankBranchNumber: string;
+  BankBranchName: string;
+  BankAccountNumber: string;
+  BankAccountName: string;
+  Street: string;
+  FlatNumber: string;
+  City: string;
+  Province: string;
+  PostalCode: string;
+  Country: string;
+  MartialStatus: string;
+  ContactName: string;
+  Relationship: string;
+  PhoneR: string;
+  StreetR: string;
+  FlatNumberR: string;
+  CityR: string;
+  ProvinceR: string;
+  PostalCodeR: string;
+  CountryR: string;
+  Signature: string;
 }
 
 interface OverviewProps {
   isEditing: boolean;
   infoAPI: {
-    EmployeeNumber: string,
-    Username: string,
-    Email: string,
-    FirstName: string,
-    LastName: string,
-    Sex: boolean,
-    Birthday: Dayjs | null,
-    JobTitle: string,
-    Company: string,
-    Unit: string,
-    Function: string,
-    SectionsOrTeam: string,
-    Groups: string,
-    OfficeLocation: string,
-    LineManager: string,
-    BelongToDepartments: string,
-    Rank: string,
-    EmployeeType: string,
-    Rights: string
-    
-  }
-  //   React.SetStateAction<{
-  //     employee_number: string;
-  //     sex: string;
-  //     birth_day: Dayjs | null;
-  //     positon: string;
-  //     company: string;
-  //     unit: string;
-  //     function: string;
-  //     deparment: string;
-  //     sections_teams: string;
-  //     groups: string;
-  //     office_location: string;
-  //     cost_center: string;
-  //     rank: string;
-  //     employee_type: string;
-  //     nation: string;
-  //     phone: string;
-  //     id_card_number: string;
-  //     dateofidcard: Dayjs | null;
-  //     placeofidcard: string;
-  //     health_insurance: string;
-  //     starting_date: Dayjs | null;
-  //     Starting_date_official: Dayjs | null;
-  //     Leaving_date: Dayjs | null;
-  //     start_date_maternity_leave: Dayjs | null;
-  //     note: string;
-  //     academic_level: string;
-  //     specialized_qualification: string;
-  //     business_phone: string;
-  //     home_phone: string;
-  //     personal_email: string;
-  //     bank_name: string;
-  //     branch_number: string;
-  //     bank_branch_name: string;
-  //     bank_account_number: string;
-  //     notebank_account_name: string;
-  //     street: string;
-  //     building_flatnumber: string;
-  //     city: string;
-  //     province_state: string;
-  //     postal_code: string;
-  //     country: string;
-  //     martial_status: string;
-  //     contact_name: string;
-  //     relationship: string;
-  //     phone_family: string;
-  //     street_family: string;
-  //     building_family: string;
-  //     city_family: string;
-  //     province_state_family: string;
-  //     postal_code_family: string;
-  //     country_family: string;
-  //   }>>;
-  setInfoAPI: React.Dispatch<React.SetStateAction<API>>
+    EmployeeNumber: string;
+    Username: string;
+    Email: string;
+    FirstName: string;
+    LastName: string;
+    Sex: boolean;
+    Birthday: string;
+    JobTitle: string;
+    Company: string;
+    Unit: string;
+    Function: string;
+    SectionsOrTeam: string;
+    Groups: string;
+    OfficeLocation: string;
+    LineManager: string;
+    BelongToDepartments: string;
+    Rank: string;
+    EmployeeType: string;
+    Rights: string;
+  };
+  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 
-const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) => {
+const Overview: React.FC<OverviewProps> = ({
+  infoAPI,
+  isEditing,
+  setInfoAPI,
+}) => {
   // tab_overview
-  const handleDate_birth = (value: Dayjs | null) => {
-    setInfoAPI((prevInfo) => ({ ...prevInfo, Birthday: value }));
+
+  const handleDate_birth = (date: Dayjs | null, dateString: string) => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      Birthday: dateString.substring(0, 10),
+    }));
   };
 
   const columns_overview = [
@@ -137,6 +131,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
           placeholder="Employee number"
           name="Employee Number"
           value={infoAPI.EmployeeNumber}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -152,11 +147,44 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
     },
     {
       overview_title: "First name",
-      info: <strong>{infoAPI.FirstName}</strong>,
+      info:isEditing ? (
+        <Input
+          placeholder="First name"
+          name= "First name"
+          value={infoAPI.FirstName}
+          onChange={(e) => {
+            setInfoAPI((prev) => {
+              return {
+                ...prev,
+                FirstName: e.target.value,
+              };
+            });
+          }}
+        />
+      ) : (
+        <strong>{infoAPI.FirstName}</strong>
+      )
+      
     },
     {
       overview_title: "Last name",
-      info: <strong>{infoAPI.LastName}</strong>,
+      info: isEditing ? (
+        <Input
+          placeholder="Last Name"
+          name="Last Name"
+          value={infoAPI.LastName}
+          onChange={(e) => {
+            setInfoAPI((prev) => {
+              return {
+                ...prev,
+                LastName: e.target.value,
+              };
+            });
+          }}
+        />
+      ) : (
+        <strong>{infoAPI.LastName}</strong>
+      ),
     },
     {
       overview_title: "Sex",
@@ -165,6 +193,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
           placeholder="Sex"
           name="sex"
           // value={infoAPI.Sex}
+          disabled = {true}
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -182,16 +211,14 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
-          className="profile-birth-day-datepicker"
-          value={infoAPI.Birthday}
+          value={infoAPI.Birthday === null ? dayjs() : dayjs(infoAPI.Birthday)}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"
+          format="YYYY-MM-DD"
         />
       ) : (
-        <strong>
-          {infoAPI.Birthday ? infoAPI.Birthday.format("DD-MM-YYYY") : ""}
-        </strong>
+        <strong>{infoAPI.Birthday.substring(0, 10)}</strong>
       ),
     },
     {
@@ -324,7 +351,7 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
     },
     {
       overview_title: "Belong to departments",
-      info: <strong>{infoAPI.BelongToDepartments}</strong>
+      info: <strong>{infoAPI.BelongToDepartments}</strong>,
     },
     {
       overview_title: "Rank",
@@ -359,7 +386,6 @@ const Overview: React.FC<OverviewProps> = ({ infoAPI, isEditing, setInfoAPI}) =>
                 ...prev,
                 EmployeeType: e.target.value,
               };
-              
             });
           }}
         />

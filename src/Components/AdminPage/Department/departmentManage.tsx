@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Input, message, Select } from 'antd';
+import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Department, DepartmentFormProps } from '../Utils/interfaces';
 import * as util from '../Utils'
@@ -62,11 +62,15 @@ const DepartmentManage: React.FC = () => {
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<any>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 5;
 
   const getDepartments = async () => {
-    let res = await axios.get('http://localhost:63642/api/department/all?page=1&limit=15')
+    let res = await axios.get(`http://localhost:63642/api/department/all?page=${currentPage}&limit=${limit}`)
     console.log('>>check res department:', res)
     if (res.data.Success) {
+      setTotal(res.data.Data.TotalPage);
       setDepartments(res.data.Data.ListData)
     } else {
       setDepartments([])
@@ -100,6 +104,10 @@ const DepartmentManage: React.FC = () => {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   const handleSave = async (department: Department) => {
     console.log('>>check department data from form:', department);
     console.log('>>selected department:', selectedDepartment);
@@ -130,12 +138,27 @@ const DepartmentManage: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className='manage-department-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
         Add Department
       </Button>
 
-      <Table dataSource={departments} columns={columns} rowKey="Id" />
+      <Table dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
+      <Pagination
+        current={currentPage}
+        pageSize={limit}
+        total={total * limit}
+        onChange={handlePageChange}
+        itemRender={(page, type, originalElement) => {
+          if (type === 'prev') {
+            return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+          }
+          if (type === 'next') {
+            return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+          }
+          return originalElement;
+        }}
+      />
 
       <Modal
         title={selectedDepartment ? <Typography.Title level={2}>Edit Department</Typography.Title> : <Typography.Title level={2}>Add Department</Typography.Title>}
