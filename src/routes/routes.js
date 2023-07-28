@@ -66,6 +66,10 @@ const private_routes = [
     path: "*",
     element: <PageNotFound />,
   },
+  {
+    path: "/page-not-found",
+    element: <PageNotFound />
+  }
 ];
 
 export { public_routes, private_routes };
