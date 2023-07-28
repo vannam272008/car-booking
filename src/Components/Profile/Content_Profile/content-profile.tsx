@@ -37,7 +37,6 @@ const ContentProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   //avatar
   const [image, setImage] = useState<RcFile>();
-  const [imageSignature, setImageSignature] = useState<RcFile>();
 
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
@@ -98,24 +97,25 @@ const ContentProfile: React.FC = () => {
     PostalCodeR: "",
     CountryR: "",
     Signature: "",
+    SignatureTemp: "",
   });
 
   const { userID } = useParams();
+  const endpoint = "/user/profile/" + userID;
+  const getProfile = async () => {
+    await request
+      .get(endpoint)
+      .then((response) => {
+        setInfoAPI(response.data.Data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
-    const endpoint = "/user/profile/" + userID;
-    const getProfile = async () => {
-      await request
-        .get(endpoint)
-        .then((response) => {
-          setInfoAPI(response.data.Data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
     getProfile();
-  }, [userID]);
+  }, []);
 
   const onSave = () => {
     setIsEditing(false);
@@ -124,6 +124,17 @@ const ContentProfile: React.FC = () => {
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
+    
+    if (infoAPI.SignatureTemp) {
+      console.log('infoAPI.Signature check final:', infoAPI.SignatureTemp);
+      const resSig = await request.post('/user/signature', {
+        Id: userID,
+        Signature: infoAPI.SignatureTemp
+      }, config)
+      console.log('res set Signature:', resSig);
+      if(!resSig.data.Success) return message.error(resSig.data.Message)
+      
+    }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
       message.success("Edit success !");
@@ -131,6 +142,7 @@ const ContentProfile: React.FC = () => {
       message.error(res.data.Message);
     }
     console.log("signature: ", infoAPI.Signature);
+    getProfile();
   };
 
   //declare contract
@@ -194,27 +206,27 @@ const ContentProfile: React.FC = () => {
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      Birthday: infoAPI.Birthday.substring(0, 10),
+      Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
+      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      LeavingDate: infoAPI.LeavingDate.substring(0, 10),
+      LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
+      DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDate: infoAPI.StartingDate.substring(0, 10),
+      StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDateOfficial: infoAPI.StartingDateOfficial.substring(0, 10),
+      StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
     }));
     setIsEditing(true);
   };
@@ -272,7 +284,6 @@ const ContentProfile: React.FC = () => {
       label: <strong>Signature</strong>,
       children: (
         <Signature
-        setImageSignature ={setImageSignature}
           isEditing={isEditing}
           infoAPI={infoAPI}
           setInfoAPI={setInfoAPI}
@@ -362,15 +373,16 @@ const ContentProfile: React.FC = () => {
             }}
           >
             {image ? (
+              // HERE
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-                // src = {URL.createObjectURL(image)}
+                src = {URL.createObjectURL(image)}
               />
             ) : (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                icon={<UserOutlined />}
+                src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+                // icon={<UserOutlined />}
               />
             )}
 

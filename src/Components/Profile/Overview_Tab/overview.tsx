@@ -14,7 +14,7 @@ const Overview: React.FC<OverviewProps> = ({
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      Birthday: dateString.substring(0, 10),
+      Birthday: dateString ? dateString.substring(0, 10) : "",
     }));
   };
 
@@ -130,7 +130,7 @@ const Overview: React.FC<OverviewProps> = ({
           format="YYYY-MM-DD"
         />
       ) : (
-        <strong>{infoAPI.Birthday.substring(0, 10)}</strong>
+        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}</strong>
       ),
     },
     {

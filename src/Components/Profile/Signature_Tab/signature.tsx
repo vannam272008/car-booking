@@ -28,11 +28,9 @@ const Signature: React.FC<SignatureProps> = ({
   isEditing,
   infoAPI,
   setInfoAPI,
-  setImageSignature,
 }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [styleSignature, setStyleSignature] = useState<string>("")
-  const [signatureRoot, setSignatureRoot] = useState<string>(infoAPI.Signature)
   const [fonts] = useState<string[]>([
     "Great Vibes",
     "Dancing Script",
@@ -43,12 +41,21 @@ const Signature: React.FC<SignatureProps> = ({
   const [img_preview, setImg_Preview] = useState<string | undefined>();
 
   const handleChangeSelect = (value: string) => {
+    // console.log('change font !');
+    setInfoAPI((prev) => {
+      const ps = prev.SignatureTemp
+      // console.log(ps.replace(ps.substring(ps.indexOf('font-family'), ps.indexOf(';"')), `font-family: ${value}`));
+      return {
+        ...prev,
+        SignatureTemp: ps.replace(ps.substring(ps.indexOf('font-family'), ps.indexOf(';"')), `font-family: ${value}`),
+      };
+    });
+    
     setSelectedFont(value);
   };
 
   const handleFileChange = async (file: any) => {
     if (file.status === "done") {
-      setImageSignature(file);
       var userId = localStorage.getItem("Id");
       const objectUrl = URL.createObjectURL(file.originFileObj);
       setImg_Preview(objectUrl);
@@ -62,7 +69,7 @@ const Signature: React.FC<SignatureProps> = ({
           console.log("res finish:", res);
           setInfoAPI((prevInfo) => ({
             ...prevInfo,
-            Signature: res.data.Data,
+            SignatureTemp: res.data.Data,
           }));
         })
         .catch((e) => {
@@ -72,6 +79,10 @@ const Signature: React.FC<SignatureProps> = ({
   };
 
   useEffect(() => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      SignatureTemp: prevInfo.Signature,
+    }))
     const interval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -92,13 +103,13 @@ const Signature: React.FC<SignatureProps> = ({
                   aria-required
                   showCount
                   placeholder="Confirm your name"
-                  // value={infoAPI.Signature.includes('<h1>') ? infoAPI.Signature : ""}
                   onChange={(e) => {
+                    console.log(infoAPI.SignatureTemp);
                     setStyleSignature(e.target.value)
                     setInfoAPI((prev) => {
                       return {
                         ...prev,
-                        Signature: `<h1 style={{ fontSize: "30px", fontFamily: ${selectedFont} }}>${e.target.value}</h1>`,
+                        SignatureTemp: `<h1 style="font-size: 30px; font-family: ${selectedFont};">${e.target.value}</h1>`,
                       };
                     });
                     setImg_Preview("");
@@ -125,6 +136,7 @@ const Signature: React.FC<SignatureProps> = ({
             </Col>
           </Row>
           <Row>
+            {/* HERE */}
             {infoAPI.Signature ? (
               <div className="QR_signature">
                 <QRCodeCanvas
@@ -133,12 +145,14 @@ const Signature: React.FC<SignatureProps> = ({
                 />
                 <p>{infoAPI.Email}</p>
                 <p>{currentTime.toLocaleString()}</p>
-                {/* <h1 style={{ fontSize: "14px", fontFamily: selectedFont }}>
-                  {styleSignature}
-                </h1> */}
-                {styleSignature.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
-                signatureRoot.includes("<h1>") ? <div dangerouslySetInnerHTML={{ __html: signatureRoot }} /> : <img width={250} height={150} src={`http://localhost:63642/${signatureRoot}`}></img>}
-                
+                {!styleSignature || styleSignature.length === 0
+                ?
+                (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
+                infoAPI.Signature && infoAPI.Signature.length > 0 ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
+                :
+                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
+                infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
+                infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>)}
               </div>
             ) : null}
           </Row>
@@ -171,7 +185,19 @@ const Signature: React.FC<SignatureProps> = ({
               />
               <p>{infoAPI.Email}</p>
               <p>{currentTime.toLocaleString()}</p>
-              { styleSignature.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} />
+
+              {/* HERE */}
+              {!img_preview ?
+              /* infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
+              infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div> */
+              (!styleSignature || styleSignature.length === 0
+                ?
+                (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
+                infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
+                :
+                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
+                infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
+                infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>))
               :
                 <Image
                 src={img_preview}
@@ -203,14 +229,16 @@ const Signature: React.FC<SignatureProps> = ({
       <p>{infoAPI.Email}</p>
       <p>{currentTime.toLocaleString()}</p>
       
-      {!signatureRoot.includes("<h1>") ? (
+      
+      {/* HERE */}
+      {infoAPI.Signature && !infoAPI.Signature.includes("<h1") ? (
         <img
-          src={"http://localhost:63642/" + signatureRoot}
+          src={"http://localhost:63642/" + infoAPI.Signature}
           width={250}
           height={150}
         ></img>
       ) : (
-        <div dangerouslySetInnerHTML={{ __html: signatureRoot }} />
+        <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} />
       )}
     </div>
   );

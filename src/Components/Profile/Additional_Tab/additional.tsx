@@ -176,7 +176,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.DateOfIdCard === null ? (
         infoAPI.DateOfIdCard
       ) : (
-        infoAPI.DateOfIdCard.substring(0,10)
+        infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0,10) : ""
       ))
     },
     {
@@ -216,7 +216,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartingDate === null ? (
         infoAPI.StartingDate
       ) : (
-        infoAPI.StartingDate.substring(0, 10)
+        infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : ""
       ))
     },
     {
@@ -236,7 +236,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartingDateOfficial === null ? (
         infoAPI.StartingDateOfficial
       ) : (
-        infoAPI.StartingDateOfficial.substring(0, 10)
+        infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : ""
       ))
     },
     {
@@ -254,7 +254,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.LeavingDate === null ? (
         infoAPI.LeavingDate
       ) : (
-        infoAPI.LeavingDate.substring(0, 10)
+        infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : ""
       ))
     },
     {
@@ -274,7 +274,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartDateMaternityLeave === null ? (
         infoAPI.StartDateMaternityLeave
       ) : (
-        infoAPI.StartDateMaternityLeave.substring(0, 10)
+        infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : ""
       ))
     },
     {

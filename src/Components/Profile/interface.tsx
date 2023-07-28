@@ -58,15 +58,12 @@ export interface API {
   PostalCodeR: string;
   CountryR: string;
   Signature: string;
+  SignatureTemp: string;
 }
 
 export interface SignatureProps {
   isEditing: boolean;
-  infoAPI: {
-    Email: string;
-    Signature: string;
-  };
-  setImageSignature: React.Dispatch<React.SetStateAction<RcFile | undefined>>;
+  infoAPI: API
   setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
 }
 
