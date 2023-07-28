@@ -33,6 +33,7 @@ const AppHeader = (props: any) => {
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
+        window.location.reload();
     }
 
     const handleClickHelp = () => {
@@ -101,7 +102,7 @@ const AppHeader = (props: any) => {
                 <Col span={3} className="col-logo">
 
                     <div onClick={handlePathName}>
-                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/request/carbooking" className={`${pathName === "/" && "select-page"}`}>
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
