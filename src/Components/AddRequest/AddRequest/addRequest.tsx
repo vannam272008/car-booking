@@ -353,7 +353,7 @@ function AddRequest(): JSX.Element {
                                                             },
                                                             {
                                                                 pattern: /^[0-9]*$/,
-                                                                message: 'Mobile must be a number',
+                                                                message: 'Total passengers must be a number',
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
