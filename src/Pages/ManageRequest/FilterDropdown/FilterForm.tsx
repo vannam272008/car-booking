@@ -111,10 +111,11 @@ const FilterForm: React.FC<FilterFormProps> = ({
             </Form.Item>
             <Form.Item name="requestCode" label="Request Code" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <Input placeholder='Key words...'
-                    onChange={e => setFilter((prevFilter) => ({
-                        ...prevFilter,
-                        requestCode: e.target.value
-                    }))} />
+                // onChange={e => setFilter((prevFilter) => ({
+                //     ...prevFilter,
+                //     requestCode: e.target.value
+                // }))} 
+                />
             </Form.Item>
             <Form.Item name="created" label="Created" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <DatePicker.RangePicker
