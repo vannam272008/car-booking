@@ -60,8 +60,11 @@ const ManageRequest = (props: any) => {
   };
 
   const handlePageChange = (page: number, pageSize: number) => {
-    setLimit(pageSize);
-    setCurrentPage(page);
+    if (pageSize !== limit) {
+      setLimit(pageSize);
+      setCurrentPage(1);
+    } else
+      setCurrentPage(page);
 
     // setRequestCode(requestCode);
     // setCreatedFrom(createdFrom);
