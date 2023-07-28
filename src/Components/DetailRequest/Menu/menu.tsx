@@ -178,10 +178,7 @@ function MenuRequest(props: any): JSX.Element {
         });
     };
     const downloadFilePdf = async () => {
-        await request.get('/file/pdf-request/' + requestId)
-            .then((res) => {
-            })
-
+        window.open(`http://localhost:63642/api/file/pdf-request/${requestId}`)
     }
 
     return (

@@ -143,7 +143,7 @@ const ManageRequest = (props: any) => {
               loading={loading}
               onRow={(record) => ({
                 onDoubleClick: () => {
-                  if (record.Status === 'Rejected') {
+                  if (record.Status === 'Rejected' || record.Status === 'Draft') {
                     navigate(`/request/carbooking/edit/${record.Id}`);
                   }
                   else {
