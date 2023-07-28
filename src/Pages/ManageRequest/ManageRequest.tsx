@@ -226,10 +226,10 @@ const ManageRequest = (props: any) => {
               onChange={handlePageChange}
               itemRender={(page, type, originalElement) => {
                 if (type === 'prev') {
-                  return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+                  return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px', fontFamily: "Segoe UI" }}>Previous</a>;
                 }
                 if (type === 'next') {
-                  return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+                  return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px', fontFamily: "Segoe UI" }}>Next</a>;
                 }
                 return originalElement;
               }}
