@@ -9,14 +9,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
-function DoneRequest() {
+function DoneRequest(props: any) {
 
+    const { requestCode } = props;
     const [checkFeedback, setCheckFeedback] = useState<boolean>(true);
     const [dataRotation, setDataRotation] = useState<any>({});
     const [dataDriver, setDataDriver] = useState<any>({})
     const { requestId } = useParams();
     const [departmentDetail, setDepartmentDetail] = useState<any>({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [comment, setComment] = useState({
+        comment: "Request " + requestCode + " has been Done",
+    });
 
 
 
@@ -59,11 +63,11 @@ function DoneRequest() {
     const onFinish = (values: any) => {
         values.RequestId = requestId;
         values.Type = checkFeedback;
-        console.log("hello", values);
         request.post("/request/vehicle/create", values)
             .then((response) => {
                 const data = response.data;
                 if (data) {
+                    request.postForm("/request/comment/requestId=" + requestId, comment)
                     localStorage.setItem("Data", data?.Data);
                     if (data.Success === false) {
                         message.error(data.Message);
@@ -203,7 +207,12 @@ function DoneRequest() {
                                             name="Note"
                                             labelCol={{ span: 24 }}
                                         >
-                                            <Input type='text' name='Note'></Input>
+                                            <Input type='text' name='Note' onChange={(e) => {
+                                                setComment((prevComment) => ({
+                                                    ...prevComment,
+                                                    comment: "Request " + requestCode + " has been Done  - Note: " + e.target.value
+                                                }));
+                                            }}></Input>
                                         </Form.Item>
                                     </Col>
                                 </Row>

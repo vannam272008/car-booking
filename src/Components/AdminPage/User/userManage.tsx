@@ -1,6 +1,6 @@
 // src/UserManage.tsx
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Tag, Typography, message } from 'antd';
+import { Table, Button, Modal, Form, Tag, Typography, message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserForm from './userForm';
 import { User, UserRoles, DepartmentMembers } from '../Utils/interfaces';
@@ -11,6 +11,7 @@ import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import request from '../../../Utils/request';
 import RequestLayout from '../../RequestLayout';
+import "./userManage.css";
 
 const UserManage: React.FC = () => {
   let config = {
@@ -26,6 +27,9 @@ const UserManage: React.FC = () => {
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<User>();
   const [isLoading, setIsLoading] = useState<Boolean>(true)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 5;
 
   const columns = [
     {
@@ -78,9 +82,10 @@ const UserManage: React.FC = () => {
     },
   ];
   const getUsers = async () => {
-    let res = await axios.get('http://localhost:63642/api/user/all?page=1&limit=15', config)
+    let res = await axios.get(`http://localhost:63642/api/user/all?page=${currentPage}&limit=${limit}`, config)
     console.log('>>check res user:', res)
     if (res.data.Success) {
+      setTotal(res.data.Data.TotalPage);
       let usersData: User[] = res.data.Data.ListData
       usersData.forEach(user => {
         user.AvatarPath = `http://localhost:63642/${user.AvatarPath}`
@@ -110,7 +115,7 @@ const UserManage: React.FC = () => {
 
   useEffect(() => {
     getUsers()
-  }, [])
+  }, [currentPage])
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
@@ -202,13 +207,32 @@ const UserManage: React.FC = () => {
   }
   const profile = true
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div>
+    <div className='manage-user-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
         Add User
       </Button>
 
-      <Table dataSource={users} columns={columns} rowKey="id" />
+      <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
+      <Pagination
+        current={currentPage}
+        pageSize={limit}
+        total={total * limit}
+        onChange={handlePageChange}
+        itemRender={(page, type, originalElement) => {
+          if (type === 'prev') {
+            return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+          }
+          if (type === 'next') {
+            return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+          }
+          return originalElement;
+        }}
+      />
 
       <Modal
         title={selectedUser ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}

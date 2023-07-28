@@ -37,6 +37,7 @@ const ManageRequest = (props: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
+  const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({
     requestCode: "",
     createdFrom: "",
@@ -47,7 +48,7 @@ const ManageRequest = (props: any) => {
 
   const handleGetAllRequest = () => {
     setLoading(true);
-    const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
+    const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=${limit}&search=${searchQuery}`;
     request.get(url)
       .then((res) => {
         setRequestData(res.data.Data.ListData);
@@ -58,8 +59,12 @@ const ManageRequest = (props: any) => {
       })
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (page: number, pageSize: number) => {
+    if (pageSize !== limit) {
+      setLimit(pageSize);
+      setCurrentPage(1);
+    } else
+      setCurrentPage(page);
 
     // setRequestCode(requestCode);
     // setCreatedFrom(createdFrom);
@@ -106,7 +111,7 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, filter, status, currentPage]);
+  }, [tab, filter, status, currentPage, limit]);
 
 
 
@@ -143,7 +148,7 @@ const ManageRequest = (props: any) => {
               loading={loading}
               onRow={(record) => ({
                 onDoubleClick: () => {
-                  if (record.Status === 'Rejected') {
+                  if (record.Status === 'Rejected' || record.Status === 'Draft') {
                     navigate(`/request/carbooking/edit/${record.Id}`);
                   }
                   else {
@@ -220,16 +225,17 @@ const ManageRequest = (props: any) => {
               pagination={false}
             />
             <Pagination
+              showSizeChanger
               current={currentPage}
-              pageSize={20}
-              total={total * 20}
+              pageSize={limit}
+              total={total * limit}
               onChange={handlePageChange}
               itemRender={(page, type, originalElement) => {
                 if (type === 'prev') {
-                  return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+                  return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px', fontFamily: "Segoe UI" }}>Previous</a>;
                 }
                 if (type === 'next') {
-                  return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+                  return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px', fontFamily: "Segoe UI" }}>Next</a>;
                 }
                 return originalElement;
               }}

@@ -10,6 +10,8 @@ import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
+import PageNotFound from '../../../Pages/404';
+import { useNavigate } from 'react-router-dom';
 
 function DetailRequest(): JSX.Element {
 
@@ -45,6 +47,7 @@ function DetailRequest(): JSX.Element {
     const profile = false;
 
     const { requestId } = useParams();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -54,7 +57,9 @@ function DetailRequest(): JSX.Element {
                 setDetailData(res.data.Data);
                 setShowFeedback(res.data.Data.Status);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         const getAttachmentsRequest = async () => {
             const endpoint = "/request/attachment/requestId=" + requestId;
@@ -84,6 +89,10 @@ function DetailRequest(): JSX.Element {
         // console.log('radio checked', e.target.value);
         setValue(e.target.value);
     };
+
+    const handleDownloadFile = (attachmentPath: string) => {
+        window.open(`http://localhost:63642/${attachmentPath}`);
+    }
 
     // console.log(attachmentData);
     // const handleDownloadFile = (attachment: string) => {
@@ -178,7 +187,7 @@ function DetailRequest(): JSX.Element {
                                     </Radio.Group>
                                 </div>
                                 {showFeedback === 'Approved' ? (
-                                    <DoneRequest />
+                                    <DoneRequest requestCode={detailData.RequestCode} />
                                 ) : showFeedback === 'Done' ? (
                                     <InfoFeedback />
                                 ) : null}
@@ -187,7 +196,7 @@ function DetailRequest(): JSX.Element {
                                     <div>
                                         {Array.isArray(attachmentData) ? (
                                             attachmentData.map((attachment: { Id: number; Path: string; }) => (
-                                                <div key={attachment.Id} className='approver' >
+                                                <div key={attachment.Id} className='approver' onClick={() => { handleDownloadFile(attachment.Path) }}>
                                                     <span><FileTextOutlined /> </span>
                                                     {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
                                                     <span>{attachment.Path.substring(39)} </span>
