@@ -37,6 +37,7 @@ const ManageRequest = (props: any) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
+  const [limit, setLimit] = useState(20);
   const [filter, setFilter] = useState({
     requestCode: "",
     createdFrom: "",
@@ -47,7 +48,7 @@ const ManageRequest = (props: any) => {
 
   const handleGetAllRequest = () => {
     setLoading(true);
-    const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=20&search=${searchQuery}`;
+    const url = `/request/${tab}?requestCode=${filter.requestCode}&createdFrom=${filter.createdFrom}&createdTo=${filter.createdTo}&senderId=${filter.senderId}&status=${status}&page=${currentPage}&limit=${limit}&search=${searchQuery}`;
     request.get(url)
       .then((res) => {
         setRequestData(res.data.Data.ListData);
@@ -58,7 +59,8 @@ const ManageRequest = (props: any) => {
       })
   };
 
-  const handlePageChange = (page: number) => {
+  const handlePageChange = (page: number, pageSize: number) => {
+    setLimit(pageSize);
     setCurrentPage(page);
 
     // setRequestCode(requestCode);
@@ -106,7 +108,7 @@ const ManageRequest = (props: any) => {
 
   useEffect(() => {
     handleGetAllRequest();
-  }, [tab, filter, status, currentPage]);
+  }, [tab, filter, status, currentPage, limit]);
 
 
 
@@ -220,9 +222,10 @@ const ManageRequest = (props: any) => {
               pagination={false}
             />
             <Pagination
+              showSizeChanger
               current={currentPage}
-              pageSize={20}
-              total={total * 20}
+              pageSize={limit}
+              total={total * limit}
               onChange={handlePageChange}
               itemRender={(page, type, originalElement) => {
                 if (type === 'prev') {
