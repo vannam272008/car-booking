@@ -19,7 +19,7 @@ function DoneRequest(props: any) {
     const [departmentDetail, setDepartmentDetail] = useState<any>({});
     const [loading, setLoading] = useState<boolean>(true);
     const [comment, setComment] = useState({
-        comment: "",
+        comment: "Request " + requestCode + " has been Done",
     });
 
 
@@ -61,14 +61,8 @@ function DoneRequest(props: any) {
     const navigate = useNavigate();
 
     const onFinish = (values: any) => {
-        console.log(values.Note);
-        setComment((prevComment) => ({
-            ...prevComment,
-            comment: "Request " + requestCode + " has been Done  - Note: " + values.Note === undefined ? "No Note" : values.Note
-        }));
         values.RequestId = requestId;
         values.Type = checkFeedback;
-        console.log("hello", values);
         request.post("/request/vehicle/create", values)
             .then((response) => {
                 const data = response.data;
@@ -213,7 +207,12 @@ function DoneRequest(props: any) {
                                             name="Note"
                                             labelCol={{ span: 24 }}
                                         >
-                                            <Input type='text' name='Note'></Input>
+                                            <Input type='text' name='Note' onChange={(e) => {
+                                                setComment((prevComment) => ({
+                                                    ...prevComment,
+                                                    comment: "Request " + requestCode + " has been Done  - Note: " + e.target.value
+                                                }));
+                                            }}></Input>
                                         </Form.Item>
                                     </Col>
                                 </Row>
