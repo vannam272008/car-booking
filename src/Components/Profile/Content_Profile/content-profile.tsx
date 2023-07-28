@@ -18,67 +18,7 @@ import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
-
-interface API {
-  EmployeeNumber: string;
-  Username: string;
-  Email: string;
-  AvatarPath: RcFile | null;
-  FirstName: string;
-  LastName: string;
-  Sex: boolean;
-  Birthday: string;
-  JobTitle: string;
-  Company: string;
-  Unit: string;
-  Function: string;
-  SectionsOrTeam: string;
-  Groups: string;
-  OfficeLocation: string;
-  LineManager: string;
-  BelongToDepartments: string;
-  Rank: string;
-  EmployeeType: string;
-  Rights: string;
-  Nation: string;
-  Phone: string;
-  IdCardNumber: string;
-  DateOfIdCard: string;
-  PlaceOfIdCard: string;
-  HealthInsurance: string;
-  StartingDate: string;
-  StartingDateOfficial: string;
-  LeavingDate: string;
-  StartDateMaternityLeave: string;
-  Note: string;
-  AcademicLevel: string;
-  Qualification: string;
-  BusinessPhone: string;
-  HomePhone: string;
-  PersonalEmail: string;
-  BankName: string;
-  BankBranchNumber: string;
-  BankBranchName: string;
-  BankAccountNumber: string;
-  BankAccountName: string;
-  Street: string;
-  FlatNumber: string;
-  City: string;
-  Province: string;
-  PostalCode: string;
-  Country: string;
-  MartialStatus: string;
-  ContactName: string;
-  Relationship: string;
-  PhoneR: string;
-  StreetR: string;
-  FlatNumberR: string;
-  CityR: string;
-  ProvinceR: string;
-  PostalCodeR: string;
-  CountryR: string;
-  Signature: string;
-}
+import { API } from "../interface"
 
 const ContentProfile: React.FC = () => {
   const jwt_admin = localStorage.getItem("Token");
@@ -97,6 +37,7 @@ const ContentProfile: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   //avatar
   const [image, setImage] = useState<RcFile>();
+  const [imageSignature, setImageSignature] = useState<RcFile>();
 
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
@@ -189,7 +130,7 @@ const ContentProfile: React.FC = () => {
     } else {
       message.error(res.data.Message);
     }
-    console.log("signature: ", infoAPI.Signature)
+    console.log("signature: ", infoAPI.Signature);
   };
 
   //declare contract
@@ -215,13 +156,38 @@ const ContentProfile: React.FC = () => {
     const formData = new FormData();
     formData.append("fileName", image ? image.name : "");
     formData.append("userId", userID ? userID : "");
-    await request.postForm("/file/upload-finish", formData, config);
+    let res = await request.postForm("/file/upload-finish", formData, config);
+    infoAPI.AvatarPath = res.data.Data;
+    console.log("res.data.Data:", res.data.Data);
+
+    setInfoAPI((prevData) => ({
+      ...prevData,
+      AvatarPath: res.data.Data,
+    }));
   };
 
   const handleFileChange = (file: RcFile) => {
     setImage(file);
   };
 
+  const handleNotSave = () => {
+    return (
+      <>
+      <Modal
+      title=""
+      open={visible}
+      // onCancel={handleCloseModal}
+      // onOk={handleOk}
+      centered={true}
+      bodyStyle={{ alignItems: "centered" }}
+    >
+      Are you sure
+    </Modal>
+      </>
+      
+    )
+    
+  };
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
@@ -252,7 +218,7 @@ const ContentProfile: React.FC = () => {
     }));
     setIsEditing(true);
   };
- 
+
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
@@ -304,9 +270,18 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} infoAPI={infoAPI} setInfoAPI={setInfoAPI}/>,
+      children: (
+        <Signature
+        setImageSignature ={setImageSignature}
+          isEditing={isEditing}
+          infoAPI={infoAPI}
+          setInfoAPI={setInfoAPI}
+        />
+      ),
     },
   ];
+
+  console.log(infoAPI);
 
   return (
     <div className="content-profile">
@@ -315,30 +290,41 @@ const ContentProfile: React.FC = () => {
           <>
             <Button
               className="btn"
-              style={{ margin: "20px 0px 20px 25px" }}
+              style={{ margin: "10px 0px 20px 25px" }}
               onClick={() => {
                 onSave();
               }}
-              icon={<SaveOutlined style={{ fontSize: "30px" }} />}
             >
+              <SaveOutlined style={{ fontSize: "35px" }} />
               Save
             </Button>
+            <Button
+              className="btn"
+              style={{ margin: "10px 10px 20px 5px" }}
+              onClick={handleNotSave}
+            >
+              <LeftCircleOutlined
+                style={{
+                  fontSize: "35px",
+                }}
+              />
+              Return
+            </Button>
           </>
-        ) : null}
-        <Button
-          className="btn"
-          style={{ margin: "20px 10px 20px 5px" }}
-          onClick={handleReturnSetting}
-          icon={
+        ) : (
+          <Button
+            className="btn"
+            style={{ margin: "10px 10px 20px 5px" }}
+            onClick={handleReturnSetting}
+          >
             <LeftCircleOutlined
               style={{
-                fontSize: "30px",
+                fontSize: "35px",
               }}
             />
-          }
-        >
-          Return
-        </Button>
+            Return
+          </Button>
+        )}
       </div>
       <div className="info-user">
         {isEditing ? (
@@ -378,7 +364,8 @@ const ContentProfile: React.FC = () => {
             {image ? (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={URL.createObjectURL(image)}
+                src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+                // src = {URL.createObjectURL(image)}
               />
             ) : (
               <Avatar
@@ -401,20 +388,14 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          {onOk ? (
-            <Avatar
-              className="avatar"
-              size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-              icon={<UserOutlined />}
-              src={URL.createObjectURL(image!)}
-            />
-          ) : (
-            <Avatar
-              className="avatar"
-              size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-              icon={<UserOutlined />}
-            />
-          )}
+          <Avatar
+            className="avatar"
+            size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
+            icon={<UserOutlined />}
+            // src={URL.createObjectURL(image!)}
+
+            src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+          />
         </span>
         <div></div>
         <h1 style={{ marginLeft: "50px" }}>

@@ -4,82 +4,35 @@ import { InboxOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
 import type { TabsProps } from "antd";
 import "./signature.css";
-import { RcFile } from "antd/lib/upload";
+import request from "../../../Utils/request";
 
-interface API {
-  EmployeeNumber: string;
-  Username: string;
-  Email: string;
-  AvatarPath: RcFile | null;
-  FirstName: string;
-  LastName: string;
-  Sex: boolean;
-  Birthday: string;
-  JobTitle: string;
-  Company: string;
-  Unit: string;
-  Function: string;
-  SectionsOrTeam: string;
-  Groups: string;
-  OfficeLocation: string;
-  LineManager: string;
-  BelongToDepartments: string;
-  Rank: string;
-  EmployeeType: string;
-  Rights: string;
-  Nation: string;
-  Phone: string;
-  IdCardNumber: string;
-  DateOfIdCard: string;
-  PlaceOfIdCard: string;
-  HealthInsurance: string;
-  StartingDate: string;
-  StartingDateOfficial: string;
-  LeavingDate: string;
-  StartDateMaternityLeave: string;
-  Note: string;
-  AcademicLevel: string;
-  Qualification: string;
-  BusinessPhone: string;
-  HomePhone: string;
-  PersonalEmail: string;
-  BankName: string;
-  BankBranchNumber: string;
-  BankBranchName: string;
-  BankAccountNumber: string;
-  BankAccountName: string;
-  Street: string;
-  FlatNumber: string;
-  City: string;
-  Province: string;
-  PostalCode: string;
-  Country: string;
-  MartialStatus: string;
-  ContactName: string;
-  Relationship: string;
-  PhoneR: string;
-  StreetR: string;
-  FlatNumberR: string;
-  CityR: string;
-  ProvinceR: string;
-  PostalCodeR: string;
-  CountryR: string;
-  Signature: string;
-}
+import { API, SignatureProps } from "../interface"
+import { info } from "console";
 
-interface SignatureProps {
-  isEditing: boolean;
-  infoAPI: {
-    Email: string;
-    Signature: string;
-  };
-  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
-}
+const jwt_admin = localStorage.getItem("Token");
+const uploadConfig = {
+  action: "http://localhost:63642/api/file/signature-temp",
+  headers: {
+    Authorization: `Bearer ${jwt_admin}`,
+  },
+};
+const config = {
+  headers: {
+    Authorization: `Bearer ${jwt_admin}`,
+  },
+};
 
 const { Dragger } = Upload;
 
-const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI }) => {
+const Signature: React.FC<SignatureProps> = ({
+  isEditing,
+  infoAPI,
+  setInfoAPI,
+  setImageSignature,
+}) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [styleSignature, setStyleSignature] = useState<string>("")
+  const [signatureRoot, setSignatureRoot] = useState<string>(infoAPI.Signature)
   const [fonts] = useState<string[]>([
     "Great Vibes",
     "Dancing Script",
@@ -93,16 +46,29 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
     setSelectedFont(value);
   };
 
-  
-  const handleFileChange = (file: RcFile) => {
-    const objectUrl = URL.createObjectURL(file);
-    setImg_Preview(objectUrl);
-    // setSignature("");
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      Signature:"",
-    }));
-  
+  const handleFileChange = async (file: any) => {
+    if (file.status === "done") {
+      setImageSignature(file);
+      var userId = localStorage.getItem("Id");
+      const objectUrl = URL.createObjectURL(file.originFileObj);
+      setImg_Preview(objectUrl);
+
+      const formData = new FormData();
+      formData.append("fileName", file.originFileObj ? file.name : "");
+      formData.append("userId", userId ? userId : "");
+      await request
+        .postForm("/file/signature-finish", formData, config)
+        .then((res) => {
+          console.log("res finish:", res);
+          setInfoAPI((prevInfo) => ({
+            ...prevInfo,
+            Signature: res.data.Data,
+          }));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   };
 
   useEffect(() => {
@@ -111,7 +77,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
     }, 1000);
     return () => clearInterval(interval);
   }, []);
- 
+
   const signature_tab: TabsProps["items"] = [
     {
       key: "1",
@@ -126,18 +92,17 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
                   aria-required
                   showCount
                   placeholder="Confirm your name"
-                  value={infoAPI.Signature}
+                  // value={infoAPI.Signature.includes('<h1>') ? infoAPI.Signature : ""}
                   onChange={(e) => {
+                    setStyleSignature(e.target.value)
                     setInfoAPI((prev) => {
                       return {
                         ...prev,
-                        Signature: e.target.value,
+                        Signature: `<h1 style={{ fontSize: "30px", fontFamily: ${selectedFont} }}>${e.target.value}</h1>`,
                       };
-                      
                     });
-                    setImg_Preview('');
+                    setImg_Preview("");
                   }}
-                 
                   style={{ width: "95%" }}
                   maxLength={50}
                 />
@@ -168,9 +133,12 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
                 />
                 <p>{infoAPI.Email}</p>
                 <p>{currentTime.toLocaleString()}</p>
-                <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
-                  {infoAPI.Signature}
-                </h1>
+                {/* <h1 style={{ fontSize: "14px", fontFamily: selectedFont }}>
+                  {styleSignature}
+                </h1> */}
+                {styleSignature.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
+                signatureRoot.includes("<h1>") ? <div dangerouslySetInnerHTML={{ __html: signatureRoot }} /> : <img width={250} height={150} src={`http://localhost:63642/${signatureRoot}`}></img>}
+                
               </div>
             ) : null}
           </Row>
@@ -183,11 +151,10 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
       children: (
         <>
           <Dragger
+            {...uploadConfig}
             listType="picture-card"
             showUploadList={false}
-            onChange={({ file }) =>
-              handleFileChange(file.originFileObj as RcFile)
-            }
+            onChange={({ file }) => handleFileChange(file)}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -196,7 +163,7 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
               Click or drag file to this area to upload
             </p>
           </Dragger>
-          {img_preview ? (
+          {infoAPI.Signature ? (
             <div className="QR_signature">
               <QRCodeCanvas
                 style={{ height: "200px", width: "200px" }}
@@ -204,7 +171,9 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
               />
               <p>{infoAPI.Email}</p>
               <p>{currentTime.toLocaleString()}</p>
-              <Image
+              { styleSignature.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} />
+              :
+                <Image
                 src={img_preview}
                 alt="upload image"
                 style={{
@@ -214,6 +183,8 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
                   maxHeight: "150px",
                 }}
               />
+              }
+              
             </div>
           ) : null}
         </>
@@ -231,25 +202,15 @@ const Signature: React.FC<SignatureProps> = ({ isEditing, infoAPI, setInfoAPI })
       />
       <p>{infoAPI.Email}</p>
       <p>{currentTime.toLocaleString()}</p>
-      {img_preview ? (
-        <>
-          <Image
-            src={img_preview || ""}
-            alt="upload image"
-            style={{
-              minWidth: "200px",
-              maxWidth: "500px",
-              minHeight: "50px",
-              maxHeight: "150px",
-            }}
-          />
-        </>
+      
+      {!signatureRoot.includes("<h1>") ? (
+        <img
+          src={"http://localhost:63642/" + signatureRoot}
+          width={250}
+          height={150}
+        ></img>
       ) : (
-        <>
-          <h1 style={{ fontSize: "50px", fontFamily: selectedFont }}>
-            {infoAPI.Signature}
-          </h1>
-        </>
+        <div dangerouslySetInnerHTML={{ __html: signatureRoot }} />
       )}
     </div>
   );
