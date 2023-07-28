@@ -5,10 +5,7 @@ import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import request from '../../../Utils/request';
 import { useNavigate } from 'react-router';
-import { useParams } from 'react-router';
-
-
-
+import { useParams } from 'react-router'
 
 interface MenuAddProps {
     formData: {
