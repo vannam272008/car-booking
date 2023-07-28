@@ -59,9 +59,11 @@ function EditRequest() {
                 setApplyNote(detailsDataRes.data.Data.ApplyNote);
                 setStatus(detailsDataRes.data.Data.Status);
 
+
                 // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
                 // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // setFileList([...fileList, attachmentsDataRes.data.Data]);
+                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
+
 
 
                 setFormData((prevFormData) => ({
@@ -78,6 +80,7 @@ function EditRequest() {
 
         fetchData();
     }, [activeTabKey]);
+
 
 
     const [detailData, setDetailData] = useState<any>({});
@@ -105,6 +108,9 @@ function EditRequest() {
     });
 
     useEffect(() => {
+        const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
+        const stringNumber = number.toString();
+
         setFormData((prevFormData) => ({
             ...prevFormData,
             files: fileList,
@@ -112,7 +118,7 @@ function EditRequest() {
             ListOfUserId: listOfUserId,
             Mobile: detailData.Mobile,
             CostCenter: detailData.CostCenter,
-            TotalPassengers: detailData.TotalPassengers,
+            TotalPassengers: stringNumber,
             PickLocation: detailData.PickLocation,
             Destination: detailData.Destination,
             Reason: detailData.Reason,
@@ -191,9 +197,17 @@ function EditRequest() {
         setFileList(updatedFileList);
     };
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const charCode = event.which ? event.which : event.keyCode;
+
+        if ((charCode < 48 || charCode > 57) && charCode !== 8) {
+            event.preventDefault();
+        }
+    };
+
     const profile = false;
 
-    // console.log(formData);
+    console.log(formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -319,7 +333,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.Mobile ? detailData.Mobile : undefined}
                                                 >
-                                                    <Input type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -342,7 +356,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
                                                 >
-                                                    <Input type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Total passengers*/}
@@ -363,7 +377,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
                                                 >
-                                                    <Input type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time from*/}
