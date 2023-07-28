@@ -1,6 +1,5 @@
 import { Layout, Menu, Dropdown } from 'antd';
 import { MenuClickEventHandler } from 'rc-menu/lib/interface';
-import i18n from 'i18next';
 import "./AppFooter.scss";
 import united_states from "../../assets/united_states.svg";
 import vietnam from "../../assets/vietnam.svg";
