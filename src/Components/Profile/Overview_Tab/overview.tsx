@@ -77,10 +77,6 @@ const Overview: React.FC<OverviewProps> = ({
       ) : (
         <strong>{infoAPI.FirstName}</strong>
       )
-<<<<<<< HEAD
-=======
-
->>>>>>> feature-fe
     },
     {
       overview_title: "Last name",
@@ -134,11 +130,7 @@ const Overview: React.FC<OverviewProps> = ({
           format="YYYY-MM-DD"
         />
       ) : (
-<<<<<<< HEAD
         <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}</strong>
-=======
-        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : null}</strong>
->>>>>>> feature-fe
       ),
     },
     {
