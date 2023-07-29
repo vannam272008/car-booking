@@ -206,27 +206,27 @@ const ContentProfile: React.FC = () => {
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
+      Birthday: infoAPI.Birthday.substring(0, 10),
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
+      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
+      LeavingDate: infoAPI.LeavingDate.substring(0, 10),
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
+      DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
+      StartingDate: infoAPI.StartingDate.substring(0, 10),
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
+      StartingDateOfficial: infoAPI.StartingDateOfficial.substring(0, 10),
     }));
     setIsEditing(true);
   };
@@ -282,13 +282,7 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: (
-        <Signature
-          isEditing={isEditing}
-          infoAPI={infoAPI}
-          setInfoAPI={setInfoAPI}
-        />
-      ),
+      children: <Signature isEditing={isEditing} infoAPI={infoAPI} setInfoAPI={setInfoAPI}/>,
     },
   ];
 

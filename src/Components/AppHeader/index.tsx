@@ -33,6 +33,7 @@ const AppHeader = (props: any) => {
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
+        window.location.reload();
     }
 
     const handleClickHelp = () => {
@@ -75,7 +76,7 @@ const AppHeader = (props: any) => {
                     const data = response.data;
                     console.log(response);
                     if (data) {
-                        if (data.Success == false) {
+                        if (data.Success === false) {
                             message.error(data.Message);
                         } else {
                             localStorage.clear();
@@ -101,7 +102,7 @@ const AppHeader = (props: any) => {
                 <Col span={3} className="col-logo">
 
                     <div onClick={handlePathName}>
-                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/request/carbooking" className={`${pathName === "/" && "select-page"}`}>
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
@@ -142,7 +143,7 @@ const AppHeader = (props: any) => {
                             {/* </div> */}
                         </Drawer>
 
-                        <Badge count={3000} style={{zIndex: '9999'}}>
+                        <Badge count={3000} style={{ zIndex: '9999' }}>
                             <Button className="btn-item"><BellOutlined style={{ fontSize: '24px', color: 'white' }} /></Button>
                         </Badge>
                         <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>

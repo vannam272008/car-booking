@@ -60,10 +60,10 @@ const Overview: React.FC<OverviewProps> = ({
     },
     {
       overview_title: "First name",
-      info:isEditing ? (
+      info: isEditing ? (
         <Input
           placeholder="First name"
-          name= "First name"
+          name="First name"
           value={infoAPI.FirstName}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -77,6 +77,10 @@ const Overview: React.FC<OverviewProps> = ({
       ) : (
         <strong>{infoAPI.FirstName}</strong>
       )
+<<<<<<< HEAD
+=======
+
+>>>>>>> feature-fe
     },
     {
       overview_title: "Last name",
@@ -105,7 +109,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Sex"
           name="sex"
           // value={infoAPI.Sex}
-          disabled = {true}
+          disabled={true}
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -123,14 +127,18 @@ const Overview: React.FC<OverviewProps> = ({
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
-          value={infoAPI.Birthday === null ? dayjs() : dayjs(infoAPI.Birthday)}
+          value={infoAPI.Birthday === null || infoAPI.Birthday ? dayjs() : dayjs(infoAPI.Birthday)}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"
           format="YYYY-MM-DD"
         />
       ) : (
+<<<<<<< HEAD
         <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}</strong>
+=======
+        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : null}</strong>
+>>>>>>> feature-fe
       ),
     },
     {

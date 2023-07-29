@@ -41,7 +41,7 @@ function AddRequest(): JSX.Element {
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const senderId = localStorage.getItem("Id")
-    const [activeTabKey, setActiveTabKey] = useState<string>("");
+    // const [activeTabKey, setActiveTabKey] = useState<string>("");
     const [userLoginName, setUserLoginName] = useState("");
     const [formData, setFormData] = useState({
         SenderId: senderId as string | null,
@@ -139,7 +139,6 @@ function AddRequest(): JSX.Element {
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
         const { name, value } = event.target;
-
         setFormData((prevFormData) => ({
             ...prevFormData,
             [name]: value,
@@ -182,11 +181,19 @@ function AddRequest(): JSX.Element {
 
     };
 
-    const getFullNameIfContainsSenderId = (dataDepartmentMember: DepartmentMember[], senderId: string | null) => {
-        const userWithSenderId = dataDepartmentMember.find(
-            (departmentMember) => departmentMember?.User.Id === senderId
-        );
-        return userWithSenderId?.User.FullName;
+    // const getFullNameIfContainsSenderId = (dataDepartmentMember: DepartmentMember[], senderId: string | null) => {
+    //     const userWithSenderId = dataDepartmentMember.find(
+    //         (departmentMember) => departmentMember?.User.Id === senderId
+    //     );
+    //     return userWithSenderId?.User.FullName;
+    // };
+
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        const charCode = event.which ? event.which : event.keyCode;
+
+        if ((charCode < 48 || charCode > 57) && charCode !== 8) {
+            event.preventDefault();
+        }
     };
 
     console.log(formData);
@@ -316,7 +323,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -339,7 +346,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Total passengers*/}
@@ -355,12 +362,12 @@ function AddRequest(): JSX.Element {
                                                             },
                                                             {
                                                                 pattern: /^[0-9]*$/,
-                                                                message: 'Mobile must be a number',
+                                                                message: 'Total passengers must be a number',
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Usage time from*/}

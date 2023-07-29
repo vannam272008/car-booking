@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Menu, Modal, message, notification, Checkbox } from 'antd';
 import { ArrowLeftOutlined, DeleteOutlined, SendOutlined, WarningOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import request from '../../../Utils/request';
 import { useNavigate } from 'react-router';
-import { useParams } from 'react-router';
-
-
-
+import { useParams } from 'react-router'
 
 interface MenuAddProps {
     formData: {

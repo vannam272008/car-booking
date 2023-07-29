@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Select, Input, Row, Col, message, Space } from 'antd';
+import { Table, Button, Modal, Form, Typography, Select, Input, Row, Col, message, Space, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Role, RoleFormProps } from '../Utils/interfaces'
 import { roleSampleData } from '../Utils/sampleData';
 import * as util from '../Utils'
 import axios from 'axios';
 import { resetRole } from '../Utils';
+import "./roleManage.css";
 
 const RoleManage: React.FC = () => {
 
@@ -42,11 +43,16 @@ const RoleManage: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<Role>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 5;
 
   const getRoles = async () => {
-    let res = await axios.get('http://localhost:63642/api/role/all?page=1&limit=10')
+    let res = await axios.get(`http://localhost:63642/api/role/all?page=${currentPage}&limit=${limit}`)
     console.log('>>check res role:', res)
+
     res.data.Success ? setRoles(res.data.Data.ListData) : setRoles([])
+    setTotal(res.data.Data.TotalPage);
   }
 
   useEffect(() => {
@@ -99,7 +105,7 @@ const RoleManage: React.FC = () => {
     } else if (action === util.ACTION_HANDLE.EDIT) {
       if (!role.Title) return message.error('Missing title !')
       console.log(role.Id);
-      
+
       let res = await axios.put(`http://localhost:63642/api/role/edit/${role.Id}`, { Title: role.Title })
 
       /* var existRole = roles.filter(r => r.Id !== role.Id)
@@ -118,13 +124,32 @@ const RoleManage: React.FC = () => {
     }
   }
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div>
+    <div className='manage-role-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
         Add Role
       </Button>
 
-      <Table dataSource={roles} columns={columns} rowKey="Id" />
+      <Table dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
+      <Pagination
+        current={currentPage}
+        pageSize={limit}
+        total={total * limit}
+        onChange={handlePageChange}
+        itemRender={(page, type, originalElement) => {
+          if (type === 'prev') {
+            return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+          }
+          if (type === 'next') {
+            return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+          }
+          return originalElement;
+        }}
+      />
 
       <Modal
         title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Role</Typography.Title> : <Typography.Title level={2}>Add Role</Typography.Title>}
@@ -162,7 +187,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
   }
 
   return (
-    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '400px', marginTop: '24px'}}>
+    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '400px', marginTop: '24px' }}>
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
@@ -171,10 +196,10 @@ const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
       </Form.Item>
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
-        <Button type="primary" onClick={handleSubmit} style={{marginRight: '12px'}}>
+        <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
           Save
         </Button>
-        <Button onClick={handleFormReset} style={{marginLeft: '12px'}}>
+        <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
           Reset
         </Button>
       </Form.Item>

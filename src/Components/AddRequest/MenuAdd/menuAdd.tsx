@@ -70,41 +70,43 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
         }
     };
     useEffect(() => {
-        if (formData.Status.length > 0 && formData.Status === "Draft") {
-            request.postForm("/request/create", formData)
-                .then((response) => {
-                    const data = response.data;
-                    if (data) {
-                        localStorage.setItem("Data", data?.Data);
-                        if (data.Success === false) {
-                            message.error(data.Message);
-                        } else {
-                            navigate("/request/carbooking");
+        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
+            if (formData.Status.length > 0 && formData.Status === "Draft") {
+                request.postForm("/request/create", formData)
+                    .then((response) => {
+                        const data = response.data;
+                        if (data) {
+                            localStorage.setItem("Data", data?.Data);
+                            if (data.Success === false) {
+                                message.error(data.Message);
+                            } else {
+                                navigate("/request/carbooking");
+                            }
                         }
-                    }
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        SenderId: "",
-                        DepartmentId: "",
-                        ReceiverId: "",
-                        Mobile: "",
-                        CostCenter: "",
-                        TotalPassengers: "",
-                        PickLocation: '',
-                        Destination: '',
-                        Reason: '',
-                        ApplyNote: false,
-                        UsageFrom: "",
-                        UsageTo: "",
-                        PickTime: "",
-                        ListOfUserId: [],
-                        Status: "",
-                        files: [],
-                    }));
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+                        setFormData((prevFormData) => ({
+                            ...prevFormData,
+                            SenderId: "",
+                            DepartmentId: "",
+                            ReceiverId: "",
+                            Mobile: "",
+                            CostCenter: "",
+                            TotalPassengers: "",
+                            PickLocation: '',
+                            Destination: '',
+                            Reason: '',
+                            ApplyNote: false,
+                            UsageFrom: "",
+                            UsageTo: "",
+                            PickTime: "",
+                            ListOfUserId: [],
+                            Status: "",
+                            files: [],
+                        }));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
     }, [formData, navigate, setFormData])
 
