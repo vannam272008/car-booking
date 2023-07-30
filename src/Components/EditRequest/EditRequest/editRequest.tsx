@@ -519,6 +519,7 @@ function EditRequest() {
                             </div>
                             <div className='reply-upload-comment' style={{ width: 'fit-content' }}>
                                 <Upload
+                                    disabled
                                     beforeUpload={handleBeforeUpload}
                                     accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                                     fileList={fileList}
