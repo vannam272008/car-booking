@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Input, Select, Tabs, Upload, Image, Col, Row } from "antd";
+import { Input, Select, Tabs, Upload, Image, Col, Row, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
 import type { TabsProps } from "antd";
@@ -7,7 +7,6 @@ import "./signature.css";
 import request from "../../../Utils/request";
 
 import { API, SignatureProps } from "../interface"
-import { info } from "console";
 
 const jwt_admin = localStorage.getItem("Token");
 const uploadConfig = {
@@ -40,6 +39,14 @@ const Signature: React.FC<SignatureProps> = ({
   const [selectedFont, setSelectedFont] = useState<string>("");
   const [img_preview, setImg_Preview] = useState<string | undefined>();
 
+  // const beforeUpload = (file: File) => {
+  //   const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === "image/jpg";
+  //   if (!isImage) {
+  //     message.error('You can only upload image files type (.png, .jpg, .jpeg)!');
+  //   }
+  //   return isImage;
+  // }
+
   const handleChangeSelect = (value: string) => {
     // console.log('change font !');
     setInfoAPI((prev) => {
@@ -55,6 +62,7 @@ const Signature: React.FC<SignatureProps> = ({
   };
 
   const handleFileChange = async (file: any) => {
+    console.log("file: ", file);
     if (file.status === "done") {
       var userId = localStorage.getItem("Id");
       const objectUrl = URL.createObjectURL(file.originFileObj);
@@ -73,6 +81,7 @@ const Signature: React.FC<SignatureProps> = ({
           }));
         })
         .catch((e) => {
+          message.error("Upload failed ! ");
           console.log(e);
         });
     }
@@ -106,7 +115,7 @@ const Signature: React.FC<SignatureProps> = ({
                   onChange={(e) => {
                     console.log(infoAPI.SignatureTemp);
                     setStyleSignature(e.target.value)
-                    if(e.target.value && e.target.value.length > 0) {
+                    if (e.target.value && e.target.value.length > 0) {
                       setInfoAPI((prev) => {
                         return {
                           ...prev,
@@ -156,13 +165,13 @@ const Signature: React.FC<SignatureProps> = ({
               {infoAPI.SignatureTemp && infoAPI.SignatureTemp.length !== 0
                 ?
                 (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 && infoAPI.SignatureTemp.includes("<h1") ?
-                <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
-                <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img>)
+                  <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
+                  <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img>)
                 :
-                (infoAPI.Signature ? 
+                (infoAPI.Signature ?
                   (infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img>)
-                : null)
-                }
+                  : null)
+              }
             </div>
           </Row>
         </>
@@ -175,6 +184,8 @@ const Signature: React.FC<SignatureProps> = ({
         <>
           <Dragger
             {...uploadConfig}
+            // beforeUpload={beforeUpload}
+            accept="image/*"
             listType="picture-card"
             showUploadList={false}
             onChange={({ file }) => handleFileChange(file)}
