@@ -9,8 +9,6 @@ import * as util from '../Utils'
 import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
-import request from '../../../Utils/request';
-import RequestLayout from '../../RequestLayout';
 import "./userManage.css";
 
 const UserManage: React.FC = () => {
@@ -118,8 +116,8 @@ const UserManage: React.FC = () => {
   }, [currentPage])
 
   const handleAdd = () => {
+    setSelectedUser(resetUser)
     setAction(util.ACTION_HANDLE.ADD)
-    setSelectedUser(null);
     setIsModalVisible(true);
   };
 
@@ -132,9 +130,9 @@ const UserManage: React.FC = () => {
   const handleDelete = async (id: string) => {
     let res = await axios.delete(`http://localhost:63642/api/user/delete/${id}`)
     if (res.data.Success) {
-      message.success('Delete success !')
+      message.success(res.data.Message)
       setIsModalVisible(false)
-      await getUsers()
+      getUsers()
     } else {
       message.error(res.data.Message)
     }
@@ -202,6 +200,7 @@ const UserManage: React.FC = () => {
 
   const handleCancel = async () => {
     setIsModalVisible(false)
+    setSelectedUser(resetUser)
     /* var data = await deleteFilesTemp()
     console.log('data del temp files:', data) */
   }
