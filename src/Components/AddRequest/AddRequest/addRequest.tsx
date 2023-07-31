@@ -310,7 +310,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -332,7 +332,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Total passengers*/}
@@ -352,7 +352,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Usage time from*/}

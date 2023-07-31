@@ -10,7 +10,7 @@ import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
-import PageNotFound from '../../../Pages/404';
+// import PageNotFound from '../../../Pages/404';
 import { useNavigate } from 'react-router-dom';
 
 function DetailRequest(): JSX.Element {
@@ -66,20 +66,24 @@ function DetailRequest(): JSX.Element {
             await request.get(endpoint).then((res) => {
                 setAttachmentData(res.data.Data);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         const getWokflowRequest = async () => {
             const endpoint = "/request/workflow/requestId=" + requestId;
             await request.get(endpoint).then((res) => {
                 setWorkflowData(res.data.Data);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         getWokflowRequest();
         getAttachmentsRequest();
         getDetailRequest();
         setLoading(false);
-    }, [requestId, loading])
+    }, [requestId, loading, navigate])
 
     const [value, setValue] = useState(!detailData.ApplyNote);
 
