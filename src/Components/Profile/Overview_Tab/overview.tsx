@@ -123,7 +123,7 @@ const Overview: React.FC<OverviewProps> = ({
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
-          value={infoAPI.Birthday === null || infoAPI.Birthday ? dayjs() : dayjs(infoAPI.Birthday)}
+          value={infoAPI.Birthday === null || infoAPI.Birthday ? null : dayjs(infoAPI.Birthday)}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"

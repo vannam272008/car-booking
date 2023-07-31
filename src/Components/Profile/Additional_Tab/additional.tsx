@@ -93,7 +93,7 @@ const Additional: React.FC<AdditionalProps> = ({
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {setEdit_Contract(true)}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => { setEdit_Contract(true) }} /> : null,
       dataIndex: "action",
     },
   ];
@@ -165,7 +165,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.DateOfIdCard === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.DateOfIdCard)
           }
           style={{ width: "100%" }}
@@ -176,7 +176,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.DateOfIdCard === null ? (
         infoAPI.DateOfIdCard
       ) : (
-        infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0,10) : ""
+        infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : ""
       ))
     },
     {
@@ -205,7 +205,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartingDate === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartingDate)
           }
           style={{ width: "100%" }}
@@ -225,7 +225,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartingDateOfficial === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartingDateOfficial)
           }
           style={{ width: "100%" }}
@@ -244,7 +244,7 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <DatePicker
           value={
-            infoAPI.LeavingDate === null ? dayjs() : dayjs(infoAPI.LeavingDate)
+            infoAPI.LeavingDate === null ? null : dayjs(infoAPI.LeavingDate)
           }
           style={{ width: "100%" }}
           onChange={handleleaving_date}
@@ -263,7 +263,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartDateMaternityLeave === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartDateMaternityLeave)
           }
           style={{ width: "100%" }}
@@ -637,14 +637,14 @@ const Additional: React.FC<AdditionalProps> = ({
 
   let dataSource_contract = [
     {
-      Contract_type: isEditing ? (edit_contract ? <Input /> : null):( null) ,
-      From: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
-      To: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
-      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null):( null),
-      Subject: isEditing ? (edit_contract ? <Input /> : null):( null),
-      Department: isEditing ? (edit_contract ? <Input /> : null):( null),
-      Note: isEditing ? (edit_contract ? <Input /> : null):( null),
-      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => {}} /> : null):( null),
+      Contract_type: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      From: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      To: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      Subject: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      Department: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      Note: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => { }} /> : null) : (null),
     },
   ];
   return (

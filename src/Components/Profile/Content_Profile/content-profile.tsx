@@ -122,9 +122,17 @@ const ContentProfile: React.FC = () => {
     handleUpdateInfo();
   };
 
+  const beforeUpload = (file: File) => {
+    const isImage = file.type.includes('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage;
+  }
+
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
-    
+
     if (infoAPI.SignatureTemp) {
       console.log('infoAPI.Signature check final:', infoAPI.SignatureTemp);
       const resSig = await request.post('/user/signature', {
@@ -132,8 +140,8 @@ const ContentProfile: React.FC = () => {
         Signature: infoAPI.SignatureTemp
       }, config)
       console.log('res set Signature:', resSig);
-      if(!resSig.data.Success) return message.error(resSig.data.Message)
-      
+      if (!resSig.data.Success) return message.error(resSig.data.Message)
+
     }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
@@ -185,51 +193,51 @@ const ContentProfile: React.FC = () => {
   const handleNotSave = () => {
     return (
       <>
-      <Modal
-      title=""
-      open={visible}
-      // onCancel={handleCloseModal}
-      // onOk={handleOk}
-      centered={true}
-      bodyStyle={{ alignItems: "centered" }}
-    >
-      Are you sure
-    </Modal>
+        <Modal
+          title=""
+          open={visible}
+          // onCancel={handleCloseModal}
+          // onOk={handleOk}
+          centered={true}
+          bodyStyle={{ alignItems: "centered" }}
+        >
+          Are you sure
+        </Modal>
       </>
-      
+
     )
-    
+
   };
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
-  const onEditInfo = () => {
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
-    }));
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
-    }));
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
-    }));
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
-    }));
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
-    }));
-    setInfoAPI((prevInfo) => ({
-      ...prevInfo,
-      StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
-    }));
-    setIsEditing(true);
-  };
+  // const onEditInfo = () => {
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
+  //   }));
+  //   setIsEditing(true);
+  // };
 
   // handle Modal
   const handleOpenModal = () => {
@@ -376,19 +384,21 @@ const ContentProfile: React.FC = () => {
               // HERE
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src = {URL.createObjectURL(image)}
+                src={URL.createObjectURL(image)}
               />
             ) : (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-                // icon={<UserOutlined />}
+              // icon={<UserOutlined />}
               />
             )}
 
             <div className="Upload-Avatar">
               <Upload
                 {...uploadConfig}
+                accept="image/*"
+                beforeUpload={beforeUpload}
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -417,9 +427,10 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            onClick={() => {
-              onEditInfo();
-            }}
+            onClick={() => setIsEditing(true)}
+            // onClick={() => {
+            //   onEditInfo();
+            // }}
             icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}

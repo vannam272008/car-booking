@@ -39,13 +39,13 @@ const Signature: React.FC<SignatureProps> = ({
   const [selectedFont, setSelectedFont] = useState<string>("");
   const [img_preview, setImg_Preview] = useState<string | undefined>();
 
-  // const beforeUpload = (file: File) => {
-  //   const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === "image/jpg";
-  //   if (!isImage) {
-  //     message.error('You can only upload image files type (.png, .jpg, .jpeg)!');
-  //   }
-  //   return isImage;
-  // }
+  const beforeUpload = (file: File) => {
+    const isImage = file.type.includes('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage;
+  }
 
   const handleChangeSelect = (value: string) => {
     // console.log('change font !');
@@ -184,7 +184,7 @@ const Signature: React.FC<SignatureProps> = ({
         <>
           <Dragger
             {...uploadConfig}
-            // beforeUpload={beforeUpload}
+            beforeUpload={beforeUpload}
             accept="image/*"
             listType="picture-card"
             showUploadList={false}
