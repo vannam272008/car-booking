@@ -50,7 +50,7 @@ const Signature: React.FC<SignatureProps> = ({
         SignatureTemp: ps.replace(ps.substring(ps.indexOf('font-family'), ps.indexOf(';"')), `font-family: ${value}`),
       };
     });
-    
+
     setSelectedFont(value);
   };
 
@@ -106,12 +106,21 @@ const Signature: React.FC<SignatureProps> = ({
                   onChange={(e) => {
                     console.log(infoAPI.SignatureTemp);
                     setStyleSignature(e.target.value)
-                    setInfoAPI((prev) => {
-                      return {
-                        ...prev,
-                        SignatureTemp: `<h1 style="font-size: 30px; font-family: ${selectedFont};">${e.target.value}</h1>`,
-                      };
-                    });
+                    if(e.target.value && e.target.value.length > 0) {
+                      setInfoAPI((prev) => {
+                        return {
+                          ...prev,
+                          SignatureTemp: `<h1 style="font-size: 30px; font-family: ${selectedFont};">${e.target.value}</h1>`,
+                        };
+                      });
+                    } else {
+                      setInfoAPI((prev) => {
+                        return {
+                          ...prev,
+                          SignatureTemp: '',
+                        };
+                      });
+                    }
                     setImg_Preview("");
                   }}
                   style={{ width: "95%" }}
@@ -137,24 +146,24 @@ const Signature: React.FC<SignatureProps> = ({
           </Row>
           <Row>
             {/* HERE */}
-            {infoAPI.Signature ? (
-              <div className="QR_signature">
-                <QRCodeCanvas
-                  style={{ height: "200px", width: "200px" }}
-                  value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
-                />
-                <p>{infoAPI.Email}</p>
-                <p>{currentTime.toLocaleString()}</p>
-                {!styleSignature || styleSignature.length === 0
+            <div className="QR_signature">
+              <QRCodeCanvas
+                style={{ height: "200px", width: "200px" }}
+                value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
+              />
+              <p>{infoAPI.Email}</p>
+              <p>{currentTime.toLocaleString()}</p>
+              {infoAPI.SignatureTemp && infoAPI.SignatureTemp.length !== 0
                 ?
-                (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
-                infoAPI.Signature && infoAPI.Signature.length > 0 ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
+                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 && infoAPI.SignatureTemp.includes("<h1") ?
+                <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
+                <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img>)
                 :
-                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
-                infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
-                infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>)}
-              </div>
-            ) : null}
+                (infoAPI.Signature ? 
+                  (infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img>)
+                : null)
+                }
+            </div>
           </Row>
         </>
       ),
@@ -177,29 +186,26 @@ const Signature: React.FC<SignatureProps> = ({
               Click or drag file to this area to upload
             </p>
           </Dragger>
-          {infoAPI.Signature ? (
-            <div className="QR_signature">
-              <QRCodeCanvas
-                style={{ height: "200px", width: "200px" }}
-                value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
-              />
-              <p>{infoAPI.Email}</p>
-              <p>{currentTime.toLocaleString()}</p>
+          <div className="QR_signature">
+            <QRCodeCanvas
+              style={{ height: "200px", width: "200px" }}
+              value="https://tasken.io/setting/system/employee?userId=87fa2638-eefe-42da-baec-70fbb6a5fd23"
+            />
+            <p>{infoAPI.Email}</p>
+            <p>{currentTime.toLocaleString()}</p>
 
-              {/* HERE */}
-              {!img_preview ?
-              /* infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
-              infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div> */
-              (!styleSignature || styleSignature.length === 0
+            {/* HERE */}
+            {!img_preview ?
+              (infoAPI.Signature && !styleSignature
                 ?
-                (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : 
-                infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
+                (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> :
+                  infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
                 :
-                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
-                infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> : 
-                infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>))
+                (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
+                  infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
+                    infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>))
               :
-                <Image
+              <Image
                 src={img_preview}
                 alt="upload image"
                 style={{
@@ -209,10 +215,8 @@ const Signature: React.FC<SignatureProps> = ({
                   maxHeight: "150px",
                 }}
               />
-              }
-              
-            </div>
-          ) : null}
+            }
+          </div>
         </>
       ),
     },
@@ -228,8 +232,8 @@ const Signature: React.FC<SignatureProps> = ({
       />
       <p>{infoAPI.Email}</p>
       <p>{currentTime.toLocaleString()}</p>
-      
-      
+
+
       {/* HERE */}
       {infoAPI.Signature && !infoAPI.Signature.includes("<h1") ? (
         <img
