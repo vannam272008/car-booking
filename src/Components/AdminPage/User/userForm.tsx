@@ -7,6 +7,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import dayjs, { Dayjs } from 'dayjs';
+import { resetUser } from '../Utils';
 
 
 const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action }) => {
@@ -59,19 +60,19 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       console.log('check final imageUrl', imageUrl);
 
       onSave(values as User, file);
+      setDataUser(resetUser)
     });
+
   };
 
   useEffect(() => {
-    form.resetFields()
-    setImageUrl(null)
-    setTempUrl(null)
-    setListFiles([])
+    handleFormReset()
     deleteFilesTemp()
 
   }, [initialValues])
 
   const handleFormReset = () => {
+    setDataUser(initialValues)
     form.resetFields()
     setImageUrl(null)
     setTempUrl(null)
@@ -173,6 +174,19 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
             </Col>
           </Row>
           <Row gutter={12}>
+            <Col span={24}>
+              <Form.Item label="Belong to departments" name="Departments">
+                <Select mode="multiple">
+                  {departments.map((d) => (
+                    <Option key={d.Id}>
+                      {d.Name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}>
             <Col span={12}>
               <Form.Item label="Email" name="Email">
                 <Input />
@@ -196,6 +210,19 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
                   {roles.map((role) => (
                     <Option key={role.Id}>
                       {role.Title}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={12}>
+            <Col span={24}>
+              <Form.Item label="Belong to departments" name="Departments">
+                <Select mode="multiple">
+                  {departments.map((d) => (
+                    <Option key={d.Id}>
+                      {d.Name}
                     </Option>
                   ))}
                 </Select>
@@ -247,7 +274,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item label="Birthday">
-            <DatePicker style={{ float: 'right' }} value={dayjs(dataUser.Birthday)} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder="Birthday" />
+            <DatePicker style={{ float: 'right' }} value={dataUser.Birthday ? dayjs(dataUser.Birthday) : null} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder="Birthday" />
             {/* <Input hidden /> */}
           </Form.Item>
         </Col>
@@ -263,36 +290,16 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
             <Input />
           </Form.Item>
         </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <Form.Item label="Office location" name="OfficeLocation">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={12}>
         <Col span={12}>
           <Form.Item label="Line manager" name="LineManager">
             <Input />
           </Form.Item>
         </Col>
-        <Col span={12}>
-          <Form.Item label="Cost center" name="CostCenter">
-            <Input />
-          </Form.Item>
-        </Col>
       </Row>
-      <Row gutter={12}>
+      <Row>
         <Col span={24}>
-          <Form.Item label="Belong to departments" name="Departments">
-            <Select mode="multiple">
-              {departments.map((d) => (
-                <Option key={d.Id}>
-                  {d.Name}
-                </Option>
-              ))}
-            </Select>
+          <Form.Item label="Office location" name="OfficeLocation">
+            <Input />
           </Form.Item>
         </Col>
       </Row>
@@ -432,7 +439,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Personal email" name="Personal email">
+          <Form.Item label="Personal email" name="PersonalEmail">
             <Input />
           </Form.Item>
         </Col>
@@ -558,14 +565,14 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Province / State" name="FlatNumberR">
+          <Form.Item label="Province / State" name="ProvinceR">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Postal code" name="CityR">
+          <Form.Item label="Postal code" name="PostalCodeR">
             <Input />
           </Form.Item>
         </Col>
@@ -575,13 +582,13 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Form.Item>
         </Col>
       </Row>
-      <Row gutter={12}>
+      {/* <Row gutter={12}>
         <Col span={12}>
           <Form.Item label="Signature" name="Signature">
             <Input />
           </Form.Item>
         </Col>
-      </Row>
+      </Row> */}
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
         <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>

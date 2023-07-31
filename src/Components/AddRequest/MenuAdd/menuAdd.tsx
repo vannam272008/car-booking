@@ -7,7 +7,6 @@ import {
     WarningOutlined
 } from '@ant-design/icons';
 import './menuAdd.css'
-// import { request } from 'http';
 import { useNavigate } from 'react-router-dom';
 import request from '../../../Utils/request';
 import { RcFile } from 'antd/es/upload';
@@ -69,6 +68,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
             openNotification('topRight')
         }
     };
+
     useEffect(() => {
         if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
             if (formData.Status.length > 0 && formData.Status === "Draft") {
@@ -152,7 +152,6 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
             openNotification('topRight');
         }
     }
-
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({

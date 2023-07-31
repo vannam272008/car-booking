@@ -1,3 +1,4 @@
+import { Navigate } from "react-router-dom";
 import AddRequest from "../Components/AddRequest/AddRequest/addRequest";
 import AdminPage from "../Components/AdminPage";
 import DetailRequest from "../Components/DetailRequest/DetailRequest/detailRequest";
@@ -13,7 +14,7 @@ import SettingPage from "../Pages/Setting/settingPage";
 const public_routes = [
   {
     path: "*",
-    element: <PageNotFound />,
+    element: <Navigate to="/login" />,
   },
   {
     path: "/login",
@@ -66,6 +67,10 @@ const private_routes = [
     path: "*",
     element: <PageNotFound />,
   },
+  {
+    path: "/page-not-found",
+    element: <PageNotFound />
+  }
 ];
 
 export { public_routes, private_routes };

@@ -1,95 +1,8 @@
-import React, { useEffect } from "react";
-import { Moment } from "moment";
+import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
 import { RcFile } from "antd/es/upload/interface";
-
-interface API {
-  EmployeeNumber: string;
-  Username: string;
-  Email: string;
-  AvatarPath: RcFile | null;
-  FirstName: string;
-  LastName: string;
-  Sex: boolean;
-  Birthday: string;
-  JobTitle: string;
-  Company: string;
-  Unit: string;
-  Function: string;
-  SectionsOrTeam: string;
-  Groups: string;
-  OfficeLocation: string;
-  LineManager: string;
-  BelongToDepartments: string;
-  Rank: string;
-  EmployeeType: string;
-  Rights: string;
-  Nation: string;
-  Phone: string;
-  IdCardNumber: string;
-  DateOfIdCard: string;
-  PlaceOfIdCard: string;
-  HealthInsurance: string;
-  StartingDate: string;
-  StartingDateOfficial: string;
-  LeavingDate: string;
-  StartDateMaternityLeave: string;
-  Note: string;
-  AcademicLevel: string;
-  Qualification: string;
-  BusinessPhone: string;
-  HomePhone: string;
-  PersonalEmail: string;
-  BankName: string;
-  BankBranchNumber: string;
-  BankBranchName: string;
-  BankAccountNumber: string;
-  BankAccountName: string;
-  Street: string;
-  FlatNumber: string;
-  City: string;
-  Province: string;
-  PostalCode: string;
-  Country: string;
-  MartialStatus: string;
-  ContactName: string;
-  Relationship: string;
-  PhoneR: string;
-  StreetR: string;
-  FlatNumberR: string;
-  CityR: string;
-  ProvinceR: string;
-  PostalCodeR: string;
-  CountryR: string;
-  Signature: string;
-}
-
-interface OverviewProps {
-  isEditing: boolean;
-  infoAPI: {
-    EmployeeNumber: string;
-    Username: string;
-    Email: string;
-    FirstName: string;
-    LastName: string;
-    Sex: boolean;
-    Birthday: string;
-    JobTitle: string;
-    Company: string;
-    Unit: string;
-    Function: string;
-    SectionsOrTeam: string;
-    Groups: string;
-    OfficeLocation: string;
-    LineManager: string;
-    BelongToDepartments: string;
-    Rank: string;
-    EmployeeType: string;
-    Rights: string;
-  };
-  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
-}
+import { API, OverviewProps } from "../interface"
 
 const Overview: React.FC<OverviewProps> = ({
   infoAPI,
@@ -101,7 +14,7 @@ const Overview: React.FC<OverviewProps> = ({
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      Birthday: dateString.substring(0, 10),
+      Birthday: dateString ? dateString.substring(0, 10) : "",
     }));
   };
 
@@ -164,7 +77,6 @@ const Overview: React.FC<OverviewProps> = ({
       ) : (
         <strong>{infoAPI.FirstName}</strong>
       )
-
     },
     {
       overview_title: "Last name",
@@ -211,14 +123,14 @@ const Overview: React.FC<OverviewProps> = ({
       overview_title: "Birth day",
       info: isEditing ? (
         <DatePicker
-          value={infoAPI.Birthday === null || infoAPI.Birthday ? dayjs() : dayjs(infoAPI.Birthday)}
+          value={infoAPI.Birthday === null || infoAPI.Birthday ? null : dayjs(infoAPI.Birthday)}
           style={{ width: "100%" }}
           onChange={handleDate_birth}
           placeholder="Birth day"
           format="YYYY-MM-DD"
         />
       ) : (
-        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : null}</strong>
+        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}</strong>
       ),
     },
     {

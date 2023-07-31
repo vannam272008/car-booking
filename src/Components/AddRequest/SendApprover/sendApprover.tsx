@@ -21,13 +21,18 @@ interface PropsDataList {
     setApplyNote: React.Dispatch<React.SetStateAction<boolean>>;
     listOfUserId: string[];
     setListOfUserId: React.Dispatch<React.SetStateAction<string[]>>;
-
 }
 
 
 function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
+    const [inputs, setInputs] = useState<string[]>(['Initial Input']);
+    const [counterApprover, setCounterApprover] = useState(1);
+    const [editingIndex, setEditingIndex] = useState(-1);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>([`Approver ${counterApprover}`]);
+    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
+    const [searchValue, setSearchValue] = useState<string>('');
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
@@ -35,7 +40,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
             }).catch(() => {
-                // setLoading(true);
             });
         }
         getDataDepartmentMember();
@@ -43,16 +47,9 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
 
     const { Option } = Select;
 
-    // const [applyNote, setApplyNote] = useState<DataApplyNote>(false);
-
     const onChange = (e: RadioChangeEvent) => {
-        // console.log('radio checked', e.target.value);
         setApplyNote(e.target.value);
     };
-
-    const [inputs, setInputs] = useState<string[]>(['Initial Input']);
-
-    const [counterApprover, setCounterApprover] = useState(1);
 
     const handleAddInput = () => {
         setInputs([...inputs, '']);
@@ -62,22 +59,18 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
 
     const handleDelete = (index: number) => {
         const newInputs = [...inputs];
+        newInputs.splice(index, 1);
+        setInputs(newInputs);
         const newListOfUser = [...listOfUserId];
         newListOfUser.splice(index, 1);
         setListOfUserId(newListOfUser);
-        newInputs.splice(index, 1);
-        setInputs(newInputs);
     };
-
-    const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>([`Approver ${counterApprover}`]);
 
     const handleInputChangeApprover = (index: number, value: string) => {
         const newApprovers = [...labelApprovers];
         newApprovers[index] = value;
         setLabelApprovers(newApprovers);
     };
-
 
     const handleSave = (index: number) => {
         setEditingIndex(-1);
@@ -86,14 +79,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     const handleEdit = (index: number) => {
         setEditingIndex(index);
     };
-
-    const handleBeforeUpload = (file: RcFile) => {
-        setFileList([...fileList, file]);
-        return false;
-    };
-
-    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
-
 
     const handleSelectChange = (index: number, value: string) => {
         if (listOfUserId.indexOf(value) !== -1) {
@@ -113,12 +98,10 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             placement,
         });
     };
-    const [searchValue, setSearchValue] = useState<string>('');
 
     const handleSearch = (inputValue: string) => {
         setSearchValue(inputValue);
     };
-
 
     const filteredData = () => {
         if (dataDepartmentMember.length > 0) {
@@ -132,8 +115,12 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         else return [];
     };
 
+    const handleBeforeUpload = (file: RcFile) => {
+        setFileList([...fileList, file]);
+        return false;
+    };
+
     const handleRemoveFile = (file: UploadFile<any>) => {
-        // Filter out the file to be removed from the fileList
         const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
         setFileList(updatedFileList);
     };

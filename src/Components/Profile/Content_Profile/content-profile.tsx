@@ -12,74 +12,13 @@ import {
 } from "@ant-design/icons";
 import "./profile.css";
 import { useNavigate, useParams } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
 import type { RcFile } from "antd/es/upload/interface";
 import Overview from "../Overview_Tab/overview";
 import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
-
-interface API {
-  EmployeeNumber: string;
-  Username: string;
-  Email: string;
-  AvatarPath: RcFile | null;
-  FirstName: string;
-  LastName: string;
-  Sex: boolean;
-  Birthday: string;
-  JobTitle: string;
-  Company: string;
-  Unit: string;
-  Function: string;
-  SectionsOrTeam: string;
-  Groups: string;
-  OfficeLocation: string;
-  LineManager: string;
-  BelongToDepartments: string;
-  Rank: string;
-  EmployeeType: string;
-  Rights: string;
-  Nation: string;
-  Phone: string;
-  IdCardNumber: string;
-  DateOfIdCard: string;
-  PlaceOfIdCard: string;
-  HealthInsurance: string;
-  StartingDate: string;
-  StartingDateOfficial: string;
-  LeavingDate: string;
-  StartDateMaternityLeave: string;
-  Note: string;
-  AcademicLevel: string;
-  Qualification: string;
-  BusinessPhone: string;
-  HomePhone: string;
-  PersonalEmail: string;
-  BankName: string;
-  BankBranchNumber: string;
-  BankBranchName: string;
-  BankAccountNumber: string;
-  BankAccountName: string;
-  Street: string;
-  FlatNumber: string;
-  City: string;
-  Province: string;
-  PostalCode: string;
-  Country: string;
-  MartialStatus: string;
-  ContactName: string;
-  Relationship: string;
-  PhoneR: string;
-  StreetR: string;
-  FlatNumberR: string;
-  CityR: string;
-  ProvinceR: string;
-  PostalCodeR: string;
-  CountryR: string;
-  Signature: string;
-}
+import { API } from "../interface"
 
 const ContentProfile: React.FC = () => {
   const jwt_admin = localStorage.getItem("Token");
@@ -158,22 +97,23 @@ const ContentProfile: React.FC = () => {
     PostalCodeR: "",
     CountryR: "",
     Signature: "",
+    SignatureTemp: "",
   });
 
   const { userID } = useParams();
+  const endpoint = "/user/profile/" + userID;
+  const getProfile = async () => {
+    await request
+      .get(endpoint)
+      .then((response) => {
+        setInfoAPI(response.data.Data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   useEffect(() => {
-    const endpoint = "/user/profile/" + userID;
-    const getProfile = async () => {
-      await request
-        .get(endpoint)
-        .then((response) => {
-          setInfoAPI(response.data.Data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
     getProfile();
   }, []);
 
@@ -182,15 +122,35 @@ const ContentProfile: React.FC = () => {
     handleUpdateInfo();
   };
 
+  const beforeUpload = (file: File) => {
+    const isImage = file.type.includes('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage;
+  }
+
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
+
+    if (infoAPI.SignatureTemp) {
+      console.log('infoAPI.Signature check final:', infoAPI.SignatureTemp);
+      const resSig = await request.post('/user/signature', {
+        Id: userID,
+        Signature: infoAPI.SignatureTemp
+      }, config)
+      console.log('res set Signature:', resSig);
+      if (!resSig.data.Success) return message.error(resSig.data.Message)
+
+    }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
       message.success("Edit success !");
     } else {
       message.error(res.data.Message);
     }
-    console.log("signature: ", infoAPI.Signature)
+    console.log("signature: ", infoAPI.Signature);
+    getProfile();
   };
 
   //declare contract
@@ -216,43 +176,68 @@ const ContentProfile: React.FC = () => {
     const formData = new FormData();
     formData.append("fileName", image ? image.name : "");
     formData.append("userId", userID ? userID : "");
-    await request.postForm("/file/upload-finish", formData, config);
+    let res = await request.postForm("/file/upload-finish", formData, config);
+    infoAPI.AvatarPath = res.data.Data;
+    console.log("res.data.Data:", res.data.Data);
+
+    setInfoAPI((prevData) => ({
+      ...prevData,
+      AvatarPath: res.data.Data,
+    }));
   };
 
   const handleFileChange = (file: RcFile) => {
     setImage(file);
   };
 
+  const handleNotSave = () => {
+    return (
+      <>
+        <Modal
+          title=""
+          open={visible}
+          // onCancel={handleCloseModal}
+          // onOk={handleOk}
+          centered={true}
+          bodyStyle={{ alignItems: "centered" }}
+        >
+          Are you sure
+        </Modal>
+      </>
+
+    )
+
+  };
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
-  const onEditInfo = () => {
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
-    // }));
-    // setInfoAPI((prevInfo) => ({
-    //   ...prevInfo,
-    //   StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
-    // }));
-    setIsEditing(true);
-  };
+  // const onEditInfo = () => {
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
+  //   }));
+  //   setIsEditing(true);
+  // };
 
   // handle Modal
   const handleOpenModal = () => {
@@ -305,9 +290,17 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} infoAPI={infoAPI} setInfoAPI={setInfoAPI} />,
+      children: (
+        <Signature
+          isEditing={isEditing}
+          infoAPI={infoAPI}
+          setInfoAPI={setInfoAPI}
+        />
+      ),
     },
   ];
+
+  console.log(infoAPI);
 
   return (
     <div className="content-profile">
@@ -316,30 +309,41 @@ const ContentProfile: React.FC = () => {
           <>
             <Button
               className="btn"
-              style={{ margin: "20px 0px 20px 25px" }}
+              style={{ margin: "10px 0px 20px 25px" }}
               onClick={() => {
                 onSave();
               }}
-              icon={<SaveOutlined style={{ fontSize: "30px" }} />}
             >
+              <SaveOutlined style={{ fontSize: "35px" }} />
               Save
             </Button>
+            <Button
+              className="btn"
+              style={{ margin: "10px 10px 20px 5px" }}
+              onClick={handleNotSave}
+            >
+              <LeftCircleOutlined
+                style={{
+                  fontSize: "35px",
+                }}
+              />
+              Return
+            </Button>
           </>
-        ) : null}
-        <Button
-          className="btn"
-          style={{ margin: "20px 10px 20px 5px" }}
-          onClick={handleReturnSetting}
-          icon={
+        ) : (
+          <Button
+            className="btn"
+            style={{ margin: "10px 10px 20px 5px" }}
+            onClick={handleReturnSetting}
+          >
             <LeftCircleOutlined
               style={{
-                fontSize: "30px",
+                fontSize: "35px",
               }}
             />
-          }
-        >
-          Return
-        </Button>
+            Return
+          </Button>
+        )}
       </div>
       <div className="info-user">
         {isEditing ? (
@@ -377,6 +381,7 @@ const ContentProfile: React.FC = () => {
             }}
           >
             {image ? (
+              // HERE
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={URL.createObjectURL(image)}
@@ -384,13 +389,16 @@ const ContentProfile: React.FC = () => {
             ) : (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                icon={<UserOutlined />}
+                src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+              // icon={<UserOutlined />}
               />
             )}
 
             <div className="Upload-Avatar">
               <Upload
                 {...uploadConfig}
+                accept="image/*"
+                beforeUpload={beforeUpload}
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -402,20 +410,14 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          {onOk ? (
-            <Avatar
-              className="avatar"
-              size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-              icon={<UserOutlined />}
-              src={URL.createObjectURL(image!)}
-            />
-          ) : (
-            <Avatar
-              className="avatar"
-              size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-              icon={<UserOutlined />}
-            />
-          )}
+          <Avatar
+            className="avatar"
+            size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
+            icon={<UserOutlined />}
+            // src={URL.createObjectURL(image!)}
+
+            src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+          />
         </span>
         <div></div>
         <h1 style={{ marginLeft: "50px" }}>
@@ -425,9 +427,10 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            onClick={() => {
-              onEditInfo();
-            }}
+            onClick={() => setIsEditing(true)}
+            // onClick={() => {
+            //   onEditInfo();
+            // }}
             icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}

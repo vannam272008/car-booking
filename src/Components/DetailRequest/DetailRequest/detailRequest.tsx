@@ -10,6 +10,8 @@ import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
+import PageNotFound from '../../../Pages/404';
+import { useNavigate } from 'react-router-dom';
 
 function DetailRequest(): JSX.Element {
 
@@ -45,6 +47,7 @@ function DetailRequest(): JSX.Element {
     const profile = false;
 
     const { requestId } = useParams();
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -54,7 +57,9 @@ function DetailRequest(): JSX.Element {
                 setDetailData(res.data.Data);
                 setShowFeedback(res.data.Data.Status);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         const getAttachmentsRequest = async () => {
             const endpoint = "/request/attachment/requestId=" + requestId;
