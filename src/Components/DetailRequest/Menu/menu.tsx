@@ -195,7 +195,7 @@ function MenuRequest(props: any): JSX.Element {
                 </Menu.Item>
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
-                        <Button type="primary" onClick={handleDelete} disabled={checkBoxDelete ? false : true}>OK</Button>
+                        <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>Cancel</Button>
                     </div>
                 }>
