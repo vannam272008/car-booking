@@ -122,6 +122,14 @@ const ContentProfile: React.FC = () => {
     handleUpdateInfo();
   };
 
+  const beforeUpload = (file: File) => {
+    const isImage = file.type.includes('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage;
+  }
+
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
 
@@ -203,6 +211,7 @@ const ContentProfile: React.FC = () => {
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
+<<<<<<< HEAD
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
@@ -230,6 +239,35 @@ const ContentProfile: React.FC = () => {
     }));
     setIsEditing(true);
   };
+=======
+  // const onEditInfo = () => {
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
+  //   }));
+  //   setInfoAPI((prevInfo) => ({
+  //     ...prevInfo,
+  //     StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
+  //   }));
+  //   setIsEditing(true);
+  // };
+>>>>>>> feature-fe
 
   // handle Modal
   const handleOpenModal = () => {
@@ -389,6 +427,8 @@ const ContentProfile: React.FC = () => {
             <div className="Upload-Avatar">
               <Upload
                 {...uploadConfig}
+                accept="image/*"
+                beforeUpload={beforeUpload}
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -417,9 +457,10 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            onClick={() => {
-              onEditInfo();
-            }}
+            onClick={() => setIsEditing(true)}
+            // onClick={() => {
+            //   onEditInfo();
+            // }}
             icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}
