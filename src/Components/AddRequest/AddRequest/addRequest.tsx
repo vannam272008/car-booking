@@ -67,7 +67,7 @@ function AddRequest(): JSX.Element {
     //define initialValue for element input form
     const initialValueSender = userLoginName ?? '';
     const initialValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
-    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : '';
+    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'Please choose another department !';
     const initialValueUsageFrom = formData.UsageFrom === "" ? dayjs() : dayjs(formData.UsageFrom);
 
     const { Option } = Select;
@@ -103,7 +103,7 @@ function AddRequest(): JSX.Element {
                     setDataDepartmentMember(res.data.Data);
                     setFormData((prevFormData) => ({
                         ...prevFormData,
-                        ReceiverId: res.data.Data[0].User.Id,
+                        ReceiverId: res.data.Data.length > 0 ? res.data.Data[0].User.Id : '',
                     }));
                     setLoading(false);
                 })
@@ -165,7 +165,7 @@ function AddRequest(): JSX.Element {
 
     //show value option after search
     const filteredData = () => {
-        if (dataDepartmentMember.length > 0) {
+        if (dataDepartmentMember && dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
                     departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
@@ -184,7 +184,7 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    // console.log(formData);
+    console.log('formdata', formData);
 
     return (
         <RequestLayout profile={profile}>
