@@ -3,7 +3,7 @@ import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
-import { API, AdditionalProps } from "../interface"
+import { AdditionalProps } from "../interface";
 
 const { Title } = Typography;
 
@@ -93,7 +93,13 @@ const Additional: React.FC<AdditionalProps> = ({
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => { setEdit_Contract(true) }} /> : null,
+      title: isEditing ? (
+        <PlusCircleFilled
+          onClick={() => {
+            setEdit_Contract(true);
+          }}
+        />
+      ) : null,
       dataIndex: "action",
     },
   ];
@@ -162,22 +168,29 @@ const Additional: React.FC<AdditionalProps> = ({
     {
       additional_title: "Date of ID card",
       info: isEditing ? (
-        <DatePicker
-          value={
-            infoAPI.DateOfIdCard === null
-              ? null
-              : dayjs(infoAPI.DateOfIdCard)
-          }
-          style={{ width: "100%" }}
-          onChange={handleDate_Id_card}
-          placeholder="Date of ID card"
-          format="YYYY-MM-DD"
-        />
-      ) : (infoAPI.DateOfIdCard === null ? (
-        infoAPI.DateOfIdCard
+        infoAPI.DateOfIdCard ? (
+          <DatePicker
+            value={dayjs(infoAPI.DateOfIdCard)}
+            style={{ width: "100%" }}
+            onChange={handleDate_Id_card}
+            placeholder="Date of ID card"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            // value={infoAPI.Birthday === null ? null : dayjs(infoAPI.Birthday)}
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handleDate_Id_card}
+            placeholder="Date of ID card"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : ""
-      ))
+        <strong>
+          {infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : ""}
+        </strong>
+      ),
     },
     {
       additional_title: "Health insurance",
@@ -202,80 +215,110 @@ const Additional: React.FC<AdditionalProps> = ({
     {
       additional_title: "Starting date",
       info: isEditing ? (
-        <DatePicker
-          value={
-            infoAPI.StartingDate === null
-              ? null
-              : dayjs(infoAPI.StartingDate)
-          }
-          style={{ width: "100%" }}
-          onChange={handleDate_start_date}
-          placeholder="Starting date"
-          format="YYYY-MM-DD"
-        />
-      ) : (infoAPI.StartingDate === null ? (
-        infoAPI.StartingDate
+        infoAPI.StartingDate ? (
+          <DatePicker
+            value={dayjs(infoAPI.StartingDate)}
+            style={{ width: "100%" }}
+            onChange={handleDate_start_date}
+            placeholder="Starting date"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handleDate_start_date}
+            placeholder="Starting date"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : ""
-      ))
+        <strong>
+          {infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : ""}
+        </strong>
+      ),
     },
     {
       additional_title: "Starting date offical",
       info: isEditing ? (
-        <DatePicker
-          value={
-            infoAPI.StartingDateOfficial === null
-              ? null
-              : dayjs(infoAPI.StartingDateOfficial)
-          }
-          style={{ width: "100%" }}
-          onChange={handleDate_start_date_official}
-          placeholder="Starting date offical"
-          format="YYYY-MM-DD"
-        />
-      ) : (infoAPI.StartingDateOfficial === null ? (
-        infoAPI.StartingDateOfficial
+        infoAPI.StartingDateOfficial ? (
+          <DatePicker
+            value={dayjs(infoAPI.StartingDateOfficial)}
+            style={{ width: "100%" }}
+            onChange={handleDate_start_date_official}
+            placeholder="Starting date offical"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handleDate_start_date_official}
+            placeholder="Starting date offical"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : ""
-      ))
+        <strong>
+          {infoAPI.StartingDateOfficial
+            ? infoAPI.StartingDateOfficial.substring(0, 10)
+            : ""}
+        </strong>
+      ),
     },
     {
       additional_title: "Leaving date",
       info: isEditing ? (
-        <DatePicker
-          value={
-            infoAPI.LeavingDate === null ? null : dayjs(infoAPI.LeavingDate)
-          }
-          style={{ width: "100%" }}
-          onChange={handleleaving_date}
-          placeholder="Leaving date"
-          format="YYYY-MM-DD"
-        />
-      ) : (infoAPI.LeavingDate === null ? (
-        infoAPI.LeavingDate
+        infoAPI.LeavingDate ? (
+          <DatePicker
+            value={dayjs(infoAPI.LeavingDate)}
+            style={{ width: "100%" }}
+            onChange={handleleaving_date}
+            placeholder="Leaving date"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handleleaving_date}
+            placeholder="Leaving date"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : ""
-      ))
+        <strong>
+          {infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : ""}
+        </strong>
+      ),
     },
     {
       additional_title: "Start Date Maternity Leave",
       info: isEditing ? (
-        <DatePicker
-          value={
-            infoAPI.StartDateMaternityLeave === null
-              ? null
-              : dayjs(infoAPI.StartDateMaternityLeave)
-          }
-          style={{ width: "100%" }}
-          onChange={handlestart_date_maternity_leave}
-          placeholder="Start Date Maternity Leave"
-          format="YYYY-MM-DD"
-        />
-      ) : (infoAPI.StartDateMaternityLeave === null ? (
-        infoAPI.StartDateMaternityLeave
+        infoAPI.StartDateMaternityLeave ? (
+          <DatePicker
+            value={dayjs(infoAPI.StartDateMaternityLeave)}
+            style={{ width: "100%" }}
+            onChange={handlestart_date_maternity_leave}
+            placeholder="Start Date Maternity Leave"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handlestart_date_maternity_leave}
+            placeholder="Start Date Maternity Leave"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : ""
-      ))
+        <strong>
+          {infoAPI.StartDateMaternityLeave
+            ? infoAPI.StartDateMaternityLeave.substring(0, 10)
+            : ""}
+        </strong>
+      ),
     },
     {
       additional_title: "Note",
@@ -637,14 +680,18 @@ const Additional: React.FC<AdditionalProps> = ({
 
   let dataSource_contract = [
     {
-      Contract_type: isEditing ? (edit_contract ? <Input /> : null) : (null),
-      From: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
-      To: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
-      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
-      Subject: isEditing ? (edit_contract ? <Input /> : null) : (null),
-      Department: isEditing ? (edit_contract ? <Input /> : null) : (null),
-      Note: isEditing ? (edit_contract ? <Input /> : null) : (null),
-      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => { }} /> : null) : (null),
+      Contract_type: isEditing ? edit_contract ? <Input /> : null : null,
+      From: isEditing ? edit_contract ? <DatePicker /> : null : null,
+      To: isEditing ? edit_contract ? <DatePicker /> : null : null,
+      Signing_date: isEditing ? edit_contract ? <DatePicker /> : null : null,
+      Subject: isEditing ? edit_contract ? <Input /> : null : null,
+      Department: isEditing ? edit_contract ? <Input /> : null : null,
+      Note: isEditing ? edit_contract ? <Input /> : null : null,
+      action: isEditing ? (
+        edit_contract ? (
+          <DeleteFilled onClick={() => {}} />
+        ) : null
+      ) : null,
     },
   ];
   return (

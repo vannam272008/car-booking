@@ -1,7 +1,7 @@
 import React from "react";
 import type { TabsProps } from "antd";
 import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   UserAddOutlined,
   LeftCircleOutlined,
@@ -18,7 +18,7 @@ import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
-import { API } from "../interface"
+import { API } from "../interface";
 
 const ContentProfile: React.FC = () => {
   const jwt_admin = localStorage.getItem("Token");
@@ -35,6 +35,7 @@ const ContentProfile: React.FC = () => {
   };
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  // const [infoAPItemp, setInfoAPITemp] = useState<any>();
   //avatar
   const [image, setImage] = useState<RcFile>();
 
@@ -107,15 +108,27 @@ const ContentProfile: React.FC = () => {
       .get(endpoint)
       .then((response) => {
         setInfoAPI(response.data.Data);
+        // setInfoAPITemp(response.data.Data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  const handleNotSave = () => {
+    Modal.confirm({
+      title: "Are you sure you want to cancel this update session ?",
+      width: 1000,
+      onOk() {
+        getProfile();
+        setIsEditing(false);
+      },
+    });
+  };
 
   useEffect(() => {
     getProfile();
-  }, []);
+  },[]);
+
 
   const onSave = () => {
     setIsEditing(false);
@@ -123,25 +136,26 @@ const ContentProfile: React.FC = () => {
   };
 
   const beforeUpload = (file: File) => {
-    const isImage = file.type.includes('image/');
+    const isImage = file.type.includes("image/");
     if (!isImage) {
-      message.error('You can only upload image files!');
+      message.error("You can only upload image files!");
     }
     return isImage;
-  }
+  };
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
 
     if (infoAPI.SignatureTemp) {
-      console.log('infoAPI.Signature check final:', infoAPI.SignatureTemp);
-      const resSig = await request.post('/user/signature', {
-        Id: userID,
-        Signature: infoAPI.SignatureTemp
-      }, config)
-      console.log('res set Signature:', resSig);
-      if (!resSig.data.Success) return message.error(resSig.data.Message)
-
+      const resSig = await request.post(
+        "/user/signature",
+        {
+          Id: userID,
+          Signature: infoAPI.SignatureTemp,
+        },
+        config
+      );
+      if (!resSig.data.Success) return message.error(resSig.data.Message);
     }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
@@ -149,7 +163,6 @@ const ContentProfile: React.FC = () => {
     } else {
       message.error(res.data.Message);
     }
-    console.log("signature: ", infoAPI.Signature);
     getProfile();
   };
 
@@ -178,7 +191,6 @@ const ContentProfile: React.FC = () => {
     formData.append("userId", userID ? userID : "");
     let res = await request.postForm("/file/upload-finish", formData, config);
     infoAPI.AvatarPath = res.data.Data;
-    console.log("res.data.Data:", res.data.Data);
 
     setInfoAPI((prevData) => ({
       ...prevData,
@@ -190,84 +202,47 @@ const ContentProfile: React.FC = () => {
     setImage(file);
   };
 
-  const handleNotSave = () => {
-    return (
-      <>
-        <Modal
-          title=""
-          open={visible}
-          // onCancel={handleCloseModal}
-          // onOk={handleOk}
-          centered={true}
-          bodyStyle={{ alignItems: "centered" }}
-        >
-          Are you sure
-        </Modal>
-      </>
-
-    )
-
-  };
+ 
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
-<<<<<<< HEAD
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      Birthday: infoAPI.Birthday.substring(0, 10),
+      Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave.substring(0, 10),
+      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave
+        ? infoAPI.StartDateMaternityLeave.substring(0, 10)
+        : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      LeavingDate: infoAPI.LeavingDate.substring(0, 10),
+      LeavingDate: infoAPI.LeavingDate
+        ? infoAPI.LeavingDate.substring(0, 10)
+        : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      DateOfIdCard: infoAPI.DateOfIdCard.substring(0, 10),
+      DateOfIdCard: infoAPI.DateOfIdCard
+        ? infoAPI.DateOfIdCard.substring(0, 10)
+        : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDate: infoAPI.StartingDate.substring(0, 10),
+      StartingDate: infoAPI.StartingDate
+        ? infoAPI.StartingDate.substring(0, 10)
+        : "",
     }));
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
-      StartingDateOfficial: infoAPI.StartingDateOfficial.substring(0, 10),
+      StartingDateOfficial: infoAPI.StartingDateOfficial
+        ? infoAPI.StartingDateOfficial.substring(0, 10)
+        : "",
     }));
     setIsEditing(true);
   };
-=======
-  // const onEditInfo = () => {
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
-  //   }));
-  //   setIsEditing(true);
-  // };
->>>>>>> feature-fe
 
   // handle Modal
   const handleOpenModal = () => {
@@ -329,9 +304,6 @@ const ContentProfile: React.FC = () => {
       ),
     },
   ];
-
-  console.log(infoAPI);
-
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
@@ -420,7 +392,7 @@ const ContentProfile: React.FC = () => {
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-              // icon={<UserOutlined />}
+                // icon={<UserOutlined />}
               />
             )}
 
@@ -444,12 +416,9 @@ const ContentProfile: React.FC = () => {
             className="avatar"
             size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
             icon={<UserOutlined />}
-            // src={URL.createObjectURL(image!)}
-
             src={`http://localhost:63642/${infoAPI.AvatarPath}`}
           />
         </span>
-        <div></div>
         <h1 style={{ marginLeft: "50px" }}>
           {infoAPI.FirstName} {infoAPI.LastName}
         </h1>
@@ -457,10 +426,8 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            onClick={() => setIsEditing(true)}
-            // onClick={() => {
-            //   onEditInfo();
-            // }}
+            // onClick={() => setIsEditing(true)}
+            onClick={() => onEditInfo()}
             icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}
