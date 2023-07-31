@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Radio, RadioChangeEvent, Spin, Alert } from 'antd';
+import { Row, Col, Radio, RadioChangeEvent, Spin, Alert, Badge, Card } from 'antd';
 import DoneRequest from '../DoneRequest/doneRequest';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
@@ -99,6 +99,8 @@ function DetailRequest(): JSX.Element {
     //     console.log(attachment);
     //     window = attachment;
     // }
+
+    console.log('hello', workflowData);
 
     return (
         <RequestLayout profile={profile}>
@@ -212,9 +214,28 @@ function DetailRequest(): JSX.Element {
                                     <p>Approvers:</p>
                                     <Row>
                                         {Array.isArray(workflowData) ? (
-                                            workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
-                                                <Col key={approverData.Id} span={8} className='approver'>
-                                                    {approverData.User.FullName}
+                                            workflowData.map((approverData: { Id: number; Status: string; User: { Id: number; FullName: string } }, index: number) => (
+                                                <Col key={approverData.Id} span={6} className='approver'>
+                                                    {approverData.Status === 'Rejected' ? (
+                                                        <Badge.Ribbon text="Rejected" color="red" >
+                                                            <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                {approverData.User.FullName}
+                                                            </Card>
+                                                        </Badge.Ribbon>
+                                                    ) : (
+                                                        approverData.Status === 'Approved' ? (
+                                                            <Badge.Ribbon text="Approved" color="green" >
+                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                    {approverData.User.FullName}
+                                                                </Card>
+                                                            </Badge.Ribbon>) : (
+                                                            <Badge.Ribbon text="Waiting for approval" color="blue" >
+                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                    {approverData.User.FullName}
+                                                                </Card>
+                                                            </Badge.Ribbon>
+                                                        )
+                                                    )}
                                                 </Col>
                                             ))
                                         ) : (

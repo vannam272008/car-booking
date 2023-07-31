@@ -151,6 +151,7 @@ function Comment(): JSX.Element {
                             </Col>
                             <Col span={6}>
                                 <Input.TextArea
+                                    rows={5}
                                     className='input-comment'
                                     placeholder='Write a comment...'
                                     value={newComment}
