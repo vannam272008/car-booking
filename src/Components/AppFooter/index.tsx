@@ -1,14 +1,17 @@
-import { Layout, Menu, Dropdown } from 'antd';
+import { useDispatch } from 'react-redux';
 import { MenuClickEventHandler } from 'rc-menu/lib/interface';
-import "./AppFooter.scss";
+import { Layout, Menu, Dropdown } from 'antd';
+import { setLanguage } from '../../Reducers/languageReducer';
 import united_states from "../../assets/united_states.svg";
 import vietnam from "../../assets/vietnam.svg";
 
 const { Footer } = Layout
 
 const AppFooter = () => {
+    const dispatch = useDispatch();
+
     const handleMenuClick: MenuClickEventHandler = (e) => {
-        console.log(e.key)
+        dispatch(setLanguage(e.key));
     }
 
     const menu = (
