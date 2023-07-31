@@ -179,7 +179,11 @@ function Comment(): JSX.Element {
                                 <Col span={18}>
                                     <span className="comment-author">{comment.Account ? comment.Account.FullName : "No Name"}</span>
                                     <span className="comment-date">{comment.Created ? comment.Created : "No Data"}</span>
-                                    <div className="comment-content"><span>{comment.Content}</span></div>
+                                    <div className="comment-content">
+                                        <span>{comment.Content?.includes("</br>") ? comment.Content?.substring(0, comment.Content.indexOf("</br>")) : comment.Content}</span>
+                                        <br></br>
+                                        <span>{comment.Content?.includes("</br>") ? comment.Content?.substring(comment.Content.indexOf("</br>") + "</br>".length) : null}</span>
+                                    </div>
                                 </Col>
                                 {/* {!showReplyForm && (
                                     <Col span={2} className='comment-reply'>

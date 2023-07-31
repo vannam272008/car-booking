@@ -5,7 +5,6 @@ import { Col, Input, Row, Form, Select, DatePicker, Spin, Alert } from 'antd';
 import './addRequest.css'
 import { ChangeEvent, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
-import { changeFormatDatePostRequest } from '../../../Utils/formatDate.js';
 import request from "../../../Utils/request";
 import { RcFile } from 'antd/es/upload';
 
@@ -13,6 +12,7 @@ interface Department {
     Name: string;
     Id: string;
 }
+
 interface DepartmentMember {
     Id: string;
     User: {
@@ -23,26 +23,28 @@ interface DepartmentMember {
     };
 }
 
-
 function AddRequest(): JSX.Element {
 
-    const { Option } = Select;
-
+    //set layout
     const profile = false;
 
-    const futureTime = dayjs().add(24, 'hours');
-    const usageMoment = dayjs();
-    const updatefutureTime = changeFormatDatePostRequest(futureTime);
-    const updateMoment = changeFormatDatePostRequest(usageMoment);
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [fileList, setFileList] = useState<RcFile[]>([]);
     const [applyNote, setApplyNote] = useState<boolean>(false);
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
-    const senderId = localStorage.getItem("Id")
-    // const [activeTabKey, setActiveTabKey] = useState<string>("");
     const [userLoginName, setUserLoginName] = useState("");
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    //set initial formData
+    const senderId = localStorage.getItem("Id")
+    const futureTime = dayjs().add(24, 'hours');
+    const usageMoment = dayjs();
+    const updatefutureTime = futureTime.format('YYYY-MM-DD HH:mm:ss');
+    const updateMoment = usageMoment.format('YYYY-MM-DD HH:mm:ss');
+
+    //set formData post Api to server 
     const [formData, setFormData] = useState({
         SenderId: senderId as string | null,
         DepartmentId: "",
@@ -61,6 +63,14 @@ function AddRequest(): JSX.Element {
         Status: '',
         files: fileList,
     });
+
+    //define initialValue for element input form
+    const initialValueSender = userLoginName ?? '';
+    const initialValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
+    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : '';
+    const initialValueUsageFrom = formData.UsageFrom === "" ? dayjs() : dayjs(formData.UsageFrom);
+
+    const { Option } = Select;
 
     useEffect(() => {
         request.get("/user/profile/" + senderId)
@@ -83,29 +93,21 @@ function AddRequest(): JSX.Element {
                         ...prevFormData,
                         DepartmentId: res.data.Data.ListData[0].Id,
                     }));
-                    // Fetch data from the second API
                 })
         }
 
-
         const fetchData = async () => {
             try {
-                // Fetch data from the first API
                 const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
                 request.get(departmentMemberEndpoint).then((res) => {
                     setDataDepartmentMember(res.data.Data);
-                    // Update form data based on the fetched data
                     setFormData((prevFormData) => ({
                         ...prevFormData,
                         ReceiverId: res.data.Data[0].User.Id,
                     }));
                     setLoading(false);
                 })
-
-                // Set loading to false since data fetching is completed
-
             } catch (error) {
-                // Handle errors if needed
                 setLoading(true);
             }
         };
@@ -115,12 +117,7 @@ function AddRequest(): JSX.Element {
         } else {
             fetchData();
         }
-
     }, [formData.DepartmentId]);
-
-
-
-
 
     useEffect(() => {
         setFormData((prevFormData) => ({
@@ -132,12 +129,9 @@ function AddRequest(): JSX.Element {
         }));
     }, [fileList, applyNote, listOfUserId, senderId]);
 
-    // useEffect(() => {
-    //     setActiveTabKey(dataDepartment && !activeTabKey ? dataDepartment[0].Id : activeTabKey);
-    // }, [])
 
+    //set Mobile, Cost Center, Total passengers, Pick location, Destination, Reason values ​​for formdata
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-
         const { name, value } = event.target;
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -145,6 +139,7 @@ function AddRequest(): JSX.Element {
         }));
     };
 
+    //set User values ​​for formdata
     const handleSelectChange = (value: string, field: string) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -152,6 +147,7 @@ function AddRequest(): JSX.Element {
         }));
     };
 
+    //set Usage time from, Usage time to, Pick time values ​​for formdata
     const handleDatePicker = (value: Dayjs | null, field: string) => {
         if (value) {
             const formattedValue = value.format('YYYY-MM-DD HH:mm:ss');
@@ -162,12 +158,12 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    const [searchValue, setSearchValue] = useState<string>('');
-
+    //search value option in 'Select' 
     const handleSearch = (inputValue: string) => {
         setSearchValue(inputValue);
     };
 
+    //show value option after search
     const filteredData = () => {
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
@@ -178,25 +174,17 @@ function AddRequest(): JSX.Element {
             )
         }
         else return [];
-
     };
 
-    // const getFullNameIfContainsSenderId = (dataDepartmentMember: DepartmentMember[], senderId: string | null) => {
-    //     const userWithSenderId = dataDepartmentMember.find(
-    //         (departmentMember) => departmentMember?.User.Id === senderId
-    //     );
-    //     return userWithSenderId?.User.FullName;
-    // };
-
+    //limit the characters entered on the input tag
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const charCode = event.which ? event.which : event.keyCode;
-
         if ((charCode < 48 || charCode > 57) && charCode !== 8) {
             event.preventDefault();
         }
     };
 
-    console.log(formData);
+    // console.log(formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -235,7 +223,7 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={userLoginName}
+                                                        initialValue={initialValueSender}
                                                     >
                                                         <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
                                                     </Form.Item>
@@ -251,7 +239,7 @@ function AddRequest(): JSX.Element {
                                                                 message: 'Select something!',
                                                             },
                                                         ]}
-                                                        initialValue={dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name}
+                                                        initialValue={initialValueDepartment}
                                                         labelCol={{ span: 24 }}
                                                     >
                                                         <Select
@@ -282,7 +270,7 @@ function AddRequest(): JSX.Element {
                                                                 message: 'Select something!',
                                                             },
                                                         ]}
-                                                        initialValue={dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : undefined}
+                                                        initialValue={initialValueReceiver}
                                                         labelCol={{ span: 24 }}
                                                     >
                                                         <Select
@@ -310,7 +298,6 @@ function AddRequest(): JSX.Element {
                                                     <Form.Item
                                                         label="Mobile"
                                                         name="Mobile"
-                                                        initialValue={formData.Mobile}
                                                         rules={[
                                                             {
                                                                 required: true,
@@ -323,7 +310,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -333,7 +320,6 @@ function AddRequest(): JSX.Element {
                                                     <Form.Item
                                                         label="Cost Center"
                                                         name="CostCenter"
-                                                        initialValue={formData.CostCenter}
                                                         rules={[
                                                             {
                                                                 required: true,
@@ -346,7 +332,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Total passengers*/}
@@ -354,7 +340,6 @@ function AddRequest(): JSX.Element {
                                                     <Form.Item
                                                         label="Total passengers"
                                                         name="Totalpassengers"
-                                                        initialValue={formData.TotalPassengers}
                                                         rules={[
                                                             {
                                                                 required: true,
@@ -367,7 +352,7 @@ function AddRequest(): JSX.Element {
                                                         ]}
                                                         labelCol={{ span: 24 }}
                                                     >
-                                                        <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Usage time from*/}
@@ -382,7 +367,7 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={formData.UsageFrom === "" ? dayjs() : dayjs(formData.UsageFrom)} // Giá trị mặc định là thời gian hiện tại
+                                                        initialValue={initialValueUsageFrom}
                                                     >
                                                         <DatePicker
                                                             className='add-request-width-formitem'
@@ -405,7 +390,7 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={futureTime} // Giá trị mặc định là thời gian sau 24 giờ
+                                                        initialValue={futureTime}
                                                     >
                                                         <DatePicker
                                                             className='add-request-width-formitem'
@@ -430,7 +415,7 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={dayjs()} // Giá trị mặc định là thời gian hiện tại
+                                                        initialValue={dayjs()}
                                                     >
                                                         <DatePicker
                                                             className='.add-request-width-formitem'
@@ -453,7 +438,6 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={formData.PickLocation}
                                                     >
                                                         <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                     </Form.Item>
@@ -471,7 +455,6 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={formData.Destination}
                                                     >
                                                         <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                     </Form.Item>
@@ -488,7 +471,6 @@ function AddRequest(): JSX.Element {
                                                             },
                                                         ]}
                                                         labelCol={{ span: 24 }}
-                                                        initialValue={formData.Reason}
                                                     >
                                                         <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                                     </Form.Item>

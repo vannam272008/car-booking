@@ -282,7 +282,13 @@ const ContentProfile: React.FC = () => {
     {
       key: "4",
       label: <strong>Signature</strong>,
-      children: <Signature isEditing={isEditing} infoAPI={infoAPI} setInfoAPI={setInfoAPI}/>,
+      children: (
+        <Signature
+          isEditing={isEditing}
+          infoAPI={infoAPI}
+          setInfoAPI={setInfoAPI}
+        />
+      ),
     },
   ];
 
