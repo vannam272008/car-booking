@@ -41,7 +41,7 @@
 }
 .tabs-col .ant-tabs-nav{
     width: 25%;
-    border-top: 1px solid #4b4141;
+    border-top: 1px solid #cac3c3;
 }
 .tabs-col .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list .ant-tabs-tab{
     margin-top: 0;
@@ -104,7 +104,6 @@
 .tabs-container .ant-tabs .ant-tabs-nav-operations button{
     display: none;
 }
-
 
 
 
