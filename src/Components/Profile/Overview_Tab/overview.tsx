@@ -62,6 +62,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="First name"
           name="First name"
+          disabled
           value={infoAPI.FirstName}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -82,6 +83,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Last Name"
           name="Last Name"
+          disabled
           value={infoAPI.LastName}
           onChange={(e) => {
             setInfoAPI((prev) => {

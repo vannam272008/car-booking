@@ -44,8 +44,12 @@ const Signature: React.FC<SignatureProps> = ({
     if (!isImage) {
       message.error('You can only upload image files!');
     }
-    return isImage;
-  }
+    const filesize = file.size / 1024 / 1024 < 5;
+    if(!filesize){
+      message.error("Image must smaller than 5MB ");
+    }
+    return isImage && filesize;
+  };
 
   const handleChangeSelect = (value: string) => {
     setInfoAPI((prev) => {
