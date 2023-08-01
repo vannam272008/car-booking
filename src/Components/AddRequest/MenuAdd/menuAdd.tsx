@@ -12,7 +12,6 @@ import request from '../../../Utils/request';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 
-
 interface MenuAddProps {
     formData: {
         SenderId: string | null,

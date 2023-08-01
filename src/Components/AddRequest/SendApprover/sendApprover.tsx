@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DeleteOutlined, DragOutlined, EditOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons';
-import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, notification } from 'antd';
+import { Form, Select, Radio, RadioChangeEvent, Upload, Button, Row, Col, Input, Space, notification, message } from 'antd';
 import './sendApprover.css'
 import request from "../../../Utils/request";
 import { RcFile } from 'antd/es/upload';
@@ -116,8 +116,15 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     };
 
     const handleBeforeUpload = (file: RcFile) => {
-        setFileList([...fileList, file]);
-        return false;
+        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+        const acceptedFileExtensions = ['png', 'jpg', 'jpeg', 'pdf', 'csv', 'doc', 'docx', 'pptx', 'ppt', 'txt', 'xls', 'xlsx'];
+        if (fileExtension && !acceptedFileExtensions.includes(fileExtension)) {
+            message.error(`File type not supported: ${fileExtension}`);
+            return false;
+        } else {
+            setFileList([...fileList, file]);
+            return false;
+        }
     };
 
     const handleRemoveFile = (file: UploadFile<any>) => {
@@ -143,6 +150,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                     accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                     fileList={fileList}
                     onRemove={handleRemoveFile}
+                    multiple={true}
                 >
                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
                         Add attachments
