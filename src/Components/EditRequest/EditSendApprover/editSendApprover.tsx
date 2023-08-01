@@ -175,6 +175,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            virtual={false}
                                             onChange={(value) => handleSelectChange(index, value)}
                                             showSearch
                                             optionFilterProp="children"

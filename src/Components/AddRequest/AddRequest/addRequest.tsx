@@ -252,6 +252,7 @@ function AddRequest(): JSX.Element {
                                                         labelCol={{ span: 24 }}
                                                     >
                                                         <Select
+                                                            virtual={false}
                                                             value={formData.DepartmentId}
                                                             onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                             showSearch
@@ -283,6 +284,7 @@ function AddRequest(): JSX.Element {
                                                         labelCol={{ span: 24 }}
                                                     >
                                                         <Select
+                                                            virtual={false}
                                                             value={formData.SenderId}
                                                             onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                             showSearch

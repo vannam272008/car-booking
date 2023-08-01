@@ -262,6 +262,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
+                                                        virtual={false}
                                                         value={formData.DepartmentId}
                                                         onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                         showSearch
@@ -293,6 +294,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
+                                                        virtual={false}
                                                         value={formData.ReceiverId}
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                         showSearch
