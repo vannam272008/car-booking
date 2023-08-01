@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import "./AppSider.scss";
 import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
+import { useTranslation } from 'react-i18next';
 
 const { Sider } = Layout;
 
@@ -31,21 +32,22 @@ function getItem(
 
 const AppSider = (props: any) => {
     const userID = localStorage.getItem("Id")
+    const {t} = useTranslation();
 
     const { tab, setTab, setStatus } = props
     const items: MenuProps['items'] = [
-        getItem('Requests', 'requests', <FolderOpenOutlined />, [
-            getItem('All requests', 'get-all'),
-            getItem('Sent to me', 'sent-to-me'),
-            getItem('Sent to others', 'sent-to-others'),
-            getItem('Shared with me', 'shared-with-me'),
+        getItem(t('requests'), 'requests', <FolderOpenOutlined />, [
+            getItem(t('allrequests'), 'get-all'),
+            getItem(t('senttome'), 'sent-to-me'),
+            getItem(t('senttoothers'), 'sent-to-others'),
+            getItem(t('sharedwithme'), 'shared-with-me'),
         ]),
 
-        getItem('Status', 'status', <BarChartOutlined />, [
-            getItem('Draft', 'Draft'),
-            getItem('Approving', 'Waiting for approval'),
-            getItem('Approved', 'Approved'),
-            getItem('Rejected', 'Rejected'),
+        getItem(t('status'), 'status', <BarChartOutlined />, [
+            getItem(t('draft'), 'Draft'),
+            getItem(t('approving'), 'Waiting for approval'),
+            getItem(t('approved'), 'Approved'),
+            getItem(t('rejected'), 'Rejected'),
         ]),
 
         getItem('Reports', 'reports', <BarChartOutlined />),

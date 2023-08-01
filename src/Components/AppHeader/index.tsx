@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { RootState } from '../../Reducers/rootReducer';
 import { setTab, setStatus } from "../../Actions/requestAction";
 import Feedback from "../Feedback/Feedback";
+import { useTranslation } from "react-i18next";
 
 const { Header } = Layout;
 
@@ -30,6 +31,7 @@ const AppHeader = (props: any) => {
         Email: ""
     });
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
@@ -90,8 +92,6 @@ const AppHeader = (props: any) => {
                     console.log(error);
                 });
         };
-
-    console.log(userLoginInfo);
 
     return (
         <Header className="mcs-header">
@@ -162,7 +162,7 @@ const AppHeader = (props: any) => {
                         >
                             {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
                             <div className="title-dropdown">
-                                <span>My Account</span>
+                                <span>{t('myaccount')}</span>
                                 <Button className="header-btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
                             </div>
                             <div className="content-dropdown">
@@ -181,13 +181,13 @@ const AppHeader = (props: any) => {
                                 </div>
                                 <div className="content-info">
                                     <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
-                                        <p>My Profile</p>
+                                        <p>{t('myprofile')}</p>
                                     </div>
                                     <div className='my-profile' style={{ textDecoration: 'none' }}>
-                                        <p>My Account</p>
+                                        <p>{t('myaccount')}</p>
                                     </div>
                                     <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
-                                        <p>Sign out</p>
+                                        <p>{t('signout')}</p>
                                     </NavLink>
                                 </div>
                             </div>
