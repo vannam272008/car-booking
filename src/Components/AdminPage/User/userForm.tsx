@@ -7,18 +7,16 @@ import { UploadOutlined } from '@ant-design/icons';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import dayjs, { Dayjs } from 'dayjs';
-import { resetUser } from '../Utils';
 
-
-const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action }) => {
+const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSave, form, action }) => {
 
   const { Option } = Select;
+  const host = 'http://localhost:63642/'
   const [roles, setRoles] = useState<Role[]>([])
   const [departments, setDepartments] = useState<Department[]>([])
   const [imageUrl, setImageUrl] = React.useState<string | null>(null);
   const [tempUrl, setTempUrl] = React.useState<string | null>(null);
   const [listFiles, setListFiles] = React.useState<RcFile[]>([]);
-  const [dataUser, setDataUser] = React.useState<User>(initialValues)
 
 
   const getRoles = async () => {
@@ -49,30 +47,39 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       values.AvatarPath = imageUrl || ''
-      values.Birthday = dataUser.Birthday
-      values.DateOfIdCard = dataUser.DateOfIdCard
-      values.StartingDate = dataUser.StartingDate
-      values.StartingDateOfficial = dataUser.StartingDateOfficial
-      values.StartDateMaternityLeave = dataUser.StartDateMaternityLeave
-      values.LeavingDate = dataUser.LeavingDate
+      values.Birthday = selectedUser.Birthday
+      values.DateOfIdCard = selectedUser.DateOfIdCard
+      values.StartingDate = selectedUser.StartingDate
+      values.StartingDateOfficial = selectedUser.StartingDateOfficial
+      values.StartDateMaternityLeave = selectedUser.StartDateMaternityLeave
+      values.LeavingDate = selectedUser.LeavingDate
+      //bai hoc xuong mau
+      /**/
+      setSelectedUser((prevValues) => ({
+        ...values,
+        AvatarPath: host + prevValues.AvatarPath
+      }))
+      /**/
       var file = listFiles[0]
       console.log('check final user', values);
       console.log('check final imageUrl', imageUrl);
 
       onSave(values as User, file);
-      setDataUser(resetUser)
+    }).catch(e => {
+      console.log('user data submit error:', e);
+      
     });
 
   };
 
   useEffect(() => {
+    console.log("changes appear in child component");
     handleFormReset()
     deleteFilesTemp()
 
-  }, [initialValues])
+  }, [selectedUser])
 
   const handleFormReset = () => {
-    setDataUser(initialValues)
     form.resetFields()
     setImageUrl(null)
     setTempUrl(null)
@@ -88,7 +95,6 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
     headers: {
       Authorization: `Bearer ${jwt_admin}`,
     },
-    // multiple: false,
   }
 
   const handleImageChange = (info: any) => {
@@ -96,7 +102,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
     setListFiles([info.file])
     if (info.file.status === 'done') {
       console.log('info:', info.file.name)
-      var linkToSave = `Files/Avatar/${initialValues.Id}/${info.file.name}`
+      var linkToSave = `Files/Avatar/${selectedUser.Id}/${info.file.name}`
       var linkToSaveTemp = `Files/Avatar/temp/${info.file.name}`
       setImageUrl(linkToSave)
       setTempUrl(linkToSaveTemp)
@@ -106,18 +112,17 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
   const handleDatePicker = (value: Dayjs | null, field: string) => {
     if (value) {
       const formattedValue = value.format('YYYY-MM-DD HH:mm:ss');
-      setDataUser((prevFormData) => ({
+      setSelectedUser((prevFormData) => ({
         ...prevFormData,
         [field]: formattedValue,
       }));
     }
   };
+  console.log('selectedUser child:', selectedUser);
+
 
   return (
-    <Form onFinish={handleForSubmit} form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '600px' }}>
-
-      {/* 1 */}
-      <Typography.Title level={4}>Overview</Typography.Title>
+    <Form onFinish={handleForSubmit} form={form} initialValues={selectedUser} layout="horizontal" style={{ minWidth: '600px' }}>
 
       <Row>
         <Col span={24}>
@@ -131,7 +136,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         <Row gutter={12}>
           <Col span={24}>
             <Form.Item label="">
-              <img src={tempUrl ? `http://localhost:63642/${tempUrl}` : initialValues.AvatarPath} alt="" width={90} height={90} />
+              <img src={tempUrl ? `${host}${tempUrl}` : selectedUser.AvatarPath} alt="" width={90} height={90} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -146,7 +151,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         <Row gutter={12}>
           <Col span={24}>
             <Form.Item label="">
-              <img src={tempUrl ? `http://localhost:63642/${tempUrl}` : initialValues.AvatarPath} alt="" width={90} height={90} style={{ borderRadius: '50%' }} />
+              <img src={tempUrl ? `${host}${tempUrl}` : selectedUser.AvatarPath} alt="" width={90} height={90} style={{ borderRadius: '50%' }} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -158,11 +163,25 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Col>
         </Row>}
 
+
+      {/* save */}
+      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+        <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
+          Reset
+        </Button>
+        <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
+          Save
+        </Button>
+      </Form.Item>
+
+      {/* 1 */}
+      <Typography.Title level={4}>Overview</Typography.Title>
+
       {action === ACTION_HANDLE.ADD &&
         <>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Roles" name="Roles">
+              <Form.Item label="Roles" name="Roles" rules={[{ required: true, message: "Please select user's roles !" }]}>
                 <Select mode="multiple">
                   {roles.map((role) => (
                     <Option key={role.Id}>
@@ -175,7 +194,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <Form.Item label="Belong to departments" name="Departments">
+              <Form.Item label="Belong to departments" name="Departments" rules={[{ required: true, message: "Please select departments !" }]}>
                 <Select mode="multiple">
                   {departments.map((d) => (
                     <Option key={d.Id}>
@@ -188,14 +207,14 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Email" name="Email">
-                <Input />
+              <Form.Item label="Email" name="Email" rules={[{ type: 'email', message: "Please enter a valid email address!"}, {  required: true, message: "Please enter user's email !" }]}>
+                <Input type="email" />
               </Form.Item>
             </Col>
 
             <Col span={12}>
-              <Form.Item label="Password" name="Password">
-                <Input />
+              <Form.Item label="Password" name="Password" rules={[{ required: true, message: "Please input password !" }]}>
+                <Input type="password" />
               </Form.Item>
             </Col>
           </Row>
@@ -205,7 +224,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         <>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Roles" name="Roles">
+              <Form.Item label="Roles" name="Roles" rules={[{ required: true, message: "Please select roles !" }]}>
                 <Select mode="multiple">
                   {roles.map((role) => (
                     <Option key={role.Id}>
@@ -218,7 +237,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <Form.Item label="Belong to departments" name="Departments">
+              <Form.Item label="Belong to departments" name="Departments" rules={[{ required: true, message: "Please select departments !" }]}>
                 <Select mode="multiple">
                   {departments.map((d) => (
                     <Option key={d.Id}>
@@ -231,13 +250,13 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Username" name="Username">
+              <Form.Item label="Username" name="Username" rules={[{ required: true, message: "Please enter user's username !" }]}>
                 <Input disabled={true} />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item label="Email" name="Email">
-                <Input />
+              <Form.Item label="Email" name="Email" rules={[{ type: 'email', message: "Please enter a valid email address!"}, {  required: true, message: "Please enter user's email !" }]}>
+                <Input type="email" />
               </Form.Item>
             </Col>
           </Row>
@@ -246,12 +265,12 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
 
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="First name" name="FirstName">
+          <Form.Item label="First name" name="FirstName" rules={[{ required: true, message: "Please input first name !" }]}>
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Last name" name="LastName">
+          <Form.Item label="Last name" name="LastName" rules={[{ required: true, message: "Please input last name !" }]}>
             <Input />
           </Form.Item>
         </Col>
@@ -266,7 +285,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Employee number" name="EmployeeNumber">
+          <Form.Item label="Employee number" name="EmployeeNumber" rules={[{ required: true, message: "Please input employee number !" }]}>
             <Input />
           </Form.Item>
         </Col>
@@ -274,8 +293,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item label="Birthday">
-            <DatePicker style={{ float: 'right' }} value={dataUser.Birthday ? dayjs(dataUser.Birthday) : null} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder="Birthday" />
-            {/* <Input hidden /> */}
+            <DatePicker style={{ float: 'right' }} value={selectedUser.Birthday ? dayjs(selectedUser.Birthday) : null} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder="Birthday" />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -345,7 +363,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         </Col>
         <Col span={12}>
           <Form.Item label="Date of ID card">
-            <DatePicker style={{ float: 'right' }} value={dataUser.DateOfIdCard ? dayjs(dataUser.DateOfIdCard) : null} onChange={(value) => handleDatePicker(value, "DateOfIdCard")} placeholder="Date of ID card" />
+            <DatePicker style={{ float: 'right' }} value={selectedUser.DateOfIdCard ? dayjs(selectedUser.DateOfIdCard) : null} onChange={(value) => handleDatePicker(value, "DateOfIdCard")} placeholder="Date of ID card" />
           </Form.Item>
         </Col>
       </Row>
@@ -369,29 +387,29 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         </Col>
         <Col span={12}>
           <Form.Item label="Starting date">
-            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDate ? dayjs(dataUser.StartingDate) : null} onChange={(value) => handleDatePicker(value, "StartingDate")} placeholder="Starting date" />
+            <DatePicker style={{ float: 'right' }} value={selectedUser.StartingDate ? dayjs(selectedUser.StartingDate) : null} onChange={(value) => handleDatePicker(value, "StartingDate")} placeholder="Starting date" />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
           <Form.Item label="Starting date offical">
-            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDateOfficial ? dayjs(dataUser.StartingDateOfficial) : null} onChange={(value) => handleDatePicker(value, "StartingDateOfficial")} placeholder="Starting date offical" />
+            <DatePicker style={{ float: 'right' }} value={selectedUser.StartingDateOfficial ? dayjs(selectedUser.StartingDateOfficial) : null} onChange={(value) => handleDatePicker(value, "StartingDateOfficial")} placeholder="Starting date offical" />
           </Form.Item>
         </Col>
         <Col span={12}>
           <Form.Item label="Leaving date">
-            <DatePicker style={{ float: 'right' }} value={dataUser.LeavingDate ? dayjs(dataUser.LeavingDate) : null} onChange={(value) => handleDatePicker(value, "LeavingDate")} placeholder="Leaving date" />
+            <DatePicker style={{ float: 'right' }} value={selectedUser.LeavingDate ? dayjs(selectedUser.LeavingDate) : null} onChange={(value) => handleDatePicker(value, "LeavingDate")} placeholder="Leaving date" />
           </Form.Item>
         </Col>
       </Row>
-      {!initialValues.Sex &&
+      {!selectedUser.Sex &&
         <Row gutter={12}>
           <Col span={24}>
             <Form.Item label="Start date maternity leave (for just female)">
               <DatePicker
                 style={{ float: 'right' }}
-                value={dataUser.StartDateMaternityLeave ? dayjs(dataUser.StartDateMaternityLeave) : null}
+                value={selectedUser.StartDateMaternityLeave ? dayjs(selectedUser.StartDateMaternityLeave) : null}
                 onChange={(value) => handleDatePicker(value, "StartDateMaternityLeave")}
                 placeholder="Start date maternity leave"
               />
@@ -589,15 +607,6 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Form.Item>
         </Col>
       </Row> */}
-      {/* save */}
-      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
-        <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
-          Save
-        </Button>
-        <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
-          Reset
-        </Button>
-      </Form.Item>
     </Form>
   );
 };

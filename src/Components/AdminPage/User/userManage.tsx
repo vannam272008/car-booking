@@ -21,7 +21,7 @@ const UserManage: React.FC = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User>(resetUser);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<User>();
   const [isLoading, setIsLoading] = useState<Boolean>(true)
@@ -84,6 +84,7 @@ const UserManage: React.FC = () => {
     console.log('>>check res user:', res)
     if (res.data.Success) {
       setTotal(res.data.Data.TotalPage);
+      setSelectedUser(resetUser)
       let usersData: User[] = res.data.Data.ListData
       usersData.forEach(user => {
         user.AvatarPath = `http://localhost:63642/${user.AvatarPath}`
@@ -116,8 +117,8 @@ const UserManage: React.FC = () => {
   }, [currentPage])
 
   const handleAdd = () => {
-    setSelectedUser(resetUser)
     setAction(util.ACTION_HANDLE.ADD)
+    setSelectedUser(resetUser)
     setIsModalVisible(true);
   };
 
@@ -138,27 +139,6 @@ const UserManage: React.FC = () => {
     }
   };
 
-  /* const uploadFile = (uid: string, file: any) => {
-    console.log("check uid:", uid);
-    console.log("check file:", file);
-    
-    console.log("Uploading file...");
-    const API_ENDPOINT = "http://localhost:63642/api/file/upload";
-    const request = new XMLHttpRequest();
-    const formData = new FormData();
-  
-    request.open("POST", API_ENDPOINT, true);
-    request.onreadystatechange = () => {
-      if (request.readyState === 4 && request.status === 200) {
-        console.log(request.responseText);
-      }
-    };
-    
-    formData.append("file", file)
-    formData.append("idUser", uid)
-    request.send(formData);
-  }; */
-
   const handleSave = async (user: User, file: RcFile) => {
     console.log('>>check user data from form:', user);
     // console.log('>>selected user:', selectedUser);
@@ -168,6 +148,7 @@ const UserManage: React.FC = () => {
       if (res.data.Success) {
         message.success('Add success !')
         setIsModalVisible(false)
+        setSelectedUser(resetUser)
         await getUsers()
       } else {
         message.error(res.data.Message)
@@ -190,8 +171,9 @@ const UserManage: React.FC = () => {
 
       if (res.data.Success) {
         message.success('Edit success !')
-        await getUsers()
         setIsModalVisible(false)
+        setSelectedUser(resetUser)
+        await getUsers()
       } else {
         message.error(res.data.Message)
       }
@@ -204,11 +186,13 @@ const UserManage: React.FC = () => {
     /* var data = await deleteFilesTemp()
     console.log('data del temp files:', data) */
   }
-  const profile = true
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  console.log('>>selectedUser:', selectedUser);
+  
 
   return (
     <div className='manage-user-content'>
@@ -234,7 +218,7 @@ const UserManage: React.FC = () => {
       />
 
       <Modal
-        title={selectedUser ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
+        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
         open={isModalVisible}
         closable={true}
         onCancel={handleCancel}
@@ -242,7 +226,7 @@ const UserManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <UserForm initialValues={selectedUser ? selectedUser : resetUser} onSave={handleSave} form={form} action={action} />
+        <UserForm selectedUser={selectedUser} setSelectedUser={setSelectedUser} onSave={handleSave} form={form} action={action} />
       </Modal>
     </div>
   );
