@@ -59,9 +59,10 @@ function EditRequest() {
                 setApplyNote(detailsDataRes.data.Data.ApplyNote);
                 setStatus(detailsDataRes.data.Data.Status);
 
-                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
+                const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log('attachmentsDataRes', attachmentsDataRes.data.Data);
+                // setFileList(attachmentsDataRes.data.Data[0]);
 
                 setFormData((prevFormData) => ({
                     ...prevFormData,
@@ -204,7 +205,7 @@ function EditRequest() {
 
     const profile = false;
 
-    console.log(formData);
+    // console.log(formData);
 
     return (
         <RequestLayout profile={profile}>
