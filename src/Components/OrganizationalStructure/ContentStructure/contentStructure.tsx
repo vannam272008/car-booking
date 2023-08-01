@@ -63,7 +63,7 @@ function ContentStructure(): JSX.Element {
                 setLoading(true);
             });
         }
-        console.log('hello', activeTabKey);
+        // console.log('hello', activeTabKey);
         const getDataByPosition = async (position: string) => {
             const endpoint = `departmentMember/position?departmentId=${activeTabKey}`;
             await request.get(endpoint).then((res) => {
@@ -127,93 +127,94 @@ function ContentStructure(): JSX.Element {
                                     type="info"
                                 />
                             </Spin>) : (
-                            <Tabs
-                                style={{ display: 'flex' }}
-                                tabPosition="left"
-                                className='tabs-col'
-                                onChange={handleTabClick}
-                            >
-                                {filteredDataDepartment.map((department) => (
-                                    <TabPane className='organizational-structure-content-department' tab={<span><TeamOutlined className='icon-tabs-col-department' />{department.Name}</span>} key={department.Id}>
-                                        <div className='titile-department'>{department.Name}</div>
-                                        <Tabs style={{ display: 'flex' }} className='tabs-row' tabPosition='top'>
-                                            <TabPane tab="Information" key="Information">
-                                                <List
-                                                    dataSource={[
-                                                        { title: 'Description', content: <div>{department.Description}</div> },
-                                                        { title: 'Under the department', content: <div>{department.UnderDepartment}</div> },
-                                                        { title: 'Contact Info', content: <div>{department.ContactInfo}</div> },
-                                                        { title: 'Code', content: <div>{department.Code}</div> },
-                                                    ]}
-                                                    renderItem={(item) => (
-                                                        <List.Item>
-                                                            <Row style={{ width: '100%' }}>
-                                                                <Col span={5}>{item.title}:</Col>
-                                                                <Col span={19}>{item.content}</Col>
-                                                            </Row>
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </TabPane>
-                                            <TabPane tab="Manager" key="Manager">
-                                                <List
-                                                    dataSource={dataManager.map((data) => ({
-                                                        fullname: <div>{data.User.FullName}</div>,
-                                                        email: <div>{data.User.Email}</div>,
-                                                        jobtitle: <div>{data.User.JobTitle}</div>,
-                                                    }))}
-                                                    renderItem={(item) => (
-                                                        <List.Item>
-                                                            <Row style={{ width: '100%' }}>
-                                                                <Col span={8}>{item.fullname}</Col>
-                                                                <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.jobtitle}</Col>
-                                                            </Row>
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </TabPane>
+                            <div className='tabs-container'>
+                                <Tabs
+                                    tabPosition="left"
+                                    className='tabs-col'
+                                    onChange={handleTabClick}
+                                >
+                                    {filteredDataDepartment.map((department) => (
+                                        <TabPane className='organizational-structure-content-department' tab={<span><TeamOutlined className='icon-tabs-col-department' />{department.Name}</span>} key={department.Id}>
+                                            <div className='titile-department'>{department.Name}</div>
+                                            <Tabs style={{ display: 'flex' }} className='tabs-row' tabPosition='top'>
+                                                <TabPane tab="Information" key="Information">
+                                                    <List
+                                                        dataSource={[
+                                                            { title: 'Description', content: <div>{department.Description}</div> },
+                                                            { title: 'Under the department', content: <div>{department.UnderDepartment}</div> },
+                                                            { title: 'Contact Info', content: <div>{department.ContactInfo}</div> },
+                                                            { title: 'Code', content: <div>{department.Code}</div> },
+                                                        ]}
+                                                        renderItem={(item) => (
+                                                            <List.Item>
+                                                                <Row style={{ width: '100%' }}>
+                                                                    <Col span={5}>{item.title}:</Col>
+                                                                    <Col span={19}>{item.content}</Col>
+                                                                </Row>
+                                                            </List.Item>
+                                                        )}
+                                                    />
+                                                </TabPane>
+                                                <TabPane tab="Manager" key="Manager">
+                                                    <List
+                                                        dataSource={dataManager.map((data) => ({
+                                                            fullname: <div>{data.User.FullName}</div>,
+                                                            email: <div>{data.User.Email}</div>,
+                                                            jobtitle: <div>{data.User.JobTitle}</div>,
+                                                        }))}
+                                                        renderItem={(item) => (
+                                                            <List.Item>
+                                                                <Row style={{ width: '100%' }}>
+                                                                    <Col span={8}>{item.fullname}</Col>
+                                                                    <Col span={8}>{item.email}</Col>
+                                                                    <Col span={8}>{item.jobtitle}</Col>
+                                                                </Row>
+                                                            </List.Item>
+                                                        )}
+                                                    />
+                                                </TabPane>
 
-                                            <TabPane tab="Supervisor" key="Supervisor">
-                                                <List
-                                                    dataSource={dataSupervisor.map((data) => ({
-                                                        fullname: <div>{data.User.FullName}</div>,
-                                                        email: <div>{data.User.Email}</div>,
-                                                        jobtitle: <div>{data.User.JobTitle}</div>,
-                                                    }))}
-                                                    renderItem={(item) => (
-                                                        <List.Item>
-                                                            <Row style={{ width: '100%' }}>
-                                                                <Col span={8}>{item.fullname}</Col>
-                                                                <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.jobtitle}</Col>
-                                                            </Row>
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </TabPane>
-                                            <TabPane tab="Employee" key="Employee">
-                                                <List
-                                                    dataSource={dataDepartmentMember.map((departmentMember) => ({
-                                                        fullname: <div>{departmentMember.User.FullName}</div>,
-                                                        email: <div>{departmentMember.User.Email}</div>,
-                                                        jobtitle: <div>{departmentMember.User.JobTitle}</div>,
-                                                    }))}
-                                                    renderItem={(item) => (
-                                                        <List.Item>
-                                                            <Row style={{ width: '100%' }}>
-                                                                <Col span={8}>{item.fullname}</Col>
-                                                                <Col span={8}>{item.email}</Col>
-                                                                <Col span={8}>{item.jobtitle}</Col>
-                                                            </Row>
-                                                        </List.Item>
-                                                    )}
-                                                />
-                                            </TabPane>
-                                        </Tabs>
-                                    </TabPane>
-                                ))}
-                            </Tabs>
+                                                <TabPane tab="Supervisor" key="Supervisor">
+                                                    <List
+                                                        dataSource={dataSupervisor.map((data) => ({
+                                                            fullname: <div>{data.User.FullName}</div>,
+                                                            email: <div>{data.User.Email}</div>,
+                                                            jobtitle: <div>{data.User.JobTitle}</div>,
+                                                        }))}
+                                                        renderItem={(item) => (
+                                                            <List.Item>
+                                                                <Row style={{ width: '100%' }}>
+                                                                    <Col span={8}>{item.fullname}</Col>
+                                                                    <Col span={8}>{item.email}</Col>
+                                                                    <Col span={8}>{item.jobtitle}</Col>
+                                                                </Row>
+                                                            </List.Item>
+                                                        )}
+                                                    />
+                                                </TabPane>
+                                                <TabPane tab="Employee" key="Employee">
+                                                    <List
+                                                        dataSource={dataDepartmentMember.map((departmentMember) => ({
+                                                            fullname: <div>{departmentMember.User.FullName}</div>,
+                                                            email: <div>{departmentMember.User.Email}</div>,
+                                                            jobtitle: <div>{departmentMember.User.JobTitle}</div>,
+                                                        }))}
+                                                        renderItem={(item) => (
+                                                            <List.Item>
+                                                                <Row style={{ width: '100%' }}>
+                                                                    <Col span={8}>{item.fullname}</Col>
+                                                                    <Col span={8}>{item.email}</Col>
+                                                                    <Col span={8}>{item.jobtitle}</Col>
+                                                                </Row>
+                                                            </List.Item>
+                                                        )}
+                                                    />
+                                                </TabPane>
+                                            </Tabs>
+                                        </TabPane>
+                                    ))}
+                                </Tabs>
+                            </div>
                         )}
                     </div >
                 </div>

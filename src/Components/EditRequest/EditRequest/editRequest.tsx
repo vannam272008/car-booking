@@ -59,12 +59,10 @@ function EditRequest() {
                 setApplyNote(detailsDataRes.data.Data.ApplyNote);
                 setStatus(detailsDataRes.data.Data.Status);
 
-
-                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
-
-
+                const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log('attachmentsDataRes', attachmentsDataRes.data.Data);
+                // setFileList(attachmentsDataRes.data.Data[0]);
 
                 setFormData((prevFormData) => ({
                     ...prevFormData,
@@ -207,7 +205,7 @@ function EditRequest() {
 
     const profile = false;
 
-    console.log(formData);
+    // console.log(formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -333,7 +331,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.Mobile ? detailData.Mobile : undefined}
                                                 >
-                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -356,7 +354,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
                                                 >
-                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Total passengers*/}
@@ -377,7 +375,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
                                                 >
-                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time from*/}

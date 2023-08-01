@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router';
 import { useParams } from 'react-router';
 import request from '../../../Utils/request';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import TextArea from 'antd/es/input/TextArea';
 
 interface ActionRequest {
     action: string,
@@ -229,7 +230,7 @@ function MenuRequest(props: any): JSX.Element {
                                 <Button onClick={handleClose}>Close</Button>
                             </div>
                         }>
-                            <Input className='menu-after-btn-input' onChange={(e) => {
+                            <TextArea rows={5} className='menu-after-btn-input' onChange={(e) => {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
@@ -246,7 +247,7 @@ function MenuRequest(props: any): JSX.Element {
                                 <Button onClick={handleClose}>Close</Button>
                             </div>
                         }>
-                            <Input className='menu-after-btn-input'
+                            <TextArea rows={5} className='menu-after-btn-input'
                                 onChange={(e) => {
                                     setActionRequest({ action: "Rejected", Note: e.target.value });
                                     setComment((prevComment) => ({

@@ -12,7 +12,6 @@ import request from '../../../Utils/request';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 
-
 interface MenuAddProps {
     formData: {
         SenderId: string | null,
@@ -58,7 +57,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     const navigate = useNavigate();
 
     const handleSaveDraft = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
+        if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
             setFormData((prevFormData) => ({
                 ...prevFormData,
                 Status: 'Draft'
@@ -70,7 +69,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     };
 
     useEffect(() => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
+        if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
             if (formData.Status.length > 0 && formData.Status === "Draft") {
                 request.postForm("/request/create", formData)
                     .then((response) => {
@@ -111,7 +110,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     }, [formData, navigate, setFormData])
 
     const handleSubmit = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
+        if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
             request.postForm("/request/create", formData)
                 .then((response) => {
                     const data = response.data;

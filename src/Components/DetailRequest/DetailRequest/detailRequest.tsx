@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Radio, RadioChangeEvent, Spin, Alert } from 'antd';
+import { Row, Col, Radio, RadioChangeEvent, Spin, Alert, Badge, Card } from 'antd';
 import DoneRequest from '../DoneRequest/doneRequest';
 import Comment from '../Comments/comment';
 import MenuRequest from '../Menu/menu';
@@ -10,7 +10,7 @@ import { useParams } from 'react-router';
 import { changeFormatDatePostRequest } from '../../../Utils/formatDate';
 import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
-import PageNotFound from '../../../Pages/404';
+// import PageNotFound from '../../../Pages/404';
 import { useNavigate } from 'react-router-dom';
 
 function DetailRequest(): JSX.Element {
@@ -66,20 +66,24 @@ function DetailRequest(): JSX.Element {
             await request.get(endpoint).then((res) => {
                 setAttachmentData(res.data.Data);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         const getWokflowRequest = async () => {
             const endpoint = "/request/workflow/requestId=" + requestId;
             await request.get(endpoint).then((res) => {
                 setWorkflowData(res.data.Data);
             }
-            );
+            ).catch(() => {
+                navigate("/page-not-found");
+            });
         }
         getWokflowRequest();
         getAttachmentsRequest();
         getDetailRequest();
         setLoading(false);
-    }, [requestId, loading])
+    }, [requestId, loading, navigate])
 
     const [value, setValue] = useState(!detailData.ApplyNote);
 
@@ -99,6 +103,8 @@ function DetailRequest(): JSX.Element {
     //     console.log(attachment);
     //     window = attachment;
     // }
+
+    console.log('hello', workflowData);
 
     return (
         <RequestLayout profile={profile}>
@@ -215,9 +221,28 @@ function DetailRequest(): JSX.Element {
                                     <p>Approvers:</p>
                                     <Row>
                                         {Array.isArray(workflowData) ? (
-                                            workflowData.map((approverData: { Id: number; FullName: string; User: { Id: number; FullName: string } }) => (
-                                                <Col key={approverData.Id} span={8} className='approver'>
-                                                    {approverData.User.FullName}
+                                            workflowData.map((approverData: { Id: number; Status: string; User: { Id: number; FullName: string } }, index: number) => (
+                                                <Col key={approverData.Id} span={6} className='approver'>
+                                                    {approverData.Status === 'Rejected' ? (
+                                                        <Badge.Ribbon text="Rejected" color="red" >
+                                                            <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                {approverData.User.FullName}
+                                                            </Card>
+                                                        </Badge.Ribbon>
+                                                    ) : (
+                                                        approverData.Status === 'Approved' ? (
+                                                            <Badge.Ribbon text="Approved" color="green" >
+                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                    {approverData.User.FullName}
+                                                                </Card>
+                                                            </Badge.Ribbon>) : (
+                                                            <Badge.Ribbon text="Waiting for approval" color="blue" >
+                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`Approver ${index + 1}`}</span>} size="small">
+                                                                    {approverData.User.FullName}
+                                                                </Card>
+                                                            </Badge.Ribbon>
+                                                        )
+                                                    )}
                                                 </Col>
                                             ))
                                         ) : (
