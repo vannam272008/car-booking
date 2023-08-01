@@ -196,11 +196,14 @@ function DetailRequest(): JSX.Element {
                                     <div>
                                         {Array.isArray(attachmentData) ? (
                                             attachmentData.map((attachment: { Id: number; Path: string; }) => (
-                                                <div key={attachment.Id} className='approver' onClick={() => { handleDownloadFile(attachment.Path) }}>
+                                                <div key={attachment.Id} className='approver'
+                                                    onClick={() => { handleDownloadFile(attachment.Path) }}
+                                                    style={{ cursor: 'pointer', color: 'blue' }}
+                                                >
                                                     <span><FileTextOutlined /> </span>
                                                     {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
-                                                    <span>{attachment.Path.substring(39)} </span>
-                                                    <span>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
+                                                    <span>{attachment.Path.split('/').pop()} </span>
+                                                    <span style={{ color: 'black' }}>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
                                                 </div>
                                             ))
                                         ) : (
