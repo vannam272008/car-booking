@@ -30,7 +30,7 @@ function App() {
           <Route key={route.path} path={route.path} element={route.element} />
         ))
       )}
-      <Route path="/login" element={<Login />} />
+      {/* <Route path="/login" element={<Login />} /> */}
     </Routes>
   );
 }

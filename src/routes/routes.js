@@ -32,6 +32,10 @@ const private_routes = [
     element: <ManageRequest />,
   },
   {
+    path: "/login",
+    element: <Navigate to="/" />,
+  },
+  {
     path: "/request/carbooking/edit/:requestId",
     element: <EditRequest />,
   },

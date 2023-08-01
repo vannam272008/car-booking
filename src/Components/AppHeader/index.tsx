@@ -84,7 +84,7 @@ const AppHeader = (props: any) => {
                             localStorage.clear();
                             setStatus('');
                             setTab('get-all');
-                            navigate("/login");
+                            window.location.reload();
                         }
                     }
                 })
