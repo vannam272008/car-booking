@@ -134,7 +134,7 @@ function DetailRequest(): JSX.Element {
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
                                                 <label>User <span className='required'>*</span></label>
-                                                <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""} </div>
+                                                <div>{detailData.ReceiverUser ? detailData.ReceiverUser.FullName : ""} </div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
                                                 <label>Mobile <span className='required'>*</span></label>
