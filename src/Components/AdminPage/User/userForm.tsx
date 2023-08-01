@@ -180,7 +180,7 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
       {action === ACTION_HANDLE.ADD &&
         <>
           <Row gutter={12}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item label="Roles" name="Roles" rules={[{ required: true, message: "Please select user's roles !" }]}>
                 <Select mode="multiple">
                   {roles.map((role) => (
@@ -213,7 +213,7 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
             </Col>
 
             <Col span={12}>
-              <Form.Item label="Password" name="Password" rules={[{ required: true, message: "Please input password !" }]}>
+              <Form.Item label="Password" name="Password" rules={[{ required: true, message: "Please enter user's password !" }]}>
                 <Input type="password" />
               </Form.Item>
             </Col>
@@ -223,7 +223,7 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
       {action === ACTION_HANDLE.EDIT &&
         <>
           <Row gutter={12}>
-            <Col span={12}>
+            <Col span={24}>
               <Form.Item label="Roles" name="Roles" rules={[{ required: true, message: "Please select roles !" }]}>
                 <Select mode="multiple">
                   {roles.map((role) => (
@@ -265,12 +265,12 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
 
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="First name" name="FirstName" rules={[{ required: true, message: "Please input first name !" }]}>
+          <Form.Item label="First name" name="FirstName" rules={[{ required: true, message: "Please enter user's first name !" }]}>
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Last name" name="LastName" rules={[{ required: true, message: "Please input last name !" }]}>
+          <Form.Item label="Last name" name="LastName" rules={[{ required: true, message: "Please enter user's last name !" }]}>
             <Input />
           </Form.Item>
         </Col>
@@ -285,7 +285,7 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Employee number" name="EmployeeNumber" rules={[{ required: true, message: "Please input employee number !" }]}>
+          <Form.Item label="Employee number" name="EmployeeNumber" rules={[{ required: true, message: "Please enter user's employee number !" }]}>
             <Input />
           </Form.Item>
         </Col>
@@ -297,7 +297,7 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Job title" name="JobTitle">
+          <Form.Item label="Job title" name="JobTitle" rules={[{ required: true, message: "Please input enter user's job title !" }]}>
             <Input />
           </Form.Item>
         </Col>

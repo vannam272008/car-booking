@@ -87,6 +87,24 @@ export interface DepartmentMembers {
     DepartmentId: string,
 }
 
+export interface ByIdDepartment {
+    Id: string,
+    Position: string,
+    User: {
+        Id: string,
+        FirstName: string,
+        LastName: string,
+        Username: string,
+        Email: string,
+        JobTitle: string,
+        FullName: string,
+    },
+    Department: {
+        Id: string,
+        Name: string
+    }
+}
+
 export interface UserFormProps {
     selectedUser: User;
     setSelectedUser: React.Dispatch<React.SetStateAction<User>>;
@@ -102,6 +120,8 @@ export interface Department {
     Code: string,
     UnderDepartment: string,
     Description: string,
+    Manager: string,
+    Supervisors: string[]
 }
 
 export interface DepartmentFormProps {
@@ -109,6 +129,7 @@ export interface DepartmentFormProps {
     setDepartment: React.Dispatch<React.SetStateAction<Department>>;
     onSave: (values: Department) => void;
     form: FormInstance<Department>;
+    action: string;
 }
 
 export interface Role {
