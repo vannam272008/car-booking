@@ -27,7 +27,7 @@ const UserManage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 5;
+  const [limit, setLimit] = useState(5);
 
   const columns = [
     {
@@ -187,12 +187,16 @@ const UserManage: React.FC = () => {
     console.log('data del temp files:', data) */
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (page: number, pageSize: number) => {
+    if (pageSize !== limit) {
+      setLimit(pageSize);
+      setCurrentPage(1);
+    } else
+      setCurrentPage(page);
   };
 
   console.log('>>selectedUser:', selectedUser);
-  
+
 
   return (
     <div className='manage-user-content'>

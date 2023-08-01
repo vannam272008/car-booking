@@ -44,7 +44,7 @@ const RoleManage: React.FC = () => {
   const [form] = Form.useForm<Role>();
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 5;
+  const [limit, setLimit] = useState(5);
 
   const getRoles = async () => {
     let res = await axios.get(`http://localhost:63642/api/role/all?page=${currentPage}&limit=${limit}`)
@@ -112,8 +112,12 @@ const RoleManage: React.FC = () => {
     }
   }
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (page: number, pageSize: number) => {
+    if (pageSize !== limit) {
+      setLimit(pageSize);
+      setCurrentPage(1);
+    } else
+      setCurrentPage(page);
   };
 
   return (

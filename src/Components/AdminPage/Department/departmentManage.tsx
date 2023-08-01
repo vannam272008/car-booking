@@ -64,7 +64,7 @@ const DepartmentManage: React.FC = () => {
   const [form] = Form.useForm<any>();
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 5;
+  const [limit, setLimit] = useState(5);
 
   const getDepartments = async () => {
     let res = await axios.get(`http://localhost:63642/api/department/all?page=${currentPage}&limit=${limit}`)
@@ -104,8 +104,12 @@ const DepartmentManage: React.FC = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handlePageChange = (page: number, pageSize: number) => {
+    if (pageSize !== limit) {
+      setLimit(pageSize);
+      setCurrentPage(1);
+    } else
+      setCurrentPage(page);
   };
 
   const handleSave = async (department: Department) => {
@@ -185,7 +189,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     let res = await axios.get('http://localhost:63642/api/department/all?page=1&limit=200')
     console.log('>>check res department props:', res)
     console.log('selecselectedDepartment:', selectedDepartment);
-    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !==selectedDepartment.Id)
+    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !== selectedDepartment.Id)
     console.log('>>check listForDropDown props:', listForDropDown)
 
     res.data.Success ? setDepartmentForDropDown(listForDropDown) : setDepartmentForDropDown([])
