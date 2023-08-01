@@ -52,22 +52,21 @@ function EditRequest() {
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
                 setDataDepartmentMember(departmentMemberRes.data.Data);
 
-
                 const detailsDataEndpoint = "/request/Id=" + requestId;
                 const detailsDataRes = await request.get(detailsDataEndpoint);
                 setDetailData(detailsDataRes.data.Data);
                 setApplyNote(detailsDataRes.data.Data.ApplyNote);
                 setStatus(detailsDataRes.data.Data.Status);
 
-                const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // console.log('attachmentsDataRes', attachmentsDataRes.data.Data);
-                // setFileList(attachmentsDataRes.data.Data[0]);
+                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log(attachmentsDataRes);
+                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
 
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     DepartmentId: detailsDataRes.data.Data.Department.Id,
-                    ReceiverId: detailsDataRes.data.Data.ReceiveUser.Id,
+                    ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
                 }));
 
                 setLoading(false);
@@ -205,7 +204,7 @@ function EditRequest() {
 
     const profile = false;
 
-    // console.log(formData);
+    console.log('formData', formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -290,7 +289,7 @@ function EditRequest() {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={detailData.ReceiveUser ? detailData.ReceiveUser.FullName + ' ' + detailData.ReceiveUser.Email + ' ' + detailData.ReceiveUser.JobTitle : undefined}
+                                                    initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
