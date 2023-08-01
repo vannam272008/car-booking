@@ -194,6 +194,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            virtual={false}
                                             onChange={(value) => handleSelectChange(index, value)}
                                             showSearch
                                             optionFilterProp="children"
