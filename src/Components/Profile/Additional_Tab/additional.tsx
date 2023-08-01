@@ -3,104 +3,9 @@ import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
-import { RcFile } from "antd/es/upload/interface";
-
-interface API {
-  EmployeeNumber: string;
-  Username: string;
-  Email: string;
-  AvatarPath: RcFile | null;
-  FirstName: string;
-  LastName: string;
-  Sex: boolean;
-  Birthday: string;
-  JobTitle: string;
-  Company: string;
-  Unit: string;
-  Function: string;
-  SectionsOrTeam: string;
-  Groups: string;
-  OfficeLocation: string;
-  LineManager: string;
-  BelongToDepartments: string;
-  Rank: string;
-  EmployeeType: string;
-  Rights: string;
-  Nation: string;
-  Phone: string;
-  IdCardNumber: string;
-  DateOfIdCard: string;
-  PlaceOfIdCard: string;
-  HealthInsurance: string;
-  StartingDate: string;
-  StartingDateOfficial: string;
-  LeavingDate: string;
-  StartDateMaternityLeave: string;
-  Note: string;
-  AcademicLevel: string;
-  Qualification: string;
-  BusinessPhone: string;
-  HomePhone: string;
-  PersonalEmail: string;
-  BankName: string;
-  BankBranchNumber: string;
-  BankBranchName: string;
-  BankAccountNumber: string;
-  BankAccountName: string;
-  Street: string;
-  FlatNumber: string;
-  City: string;
-  Province: string;
-  PostalCode: string;
-  Country: string;
-  MartialStatus: string;
-  ContactName: string;
-  Relationship: string;
-  PhoneR: string;
-  StreetR: string;
-  FlatNumberR: string;
-  CityR: string;
-  ProvinceR: string;
-  PostalCodeR: string;
-  CountryR: string;
-  Signature: string;
-}
+import { API, AdditionalProps } from "../interface"
 
 const { Title } = Typography;
-
-interface AdditionalProps {
-  isEditing: boolean;
-  infoAPI: {
-    Nation: string;
-    Phone: string;
-    IdCardNumber: string;
-    DateOfIdCard: string;
-    PlaceOfIdCard: string;
-    HealthInsurance: string;
-    StartingDate: string;
-    StartingDateOfficial: string;
-    LeavingDate: string;
-    StartDateMaternityLeave: string;
-    Note: string;
-    AcademicLevel: string;
-    Qualification: string;
-    BusinessPhone: string;
-    HomePhone: string;
-    PersonalEmail: string;
-    BankName: string;
-    BankBranchNumber: string;
-    BankBranchName: string;
-    BankAccountNumber: string;
-    BankAccountName: string;
-    Street: string;
-    FlatNumber: string;
-    City: string;
-    Province: string;
-    PostalCode: string;
-    Country: string;
-  };
-  setInfoAPI: React.Dispatch<React.SetStateAction<API>>;
-}
 
 const Additional: React.FC<AdditionalProps> = ({
   infoAPI,
@@ -188,7 +93,7 @@ const Additional: React.FC<AdditionalProps> = ({
       dataIndex: "Note",
     },
     {
-      title: isEditing ? <PlusCircleFilled onClick={() => {setEdit_Contract(true)}} /> : null,
+      title: isEditing ? <PlusCircleFilled onClick={() => { setEdit_Contract(true) }} /> : null,
       dataIndex: "action",
     },
   ];
@@ -260,7 +165,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.DateOfIdCard === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.DateOfIdCard)
           }
           style={{ width: "100%" }}
@@ -271,7 +176,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.DateOfIdCard === null ? (
         infoAPI.DateOfIdCard
       ) : (
-        infoAPI.DateOfIdCard.substring(0,10)
+        infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : ""
       ))
     },
     {
@@ -300,7 +205,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartingDate === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartingDate)
           }
           style={{ width: "100%" }}
@@ -311,7 +216,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartingDate === null ? (
         infoAPI.StartingDate
       ) : (
-        infoAPI.StartingDate.substring(0, 10)
+        infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : ""
       ))
     },
     {
@@ -320,7 +225,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartingDateOfficial === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartingDateOfficial)
           }
           style={{ width: "100%" }}
@@ -331,7 +236,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartingDateOfficial === null ? (
         infoAPI.StartingDateOfficial
       ) : (
-        infoAPI.StartingDateOfficial.substring(0, 10)
+        infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : ""
       ))
     },
     {
@@ -339,7 +244,7 @@ const Additional: React.FC<AdditionalProps> = ({
       info: isEditing ? (
         <DatePicker
           value={
-            infoAPI.LeavingDate === null ? dayjs() : dayjs(infoAPI.LeavingDate)
+            infoAPI.LeavingDate === null ? null : dayjs(infoAPI.LeavingDate)
           }
           style={{ width: "100%" }}
           onChange={handleleaving_date}
@@ -349,7 +254,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.LeavingDate === null ? (
         infoAPI.LeavingDate
       ) : (
-        infoAPI.LeavingDate.substring(0, 10)
+        infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : ""
       ))
     },
     {
@@ -358,7 +263,7 @@ const Additional: React.FC<AdditionalProps> = ({
         <DatePicker
           value={
             infoAPI.StartDateMaternityLeave === null
-              ? dayjs()
+              ? null
               : dayjs(infoAPI.StartDateMaternityLeave)
           }
           style={{ width: "100%" }}
@@ -369,7 +274,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ) : (infoAPI.StartDateMaternityLeave === null ? (
         infoAPI.StartDateMaternityLeave
       ) : (
-        infoAPI.StartDateMaternityLeave.substring(0, 10)
+        infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : ""
       ))
     },
     {
@@ -732,14 +637,14 @@ const Additional: React.FC<AdditionalProps> = ({
 
   let dataSource_contract = [
     {
-      Contract_type: isEditing ? (edit_contract ? <Input /> : null):( null) ,
-      From: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
-      To: isEditing ? (edit_contract ? <DatePicker /> : null):(null),
-      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null):( null),
-      Subject: isEditing ? (edit_contract ? <Input /> : null):( null),
-      Department: isEditing ? (edit_contract ? <Input /> : null):( null),
-      Note: isEditing ? (edit_contract ? <Input /> : null):( null),
-      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => {}} /> : null):( null),
+      Contract_type: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      From: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      To: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      Signing_date: isEditing ? (edit_contract ? <DatePicker /> : null) : (null),
+      Subject: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      Department: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      Note: isEditing ? (edit_contract ? <Input /> : null) : (null),
+      action: isEditing ? (edit_contract ? <DeleteFilled onClick={() => { }} /> : null) : (null),
     },
   ];
   return (

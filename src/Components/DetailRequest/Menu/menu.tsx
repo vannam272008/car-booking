@@ -196,7 +196,7 @@ function MenuRequest(props: any): JSX.Element {
                 </Menu.Item>
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
-                        <Button type="primary" onClick={handleDelete} disabled={checkBoxDelete ? false : true}>OK</Button>
+                        <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>Cancel</Button>
                     </div>
                 }>
@@ -234,7 +234,7 @@ function MenuRequest(props: any): JSX.Element {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
-                                    comment: "Request " + requestCode + " has been Approved  - Note: " + e.target.value
+                                    comment: "Request " + requestCode + " has been Approved. </br>Note: " + e.target.value
                                 }));
                             }} />
                         </Modal>
@@ -252,7 +252,7 @@ function MenuRequest(props: any): JSX.Element {
                                     setActionRequest({ action: "Rejected", Note: e.target.value });
                                     setComment((prevComment) => ({
                                         ...prevComment,
-                                        comment: "Request " + requestCode + " has been Rejected   - Note: " + e.target.value
+                                        comment: "Request " + requestCode + " has been Rejected. </br> Reason: " + e.target.value
                                     }));
                                 }} />
                         </Modal>
@@ -280,7 +280,7 @@ function MenuRequest(props: any): JSX.Element {
                             setActionRequest({ action: "Canceled", Note: "Canceled" });
                             setComment((prevComment) => ({
                                 ...prevComment,
-                                comment: "Request " + requestCode + " has been canceled    - Note: Canceled"
+                                comment: "Request " + requestCode + " has been Canceled."
                             }));
                         }}>
                         {!showCancel && (

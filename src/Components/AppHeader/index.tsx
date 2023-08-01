@@ -20,7 +20,7 @@ interface LogoutValues {
 const AppHeader = (props: any) => {
     const userID = localStorage.getItem("Id");
     const { setTab, setStatus } = props;
-    const avatar = require('../../public/images/logo192.png');
+    const avatarDefault = require('../../public/images/avatarDefault.png');
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
@@ -90,6 +90,8 @@ const AppHeader = (props: any) => {
                     console.log(error);
                 });
         };
+
+    console.log(userLoginInfo);
 
     return (
         <Header className="mcs-header">
@@ -165,7 +167,14 @@ const AppHeader = (props: any) => {
                             </div>
                             <div className="content-dropdown">
                                 <div className="account-info">
-                                    <img src={String(avatar)} alt="avatar"></img>
+                                    {userLoginInfo.AvatarPath
+                                        ? <img
+                                            src={`http://localhost:63642/${userLoginInfo.AvatarPath}`}
+                                            alt="avatar"></img>
+                                        : <img
+                                            src={String(avatarDefault)}
+                                            alt="avatar"></img>
+                                    }
                                     <span className="info-name">{userLoginInfo.FullName}</span>
                                     <br />
                                     <span className="info-email">{userLoginInfo.Email}</span>
