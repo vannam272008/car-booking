@@ -244,6 +244,7 @@ const Additional: React.FC<AdditionalProps> = ({
         infoAPI.StartingDateOfficial ? (
           <DatePicker
             value={dayjs(infoAPI.StartingDateOfficial)}
+            disabled
             style={{ width: "100%" }}
             onChange={handleDate_start_date_official}
             placeholder="Starting date offical"
@@ -252,6 +253,7 @@ const Additional: React.FC<AdditionalProps> = ({
         ) : (
           <DatePicker
             value={null}
+            disabled
             style={{ width: "100%" }}
             onChange={handleDate_start_date_official}
             placeholder="Starting date offical"
@@ -272,6 +274,7 @@ const Additional: React.FC<AdditionalProps> = ({
         infoAPI.LeavingDate ? (
           <DatePicker
             value={dayjs(infoAPI.LeavingDate)}
+            disabled
             style={{ width: "100%" }}
             onChange={handleleaving_date}
             placeholder="Leaving date"
@@ -280,6 +283,7 @@ const Additional: React.FC<AdditionalProps> = ({
         ) : (
           <DatePicker
             value={null}
+            disabled
             style={{ width: "100%" }}
             onChange={handleleaving_date}
             placeholder="Leaving date"
@@ -298,6 +302,7 @@ const Additional: React.FC<AdditionalProps> = ({
         infoAPI.StartDateMaternityLeave ? (
           <DatePicker
             value={dayjs(infoAPI.StartDateMaternityLeave)}
+            disabled
             style={{ width: "100%" }}
             onChange={handlestart_date_maternity_leave}
             placeholder="Start Date Maternity Leave"
@@ -306,6 +311,7 @@ const Additional: React.FC<AdditionalProps> = ({
         ) : (
           <DatePicker
             value={null}
+            disabled
             style={{ width: "100%" }}
             onChange={handlestart_date_maternity_leave}
             placeholder="Start Date Maternity Leave"

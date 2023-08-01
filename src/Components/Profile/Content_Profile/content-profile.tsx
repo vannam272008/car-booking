@@ -1,11 +1,10 @@
 import React from "react";
 import type { TabsProps } from "antd";
 import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect} from "react";
 import {
   UserAddOutlined,
   LeftCircleOutlined,
-  UserOutlined,
   CameraOutlined,
   SaveOutlined,
   EditOutlined,
@@ -140,7 +139,11 @@ const ContentProfile: React.FC = () => {
     if (!isImage) {
       message.error("You can only upload image files!");
     }
-    // return isImage;
+    const filesize = file.size / 1024 / 1024 < 5;
+    if(!filesize){
+      message.error("Image must smaller than 5MB ");
+    }
+    return isImage && filesize;
   };
 
   const handleUpdateInfo = async () => {
