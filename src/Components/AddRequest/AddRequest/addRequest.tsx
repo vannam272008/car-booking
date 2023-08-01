@@ -320,7 +320,7 @@ function AddRequest(): JSX.Element {
                                                         labelCol={{ span: 24 }}
                                                         initialValue={initialValueMobile}
                                                     >
-                                                        <Input maxLength={9} onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
@@ -343,7 +343,7 @@ function AddRequest(): JSX.Element {
                                                         labelCol={{ span: 24 }}
                                                         initialValue={initialValueCostCenter}
                                                     >
-                                                        <Input maxLength={9} onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                        <Input onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                     </Form.Item>
                                                 </Col>
                                                 {/*Request Total passengers*/}

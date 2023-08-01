@@ -330,7 +330,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.Mobile ? detailData.Mobile : undefined}
                                                 >
-                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                         </Row>
@@ -353,7 +353,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
                                                 >
-                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Total passengers*/}
