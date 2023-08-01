@@ -103,7 +103,6 @@ function Comment(): JSX.Element {
     // }
     const handleRemoveFile = (file: UploadFile<any>) => {
         const updatedFileList = newComment.files.filter((item) => item.uid !== file.uid);
-        console.log("updated: ", updatedFileList);
         // setFileList(updatedFileList);
         setNewComment((prevComments) => ({
             ...prevComments,
@@ -131,7 +130,6 @@ function Comment(): JSX.Element {
             const endpoint = "/request/comment/requestId=" + requestId;
             await request.get(endpoint)
                 .then((res) => {
-                    console.log("res data: ", res.data.Data);
                     setComments(res.data.Data);
                     setLoading(false);
                 })
@@ -208,7 +206,6 @@ function Comment(): JSX.Element {
     //     setShowReplyForm(true);
     //     setReplyToCommentId(commentId);
     // };
-    console.log("comments hihi: ", newComment);
 
     return (
         <div className='comments-detail-request'>
