@@ -9,7 +9,6 @@ const Overview: React.FC<OverviewProps> = ({
   setInfoAPI,
 }) => {
   // tab_overview
-
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
@@ -104,7 +103,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Sex"
           name="sex"
           // value={infoAPI.Sex}
-          disabled={true}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -125,6 +124,7 @@ const Overview: React.FC<OverviewProps> = ({
           <DatePicker
             value={dayjs(infoAPI.Birthday)}
             style={{ width: "100%" }}
+            disabled
             onChange={handleDate_birth}
             placeholder="Birth day"
             format="YYYY-MM-DD"
@@ -135,6 +135,7 @@ const Overview: React.FC<OverviewProps> = ({
             value={null}
             style={{ width: "100%" }}
             onChange={handleDate_birth}
+            disabled
             placeholder="Birth day"
             format="YYYY-MM-DD"
           />
@@ -156,6 +157,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Company"
           name="company"
           value={infoAPI.Company}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -176,6 +178,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Unit"
           name="unit"
           value={infoAPI.Unit}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -195,6 +198,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Function"
           name="function"
+          disabled
           value={infoAPI.Function}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -214,6 +218,7 @@ const Overview: React.FC<OverviewProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Sections/Teams"
+          disabled
           name="sections_teams"
           value={infoAPI.SectionsOrTeam}
           onChange={(e) => {
@@ -235,6 +240,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Groups"
           name="groups"
+          disabled
           value={infoAPI.Groups}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -255,6 +261,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Office location"
           name="office_location"
+          disabled
           value={infoAPI.OfficeLocation}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -323,6 +330,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Rights"
           name="rights"
+          disabled
           value={infoAPI.Rights}
           onChange={(e) => {
             setInfoAPI((prev) => {

@@ -35,9 +35,8 @@ const ContentProfile: React.FC = () => {
   };
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
-  // const [infoAPItemp, setInfoAPITemp] = useState<any>();
   //avatar
-  const [image, setImage] = useState<RcFile>();
+  const [image, setImage] = useState<RcFile | null>();
 
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
@@ -108,7 +107,6 @@ const ContentProfile: React.FC = () => {
       .get(endpoint)
       .then((response) => {
         setInfoAPI(response.data.Data);
-        // setInfoAPITemp(response.data.Data);
       })
       .catch((error) => {
         console.error(error);
@@ -118,6 +116,7 @@ const ContentProfile: React.FC = () => {
     Modal.confirm({
       title: "Are you sure you want to cancel this update session ?",
       width: 1000,
+      centered: true,
       onOk() {
         getProfile();
         setIsEditing(false);
@@ -133,6 +132,7 @@ const ContentProfile: React.FC = () => {
   const onSave = () => {
     setIsEditing(false);
     handleUpdateInfo();
+    // setImage(null)
   };
 
   const beforeUpload = (file: File) => {
@@ -140,7 +140,7 @@ const ContentProfile: React.FC = () => {
     if (!isImage) {
       message.error("You can only upload image files!");
     }
-    return isImage;
+    // return isImage;
   };
 
   const handleUpdateInfo = async () => {
@@ -180,22 +180,21 @@ const ContentProfile: React.FC = () => {
   // const [relationship, setRelationship] = useState("");
   // const [relationshipnote, setRelationshipNote] = useState("");
 
-  const [onOk, setOnOk] = useState<Boolean>(false);
+  // const [onOk, setOnOk] = useState<Boolean>(false);
 
   const handleOk = async () => {
-    setOnOk(true);
-    setVisible(false);
-
     const formData = new FormData();
     formData.append("fileName", image ? image.name : "");
     formData.append("userId", userID ? userID : "");
     let res = await request.postForm("/file/upload-finish", formData, config);
     infoAPI.AvatarPath = res.data.Data;
-
+    console.log("infoAPI.AvatarPath:",infoAPI.AvatarPath)
+    console.log("res.data.Data",res.data.Data)
     setInfoAPI((prevData) => ({
       ...prevData,
       AvatarPath: res.data.Data,
     }));
+    setVisible(false);
   };
 
   const handleFileChange = (file: RcFile) => {
@@ -247,7 +246,7 @@ const ContentProfile: React.FC = () => {
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
-    setOnOk(false);
+    setImage(null)
   };
 
   const handleCloseModal = () => {
@@ -392,15 +391,14 @@ const ContentProfile: React.FC = () => {
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-                // icon={<UserOutlined />}
               />
             )}
 
             <div className="Upload-Avatar">
               <Upload
                 {...uploadConfig}
-                accept="image/*"
                 beforeUpload={beforeUpload}
+                accept="image/*"
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -415,8 +413,8 @@ const ContentProfile: React.FC = () => {
           <Avatar
             className="avatar"
             size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-            icon={<UserOutlined />}
             src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+            // icon={<UserOutlined />}
           />
         </span>
         <h1 style={{ marginLeft: "50px" }}>
