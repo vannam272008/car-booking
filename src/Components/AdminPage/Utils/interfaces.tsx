@@ -1,5 +1,6 @@
 import { FormInstance } from "antd";
 import { RcFile } from "antd/es/upload";
+import React from "react";
 
 export interface User {
     Id: string,
@@ -87,7 +88,8 @@ export interface DepartmentMembers {
 }
 
 export interface UserFormProps {
-    initialValues: User;
+    selectedUser: User;
+    setSelectedUser: React.Dispatch<React.SetStateAction<User>>;
     onSave: (values: User, file: RcFile) => void;
     form: FormInstance<User>;
     action: string;
@@ -103,7 +105,8 @@ export interface Department {
 }
 
 export interface DepartmentFormProps {
-    initialValues: Department;
+    selectedDepartment: Department;
+    setDepartment: React.Dispatch<React.SetStateAction<Department>>;
     onSave: (values: Department) => void;
     form: FormInstance<Department>;
 }
@@ -114,7 +117,8 @@ export interface Role {
 }
 
 export interface RoleFormProps {
-    initialValues: Role;
+    selectedRole: Role;
+    setSelectedRole: React.Dispatch<React.SetStateAction<Role>>;
     onSave: (values: Role) => void;
     form: FormInstance<Role>;
 }

@@ -59,7 +59,7 @@ const DepartmentManage: React.FC = () => {
 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department>(resetDepartment);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<any>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +83,7 @@ const DepartmentManage: React.FC = () => {
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
-    setSelectedDepartment(null);
+    setSelectedDepartment(resetDepartment);
     setIsModalVisible(true);
   };
 
@@ -117,6 +117,7 @@ const DepartmentManage: React.FC = () => {
       let res = await axios.post('http://localhost:63642/api/department/add', department)
       if (res.data.Success) {
         message.success('Add success !')
+        setSelectedDepartment(resetDepartment)
         setIsModalVisible(false)
         getDepartments()
       } else {
@@ -128,13 +129,13 @@ const DepartmentManage: React.FC = () => {
       let res = await axios.put(`http://localhost:63642/api/department/edit/${department.Id}`, department)
       if (res.data.Success) {
         message.success('Edit success !')
+        setSelectedDepartment(resetDepartment)
         setIsModalVisible(false)
         getDepartments()
       } else {
         message.error(res.data.Message)
       }
     }
-    setSelectedDepartment(null)
   }
 
   return (
@@ -171,20 +172,20 @@ const DepartmentManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <DepartmentForm initialValues={selectedDepartment ? selectedDepartment : resetDepartment} onSave={handleSave} form={form} />
+        <DepartmentForm selectedDepartment={selectedDepartment} setDepartment={setSelectedDepartment} onSave={handleSave} form={form} />
       </Modal>
     </div>
   );
 };
 
-const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, form }) => {
+const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, setDepartment, onSave, form }) => {
   const { Option } = Select;
   const [departmentForDropDown, setDepartmentForDropDown] = useState<Department[]>([]);
   const getDepartmentForDropDown = async () => {
     let res = await axios.get('http://localhost:63642/api/department/all?page=1&limit=200')
     console.log('>>check res department props:', res)
-    console.log('initialValues:', initialValues);
-    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !== initialValues.Id)
+    console.log('selecselectedDepartment:', selectedDepartment);
+    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !==selectedDepartment.Id)
     console.log('>>check listForDropDown props:', listForDropDown)
 
     res.data.Success ? setDepartmentForDropDown(listForDropDown) : setDepartmentForDropDown([])
@@ -194,10 +195,11 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, 
     console.log('useEffect reset fields run');
     getDepartmentForDropDown()
     form.resetFields()
-  }, [initialValues])
+  }, [selectedDepartment])
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
+      setDepartment(values)
       onSave(values as Department);
     });
   };
@@ -208,17 +210,17 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, 
   }
 
   return (
-    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '450px', marginTop: '24px' }}>
+    <Form form={form} initialValues={selectedDepartment} layout="horizontal" style={{ minWidth: '450px', marginTop: '24px' }}>
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
-      <Form.Item label="Name" name="Name">
+      <Form.Item label="Name" name="Name" rules={[{ required: true, message: "Please enter department's name !" }]}>
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="ContactInfo" name="ContactInfo">
+      <Form.Item label="ContactInfo" name="ContactInfo" rules={[{ required: true, message: "Please enter department's contact information !" }]}>
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="Code" name="Code">
+      <Form.Item label="Code" name="Code" rules={[{ required: true, message: "Please enter department's code !" }]}>
         <Input className="right-80" />
       </Form.Item>
       <Form.Item label="UnderDepartment" name="UnderDepartment">
@@ -233,16 +235,16 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, 
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Description" name="Description">
+      <Form.Item label="Description" name="Description" rules={[{ required: true, message: "Please enter department's description !" }]}>
         <Input className="right-80" />
       </Form.Item>
       {/* save */}
-      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
-        <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
-          Save
-        </Button>
-        <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
+      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
+        <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
           Reset
+        </Button>
+        <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
+          Save
         </Button>
       </Form.Item>
     </Form>
