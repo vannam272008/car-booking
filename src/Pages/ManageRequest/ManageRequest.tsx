@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import "./index.css";
 import { Button, Input, Space, Table, Tooltip, message } from 'antd';
 import { FileExcelOutlined, PlusOutlined } from '@ant-design/icons';
@@ -12,6 +12,7 @@ import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 import { Pagination, Form } from 'antd';
 import CommonUtils from '../../Utils/CommonUtils';
+import { useTranslation } from 'react-i18next'
 
 interface RequestType {
   Id: string;
@@ -38,6 +39,7 @@ const ManageRequest = (props: any) => {
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
   const [limit, setLimit] = useState(20);
+  const {t} = useTranslation();
   const [filter, setFilter] = useState({
     requestCode: "",
     createdFrom: "",
@@ -100,20 +102,21 @@ const ManageRequest = (props: any) => {
 
   const handleOnClickExport = () => {
     if (requestData.length !== 0) {
-      if (status !== "") {
-        CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
-      }
-      CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
+        if (status !== "") {
+            CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
+        } else {
+            CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
+        }
     } else {
-      message.error("No data to export excel!!!");
+        message.error("No data to export excel!!!");
     }
-  }
+}
 
   useEffect(() => {
     handleGetAllRequest();
   }, [tab, filter, status, currentPage, limit]);
-
-
+  
+  console.log(t)
 
   const profile = false;
   return (
@@ -121,17 +124,17 @@ const ManageRequest = (props: any) => {
       {() => (
         <div style={{ overflowX: 'hidden' }} className='request'>
           <div className='manage-request-navbar'>
-            <div className='manage-request-title'>car booking</div>
+            <div className='manage-request-title'>{t('carbooking')}</div>
             <Space.Compact size="large">
               <Search
-                placeholder="Search"
+                placeholder={t('search')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value) }}
                 onSearch={() => handleGetAllRequest()}
               />
             </Space.Compact>
             <div>
-              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />Export excel</Button>
+              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />{t('exportexcel')}</Button>
               <FilterDropdown
                 handleClear={handleClear}
                 form={form}
@@ -139,7 +142,7 @@ const ManageRequest = (props: any) => {
                 setLoading={setLoading}
                 onApply={onApply}
               />
-              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />Create new</Button>
+              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />{t('createnew')}</Button>
             </div>
           </div>
           <div className='manage-request-content'>
@@ -158,26 +161,26 @@ const ManageRequest = (props: any) => {
               })}
               columns={[
                 {
-                  title: 'Request Code',
+                  title: t('requestcode'),
                   dataIndex: 'RequestCode',
                 },
                 {
-                  title: 'Department',
+                  title: t('department'),
                   dataIndex: 'Department',
                   render: (department) => `${department.Name}`,
                 },
                 {
-                  title: 'Created by',
+                  title: t('createby'),
                   dataIndex: 'SenderUser',
                   render: (senderUser) => `${senderUser.FullName}`,
                 },
                 {
-                  title: 'User',
+                  title: t('user'),
                   dataIndex: 'ReceiveUser',
                   render: (receiveUser) => `${receiveUser.FullName}`,
                 },
                 {
-                  title: 'Created Date',
+                  title: t('createdate'),
                   dataIndex: 'Created',
                   render: (text: string, record: RequestType) => {
                     let className = '';
@@ -211,12 +214,12 @@ const ManageRequest = (props: any) => {
                   },
                 },
                 {
-                  title: 'From',
+                  title: t('from'),
                   dataIndex: 'UsageFrom',
                   render: (record: string) => changeFormatDate(record),
                 },
                 {
-                  title: 'To',
+                  title: t('to'),
                   dataIndex: 'UsageTo',
                   render: (record: string) => changeFormatDate(record),
                 },

@@ -5,6 +5,7 @@ import { RootState } from "../../../Reducers/rootReducer";
 import { setStatus } from "../../../Actions/requestAction";
 import { connect } from "react-redux";
 import FilterForm from "./FilterForm";
+import { useTranslation } from "react-i18next";
 
 interface FilterDropdownProps {
     setLoading: (value: boolean) => void;
@@ -29,7 +30,8 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
     form,
     onApply,
 }) => {
-
+    const {t} = useTranslation();
+    
     return (
         <Dropdown
             overlay={
@@ -46,7 +48,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
         >
             <Button style={{ marginRight: 5, marginLeft: 3, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}>
                 <FilterOutlined style={{ color: 'green' }} />
-                Filter
+                    {t('filter')}
                 <CaretDownOutlined />
             </Button>
         </Dropdown>

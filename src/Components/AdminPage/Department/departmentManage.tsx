@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Department, DepartmentFormProps } from '../Utils/interfaces';
+import { Department, DepartmentFormProps, ByIdDepartment } from '../Utils/interfaces';
 import * as util from '../Utils'
 import axios from 'axios';
 import './departmentManage.scss'
-import { resetDepartment } from '../Utils';
+import { ACTION_HANDLE, resetDepartment } from '../Utils';
+import request from '../../../Utils/request';
 
 const DepartmentManage: React.FC = () => {
 
@@ -71,7 +72,16 @@ const DepartmentManage: React.FC = () => {
     console.log('>>check res department:', res)
     if (res.data.Success) {
       setTotal(res.data.Data.TotalPage);
-      setDepartments(res.data.Data.ListData)
+      let data:Department[] = res.data.Data.ListData
+      data.forEach(d => {
+        request.get(`/departmentMember/manager/${d.Id}`).then(res => {
+          d.Manager = res.data.Data
+        })
+        request.get(`/departmentMember/supervisors/${d.Id}`).then(res => {
+          d.Supervisors = res.data.Data ? res.data.Data : []
+        })
+      });
+      setDepartments(data)
     } else {
       setDepartments([])
     }
@@ -141,6 +151,7 @@ const DepartmentManage: React.FC = () => {
       }
     }
   }
+  
 
   return (
     <div className='manage-department-content'>
@@ -166,7 +177,7 @@ const DepartmentManage: React.FC = () => {
       />
 
       <Modal
-        title={selectedDepartment ? <Typography.Title level={2}>Edit Department</Typography.Title> : <Typography.Title level={2}>Add Department</Typography.Title>}
+        title={action === ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Department</Typography.Title> : <Typography.Title level={2}>Add Department</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
@@ -176,15 +187,17 @@ const DepartmentManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <DepartmentForm selectedDepartment={selectedDepartment} setDepartment={setSelectedDepartment} onSave={handleSave} form={form} />
+        <DepartmentForm selectedDepartment={selectedDepartment} setDepartment={setSelectedDepartment} onSave={handleSave} form={form} action={action} />
       </Modal>
     </div>
   );
 };
 
-const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, setDepartment, onSave, form }) => {
+const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, setDepartment, onSave, form, action }) => {
   const { Option } = Select;
   const [departmentForDropDown, setDepartmentForDropDown] = useState<Department[]>([]);
+  const [memberDpt, setMemberDpt] = useState<ByIdDepartment[]>([]);
+
   const getDepartmentForDropDown = async () => {
     let res = await axios.get('http://localhost:63642/api/department/all?page=1&limit=200')
     console.log('>>check res department props:', res)
@@ -199,11 +212,21 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     console.log('useEffect reset fields run');
     getDepartmentForDropDown()
     form.resetFields()
+    if(selectedDepartment.Id && selectedDepartment.Id.length > 0) {
+      request.get(`/departmentMember/position?departmentId=${selectedDepartment.Id}`).then(res => {
+        console.log('>>now:', res.data);
+        let data: ByIdDepartment[] = res.data.Data
+        setMemberDpt(data)
+      }).catch(e => {
+        console.log(e);
+      })
+    }
   }, [selectedDepartment])
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       setDepartment(values)
+      
       onSave(values as Department);
     });
   };
@@ -212,6 +235,9 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     form.resetFields()
     console.log('Form resetted');
   }
+
+  
+  console.log('memberDpt check:', memberDpt);
 
   return (
     <Form form={form} initialValues={selectedDepartment} layout="horizontal" style={{ minWidth: '450px', marginTop: '24px' }}>
@@ -242,6 +268,32 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
       <Form.Item label="Description" name="Description" rules={[{ required: true, message: "Please enter department's description !" }]}>
         <Input className="right-80" />
       </Form.Item>
+      {action === ACTION_HANDLE.EDIT &&
+        <>
+        <Form.Item label="Manager" name="Manager">
+          <Select className="right-80">
+            {/* <Option value={''}>
+              None
+            </Option> */}
+            {memberDpt.map((d) => (
+              <Option key={d.User.Id}>
+                {d.User.FullName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item label="Supervisor" name="Supervisors">
+          <Select className="right-80" mode='multiple' maxTagCount={3}>
+            {memberDpt.map((d) => (
+              <Option key={d.User.Id}>
+                {d.User.FullName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        </>
+      }
+
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
         <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>

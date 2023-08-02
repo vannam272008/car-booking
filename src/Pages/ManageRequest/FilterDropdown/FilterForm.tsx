@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react'
 import { Form } from "antd";
 import request from '../../../Utils/request';
+import { useTranslation } from 'react-i18next';
 
 interface FilterFormProps {
     setLoading: (value: boolean) => void;
@@ -47,7 +48,7 @@ const FilterForm: React.FC<FilterFormProps> = ({
     const [dataUser, setDataUser] = useState<User[]>([]);
     const [FormcreatedFrom, FormsetCreatedFrom] = useState("");
     const [FormcreatedTo, formSetCreatedTo] = useState("");
-
+    const {t} = useTranslation();
 
     const handleSetFormFilter = (values: any) => {
         setFilter((prevFilter) => ({
@@ -79,9 +80,9 @@ const FilterForm: React.FC<FilterFormProps> = ({
             form={form}
             onFinish={(values) => handleSetFormFilter(values)}
             className="filter-form"
-            initialValues={{ createdBy: "All", status: "All requests" }}
+            initialValues={{ createdBy: "All", status: t('allrequests') }}
         >
-            <p style={{ fontWeight: "bold", fontFamily: "Segoe UI" }}>Filter</p>
+            <p style={{ fontWeight: "bold", fontFamily: "Segoe UI" }}>{t('filter')}</p>
             <Form.Item>
                 <Button
                     type="primary"
@@ -109,15 +110,15 @@ const FilterForm: React.FC<FilterFormProps> = ({
                 </Button>
                 <hr style={{ border: "1px solid gray" }} />
             </Form.Item>
-            <Form.Item name="requestCode" label="Request Code" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
-                <Input placeholder='Key words...'
+            <Form.Item name="requestCode" label={t('requestcode')} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+                <Input placeholder={t('keywords')}
                 // onChange={e => setFilter((prevFilter) => ({
                 //     ...prevFilter,
                 //     requestCode: e.target.value
                 // }))} 
                 />
             </Form.Item>
-            <Form.Item name="created" label="Created" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+            <Form.Item name="created" label={t('createdate')} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <DatePicker.RangePicker
                     defaultValue={[dayjs(createdFrom()), dayjs(createdTo())]}
                     onChange={(_, dateString) => {
@@ -126,7 +127,7 @@ const FilterForm: React.FC<FilterFormProps> = ({
                     }}
                 />
             </Form.Item>
-            <Form.Item name="createdBy" label="Created by" initialValue={dataUser.length > 0 ? dataUser[0].FirstName : undefined} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+            <Form.Item name="createdBy" label={t('createby')} initialValue={dataUser.length > 0 ? dataUser[0].FirstName : undefined} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <Select
                     // onChange={value => onSenderIdChange(value)}
                     showSearch
@@ -143,7 +144,7 @@ const FilterForm: React.FC<FilterFormProps> = ({
                     ))}
                 </Select>
             </Form.Item>
-            <Form.Item name="status" label="Status" style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
+            <Form.Item name="status" label={t('status')} style={{ fontWeight: 'bold', fontFamily: 'Segoe UI' }}>
                 <Select
                     // onChange={value => onStatusChange(value)}
                     showSearch
@@ -152,13 +153,13 @@ const FilterForm: React.FC<FilterFormProps> = ({
                         option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                     }
                 >
-                    <Select.Option value="">All requests</Select.Option>
-                    <Select.Option value="Draft">Draft</Select.Option>
-                    <Select.Option value="Waiting for approval">Waiting for approval</Select.Option>
-                    <Select.Option value="Approved">Approved</Select.Option>
-                    <Select.Option value="Rejected">Rejected</Select.Option>
-                    <Select.Option value="Canceled">Canceled</Select.Option>
-                    <Select.Option value="Done">Done</Select.Option>
+                    <Select.Option value="">{t('allrequests')}</Select.Option>
+                    <Select.Option value="Draft">{t('draft')}</Select.Option>
+                    <Select.Option value="Waiting for approval">{t('waitingforapproval')}</Select.Option>
+                    <Select.Option value="Approved">{t('approved')}</Select.Option>
+                    <Select.Option value="Rejected">{t('rejected')}</Select.Option>
+                    <Select.Option value="Canceled">{t('canceled')}</Select.Option>
+                    <Select.Option value="Done">{t('done')}</Select.Option>
                 </Select>
             </Form.Item>
         </Form>

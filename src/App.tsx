@@ -1,6 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Login from './Pages/Login/Login';
 import { private_routes, public_routes } from './routes/routes';
 import { useEffect, useState } from 'react';
 import request from './Utils/request';
@@ -33,6 +31,7 @@ function App() {
       {/* <Route path="/login" element={<Login />} /> */}
     </Routes>
   );
+
 }
 
 export default App;
