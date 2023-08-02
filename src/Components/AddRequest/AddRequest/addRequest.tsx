@@ -67,7 +67,7 @@ function AddRequest(): JSX.Element {
     //define initialValue for element input form
     const initialValueSender = userLoginName ?? '';
     const initialValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
-    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'Please choose another department !';
+    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data';
     const initialValueMobile = formData.Mobile ? formData.Mobile : '';
     const initialValueCostCenter = formData.CostCenter ? formData.CostCenter : '';
     const initialValueTotalPassengers = formData.TotalPassengers ? formData.TotalPassengers : '';
@@ -274,6 +274,7 @@ function AddRequest(): JSX.Element {
                                                     <Form.Item
                                                         label="User"
                                                         name="ReceiverId"
+                                                        // style={initialValueReceiver === "No Data" ? { color: 'red' } : { color: 'blue' }}
                                                         rules={[
                                                             {
                                                                 required: true,
@@ -284,6 +285,7 @@ function AddRequest(): JSX.Element {
                                                         labelCol={{ span: 24 }}
                                                     >
                                                         <Select
+                                                            className={initialValueReceiver === 'No Data' ? "no-data" : ''}
                                                             virtual={false}
                                                             value={formData.SenderId}
                                                             onChange={(value) => handleSelectChange(value, 'ReceiverId')}

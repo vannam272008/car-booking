@@ -63,11 +63,13 @@ function EditRequest() {
                 // console.log(attachmentsDataRes);
                 // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
 
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    DepartmentId: detailsDataRes.data.Data.Department.Id,
-                    ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
-                }));
+                if (formData.DepartmentId === '' && formData.ReceiverId === '') {
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        DepartmentId: detailsDataRes.data.Data.Department.Id,
+                        ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
+                    }));
+                }
 
                 setLoading(false);
             } catch (error) {
@@ -130,8 +132,6 @@ function EditRequest() {
     useEffect(() => {
         setActiveTabKey(detailData.Department && !activeTabKey ? detailData.Department.Id : activeTabKey);
     }, [detailData.Department, activeTabKey])
-
-
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -196,7 +196,6 @@ function EditRequest() {
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const charCode = event.which ? event.which : event.keyCode;
-
         if ((charCode < 48 || charCode > 57) && charCode !== 8) {
             event.preventDefault();
         }
