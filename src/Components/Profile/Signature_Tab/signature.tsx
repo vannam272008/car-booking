@@ -72,7 +72,7 @@ const Signature: React.FC<SignatureProps> = ({
       var userId = localStorage.getItem("Id");
       const objectUrl = URL.createObjectURL(file.originFileObj);
       setImg_Preview(objectUrl);
-
+      console.log("file.originFileObj:",file.originFileObj)
       const formData = new FormData();
       formData.append("fileName", file.originFileObj ? file.name : "");
       formData.append("userId", userId ? userId : "");

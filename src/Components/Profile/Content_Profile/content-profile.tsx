@@ -1,13 +1,18 @@
 import React from "react";
 import type { TabsProps } from "antd";
+import { UploadChangeParam } from "antd/lib/upload";
+import { UploadFile } from "antd/lib/upload/interface";
+import ImgCrop from "antd-img-crop";
 import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
   LeftCircleOutlined,
   CameraOutlined,
   SaveOutlined,
   EditOutlined,
+  InfoCircleFilled,
+  UserOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +23,7 @@ import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 import { API } from "../interface";
+import { info } from "console";
 
 const ContentProfile: React.FC = () => {
   const jwt_admin = localStorage.getItem("Token");
@@ -35,13 +41,13 @@ const ContentProfile: React.FC = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   //avatar
-  const [image, setImage] = useState<RcFile | null>();
+  const [image, setImage] = useState<RcFile | string>();
 
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
     Username: "",
     Email: "",
-    AvatarPath: image!,
+    AvatarPath: "",
     FirstName: "",
     LastName: "",
     Sex: true,
@@ -97,6 +103,7 @@ const ContentProfile: React.FC = () => {
     CountryR: "",
     Signature: "",
     SignatureTemp: "",
+    // AvatarPathtemp: "",
   });
 
   const { userID } = useParams();
@@ -125,13 +132,12 @@ const ContentProfile: React.FC = () => {
 
   useEffect(() => {
     getProfile();
-  },[]);
-
+  }, []);
 
   const onSave = () => {
     setIsEditing(false);
     handleUpdateInfo();
-    // setImage(null)
+    setOnOk(false)
   };
 
   const beforeUpload = (file: File) => {
@@ -140,7 +146,7 @@ const ContentProfile: React.FC = () => {
       message.error("You can only upload image files!");
     }
     const filesize = file.size / 1024 / 1024 < 5;
-    if(!filesize){
+    if (!filesize) {
       message.error("Image must smaller than 5MB ");
     }
     return isImage && filesize;
@@ -183,28 +189,30 @@ const ContentProfile: React.FC = () => {
   // const [relationship, setRelationship] = useState("");
   // const [relationshipnote, setRelationshipNote] = useState("");
 
-  // const [onOk, setOnOk] = useState<Boolean>(false);
+  const [onOk, setOnOk] = useState<Boolean>(false);
 
-  const handleOk = async () => {
-    const formData = new FormData();
-    formData.append("fileName", image ? image.name : "");
-    formData.append("userId", userID ? userID : "");
-    let res = await request.postForm("/file/upload-finish", formData, config);
-    infoAPI.AvatarPath = res.data.Data;
-    console.log("infoAPI.AvatarPath:",infoAPI.AvatarPath)
-    console.log("res.data.Data",res.data.Data)
-    setInfoAPI((prevData) => ({
-      ...prevData,
-      AvatarPath: res.data.Data,
-    }));
+  const handleOk = () => {
     setVisible(false);
+    setOnOk(true);
   };
 
-  const handleFileChange = (file: RcFile) => {
-    setImage(file);
+  const handleFileChange = async (info: UploadChangeParam<UploadFile<any>>) => {
+    const file = info.file;
+    if (file.status === "done" && file.originFileObj) {
+      const croppedImage = file.originFileObj;
+      const formData = new FormData();
+      formData.append("fileName", croppedImage ? croppedImage.name : "");
+      formData.append("userId", userID ? userID : "");
+      let res = await request.postForm("/file/upload-finish", formData, config);
+      setImage(croppedImage);
+      infoAPI.AvatarPath = res.data.Data;
+      setInfoAPI((prev) => ({ ...prev, AvatarPath: res.data.Data }));
+      // console.log("infoAPI.AvatarPath trong if:", infoAPI.AvatarPath);
+    }
+    // console.log("infoAPI.AvatarPath ngoai if:", infoAPI.AvatarPath);
   };
+  // console.log("infoAPI.AvatarPath ngoai ham:", infoAPI.AvatarPath);
 
- 
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
@@ -249,7 +257,7 @@ const ContentProfile: React.FC = () => {
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
-    setImage(null)
+    // setImage(null);
   };
 
   const handleCloseModal = () => {
@@ -368,7 +376,6 @@ const ContentProfile: React.FC = () => {
             />
           </span>
         ) : null}
-
         <Modal
           title="Upload and Edit Avatar"
           open={visible}
@@ -385,40 +392,50 @@ const ContentProfile: React.FC = () => {
             }}
           >
             {image ? (
-              // HERE
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={URL.createObjectURL(image)}
+                src={URL.createObjectURL(image as RcFile)}
               />
             ) : (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+                icon={<UserOutlined />}
+                src={`http://localhost:63642/${
+                  infoAPI.AvatarPath
+                }?${Date.now()}`}
               />
             )}
-
             <div className="Upload-Avatar">
-              <Upload
-                {...uploadConfig}
-                beforeUpload={beforeUpload}
-                accept="image/*"
-                showUploadList={false}
-                onChange={({ file }) =>
-                  handleFileChange(file.originFileObj as RcFile)
-                }
-              >
-                <Button shape="circle" icon={<EditOutlined />} />
-              </Upload>
+              <ImgCrop cropShape="round" rotationSlider>
+                <Upload
+                  {...uploadConfig}
+                  beforeUpload={beforeUpload}
+                  accept="image/*"
+                  showUploadList={false}
+                  // onChange={({ file }) => handleFileChange(file.originFileObj as RcFile)}
+                  onChange={handleFileChange}
+                >
+                  <Button shape="circle" icon={<EditOutlined />} />
+                </Upload>
+              </ImgCrop>
             </div>
           </div>
         </Modal>
         <span>
-          <Avatar
-            className="avatar"
-            size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-            src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-            // icon={<UserOutlined />}
-          />
+          {image ? (
+            <Avatar
+              size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
+              icon={<UserOutlined />}
+              // src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
+              src={URL.createObjectURL(image as RcFile)}
+            />
+          ) : (
+            <Avatar
+              size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
+              // icon={<UserOutlined />}
+              src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
+            />
+          )}
         </span>
         <h1 style={{ marginLeft: "50px" }}>
           {infoAPI.FirstName} {infoAPI.LastName}
