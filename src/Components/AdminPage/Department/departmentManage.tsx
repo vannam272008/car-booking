@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination } from 'antd';
+import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination, Checkbox, Row, Col } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Department, DepartmentFormProps, ByIdDepartment } from '../Utils/interfaces';
 import * as util from '../Utils'
@@ -72,8 +72,10 @@ const DepartmentManage: React.FC = () => {
     console.log('>>check res department:', res)
     if (res.data.Success) {
       setTotal(res.data.Data.TotalPage);
-      let data:Department[] = res.data.Data.ListData
+      let data: Department[] = res.data.Data.ListData
       data.forEach(d => {
+        d.ManEm = false
+        d.SupEm = false
         request.get(`/departmentMember/manager/${d.Id}`).then(res => {
           d.Manager = res.data.Data
         })
@@ -151,7 +153,7 @@ const DepartmentManage: React.FC = () => {
       }
     }
   }
-  
+
 
   return (
     <div className='manage-department-content'>
@@ -212,7 +214,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     console.log('useEffect reset fields run');
     getDepartmentForDropDown()
     form.resetFields()
-    if(selectedDepartment.Id && selectedDepartment.Id.length > 0) {
+    if (selectedDepartment.Id && selectedDepartment.Id.length > 0) {
       request.get(`/departmentMember/position?departmentId=${selectedDepartment.Id}`).then(res => {
         console.log('>>now:', res.data);
         let data: ByIdDepartment[] = res.data.Data
@@ -226,7 +228,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       setDepartment(values)
-      
+
       onSave(values as Department);
     });
   };
@@ -236,7 +238,7 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     console.log('Form resetted');
   }
 
-  
+
   console.log('memberDpt check:', memberDpt);
 
   return (
@@ -270,41 +272,53 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
       </Form.Item>
       {action === ACTION_HANDLE.EDIT &&
         <>
-        <Form.Item label="Manager" name="Manager">
-          <Select className="right-80">
-            {/* <Option value={''}>
+          <Form.Item label="Manager" name="Manager">
+            <Select className="right-80">
+              {/* <Option value={''}>
               None
             </Option> */}
-            {memberDpt.map((d) => (
-              <Option key={d.User.Id}>
-                {d.User.FullName}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item label="Supervisor" name="Supervisors">
-          <Select className="right-80" mode='multiple' maxTagCount={3}>
-            {memberDpt.map((d) => (
-              <Option key={d.User.Id}>
-                {d.User.FullName}
-              </Option>
-            ))}
-          </Select>
-        </Form.Item>
-        </>
+              {memberDpt.map((d) => (
+                <Option key={d.User.Id}>
+                  {d.User.FullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Form.Item label="Supervisor" name="Supervisors">
+            <Select className="right-80" mode='multiple' maxTagCount={3}>
+              {memberDpt.map((d) => (
+                <Option key={d.User.Id}>
+                  {d.User.FullName}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Form.Item label="Manager & Employee" valuePropName="checked" name="ManEm">
+                <Checkbox value={true} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Supervisor & Employee" valuePropName="checked" name="SupEm">
+                <Checkbox value={true}/>
+              </Form.Item>
+            </Col>
+          </Row>
+          </>
       }
 
-      {/* save */}
-      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
-        <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
-          Reset
-        </Button>
-        <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
-          Save
-        </Button>
-      </Form.Item>
-    </Form>
+          {/* save */}
+          <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
+            <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
+              Reset
+            </Button>
+            <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
   )
 }
 
-export default DepartmentManage;
+      export default DepartmentManage;
