@@ -18,7 +18,7 @@ const Login = () => {
     (values: LoginValues) => {
       setLoading(true);
       if (token) {
-        navigate('/request/carbooking');
+        navigate('/');
       }
       request
         .post("/user/login", values)
@@ -31,7 +31,7 @@ const Login = () => {
               console.log("Login failed:", data?.Message);
               message.error(data?.Message);
             } else {
-              navigate("/request/carbooking");
+              navigate("/");
               window.location.reload();
             }
             // setTab('get-all' + `/userId=${data.Data.userInfo.Id}`);
