@@ -1,9 +1,11 @@
 import { Button, Modal, Select } from 'antd'
 import React, { useState } from 'react'
 import "./index.css";
+import { useTranslation } from 'react-i18next';
 
 const Feedback = () => {
     const [isModalOpenFeedback, setIsModalOpenFeedback] = useState(false);
+    const {t} = useTranslation();
 
     const showModalFeedbacks = () => {
         setIsModalOpenFeedback(true);
@@ -20,7 +22,7 @@ const Feedback = () => {
     return (
         <>
             <div className='feedback-title' style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={showModalFeedbacks}>
-                <p>Feedbacks & Suggest idea</p>
+                <p>{t('feedback')}</p>
             </div>
             <Modal className='feedback-content' closable={false} title={<h3>Post an idea or report error</h3>} open={isModalOpenFeedback} onCancel={handleCancel} footer={
                 <div >

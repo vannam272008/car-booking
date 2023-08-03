@@ -6,6 +6,7 @@ import request from "../../../Utils/request";
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { UploadFile } from 'antd/lib/upload';
+import { useTranslation } from 'react-i18next';
 
 interface DepartmentMember {
     Id: string;
@@ -26,6 +27,7 @@ interface PropsDataList {
 
 function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
+    const {t} = useTranslation();
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [inputs, setInputs] = useState<string[]>(['Initial Input']);
     const [counterApprover, setCounterApprover] = useState(1);
@@ -137,8 +139,8 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
             <div className='attention-request' style={{ marginTop: '0', }}>
                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                 <Radio.Group onChange={onChange} value={applyNote}>
-                    <Radio value={true}>Yes</Radio>
-                    <Radio value={false}>No</Radio>
+                    <Radio value={true}>{t('yes')}</Radio>
+                    <Radio value={false}>{t('no')}</Radio>
                 </Radio.Group>
             </div>
             <div className='Attachment'>
@@ -153,9 +155,9 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                     multiple={true}
                 >
                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
-                        Add attachments
+                        {t('Add attachments')}
                     </Button>
-                    <span> (Maximum 20MB per file)</span>
+                    <span> {t('(Maximum 20MB per file)')}</span>
                 </Upload>
             </div>
             <div className='form-approver'>
@@ -187,10 +189,10 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Select something!',
+                                                message: t('Select something!'),
                                             },
                                         ]}
-                                        initialValue={'--Select a Approver--'}
+                                        initialValue={t('--Select a Approver--')}
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
@@ -221,7 +223,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         backgroundColor: 'rgb(47,133,239)',
                                         color: 'white'
                                     }}>
-                                    Add
+                                    {t('Add')}
                                 </Button>
                             </Col>
                         </Row>

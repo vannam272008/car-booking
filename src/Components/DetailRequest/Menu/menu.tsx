@@ -20,6 +20,7 @@ import { useParams } from 'react-router';
 import request from '../../../Utils/request';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import TextArea from 'antd/es/input/TextArea';
+import { useTranslation } from 'react-i18next';
 
 interface ActionRequest {
     action: string,
@@ -38,6 +39,7 @@ function MenuRequest(props: any): JSX.Element {
     const [checkBoxDelete, SetCheckBoxDelete] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const { requestId } = useParams();
+    const {t} = useTranslation();
     const [actionRequest, setActionRequest] = useState<ActionRequest>({
         action: "",
         Note: ""
@@ -141,7 +143,7 @@ function MenuRequest(props: any): JSX.Element {
     };
 
     const menu = (
-        <Button icon={<CloseCircleFilled />} onClick={handleCancelClick}>Cancel request</Button>
+        <Button icon={<CloseCircleFilled />} onClick={handleCancelClick}>{t('cancelrequest')}</Button>
     );
 
     const handleClose = () => {
@@ -171,7 +173,7 @@ function MenuRequest(props: any): JSX.Element {
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
-            message: <strong>Failed action</strong>,
+            message: <strong>{t('Failed action')}</strong>,
             description: errorMessage,
             placement,
             icon: <WarningOutlined style={{ color: '#FF0000' }} />,
@@ -186,32 +188,32 @@ function MenuRequest(props: any): JSX.Element {
         <div>
             <Menu mode="horizontal" className='fixed-menu'>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
-                    Return
+                    {t('return')}
                 </Menu.Item>
                 <Menu.Item onClick={downloadFilePdf} key="download" icon={<FilePdfOutlined />}>
-                    Download file
+                    {t('downloadfile')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
-                    Delete
+                    {t('delete')}
                 </Menu.Item>
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>{t('Cancel')}</Button>
                     </div>
                 }>
                     <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>Delete approval tasks related to this request.</Checkbox>
                 </Modal>
                 <Menu.Item key="progress" icon={<RiseOutlined />}>
-                    Progress
+                    {t('progress')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
-                    Share
+                    {t('share')}
                 </Menu.Item>
                 <Modal className='custom-menu' closable={false} title={<h4>Share</h4>} open={isModalOpenShare} footer={
                     <div >
-                        <Button type="primary" onClick={handleShare}>Share</Button>
-                        <Button onClick={handleClose}>Close</Button>
+                        <Button type="primary" onClick={handleShare}>{t('share')}</Button>
+                        <Button onClick={handleClose}>{t('Close')}</Button>
                     </div>
                 }>
                     <Select className='fixed-width-object'>
@@ -222,12 +224,12 @@ function MenuRequest(props: any): JSX.Element {
                 {requestStatus === 'Waiting for approval' && (
                     <>
                         <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
-                            Approve
+                            {t('approve')}
                         </Menu.Item>
                         <Modal className='custom-menu' title={<h4>Note</h4>} closable={false} open={isModalOpenApprove} footer={
                             <div>
-                                <Button type="primary" onClick={handleApprove}>Approve</Button>
-                                <Button onClick={handleClose}>Close</Button>
+                                <Button type="primary" onClick={handleApprove}>{t('approve')}</Button>
+                                <Button onClick={handleClose}>{t('Close')}</Button>
                             </div>
                         }>
                             <TextArea rows={5} className='menu-after-btn-input' onChange={(e) => {
@@ -239,12 +241,12 @@ function MenuRequest(props: any): JSX.Element {
                             }} />
                         </Modal>
                         <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
-                            Reject
+                            {t('reject')}
                         </Menu.Item>
-                        <Modal className='custom-menu' closable={false} title={<h4>Reason</h4>} open={isModalOpenReject} footer={
+                        <Modal className='custom-menu' closable={false} title={<h4>{t('reason')}</h4>} open={isModalOpenReject} footer={
                             <div>
-                                <Button type="primary" onClick={handleReject}>Reject</Button>
-                                <Button onClick={handleClose}>Close</Button>
+                                <Button type="primary" onClick={handleReject}>{t('reject')}</Button>
+                                <Button onClick={handleClose}>{t('Close')}</Button>
                             </div>
                         }>
                             <TextArea rows={5} className='menu-after-btn-input'
@@ -260,12 +262,12 @@ function MenuRequest(props: any): JSX.Element {
                 )}
 
                 <Menu.Item onClick={showModalForward} key="forward" icon={<DeliveredProcedureOutlined />}>
-                    Forward
+                    {t('forward')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4>Choose User</h4>} open={isModalOpenForward} footer={
+                <Modal className='custom-menu' closable={false} title={<h4>{t('Choose User')}</h4>} open={isModalOpenForward} footer={
                     <div >
-                        <Button type="primary" onClick={handleForward}>Forward</Button>
-                        <Button onClick={handleClose}>Close</Button>
+                        <Button type="primary" onClick={handleForward}>{t('forward')}</Button>
+                        <Button onClick={handleClose}>{t('Close')}</Button>
                     </div>
                 }>
                     <Select className='fixed-width-object'>

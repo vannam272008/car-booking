@@ -12,6 +12,7 @@ import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
 // import PageNotFound from '../../../Pages/404';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function DetailRequest(): JSX.Element {
 
@@ -43,6 +44,8 @@ function DetailRequest(): JSX.Element {
     //Data Approver
     // const Approver1: string = 'Approver 1';
     // const Approver2: string = 'Approver 2';
+
+    const {t} = useTranslation(); 
 
     const profile = false;
 
@@ -167,7 +170,7 @@ function DetailRequest(): JSX.Element {
                                         </Row>
                                         <Row className='row-request'>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Pick time <span className='required'>*</span></label>
+                                                <label>{t('Pick time')} <span className='required'>*</span></label>
                                                 <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>

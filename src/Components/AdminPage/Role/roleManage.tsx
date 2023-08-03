@@ -7,8 +7,11 @@ import * as util from '../Utils'
 import axios from 'axios';
 import { resetRole } from '../Utils';
 import "./roleManage.css";
+import { useTranslation } from 'react-i18next';
 
 const RoleManage: React.FC = () => {
+
+  const {t} = useTranslation();
 
   message.config(util.messageConfig)
   const columns = [
@@ -18,20 +21,20 @@ const RoleManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Title',
+      title: t('Title'),
       dataIndex: 'Title',
       key: 'Title',
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: Role) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -76,7 +79,7 @@ const RoleManage: React.FC = () => {
     /* const updatedRoles = roles.filter((d) => d.Id !== id);
     setRoles(updatedRoles); */
     if (res.data.Success) {
-      message.success('Delete success !')
+      message.success(t('Delete success !'))
       setIsModalVisible(false)
       getRoles()
     } else {
@@ -96,14 +99,14 @@ const RoleManage: React.FC = () => {
       setRoles([...roles, role]) */
       let res = await axios.post('http://localhost:63642/api/role/add', { Title: role.Title })
       if (res.data.Success) {
-        message.success('Add success !')
+        message.success(t('Add success !'))
         setIsModalVisible(false)
         getRoles()
       } else {
         message.error(res.data.Message)
       }
     } else if (action === util.ACTION_HANDLE.EDIT) {
-      if (!role.Title) return message.error('Missing title !')
+      if (!role.Title) return message.error(t('Missing title !'))
       console.log(role.Id);
 
       let res = await axios.put(`http://localhost:63642/api/role/edit/${role.Id}`, { Title: role.Title })
@@ -115,7 +118,7 @@ const RoleManage: React.FC = () => {
         return x < y ? -1 : x > y ? 1 : 0;
       })) */
       if (res.data.Success) {
-        message.success('Edit success !')
+        message.success(t('Edit success !'))
         setIsModalVisible(false)
         getRoles()
       } else {
@@ -131,7 +134,7 @@ const RoleManage: React.FC = () => {
   return (
     <div className='manage-role-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add Role
+        {t('Add Role')}
       </Button>
 
       <Table dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
@@ -152,7 +155,7 @@ const RoleManage: React.FC = () => {
       />
 
       <Modal
-        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Role</Typography.Title> : <Typography.Title level={2}>Add Role</Typography.Title>}
+        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>{t('Edit Role')}</Typography.Title> : <Typography.Title level={2}>{t('Add Role')}</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
           setSelectedRole(null)
@@ -170,6 +173,8 @@ const RoleManage: React.FC = () => {
 };
 
 const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
+  const {t} = useTranslation();
+  
   const handleSubmit = () => {
     form.validateFields().then((values) => {
       onSave(values as Role);
@@ -191,16 +196,16 @@ const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
-      <Form.Item label="Title" name="Title">
+      <Form.Item label={t('Title')} name="Title">
         <Input />
       </Form.Item>
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
         <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
-          Save
+          {t('Save')}
         </Button>
         <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
-          Reset
+          {t('Reset')}
         </Button>
       </Form.Item>
     </Form>

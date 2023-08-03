@@ -6,8 +6,10 @@ import * as util from '../Utils'
 import axios from 'axios';
 import './departmentManage.scss'
 import { resetDepartment } from '../Utils';
+import { useTranslation } from 'react-i18next';
 
 const DepartmentManage: React.FC = () => {
+  const {t} = useTranslation();
 
   message.config(util.messageConfig)
   const columns = [
@@ -17,40 +19,40 @@ const DepartmentManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Name',
+      title: t('Name'),
       dataIndex: 'Name',
       key: 'Name',
     },
     {
-      title: 'Contact Info',
+      title: t('Contact Info'),
       dataIndex: 'ContactInfo',
       key: 'ContactInfo',
     },
     {
-      title: 'Code',
+      title: t('Code'),
       dataIndex: 'Code',
       key: 'Code',
     },
     {
-      title: 'Under Department',
+      title: t('Under Department'),
       dataIndex: 'UnderDepartment',
       key: 'UnderDepartment',
     },
     {
-      title: 'Description',
+      title: t('Description'),
       dataIndex: 'Description',
       key: 'Description',
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: Department) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -113,21 +115,21 @@ const DepartmentManage: React.FC = () => {
     console.log('>>selected department:', selectedDepartment);
 
     if (action === util.ACTION_HANDLE.ADD) {
-      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error('Missing title !')
+      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error(t('Missing title !'))
       let res = await axios.post('http://localhost:63642/api/department/add', department)
       if (res.data.Success) {
-        message.success('Add success !')
+        message.success(t('Add success !'))
         setIsModalVisible(false)
         getDepartments()
       } else {
         message.error(res.data.Message)
       }
     } else if (action === util.ACTION_HANDLE.EDIT) {
-      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error('Missing title !')
+      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error(t('Missing title !'))
 
       let res = await axios.put(`http://localhost:63642/api/department/edit/${department.Id}`, department)
       if (res.data.Success) {
-        message.success('Edit success !')
+        message.success(t('Edit success !'))
         setIsModalVisible(false)
         getDepartments()
       } else {
@@ -140,7 +142,7 @@ const DepartmentManage: React.FC = () => {
   return (
     <div className='manage-department-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add Department
+        {t('Add Department')}
       </Button>
 
       <Table dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
@@ -161,7 +163,7 @@ const DepartmentManage: React.FC = () => {
       />
 
       <Modal
-        title={selectedDepartment ? <Typography.Title level={2}>Edit Department</Typography.Title> : <Typography.Title level={2}>Add Department</Typography.Title>}
+        title={selectedDepartment ? <Typography.Title level={2}>{t('Edit Department')}</Typography.Title> : <Typography.Title level={2}>{t('Add Department')}</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
@@ -178,6 +180,7 @@ const DepartmentManage: React.FC = () => {
 };
 
 const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, form }) => {
+  const {t} = useTranslation();
   const { Option } = Select;
   const [departmentForDropDown, setDepartmentForDropDown] = useState<Department[]>([]);
   const getDepartmentForDropDown = async () => {
@@ -212,19 +215,19 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, 
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
-      <Form.Item label="Name" name="Name">
+      <Form.Item label={t('Name')} name="Name">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="ContactInfo" name="ContactInfo">
+      <Form.Item label={t('Contact Info')} name="ContactInfo">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="Code" name="Code">
+      <Form.Item label={t('Code')} name="Code">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="UnderDepartment" name="UnderDepartment">
+      <Form.Item label={t('Under Department')} name="UnderDepartment">
         <Select className="right-80">
           <Option value={''}>
-            None
+            {t('None')}
           </Option>
           {departmentForDropDown.map((d) => (
             <Option key={d.Id}>
@@ -233,16 +236,16 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, 
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Description" name="Description">
+      <Form.Item label={t('Description')} name="Description">
         <Input className="right-80" />
       </Form.Item>
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
         <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
-          Save
+          {t('Save')}
         </Button>
         <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
-          Reset
+          {t('Reset')}
         </Button>
       </Form.Item>
     </Form>

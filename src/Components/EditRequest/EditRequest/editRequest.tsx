@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import EditSendApprover from '../EditSendApprover/editSendApprover';
 import MenuEdit from '../MenuEdit/menuEdit';
 import RequestLayout from '../../RequestLayout/index.jsx';
+import { useTranslation } from 'react-i18next';
 
 interface Department {
     Name: string;
@@ -26,6 +27,8 @@ interface DepartmentMember {
 
 
 function EditRequest() {
+
+    const {t} = useTranslation();
 
     const { Option } = Select;
 
@@ -431,12 +434,12 @@ function EditRequest() {
                                             {/*Request Pick time*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Pick time"
+                                                    label={t('Pick time')}
                                                     name="Picktime"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Pick time" is required'
+                                                            message: t('Pick time is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -447,7 +450,7 @@ function EditRequest() {
                                                         value={dayjs(formData.PickTime)}
                                                         onChange={(value) => handleDatePicker(value, 'PickTime')}
                                                         showTime
-                                                        placeholder='Pick time'
+                                                        placeholder={t('Pick time')}
                                                     />
                                                 </Form.Item>
                                             </Col>

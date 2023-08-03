@@ -8,9 +8,12 @@ import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import dayjs, { Dayjs } from 'dayjs';
 import { resetUser } from '../Utils';
+import { useTranslation } from 'react-i18next';
 
 
 const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action }) => {
+
+  const {t} = useTranslation();
 
   const { Option } = Select;
   const [roles, setRoles] = useState<Role[]>([])
@@ -117,7 +120,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
     <Form onFinish={handleForSubmit} form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '600px' }}>
 
       {/* 1 */}
-      <Typography.Title level={4}>Overview</Typography.Title>
+      <Typography.Title level={4}>{t('Overview')}</Typography.Title>
 
       <Row>
         <Col span={24}>
@@ -137,7 +140,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           <Col span={24}>
             <Form.Item label="">
               <Upload {...uploadConfig} fileList={listFiles} onChange={handleImageChange}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                <Button icon={<UploadOutlined />}>{t('Click to Upload')}</Button>
               </Upload>
             </Form.Item>
           </Col>
@@ -152,7 +155,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           <Col span={24}>
             <Form.Item label="">
               <Upload {...uploadConfig} fileList={listFiles} onChange={handleImageChange}>
-                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                <Button icon={<UploadOutlined />}>{t('Click to Upload')}</Button>
               </Upload>
             </Form.Item>
           </Col>
@@ -162,7 +165,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         <>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Roles" name="Roles">
+              <Form.Item label={t('Roles')} name="Roles">
                 <Select mode="multiple">
                   {roles.map((role) => (
                     <Option key={role.Id}>
@@ -175,7 +178,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <Form.Item label="Belong to departments" name="Departments">
+              <Form.Item label={t('Belong to departments')} name="Departments">
                 <Select mode="multiple">
                   {departments.map((d) => (
                     <Option key={d.Id}>
@@ -194,7 +197,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
             </Col>
 
             <Col span={12}>
-              <Form.Item label="Password" name="Password">
+              <Form.Item label={t('Password')} name="Password">
                 <Input />
               </Form.Item>
             </Col>
@@ -205,7 +208,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
         <>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Roles" name="Roles">
+              <Form.Item label={t('Roles')} name="Roles">
                 <Select mode="multiple">
                   {roles.map((role) => (
                     <Option key={role.Id}>
@@ -218,7 +221,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={24}>
-              <Form.Item label="Belong to departments" name="Departments">
+              <Form.Item label={t('Belong to departments')} name="Departments">
                 <Select mode="multiple">
                   {departments.map((d) => (
                     <Option key={d.Id}>
@@ -231,7 +234,7 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
           </Row>
           <Row gutter={12}>
             <Col span={12}>
-              <Form.Item label="Username" name="Username">
+              <Form.Item label={t('Username')} name="Username">
                 <Input disabled={true} />
               </Form.Item>
             </Col>
