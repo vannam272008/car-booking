@@ -1,8 +1,7 @@
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
-import { RcFile } from "antd/es/upload/interface";
-import { API, OverviewProps } from "../interface"
+import { OverviewProps } from "../interface";
 
 const Overview: React.FC<OverviewProps> = ({
   infoAPI,
@@ -10,7 +9,6 @@ const Overview: React.FC<OverviewProps> = ({
   setInfoAPI,
 }) => {
   // tab_overview
-
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
@@ -64,6 +62,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="First name"
           name="First name"
+          disabled
           value={infoAPI.FirstName}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -76,7 +75,7 @@ const Overview: React.FC<OverviewProps> = ({
         />
       ) : (
         <strong>{infoAPI.FirstName}</strong>
-      )
+      ),
     },
     {
       overview_title: "Last name",
@@ -84,6 +83,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Last Name"
           name="Last Name"
+          disabled
           value={infoAPI.LastName}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -105,7 +105,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Sex"
           name="sex"
           // value={infoAPI.Sex}
-          disabled={true}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -122,15 +122,30 @@ const Overview: React.FC<OverviewProps> = ({
     {
       overview_title: "Birth day",
       info: isEditing ? (
-        <DatePicker
-          value={infoAPI.Birthday === null || infoAPI.Birthday ? null : dayjs(infoAPI.Birthday)}
-          style={{ width: "100%" }}
-          onChange={handleDate_birth}
-          placeholder="Birth day"
-          format="YYYY-MM-DD"
-        />
+        infoAPI.Birthday ? (
+          <DatePicker
+            value={dayjs(infoAPI.Birthday)}
+            style={{ width: "100%" }}
+            disabled
+            onChange={handleDate_birth}
+            placeholder="Birth day"
+            format="YYYY-MM-DD"
+          />
+        ) : (
+          <DatePicker
+            // value={infoAPI.Birthday === null ? null : dayjs(infoAPI.Birthday)}
+            value={null}
+            style={{ width: "100%" }}
+            onChange={handleDate_birth}
+            disabled
+            placeholder="Birth day"
+            format="YYYY-MM-DD"
+          />
+        )
       ) : (
-        <strong>{infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}</strong>
+        <strong>
+          {infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : ""}
+        </strong>
       ),
     },
     {
@@ -144,6 +159,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Company"
           name="company"
           value={infoAPI.Company}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -164,6 +180,7 @@ const Overview: React.FC<OverviewProps> = ({
           placeholder="Unit"
           name="unit"
           value={infoAPI.Unit}
+          disabled
           onChange={(e) => {
             setInfoAPI((prev) => {
               return {
@@ -183,6 +200,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Function"
           name="function"
+          disabled
           value={infoAPI.Function}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -202,6 +220,7 @@ const Overview: React.FC<OverviewProps> = ({
       info: isEditing ? (
         <Input
           placeholder="Sections/Teams"
+          disabled
           name="sections_teams"
           value={infoAPI.SectionsOrTeam}
           onChange={(e) => {
@@ -223,6 +242,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Groups"
           name="groups"
+          disabled
           value={infoAPI.Groups}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -243,6 +263,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Office location"
           name="office_location"
+          disabled
           value={infoAPI.OfficeLocation}
           onChange={(e) => {
             setInfoAPI((prev) => {
@@ -311,6 +332,7 @@ const Overview: React.FC<OverviewProps> = ({
         <Input
           placeholder="Rights"
           name="rights"
+          disabled
           value={infoAPI.Rights}
           onChange={(e) => {
             setInfoAPI((prev) => {

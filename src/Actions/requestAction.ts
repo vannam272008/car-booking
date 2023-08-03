@@ -16,7 +16,7 @@ export const setStatus = (status: string) => {
 
 export const setUserInfo = (userInfo: any) => {
     return {
-        type: 'SET_STATUS',
+        type: 'SET_USER_INFO',
         payload: userInfo
     }
 }

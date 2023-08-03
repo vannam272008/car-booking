@@ -55,25 +55,24 @@ function EditRequest() {
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
                 setDataDepartmentMember(departmentMemberRes.data.Data);
 
-
                 const detailsDataEndpoint = "/request/Id=" + requestId;
                 const detailsDataRes = await request.get(detailsDataEndpoint);
                 setDetailData(detailsDataRes.data.Data);
                 setApplyNote(detailsDataRes.data.Data.ApplyNote);
                 setStatus(detailsDataRes.data.Data.Status);
 
-
                 // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
                 // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log(attachmentsDataRes);
                 // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
 
-
-
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    DepartmentId: detailsDataRes.data.Data.Department.Id,
-                    ReceiverId: detailsDataRes.data.Data.ReceiveUser.Id,
-                }));
+                if (formData.DepartmentId === '' && formData.ReceiverId === '') {
+                    setFormData((prevFormData) => ({
+                        ...prevFormData,
+                        DepartmentId: detailsDataRes.data.Data.Department.Id,
+                        ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
+                    }));
+                }
 
                 setLoading(false);
             } catch (error) {
@@ -136,8 +135,6 @@ function EditRequest() {
     useEffect(() => {
         setActiveTabKey(detailData.Department && !activeTabKey ? detailData.Department.Id : activeTabKey);
     }, [detailData.Department, activeTabKey])
-
-
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -202,7 +199,6 @@ function EditRequest() {
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         const charCode = event.which ? event.which : event.keyCode;
-
         if ((charCode < 48 || charCode > 57) && charCode !== 8) {
             event.preventDefault();
         }
@@ -210,7 +206,7 @@ function EditRequest() {
 
     const profile = false;
 
-    console.log(formData);
+    console.log('formData', formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -268,6 +264,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
+                                                        virtual={false}
                                                         value={formData.DepartmentId}
                                                         onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                         showSearch
@@ -295,10 +292,11 @@ function EditRequest() {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={detailData.ReceiveUser ? detailData.ReceiveUser.FullName + ' ' + detailData.ReceiveUser.Email + ' ' + detailData.ReceiveUser.JobTitle : undefined}
+                                                    initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
+                                                        virtual={false}
                                                         value={formData.ReceiverId}
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                         showSearch
@@ -380,7 +378,7 @@ function EditRequest() {
                                                     labelCol={{ span: 24 }}
                                                     initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
                                                 >
-                                                    <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                    <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time from*/}

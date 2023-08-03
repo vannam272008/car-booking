@@ -6,7 +6,7 @@ import type { TabsProps } from "antd";
 import "./signature.css";
 import request from "../../../Utils/request";
 
-import { API, SignatureProps } from "../interface"
+import { SignatureProps } from "../interface"
 
 const jwt_admin = localStorage.getItem("Token");
 const uploadConfig = {
@@ -29,7 +29,7 @@ const Signature: React.FC<SignatureProps> = ({
   setInfoAPI,
 }) => {
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
-  const [styleSignature, setStyleSignature] = useState<string>("")
+  const [styleSignature, setStyleSignature] = useState<string>("");
   const [fonts] = useState<string[]>([
     "Great Vibes",
     "Dancing Script",
@@ -44,17 +44,23 @@ const Signature: React.FC<SignatureProps> = ({
     if (!isImage) {
       message.error('You can only upload image files!');
     }
-    return isImage;
-  }
+    const filesize = file.size / 1024 / 1024 < 5;
+    if(!filesize){
+      message.error("Image must smaller than 5MB ");
+    }
+    return isImage && filesize;
+  };
 
   const handleChangeSelect = (value: string) => {
-    // console.log('change font !');
     setInfoAPI((prev) => {
-      const ps = prev.SignatureTemp
+      const ps = prev.SignatureTemp;
       // console.log(ps.replace(ps.substring(ps.indexOf('font-family'), ps.indexOf(';"')), `font-family: ${value}`));
       return {
         ...prev,
-        SignatureTemp: ps.replace(ps.substring(ps.indexOf('font-family'), ps.indexOf(';"')), `font-family: ${value}`),
+        SignatureTemp: ps.replace(
+          ps.substring(ps.indexOf("font-family"), ps.indexOf(';"')),
+          `font-family: ${value}`
+        ),
       };
     });
 
@@ -62,7 +68,6 @@ const Signature: React.FC<SignatureProps> = ({
   };
 
   const handleFileChange = async (file: any) => {
-    console.log("file: ", file);
     if (file.status === "done") {
       var userId = localStorage.getItem("Id");
       const objectUrl = URL.createObjectURL(file.originFileObj);
@@ -74,7 +79,6 @@ const Signature: React.FC<SignatureProps> = ({
       await request
         .postForm("/file/signature-finish", formData, config)
         .then((res) => {
-          console.log("res finish:", res);
           setInfoAPI((prevInfo) => ({
             ...prevInfo,
             SignatureTemp: res.data.Data,
@@ -82,7 +86,6 @@ const Signature: React.FC<SignatureProps> = ({
         })
         .catch((e) => {
           message.error("Upload failed ! ");
-          console.log(e);
         });
     }
   };
@@ -91,7 +94,7 @@ const Signature: React.FC<SignatureProps> = ({
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
       SignatureTemp: prevInfo.Signature,
-    }))
+    }));
     const interval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -113,7 +116,7 @@ const Signature: React.FC<SignatureProps> = ({
                   showCount
                   placeholder="Confirm your name"
                   onChange={(e) => {
-                    console.log(infoAPI.SignatureTemp);
+                    // console.log(infoAPI.SignatureTemp);
                     setStyleSignature(e.target.value)
                     if (e.target.value && e.target.value.length > 0) {
                       setInfoAPI((prev) => {
@@ -166,10 +169,10 @@ const Signature: React.FC<SignatureProps> = ({
                 ?
                 (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 && infoAPI.SignatureTemp.includes("<h1") ?
                   <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
-                  <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img>)
+                  <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`} alt="signature upload"></img>)
                 :
                 (infoAPI.Signature ?
-                  (infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img>)
+                  (infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> : <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`} alt="signature upload"></img>)
                   : null)
               }
             </div>
@@ -210,11 +213,11 @@ const Signature: React.FC<SignatureProps> = ({
               (infoAPI.Signature && !styleSignature
                 ?
                 (infoAPI.Signature && infoAPI.Signature.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} /> :
-                  infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`}></img> : <div></div>)
+                  infoAPI.Signature ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.Signature}`} alt="signature upload"></img> : <div></div>)
                 :
                 (infoAPI.SignatureTemp && infoAPI.SignatureTemp.length > 0 ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
                   infoAPI.SignatureTemp && infoAPI.SignatureTemp.includes("<h1") ? <div dangerouslySetInnerHTML={{ __html: infoAPI.SignatureTemp }} /> :
-                    infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`}></img> : <div></div>))
+                    infoAPI.SignatureTemp ? <img width={250} height={150} src={`http://localhost:63642/${infoAPI.SignatureTemp}`} alt="signature upload"></img> : <div></div>))
               :
               <Image
                 src={img_preview}
@@ -251,6 +254,7 @@ const Signature: React.FC<SignatureProps> = ({
           src={"http://localhost:63642/" + infoAPI.Signature}
           width={250}
           height={150}
+          alt="signature upload"
         ></img>
       ) : (
         <div dangerouslySetInnerHTML={{ __html: infoAPI.Signature }} />

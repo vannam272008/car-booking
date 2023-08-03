@@ -37,7 +37,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                 const departmentMemberEndpoint = "/userRole/all-approvers";
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
                 setDataDepartmentMember(departmentMemberRes.data.Data);
-                console.log(departmentMemberRes.data.Data);
+                // console.log(departmentMemberRes.data.Data);
 
                 const workflowDataEndpoint = "/request/workflow/requestId=" + requestId;
                 const workflowDataRes = await request.get(workflowDataEndpoint);
@@ -175,6 +175,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            virtual={false}
                                             onChange={(value) => handleSelectChange(index, value)}
                                             showSearch
                                             optionFilterProp="children"

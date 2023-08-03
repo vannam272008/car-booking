@@ -22,10 +22,11 @@ interface PropsDataList {
     setApplyNote: React.Dispatch<React.SetStateAction<boolean>>;
     listOfUserId: string[];
     setListOfUserId: React.Dispatch<React.SetStateAction<string[]>>;
+    departmentId: string;
 }
 
 
-function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
+function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId, departmentId }: PropsDataList): JSX.Element {
 
     const {t} = useTranslation();
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
@@ -38,14 +39,14 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
-            const endpoint = "/userRole/all-approvers";
+            const endpoint = "/userRole/all-approvers/" + departmentId;
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
             }).catch(() => {
             });
         }
         getDataDepartmentMember();
-    }, [])
+    }, [departmentId])
 
     const { Option } = Select;
 
@@ -134,6 +135,8 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setFileList(updatedFileList);
     };
 
+    console.log(departmentId);
+
     return (
         <div>
             <div className='attention-request' style={{ marginTop: '0', }}>
@@ -196,6 +199,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            virtual={false}
                                             onChange={(value) => handleSelectChange(index, value)}
                                             showSearch
                                             optionFilterProp="children"

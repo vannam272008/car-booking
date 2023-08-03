@@ -57,17 +57,19 @@ const AppHeader = (props: any) => {
     };
 
     useEffect(() => {
-        request.get("/user/profile/" + userID)
-            .then((res) => {
-                setUserLoginInfo({
-                    FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
-                    AvatarPath: res.data.Data.AvatarPath,
-                    Email: res.data.Data.Email
+        if (userID !== null) {
+            request.get("/user/profile/" + userID)
+                .then((res) => {
+                    setUserLoginInfo({
+                        FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
+                        AvatarPath: res.data.Data.AvatarPath,
+                        Email: res.data.Data.Email
+                    })
                 })
-            })
-            .catch((e) => {
-                console.log(e.response.Data);
-            })
+                .catch((e) => {
+                    console.log(e.response.Data);
+                })
+        }
     }, [userID])
 
     const handleLogout =
@@ -84,7 +86,7 @@ const AppHeader = (props: any) => {
                             localStorage.clear();
                             setStatus('');
                             setTab('get-all');
-                            navigate("/login");
+                            window.location.reload();
                         }
                     }
                 })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification } from 'antd';
 import './menu.css'
 import {
@@ -27,6 +27,13 @@ interface ActionRequest {
     Note: string
 }
 
+interface ApproverShare {
+    Id: string;
+    FullName: string;
+    Email: string;
+    JobTitle: string;
+}
+
 function MenuRequest(props: any): JSX.Element {
 
     const { Option } = Select;
@@ -48,6 +55,20 @@ function MenuRequest(props: any): JSX.Element {
         comment: "",
     });
     const [showCancel, setShowCancel] = useState(false);
+    const [dataApprover, setDataApprover] = useState<ApproverShare[]>([]);
+    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
+    const [searchValue, setSearchValue] = useState<string>('');
+
+    useEffect(() => {
+        const getDataApprover = async () => {
+            const endpoint = "/userRole/all-approvers";
+            await request.get(endpoint).then((res) => {
+                setDataApprover(res.data.Data);
+            }).catch(() => {
+            });
+        }
+        getDataApprover();
+    }, [])
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -103,9 +124,9 @@ function MenuRequest(props: any): JSX.Element {
                     openNotification('topRight');
                 })
         }
-
         putAction();
     }
+
     const handleApprove = () => {
         putActionRequest();
         setIsModalOpenApprove(false);
@@ -184,6 +205,27 @@ function MenuRequest(props: any): JSX.Element {
         window.open(`http://localhost:63642/api/file/pdf-request/${requestId}`)
     }
 
+    const handleSelectChange = (value: string) => {
+        const temporaryList = { ...selectedApprovers, value };
+        setSelectedApprovers(temporaryList);
+    }
+
+    const handleSearch = (inputValue: string) => {
+        setSearchValue(inputValue);
+    };
+
+    const filteredDataApprover = () => {
+        if (dataApprover.length > 0) {
+            return dataApprover.filter(
+                (approver) =>
+                    approver.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    approver.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    approver.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+            )
+        }
+        else return [];
+    };
+
     return (
         <div>
             <Menu mode="horizontal" className='fixed-menu'>
@@ -216,9 +258,23 @@ function MenuRequest(props: any): JSX.Element {
                         <Button onClick={handleClose}>{t('Close')}</Button>
                     </div>
                 }>
-                    <Select className='fixed-width-object'>
-                        <Option value="1">bangnm@o365.vn, Developer</Option>
-                        <Option value="2">bu.test5@o365.vn, Tài xế</Option>
+                    <Select
+                        onChange={handleSelectChange}
+                        showSearch
+                        optionFilterProp="children"
+                        filterOption={false}
+                        onSearch={handleSearch}
+                        className='fixed-width-object'
+                    >
+                        {filteredDataApprover().map((approver) => (
+                            <Option key={approver.Id} value={approver.Id}>
+                                <div>
+                                    <span>{approver.FullName} </span>
+                                    <span>{approver.Email} </span>
+                                    <span>{approver.JobTitle} </span>
+                                </div>
+                            </Option>
+                        ))}
                     </Select>
                 </Modal>
                 {requestStatus === 'Waiting for approval' && (

@@ -70,8 +70,17 @@ function AddRequest(): JSX.Element {
     //define initialValue for element input form
     const initialValueSender = userLoginName ?? '';
     const initialValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
-    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'Please choose another department !';
+    const initialValueReceiver = dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data';
+    const initialValueMobile = formData.Mobile ? formData.Mobile : '';
+    const initialValueCostCenter = formData.CostCenter ? formData.CostCenter : '';
+    const initialValueTotalPassengers = formData.TotalPassengers ? formData.TotalPassengers : '';
     const initialValueUsageFrom = formData.UsageFrom === "" ? dayjs() : dayjs(formData.UsageFrom);
+    const initialValueUsageTo = formData.UsageTo === "" ? dayjs().add(24, 'hours') : dayjs(formData.UsageTo);
+    const initialValuePickTime = formData.PickTime === "" ? dayjs() : dayjs(formData.PickTime);
+    const initialValuePickLocation = formData.PickLocation ? formData.PickLocation : '';
+    const initialValueDestination = formData.Destination ? formData.Destination : '';
+    const initialvalueReason = formData.Reason ? formData.Reason : '';
+
 
     const { Option } = Select;
 

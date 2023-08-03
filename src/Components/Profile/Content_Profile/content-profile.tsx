@@ -1,11 +1,10 @@
 import React from "react";
 import type { TabsProps } from "antd";
 import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
-import { useState, useEffect } from "react";
+import { useState, useEffect} from "react";
 import {
   UserAddOutlined,
   LeftCircleOutlined,
-  UserOutlined,
   CameraOutlined,
   SaveOutlined,
   EditOutlined,
@@ -18,7 +17,7 @@ import Additional from "../Additional_Tab/additional";
 import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
-import { API } from "../interface"
+import { API } from "../interface";
 
 const ContentProfile: React.FC = () => {
   const jwt_admin = localStorage.getItem("Token");
@@ -36,7 +35,7 @@ const ContentProfile: React.FC = () => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   //avatar
-  const [image, setImage] = useState<RcFile>();
+  const [image, setImage] = useState<RcFile | null>();
 
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
@@ -112,36 +111,54 @@ const ContentProfile: React.FC = () => {
         console.error(error);
       });
   };
+  const handleNotSave = () => {
+    Modal.confirm({
+      title: "Are you sure you want to cancel this update session ?",
+      width: 1000,
+      centered: true,
+      onOk() {
+        getProfile();
+        setIsEditing(false);
+      },
+    });
+  };
 
   useEffect(() => {
     getProfile();
-  }, []);
+  },[]);
+
 
   const onSave = () => {
     setIsEditing(false);
     handleUpdateInfo();
+    // setImage(null)
   };
 
   const beforeUpload = (file: File) => {
-    const isImage = file.type.includes('image/');
+    const isImage = file.type.includes("image/");
     if (!isImage) {
-      message.error('You can only upload image files!');
+      message.error("You can only upload image files!");
     }
-    return isImage;
-  }
+    const filesize = file.size / 1024 / 1024 < 5;
+    if(!filesize){
+      message.error("Image must smaller than 5MB ");
+    }
+    return isImage && filesize;
+  };
 
   const handleUpdateInfo = async () => {
     const endpoint = "/user/edit-post-file/" + userID;
 
     if (infoAPI.SignatureTemp) {
-      console.log('infoAPI.Signature check final:', infoAPI.SignatureTemp);
-      const resSig = await request.post('/user/signature', {
-        Id: userID,
-        Signature: infoAPI.SignatureTemp
-      }, config)
-      console.log('res set Signature:', resSig);
-      if (!resSig.data.Success) return message.error(resSig.data.Message)
-
+      const resSig = await request.post(
+        "/user/signature",
+        {
+          Id: userID,
+          Signature: infoAPI.SignatureTemp,
+        },
+        config
+      );
+      if (!resSig.data.Success) return message.error(resSig.data.Message);
     }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
@@ -149,7 +166,6 @@ const ContentProfile: React.FC = () => {
     } else {
       message.error(res.data.Message);
     }
-    console.log("signature: ", infoAPI.Signature);
     getProfile();
   };
 
@@ -167,82 +183,73 @@ const ContentProfile: React.FC = () => {
   // const [relationship, setRelationship] = useState("");
   // const [relationshipnote, setRelationshipNote] = useState("");
 
-  const [onOk, setOnOk] = useState<Boolean>(false);
+  // const [onOk, setOnOk] = useState<Boolean>(false);
 
   const handleOk = async () => {
-    setOnOk(true);
-    setVisible(false);
-
     const formData = new FormData();
     formData.append("fileName", image ? image.name : "");
     formData.append("userId", userID ? userID : "");
     let res = await request.postForm("/file/upload-finish", formData, config);
     infoAPI.AvatarPath = res.data.Data;
-    console.log("res.data.Data:", res.data.Data);
-
+    console.log("infoAPI.AvatarPath:",infoAPI.AvatarPath)
+    console.log("res.data.Data",res.data.Data)
     setInfoAPI((prevData) => ({
       ...prevData,
       AvatarPath: res.data.Data,
     }));
+    setVisible(false);
   };
 
   const handleFileChange = (file: RcFile) => {
     setImage(file);
   };
 
-  const handleNotSave = () => {
-    return (
-      <>
-        <Modal
-          title=""
-          open={visible}
-          // onCancel={handleCloseModal}
-          // onOk={handleOk}
-          centered={true}
-          bodyStyle={{ alignItems: "centered" }}
-        >
-          Are you sure
-        </Modal>
-      </>
-
-    )
-
-  };
+ 
   // visible avatar
   const [visible, setVisible] = useState(false);
   // const handleDeleteContract = () => {};
-  // const onEditInfo = () => {
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartDateMaternityLeave: infoAPI.StartDateMaternityLeave ? infoAPI.StartDateMaternityLeave.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     LeavingDate: infoAPI.LeavingDate ? infoAPI.LeavingDate.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     DateOfIdCard: infoAPI.DateOfIdCard ? infoAPI.DateOfIdCard.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartingDate: infoAPI.StartingDate ? infoAPI.StartingDate.substring(0, 10) : "",
-  //   }));
-  //   setInfoAPI((prevInfo) => ({
-  //     ...prevInfo,
-  //     StartingDateOfficial: infoAPI.StartingDateOfficial ? infoAPI.StartingDateOfficial.substring(0, 10) : "",
-  //   }));
-  //   setIsEditing(true);
-  // };
+  const onEditInfo = () => {
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      Birthday: infoAPI.Birthday ? infoAPI.Birthday.substring(0, 10) : "",
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartDateMaternityLeave: infoAPI.StartDateMaternityLeave
+        ? infoAPI.StartDateMaternityLeave.substring(0, 10)
+        : "",
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      LeavingDate: infoAPI.LeavingDate
+        ? infoAPI.LeavingDate.substring(0, 10)
+        : "",
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      DateOfIdCard: infoAPI.DateOfIdCard
+        ? infoAPI.DateOfIdCard.substring(0, 10)
+        : "",
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDate: infoAPI.StartingDate
+        ? infoAPI.StartingDate.substring(0, 10)
+        : "",
+    }));
+    setInfoAPI((prevInfo) => ({
+      ...prevInfo,
+      StartingDateOfficial: infoAPI.StartingDateOfficial
+        ? infoAPI.StartingDateOfficial.substring(0, 10)
+        : "",
+    }));
+    setIsEditing(true);
+  };
 
   // handle Modal
   const handleOpenModal = () => {
     setVisible(true);
-    setOnOk(false);
+    setImage(null)
   };
 
   const handleCloseModal = () => {
@@ -299,9 +306,6 @@ const ContentProfile: React.FC = () => {
       ),
     },
   ];
-
-  console.log(infoAPI);
-
   return (
     <div className="content-profile">
       <div className="nav-bar-profile">
@@ -390,15 +394,14 @@ const ContentProfile: React.FC = () => {
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 src={`http://localhost:63642/${infoAPI.AvatarPath}`}
-              // icon={<UserOutlined />}
               />
             )}
 
             <div className="Upload-Avatar">
               <Upload
                 {...uploadConfig}
-                accept="image/*"
                 beforeUpload={beforeUpload}
+                accept="image/*"
                 showUploadList={false}
                 onChange={({ file }) =>
                   handleFileChange(file.originFileObj as RcFile)
@@ -413,13 +416,10 @@ const ContentProfile: React.FC = () => {
           <Avatar
             className="avatar"
             size={{ xs: 80, sm: 100, md: 130, lg: 150, xl: 200, xxl: 250 }}
-            icon={<UserOutlined />}
-            // src={URL.createObjectURL(image!)}
-
             src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+            // icon={<UserOutlined />}
           />
         </span>
-        <div></div>
         <h1 style={{ marginLeft: "50px" }}>
           {infoAPI.FirstName} {infoAPI.LastName}
         </h1>
@@ -427,10 +427,8 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            onClick={() => setIsEditing(true)}
-            // onClick={() => {
-            //   onEditInfo();
-            // }}
+            // onClick={() => setIsEditing(true)}
+            onClick={() => onEditInfo()}
             icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           />
         )}
