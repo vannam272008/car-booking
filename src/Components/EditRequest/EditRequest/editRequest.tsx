@@ -28,6 +28,7 @@ interface DepartmentMember {
 function EditRequest() {
 
     const { Option } = Select;
+    const profile = false;
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
@@ -37,52 +38,8 @@ function EditRequest() {
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const { requestId } = useParams();
     const [status, setStatus] = useState<string>("")
-    const [activeTabKey, setActiveTabKey] = useState<string>();
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-
-                const departmentEndpoint = "department/all?page=1&limit=100";
-                const departmentRes = await request.get(departmentEndpoint);
-                setDataDepartment(departmentRes.data.Data.ListData);
-
-                const departmentMemberEndpoint = `departmentMember/position?departmentId=${activeTabKey}`;
-                const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data);
-
-                const detailsDataEndpoint = "/request/Id=" + requestId;
-                const detailsDataRes = await request.get(detailsDataEndpoint);
-                setDetailData(detailsDataRes.data.Data);
-                setApplyNote(detailsDataRes.data.Data.ApplyNote);
-                setStatus(detailsDataRes.data.Data.Status);
-
-                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // console.log(attachmentsDataRes);
-                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
-
-                if (formData.DepartmentId === '' && formData.ReceiverId === '') {
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        DepartmentId: detailsDataRes.data.Data.Department.Id,
-                        ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
-                    }));
-                }
-
-                setLoading(false);
-            } catch (error) {
-                setLoading(true);
-            }
-        };
-
-        fetchData();
-    }, [activeTabKey]);
-
-
-
     const [detailData, setDetailData] = useState<any>({});
+
     const usageFrom = changeFormatDatePostRequest(detailData.UsageFrom);
     const usageTo = changeFormatDatePostRequest(detailData.UsageTo);
     const pickTime = changeFormatDatePostRequest(detailData.PickTime);
@@ -105,6 +62,76 @@ function EditRequest() {
         Status: "",
         files: fileList,
     });
+
+    const initiValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
+    const initiValueReceiver = formData.ReceiverId && detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : 'No Data';
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentEndpoint = "department/all?page=1&limit=100";
+                const departmentRes = await request.get(departmentEndpoint);
+                setDataDepartment(departmentRes.data.Data.ListData);
+
+                const detailsDataEndpoint = "/request/Id=" + requestId;
+                const detailsDataRes = await request.get(detailsDataEndpoint);
+                setDetailData(detailsDataRes.data.Data);
+                setApplyNote(detailsDataRes.data.Data.ApplyNote);
+                setStatus(detailsDataRes.data.Data.Status);
+
+                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log(attachmentsDataRes);
+                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    DepartmentId: detailsDataRes.data.Data.Department.Id,
+                    ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [requestId]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
+                const departmentMemberRes = await request.get(departmentMemberEndpoint);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+
+                const ReceiverUserId = departmentMemberRes.data.Data.find((value: any) => value.User.Id === detailData.ReceiverUser.Id);
+
+                // console.log('1', departmentMemberRes.data.Data);
+                // console.log('2', detailData.ReceiverUser.Id);
+                // console.log('3', ReceiverUserId);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    ReceiverId: ReceiverUserId ? ReceiverUserId.User.Id : '',
+                }));
+
+
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [formData.DepartmentId]);
+
 
     useEffect(() => {
         const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
@@ -129,9 +156,6 @@ function EditRequest() {
         }));
     }, [listOfUserId, status, usageFrom, usageTo, pickTime, detailData.SenderUser, fileList, applyNote, detailData.Mobile, detailData.CostCenter, detailData.TotalPassengers, detailData.PickLocation, detailData.Destination, detailData.Reason]);
 
-    useEffect(() => {
-        setActiveTabKey(detailData.Department && !activeTabKey ? detailData.Department.Id : activeTabKey);
-    }, [detailData.Department, activeTabKey])
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -148,7 +172,6 @@ function EditRequest() {
             ...prevFormData,
             [field]: value,
         }));
-        setActiveTabKey(value);
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -177,7 +200,6 @@ function EditRequest() {
             )
         }
         else return [];
-
     };
 
     const onChange = (e: RadioChangeEvent) => {
@@ -189,7 +211,6 @@ function EditRequest() {
         return false;
     };
     const handleRemoveFile = (file: UploadFile<any>) => {
-        // Filter out the file to be removed from the fileList
         const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
         setFileList(updatedFileList);
     };
@@ -200,8 +221,6 @@ function EditRequest() {
             event.preventDefault();
         }
     };
-
-    const profile = false;
 
     console.log('formData', formData);
 
@@ -257,7 +276,7 @@ function EditRequest() {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={detailData.Department ? detailData.Department.Name : undefined}
+                                                    initialValue={initiValueDepartment}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
@@ -289,8 +308,9 @@ function EditRequest() {
                                                             message: 'Select something!',
                                                         },
                                                     ]}
-                                                    initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
+                                                    initialValue={initiValueReceiver}
                                                     labelCol={{ span: 24 }}
+                                                    className={initiValueReceiver === 'No Data' ? 'no-data' : ''}
                                                 >
                                                     <Select
                                                         virtual={false}
@@ -529,7 +549,7 @@ function EditRequest() {
                                     <span> (Maximum 20MB per file)</span>
                                 </Upload>
                             </div>
-                            <EditSendApprover listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                            <EditSendApprover departmentId={formData.DepartmentId} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                         </div>
                         )
                     }

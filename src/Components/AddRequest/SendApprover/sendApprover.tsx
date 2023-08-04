@@ -30,6 +30,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [inputs, setInputs] = useState<string[]>([]);
     const [editingIndex, setEditingIndex] = useState(-1);
+    const [counterApprover, setCounterApprover] = useState(1);
     const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
     // const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
     const [searchValue, setSearchValue] = useState<string>('');
@@ -58,11 +59,13 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                         tempListOfUserIdSupervisor.push(res.data.Data[i].Id);
                         tempApproverSupervisor.push(res.data.Data[i].FullName + ' ' + res.data.Data[i].Email + ' ' + res.data.Data[i].JobTitle);
                         tempLableApproverSupervisor.push(res.data.Data[i].Position);
+                        setCounterApprover(counterApprover + 2);
                     }
                     if (res.data.Data[i].Position === "Manager" && tempListOfUserIdManager.length < 1) {
                         tempListOfUserIdManager.push(res.data.Data[i].Id);
                         tempApproverManager.push(res.data.Data[i].FullName + ' ' + res.data.Data[i].Email + ' ' + res.data.Data[i].JobTitle);
                         tempLableApproverManager.push(res.data.Data[i].Position);
+                        setCounterApprover(counterApprover + 2);
                     }
                 }
 
@@ -93,8 +96,9 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     };
 
     const handleAddInput = () => {
-        setInputs([...inputs, '']);
-        setLabelApprovers([...labelApprovers, `Approve`]);
+        setInputs([...inputs, '' + counterApprover]);
+        setLabelApprovers([...labelApprovers, "Approve " + [counterApprover]]);
+        setCounterApprover(counterApprover + 1);
     };
 
     const handleDelete = (index: number) => {
@@ -110,10 +114,6 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         newInitiValueApprover.splice(index, 1);
         setInitialValueApprover(newInitiValueApprover);
 
-        const newLabelApprovers = [...labelApprovers];
-        newLabelApprovers.splice(index, 1);
-        setLabelApprovers(newLabelApprovers);
-        // setLoading(true);
     };
 
     const handleInputChangeApprover = (index: number, value: string) => {
@@ -261,7 +261,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                                 )}
                                             </div>
                                         }
-                                        name={labelApprovers[index]}
+                                        name={inputs[index]}
                                         rules={[
                                             {
                                                 required: true,

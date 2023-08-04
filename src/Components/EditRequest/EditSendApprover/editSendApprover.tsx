@@ -17,10 +17,11 @@ interface DepartmentMember {
 interface PropsDataList {
     listOfUserId: string[];
     setListOfUserId: React.Dispatch<React.SetStateAction<string[]>>;
+    departmentId: string;
 }
 
 
-function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
+function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [workflowData, setWorkflowData] = useState<any>([])
@@ -32,11 +33,9 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch data from the second API
-                const departmentMemberEndpoint = "/userRole/all-approvers";
+                const departmentMemberEndpoint = "/userRole/all-approvers/" + departmentId;
                 const departmentMemberRes = await request.get(departmentMemberEndpoint);
                 setDataDepartmentMember(departmentMemberRes.data.Data);
-                // console.log(departmentMemberRes.data.Data);
 
                 const workflowDataEndpoint = "/request/workflow/requestId=" + requestId;
                 const workflowDataRes = await request.get(workflowDataEndpoint);
@@ -48,7 +47,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
             }
         };
         fetchData();
-    }, []);
+    }, [departmentId]);
 
 
     const { Option } = Select;
@@ -134,7 +133,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
         setCounterApprover(counterApprover + 1);
     }, [listOfUserId]);
 
-    // console.log('hello', workflowData);
+    // console.log('hello', dataDepartmentMember);
 
     return (
         <div>

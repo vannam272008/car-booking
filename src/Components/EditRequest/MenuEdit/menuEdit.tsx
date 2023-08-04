@@ -46,6 +46,7 @@ interface MenuAddProps {
     }>>,
 }
 
+
 function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     const navigate = useNavigate();
@@ -137,6 +138,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         SetCheckBoxDelete(!checkBoxDelete);
     };
 
+    // console.log('formData', formData);
 
     return (
 
