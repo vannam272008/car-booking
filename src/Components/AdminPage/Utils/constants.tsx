@@ -97,7 +97,9 @@ export const resetDepartment = {
     UnderDepartment: '',
     Description: '',
     Manager: '',
-    Supervisors: []
+    Supervisors: [],
+    ManEm: false,
+    SupEm: false,
 }
 
 export const resetRole = {

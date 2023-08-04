@@ -122,6 +122,8 @@ export interface Department {
     Description: string,
     Manager: string,
     Supervisors: string[]
+    ManEm: boolean,
+    SupEm: boolean,
 }
 
 export interface DepartmentFormProps {
