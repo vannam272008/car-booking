@@ -29,7 +29,6 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
 
     const [inputs, setInputs] = useState<string[]>([]);
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {

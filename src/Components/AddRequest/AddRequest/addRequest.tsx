@@ -149,11 +149,20 @@ function AddRequest(): JSX.Element {
     };
 
     //set User values ​​for formdata
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
+    const handleSelectChange = (value: any, field: string) => {
+
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     //set Usage time from, Usage time to, Pick time values ​​for formdata
@@ -177,9 +186,11 @@ function AddRequest(): JSX.Element {
         if (dataDepartmentMember && dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    )
             )
         }
         else return [];
@@ -193,7 +204,7 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    console.log('formdata', formData);
+    // console.log('formdata', formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -262,11 +273,18 @@ function AddRequest(): JSX.Element {
                                                                     option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                                 }
                                                             >
-                                                                {dataDepartment.map((department) => (
+                                                                {dataDepartment
+                                                                    .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                                    .map((filteredDepartment) => (
+                                                                        <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                            {filteredDepartment.Name}
+                                                                        </Option>
+                                                                    ))}
+                                                                {/* {dataDepartment.map((department) => (
                                                                     <Option key={department.Id} value={department.Id} >
                                                                         {department.Name}
                                                                     </Option>
-                                                                ))}
+                                                                ))} */}
                                                             </Select>
                                                         </Form.Item>
                                                     </Col>
@@ -283,10 +301,12 @@ function AddRequest(): JSX.Element {
                                                             ]}
                                                             initialValue={initialValueReceiver}
                                                             labelCol={{ span: 24 }}
+                                                            className={initialValueReceiver === 'No Data' ? 'no-data' : ''}
                                                         >
                                                             <Select
+                                                                labelInValue
                                                                 virtual={false}
-                                                                value={formData.SenderId}
+                                                                value={formData.ReceiverId}
                                                                 onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                                 showSearch
                                                                 optionFilterProp="children"
