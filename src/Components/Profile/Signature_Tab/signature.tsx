@@ -7,6 +7,7 @@ import "./signature.css";
 import request from "../../../Utils/request";
 
 import { SignatureProps } from "../interface"
+import { useTranslation } from "react-i18next";
 
 const jwt_admin = localStorage.getItem("Token");
 const uploadConfig = {
@@ -28,6 +29,7 @@ const Signature: React.FC<SignatureProps> = ({
   infoAPI,
   setInfoAPI,
 }) => {
+  const {t} = useTranslation();
   const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [styleSignature, setStyleSignature] = useState<string>("");
   const [fonts] = useState<string[]>([
@@ -42,11 +44,11 @@ const Signature: React.FC<SignatureProps> = ({
   const beforeUpload = (file: File) => {
     const isImage = file.type.includes('image/');
     if (!isImage) {
-      message.error('You can only upload image files!');
+      message.error(t('You can only upload image files!'));
     }
     const filesize = file.size / 1024 / 1024 < 5;
     if(!filesize){
-      message.error("Image must smaller than 5MB ");
+      message.error(t('Image must smaller than 5MB '));
     }
     return isImage && filesize;
   };
@@ -85,7 +87,7 @@ const Signature: React.FC<SignatureProps> = ({
           }));
         })
         .catch((e) => {
-          message.error("Upload failed ! ");
+          message.error(t('Upload failed ! '));
         });
     }
   };
@@ -104,17 +106,17 @@ const Signature: React.FC<SignatureProps> = ({
   const signature_tab: TabsProps["items"] = [
     {
       key: "1",
-      label: "Type signature",
+      label: t('Type signature'),
       children: (
         <>
           <Row>
             <Col span={12}>
-              <strong>Confirm your Name</strong>
+              <strong>{t('Confirm your Name')}</strong>
               <div>
                 <Input
                   aria-required
                   showCount
-                  placeholder="Confirm your name"
+                  placeholder={t('Confirm your Name')}
                   onChange={(e) => {
                     // console.log(infoAPI.SignatureTemp);
                     setStyleSignature(e.target.value)
@@ -141,11 +143,11 @@ const Signature: React.FC<SignatureProps> = ({
               </div>
             </Col>
             <Col span={12}>
-              <strong>Signature Style</strong>
+              <strong>{t('Signature Style')}</strong>
               <div>
                 <Select
                   showSearch
-                  placeholder="Choose your signature"
+                  placeholder={t('Choose your signature')}
                   style={{ width: "95%" }}
                   onChange={handleChangeSelect}
                   options={fonts.map((value) => ({
@@ -182,7 +184,7 @@ const Signature: React.FC<SignatureProps> = ({
     },
     {
       key: "2",
-      label: "Upload your own",
+      label: t('Upload your own'),
       children: (
         <>
           <Dragger
@@ -197,7 +199,7 @@ const Signature: React.FC<SignatureProps> = ({
               <InboxOutlined />
             </p>
             <p className="ant-upload-text">
-              Click or drag file to this area to upload
+              {t('Click or drag file to this area to upload')}
             </p>
           </Dragger>
           <div className="QR_signature">

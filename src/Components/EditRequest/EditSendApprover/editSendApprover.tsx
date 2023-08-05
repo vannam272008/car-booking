@@ -6,6 +6,7 @@ import request from "../../../Utils/request";
 // import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface DepartmentMember {
     Id: string;
@@ -21,6 +22,8 @@ interface PropsDataList {
 
 
 function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
+
+    const {t} = useTranslation();
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [workflowData, setWorkflowData] = useState<any>([])
@@ -105,8 +108,8 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
-            message: <strong>Approver already exists</strong>,
-            description: 'Approver has been selected before, please choose another Approver',
+            message: <strong>{t('Approver already exists')}</strong>,
+            description: t('Approver has been selected before, please choose another Approver'),
             placement,
         });
     };
@@ -140,7 +143,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
     return (
         <div>
             <div className='form-approver'>
-                <h6>Send to approvers</h6>
+                <h6>{t('Send to approvers')}</h6>
                 <div className='add-approvers'>
                     <Form>
                         <Row gutter={16}>
@@ -168,7 +171,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Select something!',
+                                                message: t('Select something!'),
                                             },
                                         ]}
                                         initialValue={workflowData[index] && workflowData[index].User ? (workflowData[index].User.FullName + ' ' + workflowData[index].User.Email + ' ' + workflowData[index].User.JobTitle) : '--Select a Approver--'}
@@ -203,7 +206,7 @@ function EditSendApprover({ listOfUserId, setListOfUserId }: PropsDataList): JSX
                                         backgroundColor: 'rgb(47,133,239)',
                                         color: 'white'
                                     }}>
-                                    Add
+                                    {t('Add')}
                                 </Button>
                             </Col>
                         </Row>

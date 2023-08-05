@@ -3,7 +3,7 @@ import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 import { Layout, Menu, Dropdown } from 'antd';
 import united_states from "../../assets/united_states.svg";
 import vietnam from "../../assets/vietnam.svg";
-import "./AppFooter.scss";
+import "./AppFooter.css";
 import i18next from 'i18next';
 
 const { Footer } = Layout
@@ -33,7 +33,7 @@ const AppFooter = () => {
             <div>
                 <span className='footer-left'><b>Tasken @ Opus Solution</b></span>
                 <div className='footer-right'>
-                    <Dropdown overlay={menu} trigger={['click']}>
+                    <Dropdown overlay={menu} trigger={['click']} className='dropdown-language'>
                         <span>
                             <img src={currentLanguage === 'en' ? united_states : vietnam} alt="img-flat" width={20} />
                             <span>{currentLanguage.toUpperCase()}</span>

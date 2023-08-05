@@ -1,0 +1,26 @@
+.mcs-footer {
+    background-color: #167c82;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding: 5px; 
+}
+
+.mcs-footer .footer-left {
+    float: left;
+}
+
+.mcs-footer .footer-right {
+    float: right;
+}
+
+.mcs-footer .footer-right span {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.ant-dropdown-menu-item:hover {
+    background-color: #167c82 !important;
+    color: white !important;
+}

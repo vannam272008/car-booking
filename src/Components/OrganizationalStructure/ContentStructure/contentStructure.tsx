@@ -6,6 +6,7 @@ import './contentStructure.css'
 import request from "../../../Utils/request";
 import MenuUser from '../MenuUser/menuUser';
 import { TeamOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 const profile = true;
 
@@ -30,6 +31,8 @@ const { TabPane } = Tabs;
 
 
 function ContentStructure(): JSX.Element {
+
+    const {t} = useTranslation();
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [filteredDataDepartment, setFilteredDataDepartment] = useState<Department[]>([]);
@@ -112,7 +115,7 @@ function ContentStructure(): JSX.Element {
                     <MenuUser />
                     <div className='organizational-structure-content'>
                         <Input
-                            placeholder="Search tabs"
+                            placeholder={t('search')}
                             style={{ marginBottom: 16, width: '25%' }}
                             onChange={handleSearch}
                         />
@@ -123,7 +126,7 @@ function ContentStructure(): JSX.Element {
                                 <Alert
                                     style={{ width: '100%', textAlign: 'center' }}
                                     message="Loading..."
-                                    description="There are some issues happening, please wait a moment or you can try reloading the page"
+                                    description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                                     type="info"
                                 />
                             </Spin>) : (
@@ -137,13 +140,13 @@ function ContentStructure(): JSX.Element {
                                         <TabPane className='organizational-structure-content-department' tab={<span><TeamOutlined className='icon-tabs-col-department' />{department.Name}</span>} key={department.Id}>
                                             <div className='titile-department'>{department.Name}</div>
                                             <Tabs style={{ display: 'flex' }} className='tabs-row' tabPosition='top'>
-                                                <TabPane tab="Information" key="Information">
+                                                <TabPane tab={t('Information')} key="Information">
                                                     <List
                                                         dataSource={[
-                                                            { title: 'Description', content: <div>{department.Description}</div> },
-                                                            { title: 'Under the department', content: <div>{department.UnderDepartment}</div> },
-                                                            { title: 'Contact Info', content: <div>{department.ContactInfo}</div> },
-                                                            { title: 'Code', content: <div>{department.Code}</div> },
+                                                            { title: t('Description'), content: <div>{department.Description}</div> },
+                                                            { title: t('Under Department'), content: <div>{department.UnderDepartment}</div> },
+                                                            { title: t('Contact Info'), content: <div>{department.ContactInfo}</div> },
+                                                            { title: t('Code'), content: <div>{department.Code}</div> },
                                                         ]}
                                                         renderItem={(item) => (
                                                             <List.Item>
@@ -155,7 +158,7 @@ function ContentStructure(): JSX.Element {
                                                         )}
                                                     />
                                                 </TabPane>
-                                                <TabPane tab="Manager" key="Manager">
+                                                <TabPane tab={t('Manager')} key="Manager">
                                                     <List
                                                         dataSource={dataManager.map((data) => ({
                                                             fullname: <div>{data.User.FullName}</div>,
@@ -174,7 +177,7 @@ function ContentStructure(): JSX.Element {
                                                     />
                                                 </TabPane>
 
-                                                <TabPane tab="Supervisor" key="Supervisor">
+                                                <TabPane tab={t('Supervisor')} key="Supervisor">
                                                     <List
                                                         dataSource={dataSupervisor.map((data) => ({
                                                             fullname: <div>{data.User.FullName}</div>,
@@ -192,7 +195,7 @@ function ContentStructure(): JSX.Element {
                                                         )}
                                                     />
                                                 </TabPane>
-                                                <TabPane tab="Employee" key="Employee">
+                                                <TabPane tab={t('Employee')} key="Employee">
                                                     <List
                                                         dataSource={dataDepartmentMember.map((departmentMember) => ({
                                                             fullname: <div>{departmentMember.User.FullName}</div>,

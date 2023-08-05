@@ -219,14 +219,14 @@ function EditRequest() {
                             <Alert
                                 style={{ width: '100%', textAlign: 'center' }}
                                 message="Loading..."
-                                description="There are some issues happening, please wait a moment or you can try reloading the page"
+                                description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                                 type="info"
                             />
                         </Spin>)
                         :
                         (<div className='page-content'>
                             <div className='table-request'>
-                                <h2 className='title-request'>CAR BOOKING REQUEST</h2>
+                                <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
                                 <div className='table-content'>
                                     <Form
                                         className='form-add-request'
@@ -235,12 +235,12 @@ function EditRequest() {
                                             {/*Request Applicant*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Applicant"
+                                                    label={t('Applicant')}
                                                     name="SenderId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Applicant is require'
+                                                            message: t('Applicant is require')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -252,12 +252,12 @@ function EditRequest() {
                                             {/*Request Department*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Dapartment"
+                                                    label={t('department')}
                                                     name="DepartmentId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Select something!',
+                                                            message: t('Select something!'),
                                                         },
                                                     ]}
                                                     initialValue={detailData.Department ? detailData.Department.Name : undefined}
@@ -284,12 +284,12 @@ function EditRequest() {
                                             {/*Request User*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="User"
+                                                    label={t('user')}
                                                     name="ReceiverId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Select something!',
+                                                            message: t('Select something!'),
                                                         },
                                                     ]}
                                                     initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
@@ -319,16 +319,16 @@ function EditRequest() {
                                             {/*Request Mobile*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Mobile"
+                                                    label={t('mobile')}
                                                     name="Mobile"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Mobile is required',
+                                                            message: t('Mobile is required'),
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Mobile must be a number',
+                                                            message: t('Mobile must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -347,11 +347,11 @@ function EditRequest() {
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Cost Center" is required'
+                                                            message: t('Cost Center is required')
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Cost Center must be a number',
+                                                            message: t('Cost Center must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -363,16 +363,16 @@ function EditRequest() {
                                             {/*Request Total passengers*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Total passengers"
+                                                    label={t('totalpassengers')}
                                                     name="Totalpassengers"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Total passengers" is required'
+                                                            message: t('Total passengers is required')
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Total passengers must be a number',
+                                                            message: t('Total passengers must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -384,12 +384,12 @@ function EditRequest() {
                                             {/*Request Usage time from*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Usage time from"
+                                                    label={t('Usage time from')}
                                                     name="UsageFrom"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Usage time from" is required'
+                                                            message: t('Usage time from is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -400,19 +400,19 @@ function EditRequest() {
                                                         value={dayjs(formData.UsageFrom)}
                                                         onChange={(value) => handleDatePicker(value, 'UsageFrom')}
                                                         showTime
-                                                        placeholder='From date time'
+                                                        placeholder={t('from')}
                                                     />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time to*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Usage time to"
+                                                    label={t('Usage time to')}
                                                     name="UsageTo"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Usage time to" is required'
+                                                            message: t('Usage time to is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -455,12 +455,12 @@ function EditRequest() {
                                             {/*Request Pick location*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Pick location"
+                                                    label={t('picklocation')}
                                                     name="Picklocation"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Pick location" is required'
+                                                            message: t('Pick location is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -472,12 +472,12 @@ function EditRequest() {
                                             {/*Request Destination */}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Destination "
+                                                    label={t('destination')}
                                                     name="Destination"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Destination" is required'
+                                                            message: t('Destination is required')
 
                                                         },
                                                     ]}
@@ -490,12 +490,12 @@ function EditRequest() {
                                             {/*Request Reason*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Reason"
+                                                    label={t('reason')}
                                                     name="Reason"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Reason" is required'
+                                                            message: t('Reason is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -511,8 +511,8 @@ function EditRequest() {
                             <div className='attention-request' style={{ marginTop: '0', }}>
                                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                                 <Radio.Group onChange={onChange} value={applyNote}>
-                                    <Radio value={true}>Yes</Radio>
-                                    <Radio value={false}>No</Radio>
+                                    <Radio value={true}>{t('yes')}</Radio>
+                                    <Radio value={false}>{t('no')}</Radio>
                                 </Radio.Group>
                             </div>
                             <div className='Attachment'>
@@ -527,9 +527,9 @@ function EditRequest() {
                                     onRemove={handleRemoveFile}
                                 >
                                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
-                                        Add attachments
+                                        {t('Add attachments')}
                                     </Button>
-                                    <span> (Maximum 20MB per file)</span>
+                                    <span> {t('(Maximum 20MB per file)')}</span>
                                 </Upload>
                             </div>
                             <EditSendApprover listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />

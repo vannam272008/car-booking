@@ -6,6 +6,7 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 import request from '../../../Utils/request';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router'
+import { useTranslation } from 'react-i18next';
 
 interface MenuAddProps {
     formData: {
@@ -48,6 +49,8 @@ interface MenuAddProps {
 
 function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
+    const {t} = useTranslation();
+
     const navigate = useNavigate();
     const { requestId } = useParams();
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -60,7 +63,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 .then((response) => {
                     const data = response.data;
                     if (data) {
-                        const comment = "Submit the request " + data.Data.RequestCode + " for approval";
+                        const comment = t('Submit the request ') + data.Data.RequestCode + t(' for approval');
                         request.postForm("/request/comment/requestId=" + data.Data.Id, { comment });
                         localStorage.setItem("Data", data?.Data);
                         if (data.Success === false) {
@@ -102,8 +105,8 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     }
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
-            message: <strong>Failed action</strong>,
-            description: 'Please fill in all the information in the form and and do the action again',
+            message: <strong>{t('Failed action')}</strong>,
+            description: t('Please fill in all the information in the form and and do the action again'),
             placement,
             icon: <WarningOutlined style={{ color: '#FF0000' }} />,
 
@@ -143,24 +146,24 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         <div>
             <Menu mode="horizontal" className='fixed-menu '>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
-                    Return
+                    {t('return')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
-                    Delete
+                    {t('delete')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
+                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete} disabled={checkBoxDelete ? false : true}>OK</Button>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>{t('cancel')}</Button>
                     </div>
                 }>
-                    <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>Delete approval tasks related to this request.</Checkbox>
+                    <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
                 </Modal>
                 {/* <Menu.Item onClick={handleSaveDraft} key="savedraft" icon={<SaveOutlined />}>
                     Save draft
                 </Menu.Item> */}
                 <Menu.Item onClick={handleReSubmit} key="submit" icon={<SendOutlined />}>
-                    Re-Submit
+                    {t('Re-Submit')}
                 </Menu.Item>
             </Menu>
         </div>

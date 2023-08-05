@@ -491,7 +491,7 @@ function AddRequest(): JSX.Element {
                                         </Form>
                                     </div>
                                 </div>)}
-                        <SendApprover fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                        <SendApprover fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} departmentId={''} />
                     </div>
                 </div>
             )

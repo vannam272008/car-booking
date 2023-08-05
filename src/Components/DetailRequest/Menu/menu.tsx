@@ -238,13 +238,13 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                     {t('delete')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>Are you sure ?</h4>} open={isModalOpenDelete} footer={
+                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>{t('Cancel')}</Button>
                     </div>
                 }>
-                    <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>Delete approval tasks related to this request.</Checkbox>
+                    <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
                 </Modal>
                 <Menu.Item key="progress" icon={<RiseOutlined />}>
                     {t('progress')}
@@ -252,7 +252,7 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
                     {t('share')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4>Share</h4>} open={isModalOpenShare} footer={
+                <Modal className='custom-menu' closable={false} title={<h4>{t('share')}</h4>} open={isModalOpenShare} footer={
                     <div >
                         <Button type="primary" onClick={handleShare}>{t('share')}</Button>
                         <Button onClick={handleClose}>{t('Close')}</Button>
@@ -292,7 +292,7 @@ function MenuRequest(props: any): JSX.Element {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
-                                    comment: "Request " + requestCode + " has been Approved. </br>Note: " + e.target.value
+                                    comment: t('Request ') + requestCode + t(' has been Approved. Note: ') + e.target.value
                                 }));
                             }} />
                         </Modal>
@@ -310,7 +310,7 @@ function MenuRequest(props: any): JSX.Element {
                                     setActionRequest({ action: "Rejected", Note: e.target.value });
                                     setComment((prevComment) => ({
                                         ...prevComment,
-                                        comment: "Request " + requestCode + " has been Rejected. </br> Reason: " + e.target.value
+                                        comment: t('Request ') + requestCode + t(' has been Rejected. Reason: ') + e.target.value
                                     }));
                                 }} />
                         </Modal>
@@ -338,7 +338,7 @@ function MenuRequest(props: any): JSX.Element {
                             setActionRequest({ action: "Canceled", Note: "Canceled" });
                             setComment((prevComment) => ({
                                 ...prevComment,
-                                comment: "Request " + requestCode + " has been Canceled."
+                                comment: t('Request ') + requestCode + t(' has been Canceled.')
                             }));
                         }}>
                         {!showCancel && (

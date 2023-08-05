@@ -249,154 +249,154 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
 
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="First name" name="FirstName">
+          <Form.Item label={t('First name')} name="FirstName">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Last name" name="LastName">
+          <Form.Item label={t('Last name')} name="LastName">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Gender" name="Sex">
+          <Form.Item label={t('Gender')} name="Sex">
             <Radio.Group style={{ float: 'right' }}>
-              <Radio value={true}>Male</Radio>
-              <Radio value={false}>Female</Radio>
+              <Radio value={true}>{t('Male')}</Radio>
+              <Radio value={false}>{t('Female')}</Radio>
             </Radio.Group>
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Employee number" name="EmployeeNumber">
+          <Form.Item label={t('Employee number')} name="EmployeeNumber">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Birthday">
-            <DatePicker style={{ float: 'right' }} value={dataUser.Birthday ? dayjs(dataUser.Birthday) : null} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder="Birthday" />
+          <Form.Item label={t('Birthday')}>
+            <DatePicker style={{ float: 'right' }} value={dataUser.Birthday ? dayjs(dataUser.Birthday) : null} onChange={(value) => handleDatePicker(value, 'Birthday')} placeholder={t('Birthday')} />
             {/* <Input hidden /> */}
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Job title" name="JobTitle">
+          <Form.Item label={t('Job title')} name="JobTitle">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Company" name="Company">
+          <Form.Item label={t('Company')} name="Company">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Line manager" name="LineManager">
+          <Form.Item label={t('Line manager')} name="LineManager">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row>
         <Col span={24}>
-          <Form.Item label="Office location" name="OfficeLocation">
+          <Form.Item label={t('Office location')} name="OfficeLocation">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Groups" name="Groups">
+          <Form.Item label={t('Groups')} name="Groups">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Sections/Teams" name="SectionsOrTeam">
+          <Form.Item label={t('Sections/Teams')} name="SectionsOrTeam">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Unit" name="Unit">
+          <Form.Item label={t('Unit')} name="Unit">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Function" name="Function">
+          <Form.Item label={t('Function')} name="Function">
             <Input />
           </Form.Item>
         </Col>
       </Row>
 
       {/* 2 */}
-      <Typography.Title level={4}>Additional</Typography.Title>
+      <Typography.Title level={4}>{t('Additional')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Nation" name="Nation">
+          <Form.Item label={t('Nation')} name="Nation">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Id card number" name="IdCardNumber">
+          <Form.Item label={t('Id card number')} name="IdCardNumber">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Date of ID card">
-            <DatePicker style={{ float: 'right' }} value={dataUser.DateOfIdCard ? dayjs(dataUser.DateOfIdCard) : null} onChange={(value) => handleDatePicker(value, "DateOfIdCard")} placeholder="Date of ID card" />
+          <Form.Item label={t('Date of ID card')}>
+            <DatePicker style={{ float: 'right' }} value={dataUser.DateOfIdCard ? dayjs(dataUser.DateOfIdCard) : null} onChange={(value) => handleDatePicker(value, "DateOfIdCard")} placeholder={t('Date of ID card')} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Place of ID card" name="PlaceOfIdCard">
+          <Form.Item label={t('Place of ID card')} name="PlaceOfIdCard">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Health insurance" name="HealthInsurance">
+          <Form.Item label={t('Health insurance')} name="HealthInsurance">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Phone" name="Phone">
+          <Form.Item label={t('Phone')} name="Phone">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Starting date">
-            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDate ? dayjs(dataUser.StartingDate) : null} onChange={(value) => handleDatePicker(value, "StartingDate")} placeholder="Starting date" />
+          <Form.Item label={t('Starting date')}>
+            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDate ? dayjs(dataUser.StartingDate) : null} onChange={(value) => handleDatePicker(value, "StartingDate")} placeholder={t('Starting date')} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Starting date offical">
-            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDateOfficial ? dayjs(dataUser.StartingDateOfficial) : null} onChange={(value) => handleDatePicker(value, "StartingDateOfficial")} placeholder="Starting date offical" />
+          <Form.Item label={t('Starting date offical')}>
+            <DatePicker style={{ float: 'right' }} value={dataUser.StartingDateOfficial ? dayjs(dataUser.StartingDateOfficial) : null} onChange={(value) => handleDatePicker(value, "StartingDateOfficial")} placeholder={t('Starting date offical')} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Leaving date">
-            <DatePicker style={{ float: 'right' }} value={dataUser.LeavingDate ? dayjs(dataUser.LeavingDate) : null} onChange={(value) => handleDatePicker(value, "LeavingDate")} placeholder="Leaving date" />
+          <Form.Item label={t('Leaving date')}>
+            <DatePicker style={{ float: 'right' }} value={dataUser.LeavingDate ? dayjs(dataUser.LeavingDate) : null} onChange={(value) => handleDatePicker(value, "LeavingDate")} placeholder={t('Leaving date')} />
           </Form.Item>
         </Col>
       </Row>
       {!initialValues.Sex &&
         <Row gutter={12}>
           <Col span={24}>
-            <Form.Item label="Start date maternity leave (for just female)">
+            <Form.Item label={t('Start date maternity leave (for just female)')}>
               <DatePicker
                 style={{ float: 'right' }}
                 value={dataUser.StartDateMaternityLeave ? dayjs(dataUser.StartDateMaternityLeave) : null}
                 onChange={(value) => handleDatePicker(value, "StartDateMaternityLeave")}
-                placeholder="Start date maternity leave"
+                placeholder={t('Start date maternity leave')}
               />
             </Form.Item>
           </Col>
@@ -405,182 +405,182 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
 
       <Row>
         <Col span={12}>
-          <Form.Item label="Note" name="Note">
+          <Form.Item label={t('Note')} name="Note">
             <Input />
           </Form.Item>
         </Col>
       </Row>
 
-      <Typography.Title level={5}>Literacy</Typography.Title>
+      <Typography.Title level={5}>{t('Literacy')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Academic level" name="AcademicLevel">
+          <Form.Item label={t('Academic level')} name="AcademicLevel">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Specialized qualification" name="Qualification">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Typography.Title level={5}>Contact Info</Typography.Title>
-      <Row gutter={12}>
-        <Col span={12}>
-          <Form.Item label="Business phone" name="BusinessPhone">
-            <Input />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item label="Home phone" name="HomePhone">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={12}>
-        <Col span={12}>
-          <Form.Item label="Personal email" name="PersonalEmail">
+          <Form.Item label={t('Specialized qualification')} name="Qualification">
             <Input />
           </Form.Item>
         </Col>
       </Row>
 
-      <Typography.Title level={5}>Contact Info</Typography.Title>
+      <Typography.Title level={5}>{t('Contact Info')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Bank Name" name="BankName">
+          <Form.Item label={t('Business phone')} name="BusinessPhone">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Branch number" name="BankBranchNumber">
+          <Form.Item label={t('Home phone')} name="HomePhone">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Bank brach name" name="BankBranchName">
+          <Form.Item label={t('Personal email')} name="PersonalEmail">
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Typography.Title level={5}>{t('Contact Info')}</Typography.Title>
+      <Row gutter={12}>
+        <Col span={12}>
+          <Form.Item label={t('Bank Name')} name="BankName">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Bank account number" name="BankAccountNumber">
+          <Form.Item label={t('Branch number')} name="BankBranchNumber">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Bank account name" name="BankAccountName">
-            <Input />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Typography.Title level={5}>Address</Typography.Title>
-      <Row gutter={12}>
-        <Col span={12}>
-          <Form.Item label="Street" name="Street">
+          <Form.Item label={t('Bank brach name')} name="BankBranchName">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Building / Flat number" name="FlatNumber">
+          <Form.Item label={t('Bank account number')} name="BankAccountNumber">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="City" name="City">
+          <Form.Item label={t('Bank account name')} name="BankAccountName">
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Typography.Title level={5}>{t('Address')}</Typography.Title>
+      <Row gutter={12}>
+        <Col span={12}>
+          <Form.Item label={t('Street')} name="Street">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Province / State" name="Province">
+          <Form.Item label={t('Building / Flat number')} name="FlatNumber">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Postal code" name="PostalCode">
+          <Form.Item label={t('City')} name="City">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Country" name="Country">
+          <Form.Item label={t('Province / State')} name="Province">
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+      <Row gutter={12}>
+        <Col span={12}>
+          <Form.Item label={t('Postal code')} name="PostalCode">
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item label={t('Country')} name="Country">
             <Input />
           </Form.Item>
         </Col>
       </Row>
 
       {/* 3 */}
-      <Typography.Title level={4}>Family</Typography.Title>
+      <Typography.Title level={4}>{t('Family')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Martial status" name="MartialStatus">
+          <Form.Item label={t('Martial status')} name="MartialStatus">
             <Input />
           </Form.Item>
         </Col>
       </Row>
-      <Typography.Title level={5}>Emergency contact</Typography.Title>
+      <Typography.Title level={5}>{t('Emergency contact')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Contact name" name="ContactName">
+          <Form.Item label={t('Contact name')} name="ContactName">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Relationship" name="Relationship">
+          <Form.Item label={t('Relationship')} name="Relationship">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Phone" name="PhoneR">
+          <Form.Item label={t('Phone')} name="PhoneR">
             <Input />
           </Form.Item>
         </Col>
       </Row>
 
-      <Typography.Title level={5}>Permanent Address</Typography.Title>
+      <Typography.Title level={5}>{t('Permanent Address')}</Typography.Title>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Street" name="StreetR">
+          <Form.Item label={t('Street')} name="StreetR">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Building / Flat number" name="FlatNumberR">
+          <Form.Item label={t('Building / Flat number')} name="FlatNumberR">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="City" name="CityR">
+          <Form.Item label={t('City')} name="CityR">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Province / State" name="ProvinceR">
+          <Form.Item label={t('Province / State')} name="ProvinceR">
             <Input />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={12}>
         <Col span={12}>
-          <Form.Item label="Postal code" name="PostalCodeR">
+          <Form.Item label={t('Postal code')} name="PostalCodeR">
             <Input />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item label="Country" name="CountryR">
+          <Form.Item label={t('Country')} name="CountryR">
             <Input />
           </Form.Item>
         </Col>
@@ -595,10 +595,10 @@ const UserForm: React.FC<UserFormProps> = ({ initialValues, onSave, form, action
       {/* save */}
       <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
         <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
-          Save
+          {t('Save')}
         </Button>
         <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
-          Reset
+          {t('Reset')}
         </Button>
       </Form.Item>
     </Form>

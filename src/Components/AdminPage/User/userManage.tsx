@@ -10,6 +10,7 @@ import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import "./userManage.css";
+import { useTranslation } from 'react-i18next';
 
 const UserManage: React.FC = () => {
   let config = {
@@ -28,6 +29,7 @@ const UserManage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 5;
+  const {t} = useTranslation();
 
   const columns = [
     {
@@ -36,12 +38,12 @@ const UserManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Email',
+      title: t('Email'),
       dataIndex: 'Email',
       key: 'Email',
     },
     {
-      title: 'Roles',
+      title: t('Roles'),
       dataIndex: 'UserRoles',
       key: 'UserRoles',
       render: (roles: UserRoles[]) => (
@@ -53,7 +55,7 @@ const UserManage: React.FC = () => {
       ),
     },
     {
-      title: 'Belong to Departments',
+      title: t('Belong to departments'),
       dataIndex: 'DepartmentMembers',
       key: 'DepartmentMembers',
       render: (departments: DepartmentMembers[]) => (
@@ -65,15 +67,15 @@ const UserManage: React.FC = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: User) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -166,7 +168,7 @@ const UserManage: React.FC = () => {
     if (action === util.ACTION_HANDLE.ADD) {
       let res = await axios.post(`http://localhost:63642/api/user/add`, user, config)
       if (res.data.Success) {
-        message.success('Add success !')
+        message.success(t('Add success !'))
         setIsModalVisible(false)
         await getUsers()
       } else {
@@ -189,7 +191,7 @@ const UserManage: React.FC = () => {
       console.log('check res edit of admin:', res);
 
       if (res.data.Success) {
-        message.success('Edit success !')
+        message.success(t('Edit success !'))
         await getUsers()
         setIsModalVisible(false)
       } else {
@@ -213,7 +215,7 @@ const UserManage: React.FC = () => {
   return (
     <div className='manage-user-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add User
+        {t('Add User')}
       </Button>
 
       <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
@@ -234,7 +236,7 @@ const UserManage: React.FC = () => {
       />
 
       <Modal
-        title={selectedUser ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
+        title={selectedUser ? <Typography.Title level={2}>{t('Edit User')}</Typography.Title> : <Typography.Title level={2}>{t('Add User')}</Typography.Title>}
         open={isModalVisible}
         closable={true}
         onCancel={handleCancel}

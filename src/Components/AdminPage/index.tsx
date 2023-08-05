@@ -26,13 +26,13 @@ const AdminPage: React.FC = () => {
                 <div style={{ padding: '48px', marginTop: '30px' }}>
                     <h1>{t('Admin Page')}</h1>
                     <Tabs activeKey={activeTab} onChange={handleTabChange}>
-                        <TabPane tab="User" key="user">
+                        <TabPane tab={t('user')} key="user">
                             <UserManage />
                         </TabPane>
-                        <TabPane tab="Department" key="department">
+                        <TabPane tab={t('department')} key="department">
                             <DepartmentManage />
                         </TabPane>
-                        <TabPane tab="Role" key="role">
+                        <TabPane tab={t('Roles')} key="role">
                             <RoleManage />
                         </TabPane>
                     </Tabs>
