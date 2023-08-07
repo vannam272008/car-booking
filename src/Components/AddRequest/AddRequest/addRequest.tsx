@@ -226,7 +226,7 @@ function AddRequest(): JSX.Element {
                                                 {/*Request Applicant*/}
                                                 <Col span={6} className='col-request'>
                                                     <Form.Item
-                                                        label={t('createby')}
+                                                        label={t('Applicant')}
                                                         name="SenderId"
                                                         rules={[
                                                             {

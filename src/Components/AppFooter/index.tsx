@@ -10,18 +10,20 @@ const { Footer } = Layout
 
 const AppFooter = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
+    const [selectedKey, setSelectedKey] = useState('en');
     const handleMenuClick: MenuClickEventHandler = (e) => {
         i18next.changeLanguage(e.key)
         setCurrentLanguage(e.key);
+        setSelectedKey(e.key);
     }
 
     const menu = (
         <Menu onClick={handleMenuClick}>
-            <Menu.Item key="en">
+            <Menu.Item key="en" className={selectedKey === 'en' ? 'selected' : ''}>
                 <img src={united_states} alt="img-en-flat" width={20} />
                 <span> EN</span>
             </Menu.Item>
-            <Menu.Item key="vn">
+            <Menu.Item key="vn" className={selectedKey === 'vn' ? 'selected' : ''}>
                 <img src={vietnam} alt="img-vn-flat" width={20} />
                 <span> VN</span>
             </Menu.Item>
