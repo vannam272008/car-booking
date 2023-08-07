@@ -344,6 +344,7 @@ function AddRequest(): JSX.Element {
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
+                                                            initialValue={initialValueMobile}
                                                         >
                                                             <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                         </Form.Item>
@@ -366,6 +367,7 @@ function AddRequest(): JSX.Element {
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
+                                                            initialValue={initialValueCostCenter}
                                                         >
                                                             <Input onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                         </Form.Item>
@@ -385,6 +387,7 @@ function AddRequest(): JSX.Element {
                                                                     message: t('Total passengers must be a number'),
                                                                 },
                                                             ]}
+                                                            initialValue={initialValueTotalPassengers}
                                                             labelCol={{ span: 24 }}
                                                         >
                                                             <Input maxLength={9} onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
@@ -473,6 +476,7 @@ function AddRequest(): JSX.Element {
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
+                                                            initialValue={initialValuePickLocation}
                                                         >
                                                             <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                         </Form.Item>
@@ -490,6 +494,7 @@ function AddRequest(): JSX.Element {
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
+                                                            initialValue={initialValueDestination}
                                                         >
                                                             <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                         </Form.Item>
@@ -506,6 +511,7 @@ function AddRequest(): JSX.Element {
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
+                                                            initialValue={initialvalueReason}
                                                         >
                                                             <Input type='text' name="Reason" value={formData.Reason} onChange={handleInputChange}></Input>
                                                         </Form.Item>
@@ -514,7 +520,7 @@ function AddRequest(): JSX.Element {
                                             </Form>
                                         </div>
                                     </div>
-                                    <SendApprover fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} departmentId={''} />
+                                    <SendApprover departmentId={formData.DepartmentId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                                 </>
                             )}
                     </div>
