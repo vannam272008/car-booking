@@ -1,6 +1,6 @@
 .card-content {
-    min-width: 170px;
-    max-width: 170px;
+    min-width: 175px;
+    max-width: 200px;
     height: 200px;
 }
 
@@ -11,32 +11,32 @@
     padding-top: 10px;
 }
 
-.card-content .type-content-description{
-    color: rgba(40,130,242,0.64);
-    font-size: 12px;
+.card-content .type-content-description {
+    color: rgba(40, 130, 242, 0.64);
+    font-size: 11px;
 }
 
-.card-content:hover{
+.card-content:hover {
     cursor: pointer;
     background-color: #4ba747;
     transform: translateY(-16px);
     transition: transform 0.6s ease;
 }
 
-.card-content:hover p{
+.card-content:hover p {
     color: #fff;
 }
 
-.card-content:hover svg{
+.card-content:hover svg {
     color: #fff;
 }
 
-.card-content svg{
+.card-content svg {
     font-size: 40px;
     color: #2882f2;
 }
 
-.border-bottom{
+.border-bottom {
     border-bottom: solid #ccc 1px;
     padding-top: 16px;
 }

@@ -169,9 +169,9 @@ const Home = () => {
                 key={dt.id}
                 xs={24}
                 sm={12}
-                md={8}
-                lg={6}
-                xl={4}>
+                md={10}
+                lg={8}
+                xl={6}>
                 <CardContent
                   className={dt.icon}
                   icon={mergedObject[dt.icon]}
