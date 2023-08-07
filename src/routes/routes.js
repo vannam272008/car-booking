@@ -10,6 +10,7 @@ import Login from "../Pages/Login/Login";
 import ManageRequest from "../Pages/ManageRequest/ManageRequest";
 import Register from "../Pages/Register/Register";
 import SettingPage from "../Pages/Setting/settingPage";
+import Home from "../Pages/Home";
 
 const public_routes = [
   {
@@ -29,7 +30,7 @@ const private_routes = [
   },
   {
     path: "/",
-    element: <ManageRequest />,
+    element: <Home />,
   },
   {
     path: "/login",

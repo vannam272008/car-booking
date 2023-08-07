@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Tag, Typography, message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserForm from './userForm';
-import { User, UserRoles, DepartmentMembers } from '../Utils/interfaces';
+import { User, UserRoles, DepartmentMembers, Department, Role } from '../Utils/interfaces';
 import { resetUser } from '../Utils';
 import * as util from '../Utils'
 import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import "./userManage.css";
+import request from '../../../Utils/request';
 
 const UserManage: React.FC = () => {
   let config = {
@@ -28,6 +29,8 @@ const UserManage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [dpt, setDpt] = useState<Department[]>([])
+  const [rol, setRol] = useState<Role[]>([])
 
   const columns = [
     {
@@ -47,7 +50,7 @@ const UserManage: React.FC = () => {
       render: (roles: UserRoles[]) => (
         <>
           {roles.map((role) => (
-            <Tag key={role.RoleId}>{role.RoleId}</Tag>
+            <Tag key={role.RoleId}>{rol.find(i => i.Id == role.RoleId)?.Title}</Tag>
           ))}
         </>
       ),
@@ -59,7 +62,7 @@ const UserManage: React.FC = () => {
       render: (departments: DepartmentMembers[]) => (
         <>
           {departments.map((department) => (
-            <Tag key={department.DepartmentId}>{department.DepartmentId}</Tag>
+            <Tag key={department.DepartmentId}>{dpt.find(i => i.Id == department.DepartmentId)?.Name}</Tag>
           ))}
         </>
       ),
@@ -111,6 +114,20 @@ const UserManage: React.FC = () => {
   /* const deleteFilesTemp = async () => {
     return await axios.get('http://localhost:63642/api/file/delete-files-temp')
   } */
+
+  useEffect(() => {
+    request.get('/department/all?page=1&limit=100').then(res => {
+      setDpt(res.data.Data.ListData)
+    }).catch(e => {
+      console.log(e);
+      
+    })
+    request.get('/role/all?page=1&limit=100').then(res => {
+      setRol(res.data.Data.ListData)
+    }).catch(e => {
+      console.log(e);
+    })
+  }, [])
 
   useEffect(() => {
     getUsers()
@@ -196,7 +213,9 @@ const UserManage: React.FC = () => {
   };
 
   console.log('>>selectedUser:', selectedUser);
-
+  console.log('roles get:', rol);
+  console.log('departments get:', dpt);
+  
 
   return (
     <div className='manage-user-content'>

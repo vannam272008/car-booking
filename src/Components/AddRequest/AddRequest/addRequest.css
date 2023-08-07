@@ -133,3 +133,6 @@
     width: 100%;
 }
 
+.no-data .ant-select-selector .ant-select-selection-item {
+    color: red;
+}
