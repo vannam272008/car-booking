@@ -2,12 +2,8 @@ import React from "react";
 import { useState } from "react";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
-<<<<<<< HEAD
 import { FamilyProps } from "../interface"
-=======
-import { API, FamilyProps } from "../interface"
 import { useTranslation } from "react-i18next";
->>>>>>> feature-fe
 
 const { Title } = Typography;
 
