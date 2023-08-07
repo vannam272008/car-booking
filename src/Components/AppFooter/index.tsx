@@ -1,26 +1,29 @@
+import { useState } from 'react';
 import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 import { Layout, Menu, Dropdown } from 'antd';
 import united_states from "../../assets/united_states.svg";
 import vietnam from "../../assets/vietnam.svg";
-import "./AppFooter.scss";
+import "./AppFooter.css";
 import i18next from 'i18next';
 
 const { Footer } = Layout
 
 const AppFooter = () => {
+    const [currentLanguage, setCurrentLanguage] = useState('en');
     const handleMenuClick: MenuClickEventHandler = (e) => {
         i18next.changeLanguage(e.key)
+        setCurrentLanguage(e.key);
     }
 
     const menu = (
         <Menu onClick={handleMenuClick}>
             <Menu.Item key="en">
                 <img src={united_states} alt="img-en-flat" width={20} />
-                <span>EN</span>
+                <span> EN</span>
             </Menu.Item>
             <Menu.Item key="vn">
                 <img src={vietnam} alt="img-vn-flat" width={20} />
-                <span>VN</span>
+                <span> VN</span>
             </Menu.Item>
         </Menu>
     );
@@ -30,10 +33,10 @@ const AppFooter = () => {
             <div>
                 <span className='footer-left'><b>Tasken @ Opus Solution</b></span>
                 <div className='footer-right'>
-                    <Dropdown overlay={menu} trigger={['click']}>
+                    <Dropdown overlay={menu} trigger={['click']} className='dropdown-language'>
                         <span>
-                            <img src={united_states} alt="img-flat" width={20} />
-                            <span>EN</span>
+                            <img src={currentLanguage === 'en' ? united_states : vietnam} alt="img-flat" width={20} />
+                            <span>{currentLanguage.toUpperCase()}</span>
                         </span>
                     </Dropdown>
                     <span>Website</span>

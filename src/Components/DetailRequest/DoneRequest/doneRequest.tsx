@@ -5,11 +5,14 @@ import './doneRequest.css'
 import { SaveFilled } from '@ant-design/icons';
 import request from "../../../Utils/request";
 import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 const { Option } = Select;
 
 function DoneRequest(props: any) {
+
+    const {t} = useTranslation();
 
     const { requestCode } = props;
     const [checkFeedback, setCheckFeedback] = useState<boolean>(true);
@@ -90,14 +93,14 @@ function DoneRequest(props: any) {
                     <Alert
                         style={{ width: '100%', textAlign: 'center' }}
                         message="Loading..."
-                        description="There are some issues happening, please wait a moment or you can try reloading the page"
+                        description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                         type="info"
                     />
                 </Spin>)
                 :
                 (
                     <div>
-                        <div className='done-request-feedback-title'>Section for Administration enter feedback vehicle type</div>
+                        <div className='done-request-feedback-title'>{t('Section for Administration enter feedback vehicle type')}</div>
                         <div className='done-request-feedback'>
                             <Form
                                 onFinish={onFinish}
@@ -107,11 +110,11 @@ function DoneRequest(props: any) {
                                     <Input type="text" value={requestId} />
                                 </Form.Item>
                                 <Radio.Group name="Type" onChange={onChange} value={checkFeedback} style={{ width: '100%' }}>
-                                    <Radio className='done-request-check-radio' value={true}>1. Company vehicle</Radio>
+                                    <Radio className='done-request-check-radio' value={true}>1. {t('Company vehicle')}</Radio>
                                     <Row className='row-request'>
                                         <Col span={6} className='col-request'>
                                             <Form.Item
-                                                label="Driver"
+                                                label={t('Driver')}
                                                 name="DriverId"
                                                 labelCol={{ span: 24 }}
                                             >
@@ -130,20 +133,20 @@ function DoneRequest(props: any) {
                                                             </Option>
                                                         ))
                                                     ) : (
-                                                        <div>No workflow data available.</div>
+                                                        <div>{t('No workflow data available.')}</div>
                                                     )}
                                                 </Select>
                                             </Form.Item>
                                         </Col>
                                         <Col span={6} className='col-request'>
                                             <Form.Item
-                                                label="Mobile"
+                                                label={t('mobile')}
                                                 name="DriverMobile"
                                                 rules={[
 
                                                     {
                                                         pattern: /^[0-9]*$/,
-                                                        message: 'Mobile must be a number',
+                                                        message: t('Mobile must be a number'),
                                                     },
                                                 ]}
                                                 labelCol={{ span: 24 }}
@@ -153,7 +156,7 @@ function DoneRequest(props: any) {
                                         </Col>
                                         <Col span={6} className='col-request'>
                                             <Form.Item
-                                                label="Car plate"
+                                                label={t('Car plate')}
                                                 name="DriverCarplate"
                                                 labelCol={{ span: 24 }}
                                             >
@@ -162,7 +165,7 @@ function DoneRequest(props: any) {
                                         </Col>
                                         <Col span={6} className='col-request'>
                                             <Form.Item
-                                                label="Rotation"
+                                                label={t('Rotation')}
                                                 name="RotaionId"
                                                 labelCol={{ span: 24 }}
                                             >
@@ -181,17 +184,17 @@ function DoneRequest(props: any) {
                                                             </Option>
                                                         ))
                                                     ) : (
-                                                        <div>No workflow data available.</div>
+                                                        <div>{t('No workflow data available.')}</div>
                                                     )}
                                                 </Select>
                                             </Form.Item>
                                         </Col>
                                     </Row>
-                                    <Radio className='done-request-check-radio' value={false}>2. Rented car, taxi</Radio>
+                                    <Radio className='done-request-check-radio' value={false}>2. {t('Rented car, taxi')}</Radio>
                                     <Row className='row-request'>
                                         <Col span={12} className='col-request'>
                                             <Form.Item
-                                                label="Reason"
+                                                label={t('reason')}
                                                 name="Reason"
                                                 labelCol={{ span: 24 }}
                                             >
@@ -203,14 +206,14 @@ function DoneRequest(props: any) {
                                 <Row className='row-request'>
                                     <Col span={18} className='col-request'>
                                         <Form.Item
-                                            label="Note"
+                                            label={t('Note')}
                                             name="Note"
                                             labelCol={{ span: 24 }}
                                         >
                                             <Input type='text' name='Note' onChange={(e) => {
                                                 setComment((prevComment) => ({
                                                     ...prevComment,
-                                                    comment: "Request " + requestCode + " has been Done  - Note: " + e.target.value
+                                                    comment: t('Request ') + requestCode + t(' has been Done  - Note: ') + e.target.value
                                                 }));
                                             }}></Input>
                                         </Form.Item>
@@ -220,7 +223,7 @@ function DoneRequest(props: any) {
                                     <Col span={18}></Col>
                                     <Col span={4}>
                                         <Form.Item style={{ float: 'right' }}>
-                                            <Button htmlType="submit" icon={<SaveFilled />} className='done-request-feedback-btn'>Submit</Button>
+                                            <Button htmlType="submit" icon={<SaveFilled />} className='done-request-feedback-btn'>{t('Submit')}</Button>
                                         </Form.Item>
                                     </Col>
                                     <Col span={2}></Col>

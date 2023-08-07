@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import request from '../../../Utils/request';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
+import { useTranslation } from 'react-i18next';
 
 interface MenuAddProps {
     formData: {
@@ -55,6 +56,7 @@ interface MenuAddProps {
 function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
 
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const handleSaveDraft = () => {
         if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
@@ -115,7 +117,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
                 .then((response) => {
                     const data = response.data;
                     if (data) {
-                        const comment = "Submit the request " + data.Data.RequestCode + " for approval";
+                        const comment = t('Submit the request ') + data.Data.RequestCode + t(' for approval');
                         request.postForm("/request/comment/requestId=" + data.Data.Id, { comment });
                         localStorage.setItem("Data", data?.Data);
                         if (data.Success === false) {
@@ -154,8 +156,8 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
 
     const openNotification = (placement: NotificationPlacement) => {
         notification.info({
-            message: <strong>Failed action</strong>,
-            description: 'Please fill in all the information in the form and and do the action again',
+            message: <strong>{t('Failed action')}</strong>,
+            description: t('Please fill in all the information in the form and and do the action again'),
             placement,
             icon: <WarningOutlined style={{ color: '#FF0000' }} />,
 
@@ -172,13 +174,13 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
         <div>
             <Menu mode="horizontal" className='fixed-menu '>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
-                    Return
+                    {t('return')}
                 </Menu.Item>
                 <Menu.Item onClick={handleSaveDraft} key="savedraft" icon={<SaveOutlined />}>
-                    Save draft
+                    {t('Save draft')}
                 </Menu.Item>
                 <Menu.Item onClick={handleSubmit} key="submit" icon={<SendOutlined />}>
-                    Submit
+                    {t('Submit')}
                 </Menu.Item>
             </Menu>
         </div>

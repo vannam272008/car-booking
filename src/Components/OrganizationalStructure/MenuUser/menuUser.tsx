@@ -3,8 +3,10 @@ import './menuUser.css';
 import { Menu } from 'antd';
 import { ArrowLeftOutlined, ClusterOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function MenuUser(): JSX.Element {
+    const {t} = useTranslation();
     const navigate = useNavigate();
 
     const handleReturn = () => {
@@ -14,10 +16,10 @@ function MenuUser(): JSX.Element {
         <div>
             <Menu mode="horizontal" className='organizational-menu-user'>
                 <Menu.Item key="viewchart" icon={<ClusterOutlined />}>
-                    View orgchart
+                    {t('View orgchart')}
                 </Menu.Item>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
-                    Return
+                    {t('return')}
                 </Menu.Item>
             </Menu>
         </div>

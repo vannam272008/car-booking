@@ -3,11 +3,13 @@ import { useState } from "react";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
 import { API, FamilyProps } from "../interface"
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
 const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
   //tab_family
+  const {t} = useTranslation();
   const [edit_family, setEditFamily] = useState(false);
   const columns_family = [
     {
@@ -21,19 +23,19 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
 
   const columns_relationship = [
     {
-      title: "Contact name",
+      title: t('Contact name'),
       dataIndex: "Contact_name",
     },
     {
-      title: "Birth day",
+      title: t('Birthday'),
       dataIndex: "Birth_day",
     },
     {
-      title: "Relationship",
+      title: t('Relationship'),
       dataIndex: "Relationship",
     },
     {
-      title: "Note",
+      title: t('Note'),
       dataIndex: "Note",
     },
     {
@@ -44,10 +46,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
 
   let dataSource_family = [
     {
-      Family_title: "Martial status",
+      Family_title: t('Martial status'),
       info: isEditing ? (
         <Input
-          placeholder="Martial status"
+          placeholder={t('Martial status')}
           value={infoAPI.MartialStatus}
           name="Martial_status"
           onChange={(e) => {
@@ -68,15 +70,15 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
         <strong>
           <br />
           <br />
-          Emergency contact
+          {t('Emergency contact')}
         </strong>
       ),
     },
     {
-      Family_title: "Contact name",
+      Family_title: t('Contact name'),
       info: isEditing ? (
         <Input
-          placeholder="Contact name"
+          placeholder={t('Contact name')}
           value={infoAPI.ContactName}
           name="Contact_name"
           onChange={(e) => {
@@ -93,10 +95,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Relationship",
+      Family_title: t('Relationship'),
       info: isEditing ? (
         <Input
-          placeholder="Relationship"
+          placeholder={t('Relationship')}
           value={infoAPI.Relationship}
           name="Relationship"
           onChange={(e) => {
@@ -113,10 +115,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Phone",
+      Family_title: t('Phone'),
       info: isEditing ? (
         <Input
-          placeholder="Phone"
+          placeholder={t('Phone')}
           value={infoAPI.PhoneR}
           name="Phone"
           onChange={(e) => {
@@ -137,15 +139,15 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
         <strong>
           <br />
           <br />
-          Permanent Address
+          {t('Permanent Address')}
         </strong>
       ),
     },
     {
-      Family_title: "Street",
+      Family_title: t('Street'),
       info: isEditing ? (
         <Input
-          placeholder="Street"
+          placeholder={t('Street')}
           value={infoAPI.StreetR}
           name="Street"
           onChange={(e) => {
@@ -162,10 +164,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Building / flatnumber",
+      Family_title: t('Building / flatnumber'),
       info: isEditing ? (
         <Input
-          placeholder="Building / flatnumber"
+          placeholder={t('Building / flatnumber')}
           value={infoAPI.FlatNumberR}
           name="Building / flatnumber"
           onChange={(e) => {
@@ -182,10 +184,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "City",
+      Family_title: t('City'),
       info: isEditing ? (
         <Input
-          placeholder="City"
+          placeholder={t('City')}
           value={infoAPI.CityR}
           name="City"
           onChange={(e) => {
@@ -202,10 +204,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Province / state",
+      Family_title: t('Province / State'),
       info: isEditing ? (
         <Input
-          placeholder="Province / state"
+          placeholder={t('Province / State')}
           value={infoAPI.ProvinceR}
           name="Province_state"
           onChange={(e) => {
@@ -222,10 +224,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Postal code",
+      Family_title: t('Postal code'),
       info: isEditing ? (
         <Input
-          placeholder="Postal code"
+          placeholder={t('Postal code')}
           value={infoAPI.PostalCodeR}
           name="Postal code"
           onChange={(e) => {
@@ -242,10 +244,10 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ),
     },
     {
-      Family_title: "Country",
+      Family_title: t('Country'),
       info: isEditing ? (
         <Input
-          placeholder="Country"
+          placeholder={t('Country')}
           value={infoAPI.CountryR}
           name="Country"
           onChange={(e) => {
@@ -281,7 +283,7 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ></Table>
       <br />
       <br />
-      <Title>Relationships</Title>
+      <Title>{t('Relationship')}</Title>
       <Table
         pagination={false}
         dataSource={dataSource_relationship}

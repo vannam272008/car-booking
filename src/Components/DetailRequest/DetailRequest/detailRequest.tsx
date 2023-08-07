@@ -12,6 +12,7 @@ import { FileTextOutlined } from '@ant-design/icons';
 import InfoFeedback from '../InfoFeedback/infoFeedback';
 // import PageNotFound from '../../../Pages/404';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function DetailRequest(): JSX.Element {
 
@@ -43,6 +44,8 @@ function DetailRequest(): JSX.Element {
     //Data Approver
     // const Approver1: string = 'Approver 1';
     // const Approver2: string = 'Approver 2';
+
+    const { t } = useTranslation();
 
     const profile = false;
 
@@ -113,8 +116,8 @@ function DetailRequest(): JSX.Element {
                     {loading ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
                         <Alert
                             style={{ width: '100%', textAlign: 'center' }}
-                            message="Loading..."
-                            description="There are some issues happening, please wait a moment or you can try reloading the page"
+                            message={t('Loading...')}
+                            description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                             type="info"
                         />
                     </Spin>)
@@ -122,64 +125,64 @@ function DetailRequest(): JSX.Element {
                             <MenuRequest requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
                             <div className='info-detail-request'>
                                 <div className='info-basic-detail-request'>
-                                    <p>Request Code: {detailData.RequestCode}</p>
-                                    <p>Created at: {detailData.Created}</p>
-                                    <p>Status: {detailData.Status}</p>
+                                    <p>{t('requestcode')}: {detailData.RequestCode}</p>
+                                    <p>{t('createdate')}: {detailData.Created}</p>
+                                    <p>{t('status')}: {detailData.Status}</p>
                                 </div>
                                 <div className='main-detail-request'>
-                                    <h2 className='title-detail-request'>CAR BOOKING REQUEST</h2>
+                                    <h2 className='title-detail-request'>{t('CAR BOOKING REQUEST')}</h2>
                                     <div className='content-detail-request'>
                                         <Row className='row-detail-request'>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Applicant <span className='required'>*</span></label>
+                                                <label>{t('Applicant')} <span className='required'>*</span></label>
                                                 <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Department <span className='required'>*</span></label>
+                                                <label>{t('department')} <span className='required'>*</span></label>
                                                 <div>{detailData.Department ? detailData.Department.Name : ""}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>User <span className='required'>*</span></label>
+                                                <label>{t('user')} <span className='required'>*</span></label>
                                                 <div>{detailData.ReceiverUser ? detailData.ReceiverUser.FullName : ""} </div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Mobile <span className='required'>*</span></label>
+                                                <label>{t('mobile')} <span className='required'>*</span></label>
                                                 <div>{detailData.Mobile}</div>
                                             </Col>
                                         </Row>
                                         <Row className='row-request'>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Cost Center <span className='required'>*</span></label>
+                                                <label>{t('Cost Center')} <span className='required'>*</span></label>
                                                 <div>{detailData.CostCenter}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Total passengers <span className='required'>*</span></label>
+                                                <label>{t('totalpassengers')} <span className='required'>*</span></label>
                                                 <div>{detailData.TotalPassengers}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Usage time from <span className='required'>*</span></label>
+                                                <label>{t('Usage time from')} <span className='required'>*</span></label>
                                                 <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Usage time to <span className='required'>*</span></label>
+                                                <label>{t('Usage time to')} <span className='required'>*</span></label>
                                                 <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
                                             </Col>
                                         </Row>
                                         <Row className='row-request'>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Pick time <span className='required'>*</span></label>
+                                                <label>{t('Pick time')} <span className='required'>*</span></label>
                                                 <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Pick location <span className='required'>*</span></label>
+                                                <label>{t('picklocation')} <span className='required'>*</span></label>
                                                 <div>{detailData.PickLocation}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Destination <span className='required'>*</span></label>
+                                                <label>{t('destination')} <span className='required'>*</span></label>
                                                 <div>{detailData.Destination}</div>
                                             </Col>
                                             <Col span={6} className='col-detail-request'>
-                                                <label>Reason <span className='required'>*</span></label>
+                                                <label>{t('reason')} <span className='required'>*</span></label>
                                                 <div>{detailData.Reason}</div>
                                             </Col>
                                         </Row>
@@ -188,8 +191,8 @@ function DetailRequest(): JSX.Element {
                                 <div className='attention-detail-request'>
                                     <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                                     <Radio.Group onChange={onChange} value={value}>
-                                        <Radio value={true}>Yes</Radio>
-                                        <Radio value={false}>No</Radio>
+                                        <Radio value={true}>{t('yes')}</Radio>
+                                        <Radio value={false}>{t('no')}</Radio>
                                     </Radio.Group>
                                 </div>
                                 {showFeedback === 'Approved' ? (
@@ -198,7 +201,7 @@ function DetailRequest(): JSX.Element {
                                     <InfoFeedback />
                                 ) : null}
                                 <div className='Attachment'>
-                                    <b>Attachment(s)</b>
+                                    <b>{t('Attachment(s)')}</b>
                                     <div>
                                         {Array.isArray(attachmentData) ? (
                                             attachmentData.map((attachment: { Id: number; Path: string; }) => (
@@ -213,7 +216,7 @@ function DetailRequest(): JSX.Element {
                                                 </div>
                                             ))
                                         ) : (
-                                            <div>No attachment data available.</div>
+                                            <div>{t('No attachment data available.')}</div>
                                         )}
                                     </div>
                                 </div>
@@ -224,12 +227,12 @@ function DetailRequest(): JSX.Element {
                                             workflowData.map((approverData: { Id: number; Status: string; Position: string; User: { Id: number; FullName: string } }, index: number) => (
                                                 <Col key={approverData.Id} span={6} className='approver'>
                                                     {approverData.Status === 'Rejected' ? (
-                                                        <Badge.Ribbon text="Rejected" color="red" >
+                                                        <Badge.Ribbon text={t('rejected')} color="red" >
                                                             <Card
                                                                 title={
                                                                     approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
                                                                         (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                        : (<span style={{ fontWeight: '̃700' }}>Approver  {index + 1}</span>)
+                                                                        : (<span style={{ fontWeight: '̃700' }}>${t('Approver')}  {index + 1}</span>)
                                                                 }
                                                                 size="small">
                                                                 {approverData.User.FullName}
@@ -237,24 +240,24 @@ function DetailRequest(): JSX.Element {
                                                         </Badge.Ribbon>
                                                     ) : (
                                                         approverData.Status === 'Approved' ? (
-                                                            <Badge.Ribbon text="Approved" color="green" >
+                                                            <Badge.Ribbon text={t('approved')} color="green" >
                                                                 <Card
                                                                     title={
 
                                                                         approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
                                                                             (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                            : (<span style={{ fontWeight: '̃700' }}>Approver  {index + 1}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
                                                                     }
                                                                     size="small">
                                                                     {approverData.User.FullName}
                                                                 </Card>
                                                             </Badge.Ribbon>) : (
-                                                            <Badge.Ribbon text="Waiting for approval" color="blue" >
+                                                            <Badge.Ribbon text={t('waitingforapproval')} color="blue" >
                                                                 <Card
                                                                     title={
                                                                         approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
                                                                             (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                            : (<span style={{ fontWeight: '̃700' }}>Approver  {index + 1}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
                                                                     }
                                                                     size="small">
                                                                     {approverData.User.FullName}
@@ -265,7 +268,7 @@ function DetailRequest(): JSX.Element {
                                                 </Col>
                                             ))
                                         ) : (
-                                            <div>No workflow data available.</div>
+                                            <div>{t('No workflow data available.')}</div>
                                         )}
                                     </Row>
                                 </div>

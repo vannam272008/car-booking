@@ -18,8 +18,10 @@ import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 import { API } from "../interface";
+import { useTranslation } from "react-i18next";
 
 const ContentProfile: React.FC = () => {
+  const {t} = useTranslation();
   const jwt_admin = localStorage.getItem("Token");
   const uploadConfig = {
     action: "http://localhost:63642/api/file/upload-temp",
@@ -113,7 +115,7 @@ const ContentProfile: React.FC = () => {
   };
   const handleNotSave = () => {
     Modal.confirm({
-      title: "Are you sure you want to cancel this update session ?",
+      title: t('Are you sure you want to cancel this update session ?'),
       width: 1000,
       centered: true,
       onOk() {
@@ -137,11 +139,11 @@ const ContentProfile: React.FC = () => {
   const beforeUpload = (file: File) => {
     const isImage = file.type.includes("image/");
     if (!isImage) {
-      message.error("You can only upload image files!");
+      message.error(t('You can only upload image files!'));
     }
     const filesize = file.size / 1024 / 1024 < 5;
     if(!filesize){
-      message.error("Image must smaller than 5MB ");
+      message.error(t('Image must smaller than 5MB '));
     }
     return isImage && filesize;
   };
@@ -162,7 +164,7 @@ const ContentProfile: React.FC = () => {
     }
     const res = await request.putForm(endpoint, infoAPI, config);
     if (res.data.Success) {
-      message.success("Edit success !");
+      message.success(t('Edit success !'));
     } else {
       message.error(res.data.Message);
     }
@@ -263,7 +265,7 @@ const ContentProfile: React.FC = () => {
   let label: TabsProps["items"] = [
     {
       key: "1",
-      label: <strong>Overview</strong>,
+      label: <strong>{t('Overview')}</strong>,
       children: (
         <Overview
           infoAPI={infoAPI}
@@ -274,7 +276,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "2",
-      label: <strong>Additional</strong>,
+      label: <strong>{t('Additional')}</strong>,
       children: (
         <Additional
           infoAPI={infoAPI}
@@ -285,7 +287,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "3",
-      label: <strong>Family</strong>,
+      label: <strong>{t('Family')}</strong>,
       children: (
         <Family
           infoAPI={infoAPI}
@@ -296,7 +298,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "4",
-      label: <strong>Signature</strong>,
+      label: <strong>{t('Signature')}</strong>,
       children: (
         <Signature
           isEditing={isEditing}
@@ -319,7 +321,7 @@ const ContentProfile: React.FC = () => {
               }}
             >
               <SaveOutlined style={{ fontSize: "35px" }} />
-              Save
+              {t('Save')}
             </Button>
             <Button
               className="btn"
@@ -331,7 +333,7 @@ const ContentProfile: React.FC = () => {
                   fontSize: "35px",
                 }}
               />
-              Return
+              {t('return')}
             </Button>
           </>
         ) : (
@@ -345,7 +347,7 @@ const ContentProfile: React.FC = () => {
                 fontSize: "35px",
               }}
             />
-            Return
+            {t('return')}
           </Button>
         )}
       </div>

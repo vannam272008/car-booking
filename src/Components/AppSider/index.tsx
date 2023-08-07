@@ -56,7 +56,7 @@ const AppSider = (props: any) => {
 
     const profileItems: MenuProps['items'] = [
 
-        getItem('Setting', 'setting', <SettingOutlined />),
+        getItem(t('Setting'), 'setting', <SettingOutlined />),
 
     ];
 

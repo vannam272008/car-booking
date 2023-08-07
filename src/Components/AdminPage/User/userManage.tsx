@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Tag, Typography, message, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserForm from './userForm';
-import { User, UserRoles, DepartmentMembers, Department, Role } from '../Utils/interfaces';
+import { User, UserRoles, DepartmentMembers } from '../Utils/interfaces';
 import { resetUser } from '../Utils';
 import * as util from '../Utils'
 import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
 import "./userManage.css";
-import request from '../../../Utils/request';
+import { useTranslation } from 'react-i18next';
 
 const UserManage: React.FC = () => {
   let config = {
@@ -22,15 +22,14 @@ const UserManage: React.FC = () => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User>(resetUser);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<User>();
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(5);
-  const [dpt, setDpt] = useState<Department[]>([])
-  const [rol, setRol] = useState<Role[]>([])
+  const limit = 5;
+  const {t} = useTranslation();
 
   const columns = [
     {
@@ -39,44 +38,44 @@ const UserManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Email',
+      title: t('Email'),
       dataIndex: 'Email',
       key: 'Email',
     },
     {
-      title: 'Roles',
+      title: t('Roles'),
       dataIndex: 'UserRoles',
       key: 'UserRoles',
       render: (roles: UserRoles[]) => (
         <>
           {roles.map((role) => (
-            <Tag key={role.RoleId}>{rol.find(i => i.Id == role.RoleId)?.Title}</Tag>
+            <Tag key={role.RoleId}>{role.RoleId}</Tag>
           ))}
         </>
       ),
     },
     {
-      title: 'Belong to Departments',
+      title: t('Belong to departments'),
       dataIndex: 'DepartmentMembers',
       key: 'DepartmentMembers',
       render: (departments: DepartmentMembers[]) => (
         <>
           {departments.map((department) => (
-            <Tag key={department.DepartmentId}>{dpt.find(i => i.Id == department.DepartmentId)?.Name}</Tag>
+            <Tag key={department.DepartmentId}>{department.DepartmentId}</Tag>
           ))}
         </>
       ),
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: User) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -87,7 +86,6 @@ const UserManage: React.FC = () => {
     console.log('>>check res user:', res)
     if (res.data.Success) {
       setTotal(res.data.Data.TotalPage);
-      setSelectedUser(resetUser)
       let usersData: User[] = res.data.Data.ListData
       usersData.forEach(user => {
         user.AvatarPath = `http://localhost:63642/${user.AvatarPath}`
@@ -116,26 +114,12 @@ const UserManage: React.FC = () => {
   } */
 
   useEffect(() => {
-    request.get('/department/all?page=1&limit=100').then(res => {
-      setDpt(res.data.Data.ListData)
-    }).catch(e => {
-      console.log(e);
-      
-    })
-    request.get('/role/all?page=1&limit=100').then(res => {
-      setRol(res.data.Data.ListData)
-    }).catch(e => {
-      console.log(e);
-    })
-  }, [])
-
-  useEffect(() => {
     getUsers()
   }, [currentPage])
 
   const handleAdd = () => {
-    setAction(util.ACTION_HANDLE.ADD)
     setSelectedUser(resetUser)
+    setAction(util.ACTION_HANDLE.ADD)
     setIsModalVisible(true);
   };
 
@@ -156,6 +140,27 @@ const UserManage: React.FC = () => {
     }
   };
 
+  /* const uploadFile = (uid: string, file: any) => {
+    console.log("check uid:", uid);
+    console.log("check file:", file);
+    
+    console.log("Uploading file...");
+    const API_ENDPOINT = "http://localhost:63642/api/file/upload";
+    const request = new XMLHttpRequest();
+    const formData = new FormData();
+  
+    request.open("POST", API_ENDPOINT, true);
+    request.onreadystatechange = () => {
+      if (request.readyState === 4 && request.status === 200) {
+        console.log(request.responseText);
+      }
+    };
+    
+    formData.append("file", file)
+    formData.append("idUser", uid)
+    request.send(formData);
+  }; */
+
   const handleSave = async (user: User, file: RcFile) => {
     console.log('>>check user data from form:', user);
     // console.log('>>selected user:', selectedUser);
@@ -163,9 +168,8 @@ const UserManage: React.FC = () => {
     if (action === util.ACTION_HANDLE.ADD) {
       let res = await axios.post(`http://localhost:63642/api/user/add`, user, config)
       if (res.data.Success) {
-        message.success('Add success !')
+        message.success(t('Add success !'))
         setIsModalVisible(false)
-        setSelectedUser(resetUser)
         await getUsers()
       } else {
         message.error(res.data.Message)
@@ -187,10 +191,9 @@ const UserManage: React.FC = () => {
       console.log('check res edit of admin:', res);
 
       if (res.data.Success) {
-        message.success('Edit success !')
-        setIsModalVisible(false)
-        setSelectedUser(resetUser)
+        message.success(t('Edit success !'))
         await getUsers()
+        setIsModalVisible(false)
       } else {
         message.error(res.data.Message)
       }
@@ -203,24 +206,16 @@ const UserManage: React.FC = () => {
     /* var data = await deleteFilesTemp()
     console.log('data del temp files:', data) */
   }
+  const profile = true
 
-  const handlePageChange = (page: number, pageSize: number) => {
-    if (pageSize !== limit) {
-      setLimit(pageSize);
-      setCurrentPage(1);
-    } else
-      setCurrentPage(page);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
-
-  console.log('>>selectedUser:', selectedUser);
-  console.log('roles get:', rol);
-  console.log('departments get:', dpt);
-  
 
   return (
     <div className='manage-user-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add User
+        {t('Add User')}
       </Button>
 
       <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
@@ -241,7 +236,7 @@ const UserManage: React.FC = () => {
       />
 
       <Modal
-        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
+        title={selectedUser ? <Typography.Title level={2}>{t('Edit User')}</Typography.Title> : <Typography.Title level={2}>{t('Add User')}</Typography.Title>}
         open={isModalVisible}
         closable={true}
         onCancel={handleCancel}
@@ -249,7 +244,7 @@ const UserManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <UserForm selectedUser={selectedUser} setSelectedUser={setSelectedUser} onSave={handleSave} form={form} action={action} />
+        <UserForm initialValues={selectedUser ? selectedUser : resetUser} onSave={handleSave} form={form} action={action} />
       </Modal>
     </div>
   );

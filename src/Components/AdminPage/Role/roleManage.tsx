@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Input, message, Pagination } from 'antd';
+import { Table, Button, Modal, Form, Typography, Select, Input, Row, Col, message, Space, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Role, RoleFormProps } from '../Utils/interfaces'
+import { roleSampleData } from '../Utils/sampleData';
 import * as util from '../Utils'
 import axios from 'axios';
 import { resetRole } from '../Utils';
 import "./roleManage.css";
+import { useTranslation } from 'react-i18next';
 
 const RoleManage: React.FC = () => {
+
+  const {t} = useTranslation();
 
   message.config(util.messageConfig)
   const columns = [
@@ -17,20 +21,20 @@ const RoleManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Title',
+      title: t('Title'),
       dataIndex: 'Title',
       key: 'Title',
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: Role) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -39,12 +43,12 @@ const RoleManage: React.FC = () => {
 
   const [roles, setRoles] = useState<Role[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<Role>(resetRole);
+  const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<Role>();
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const limit = 5;
 
   const getRoles = async () => {
     let res = await axios.get(`http://localhost:63642/api/role/all?page=${currentPage}&limit=${limit}`)
@@ -60,7 +64,7 @@ const RoleManage: React.FC = () => {
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
-    setSelectedRole(resetRole);
+    setSelectedRole(null);
     setIsModalVisible(true);
   };
 
@@ -72,8 +76,10 @@ const RoleManage: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     let res = await axios.delete(`http://localhost:63642/api/role/delete/${id}`)
+    /* const updatedRoles = roles.filter((d) => d.Id !== id);
+    setRoles(updatedRoles); */
     if (res.data.Success) {
-      message.success('Delete success !')
+      message.success(t('Delete success !'))
       setIsModalVisible(false)
       getRoles()
     } else {
@@ -87,23 +93,32 @@ const RoleManage: React.FC = () => {
 
     if (action === util.ACTION_HANDLE.ADD) {
       if (!role.Title) return message.error('Missing title !')
+      /* var roleWithMaxId = roles.reduce((a, b) => a.Id > b.Id ? a : b);
+      console.log('roleWithMaxId:', roleWithMaxId);
+      role.Id = (+roleWithMaxId.Id + 1).toString();
+      setRoles([...roles, role]) */
       let res = await axios.post('http://localhost:63642/api/role/add', { Title: role.Title })
       if (res.data.Success) {
-        message.success('Add success !')
-        setSelectedRole(resetRole)
+        message.success(t('Add success !'))
         setIsModalVisible(false)
         getRoles()
       } else {
         message.error(res.data.Message)
       }
     } else if (action === util.ACTION_HANDLE.EDIT) {
-      if (!role.Title) return message.error('Missing title !')
+      if (!role.Title) return message.error(t('Missing title !'))
       console.log(role.Id);
 
       let res = await axios.put(`http://localhost:63642/api/role/edit/${role.Id}`, { Title: role.Title })
+
+      /* var existRole = roles.filter(r => r.Id !== role.Id)
+      setRoles([...existRole, role].sort((a, b) => {
+        var x = a.Id
+        var y = b.Id
+        return x < y ? -1 : x > y ? 1 : 0;
+      })) */
       if (res.data.Success) {
-        message.success('Edit success !')
-        setSelectedRole(resetRole)
+        message.success(t('Edit success !'))
         setIsModalVisible(false)
         getRoles()
       } else {
@@ -112,18 +127,14 @@ const RoleManage: React.FC = () => {
     }
   }
 
-  const handlePageChange = (page: number, pageSize: number) => {
-    if (pageSize !== limit) {
-      setLimit(pageSize);
-      setCurrentPage(1);
-    } else
-      setCurrentPage(page);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
     <div className='manage-role-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add Role
+        {t('Add Role')}
       </Button>
 
       <Table dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
@@ -144,10 +155,10 @@ const RoleManage: React.FC = () => {
       />
 
       <Modal
-        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Role</Typography.Title> : <Typography.Title level={2}>Add Role</Typography.Title>}
+        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>{t('Edit Role')}</Typography.Title> : <Typography.Title level={2}>{t('Add Role')}</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
-          setSelectedRole(resetRole)
+          setSelectedRole(null)
           setIsModalVisible(false);
         }}
         closable={true}
@@ -155,16 +166,17 @@ const RoleManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <RoleForm selectedRole={selectedRole} setSelectedRole={setSelectedRole} onSave={handleSave} form={form} />
+        <RoleForm initialValues={selectedRole ? selectedRole : resetRole} onSave={handleSave} form={form} />
       </Modal>
     </div>
   );
 };
 
-const RoleForm: React.FC<RoleFormProps> = ({ selectedRole, setSelectedRole, onSave, form }) => {
+const RoleForm: React.FC<RoleFormProps> = ({ initialValues, onSave, form }) => {
+  const {t} = useTranslation();
+  
   const handleSubmit = () => {
     form.validateFields().then((values) => {
-      setSelectedRole(values)
       onSave(values as Role);
     });
   };
@@ -172,7 +184,7 @@ const RoleForm: React.FC<RoleFormProps> = ({ selectedRole, setSelectedRole, onSa
   useEffect(() => {
     console.log('useEffect run');
     form.resetFields()
-  }, [selectedRole])
+  }, [initialValues])
 
   const handleFormReset = () => {
     form.resetFields()
@@ -180,20 +192,20 @@ const RoleForm: React.FC<RoleFormProps> = ({ selectedRole, setSelectedRole, onSa
   }
 
   return (
-    <Form form={form} initialValues={selectedRole} layout="horizontal" style={{ minWidth: '400px', marginTop: '24px' }}>
+    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '400px', marginTop: '24px' }}>
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
-      <Form.Item label="Title" name="Title" rules={[{ required: true, message: "Please enter role's title !" }]}>
+      <Form.Item label={t('Title')} name="Title">
         <Input />
       </Form.Item>
       {/* save */}
-      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
-        <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
-          Reset
+      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+        <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
+          {t('Save')}
         </Button>
-        <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
-          Save
+        <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
+          {t('Reset')}
         </Button>
       </Form.Item>
     </Form>
