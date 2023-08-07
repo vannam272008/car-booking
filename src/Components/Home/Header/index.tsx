@@ -1,29 +1,74 @@
 import React, { Dispatch, useEffect } from "react";
-import axios from "axios";
 import { useState } from "react";
-import { Dropdown, Layout, Menu, MenuProps, Select } from "antd";
+import { Dropdown, Layout, MenuProps, Select, Space, message } from "antd";
 import UserOutlined from "@ant-design/icons"
 import "./Header.css";
-import MenuHeader from "./MenuHeader";
 import request from "../../../Utils/request";
 import united_states from "../../../assets/united_states.svg";
 import vietnam from "../../../assets/vietnam.svg";
 import opus_logo from "../../../public/images/opus_logo.jpg";
 import { Option } from "antd/es/mentions";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../Reducers/rootReducer";
+import { connect } from "react-redux";
+import { setStatus, setTab, setUserInfo } from "../../../Actions/requestAction";
 
 const { Header } = Layout;
 
+
 interface propsHomeHeader {
   setPayload: Dispatch<any>
+  userInfo: any,
+  setUserInfo: Dispatch<any>
 }
 
-const HomeHeader = ({ setPayload }: propsHomeHeader) => {
+const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
+  const navigate = useNavigate();
+  const userID = localStorage.getItem("Id");
   const [data, setData] = useState<any>([]);
   const handleMenuClick = (e: any) => {
     setPayload(e.key)
   }
   // https://tasken.io/api/api/landingpage/tenant/8dc6957b-4869-4877-a511-6563f990d59e?v=1688011765685
 
+  const handleClickName = (e: any) => {
+    if (e.key === 0) {
+      navigate('/setting/profile');
+    } else {
+      request
+        .get("/user/logout")
+        .then((response) => {
+          const data = response.data;
+          console.log(response);
+          if (data) {
+            if (data.Success === false) {
+              message.error(data.Message);
+            } else {
+              localStorage.clear();
+              setStatus('');
+              setTab('get-all');
+              window.location.reload();
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  const items: MenuProps['items'] = [
+    {
+      onClick: handleClickName,
+      label: <span>My Profile</span>,
+      key: '0',
+    },
+    {
+      onClick: handleClickName,
+      label: <span>Logout</span>,
+      key: '1',
+    },
+  ];
 
   useEffect(() => {
     const url =
@@ -51,6 +96,24 @@ const HomeHeader = ({ setPayload }: propsHomeHeader) => {
       });
   }, [])
 
+  useEffect(() => {
+    if (userID !== null) {
+      request.get("/user/profile/" + userID)
+        .then((res) => {
+          setUserInfo({
+            FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
+            AvatarPath: res.data.Data.AvatarPath,
+            Email: res.data.Data.Email
+          })
+        })
+        .catch((e) => {
+          console.log(e.response.Data);
+        })
+    }
+
+  }, [userID, setUserInfo])
+
+
 
   return (
     <Header className="header">
@@ -58,8 +121,15 @@ const HomeHeader = ({ setPayload }: propsHomeHeader) => {
         <img src={opus_logo} alt="Logo" className="logo" />
         <div className="header-name">{data.name}</div>
       </div>
-      <div className="header-homepage"> <UserOutlined />Bang Nguyen Minh</div>
-      <div className="header-homepage">Trang chủ</div>
+      <div className="header-homepage">
+        <Dropdown menu={{ items }} trigger={['click']} >
+          <span onClick={(e) => e.preventDefault()} >
+            <Space>
+              <UserOutlined />{userInfo ? userInfo.FullName : ""}
+            </Space>
+          </span>
+        </Dropdown>
+      </div>
       <div className="header-homepage">
         <Select
           labelInValue
@@ -88,5 +158,12 @@ const HomeHeader = ({ setPayload }: propsHomeHeader) => {
     </Header>
   );
 };
+const mapStateToProps = (state: RootState) => ({
+  tab: state.request.tab,
+  status: state.request.status,
+  userInfo: state.request.userInfo
+});
 
-export default HomeHeader;
+const mapDispatchToProps = { setTab, setStatus, setUserInfo };
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeHeader);

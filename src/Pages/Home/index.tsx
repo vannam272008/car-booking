@@ -21,7 +21,7 @@ import { useNavigate } from "react-router";
 
 import { useState } from "react";
 // import CardContent from "./CardContent";
-import { Card, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import CardContent from "../../Components/Home/Card";
@@ -56,7 +56,6 @@ import { FaEarthAmericas } from "react-icons/fa6";
 import { TfiTimer } from "react-icons/tfi";
 import { FaPersonDress, FaFileContract } from "react-icons/fa6";
 import { RiComputerLine } from "react-icons/ri";
-import { title } from "process";
 import request from "../../Utils/request";
 
 const Home = () => {

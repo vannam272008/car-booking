@@ -45,7 +45,7 @@ function DetailRequest(): JSX.Element {
     // const Approver1: string = 'Approver 1';
     // const Approver2: string = 'Approver 2';
 
-    const {t} = useTranslation(); 
+    const { t } = useTranslation();
 
     const profile = false;
 
@@ -221,26 +221,45 @@ function DetailRequest(): JSX.Element {
                                     </div>
                                 </div>
                                 <div className='list-approvers'>
-                                    <p>Approvers:</p>
+                                    <p style={{ fontWeight: '700' }}>Approvers:</p>
                                     <Row>
                                         {Array.isArray(workflowData) ? (
-                                            workflowData.map((approverData: { Id: number; Status: string; User: { Id: number; FullName: string } }, index: number) => (
+                                            workflowData.map((approverData: { Id: number; Status: string; Position: string; User: { Id: number; FullName: string } }, index: number) => (
                                                 <Col key={approverData.Id} span={6} className='approver'>
                                                     {approverData.Status === 'Rejected' ? (
                                                         <Badge.Ribbon text={t('rejected')} color="red" >
-                                                            <Card title={<span style={{ fontWeight: '̃700' }}>{`${t('Approver')} ${index + 1}`}</span>} size="small">
+                                                            <Card
+                                                                title={
+                                                                    approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
+                                                                        (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
+                                                                        : (<span style={{ fontWeight: '̃700' }}>${t('Approver')}  {index + 1}</span>)
+                                                                }
+                                                                size="small">
                                                                 {approverData.User.FullName}
                                                             </Card>
                                                         </Badge.Ribbon>
                                                     ) : (
                                                         approverData.Status === 'Approved' ? (
                                                             <Badge.Ribbon text={t('approved')} color="green" >
-                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>} size="small">
+                                                                <Card
+                                                                    title={
+
+                                                                        approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
+                                                                            (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
+                                                                    }
+                                                                    size="small">
                                                                     {approverData.User.FullName}
                                                                 </Card>
                                                             </Badge.Ribbon>) : (
                                                             <Badge.Ribbon text={t('waitingforapproval')} color="blue" >
-                                                                <Card title={<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>} size="small">
+                                                                <Card
+                                                                    title={
+                                                                        approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
+                                                                            (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
+                                                                    }
+                                                                    size="small">
                                                                     {approverData.User.FullName}
                                                                 </Card>
                                                             </Badge.Ribbon>

@@ -31,6 +31,7 @@ function EditRequest() {
     const {t} = useTranslation();
 
     const { Option } = Select;
+    const profile = false;
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
@@ -40,52 +41,8 @@ function EditRequest() {
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const { requestId } = useParams();
     const [status, setStatus] = useState<string>("")
-    const [activeTabKey, setActiveTabKey] = useState<string>();
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-
-                const departmentEndpoint = "department/all?page=1&limit=100";
-                const departmentRes = await request.get(departmentEndpoint);
-                setDataDepartment(departmentRes.data.Data.ListData);
-
-                const departmentMemberEndpoint = `departmentMember/position?departmentId=${activeTabKey}`;
-                const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data);
-
-                const detailsDataEndpoint = "/request/Id=" + requestId;
-                const detailsDataRes = await request.get(detailsDataEndpoint);
-                setDetailData(detailsDataRes.data.Data);
-                setApplyNote(detailsDataRes.data.Data.ApplyNote);
-                setStatus(detailsDataRes.data.Data.Status);
-
-                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // console.log(attachmentsDataRes);
-                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
-
-                if (formData.DepartmentId === '' && formData.ReceiverId === '') {
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        DepartmentId: detailsDataRes.data.Data.Department.Id,
-                        ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
-                    }));
-                }
-
-                setLoading(false);
-            } catch (error) {
-                setLoading(true);
-            }
-        };
-
-        fetchData();
-    }, [activeTabKey]);
-
-
-
     const [detailData, setDetailData] = useState<any>({});
+
     const usageFrom = changeFormatDatePostRequest(detailData.UsageFrom);
     const usageTo = changeFormatDatePostRequest(detailData.UsageTo);
     const pickTime = changeFormatDatePostRequest(detailData.PickTime);
@@ -109,15 +66,64 @@ function EditRequest() {
         files: fileList,
     });
 
+
+    const initiValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
+    const initiValueReceiver = detailData.ReceiverUser && (formData.ReceiverId === detailData.ReceiverUser.Id) ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : (dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data');
+    const initiValueMoblie = formData.Mobile ? formData.Mobile : (detailData.Mobile ? detailData.Mobile : undefined);
+    const initiValueCostCenter = formData.CostCenter ? formData.CostCenter : (detailData.CostCenter ? detailData.CostCenter : undefined);
+    const initiValueTotalpassengers = formData.TotalPassengers ? formData.TotalPassengers : (detailData.TotalPassengers ? detailData.TotalPassengers : undefined);
+    const initiValueReason = formData.Reason ? formData.Reason : (detailData.Reason ? detailData.Reason : undefined);
+    const initiValueDestination = formData.Destination ? formData.Destination : (detailData.Destination ? detailData.Destination : undefined);
+    const initiValuePicklocation = formData.PickLocation ? formData.PickLocation : (detailData.PickLocation ? detailData.PickLocation : undefined);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentEndpoint = "department/all?page=1&limit=100";
+                const departmentRes = await request.get(departmentEndpoint);
+                setDataDepartment(departmentRes.data.Data.ListData);
+
+                const detailsDataEndpoint = "/request/Id=" + requestId;
+                const detailsDataRes = await request.get(detailsDataEndpoint);
+                setDetailData(detailsDataRes.data.Data);
+                setApplyNote(detailsDataRes.data.Data.ApplyNote);
+                setStatus(detailsDataRes.data.Data.Status);
+
+                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log(attachmentsDataRes);
+                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
+
+                console.log(detailsDataRes.data.Data);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    DepartmentId: detailsDataRes.data.Data.Department.Id,
+                    ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [requestId]);
+
+
     useEffect(() => {
         const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
         const stringNumber = number.toString();
+
+        // console.log('setformdata');
 
         setFormData((prevFormData) => ({
             ...prevFormData,
             files: fileList,
             ApplyNote: applyNote,
-            ListOfUserId: listOfUserId,
             Mobile: detailData.Mobile,
             CostCenter: detailData.CostCenter,
             TotalPassengers: stringNumber,
@@ -130,11 +136,39 @@ function EditRequest() {
             PickTime: pickTime,
             Status: status,
         }));
-    }, [listOfUserId, status, usageFrom, usageTo, pickTime, detailData.SenderUser, fileList, applyNote, detailData.Mobile, detailData.CostCenter, detailData.TotalPassengers, detailData.PickLocation, detailData.Destination, detailData.Reason]);
+    }, [status, usageFrom, usageTo, pickTime, fileList, applyNote, detailData]);
 
     useEffect(() => {
-        setActiveTabKey(detailData.Department && !activeTabKey ? detailData.Department.Id : activeTabKey);
-    }, [detailData.Department, activeTabKey])
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ListOfUserId: listOfUserId,
+        }));
+    }, [listOfUserId]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
+                const departmentMemberRes = await request.get(departmentMemberEndpoint);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+
+                const ReceiverUserId = departmentMemberRes.data.Data.find((value: any) => value.User.Id === detailData.ReceiverUser.Id);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    ReceiverId: ReceiverUserId ? ReceiverUserId.User.Id : (departmentMemberRes.data.Data.length > 0 ? departmentMemberRes.data.Data[0].User.Id : ''),
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [formData.DepartmentId]);
+
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -146,12 +180,19 @@ function EditRequest() {
         }));
     };
 
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
-        setActiveTabKey(value);
+    const handleSelectChange = (value: any, field: string) => {
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -174,13 +215,13 @@ function EditRequest() {
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-            )
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    ))
         }
         else return [];
-
     };
 
     const onChange = (e: RadioChangeEvent) => {
@@ -192,7 +233,6 @@ function EditRequest() {
         return false;
     };
     const handleRemoveFile = (file: UploadFile<any>) => {
-        // Filter out the file to be removed from the fileList
         const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
         setFileList(updatedFileList);
     };
@@ -204,9 +244,7 @@ function EditRequest() {
         }
     };
 
-    const profile = false;
-
-    console.log('formData', formData);
+    // console.log('formData', detailData);
 
     return (
         <RequestLayout profile={profile}>
@@ -260,7 +298,7 @@ function EditRequest() {
                                                             message: t('Select something!'),
                                                         },
                                                     ]}
-                                                    initialValue={detailData.Department ? detailData.Department.Name : undefined}
+                                                    initialValue={initiValueDepartment}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
@@ -273,11 +311,18 @@ function EditRequest() {
                                                             option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                         }
                                                     >
-                                                        {dataDepartment.map((department) => (
+                                                        {dataDepartment
+                                                            .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                            .map((filteredDepartment) => (
+                                                                <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                    {filteredDepartment.Name}
+                                                                </Option>
+                                                            ))}
+                                                        {/* {dataDepartment.map((department) => (
                                                             <Option key={department.Id} value={department.Id} >
                                                                 {department.Name}
                                                             </Option>
-                                                        ))}
+                                                        ))} */}
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
@@ -292,10 +337,12 @@ function EditRequest() {
                                                             message: t('Select something!'),
                                                         },
                                                     ]}
-                                                    initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
+                                                    initialValue={initiValueReceiver}
                                                     labelCol={{ span: 24 }}
+                                                    className={initiValueReceiver === 'No Data' ? 'no-data' : ''}
                                                 >
                                                     <Select
+                                                        labelInValue
                                                         virtual={false}
                                                         value={formData.ReceiverId}
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
@@ -332,7 +379,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Mobile ? detailData.Mobile : undefined}
+                                                    initialValue={initiValueMoblie}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -355,7 +402,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
+                                                    initialValue={initiValueCostCenter}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -376,7 +423,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
+                                                    initialValue={initiValueTotalpassengers}
                                                 >
                                                     <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -464,7 +511,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.PickLocation ? detailData.PickLocation : undefined}
+                                                    initialValue={initiValuePicklocation}
                                                 >
                                                     <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -482,7 +529,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Destination ? detailData.Destination : undefined}
+                                                    initialValue={initiValueDestination}
                                                 >
                                                     <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -499,7 +546,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Reason ? detailData.Reason : undefined}
+                                                    initialValue={initiValueReason}
                                                 >
                                                     <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -532,10 +579,9 @@ function EditRequest() {
                                     <span> {t('(Maximum 20MB per file)')}</span>
                                 </Upload>
                             </div>
-                            <EditSendApprover listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                            <EditSendApprover departmentId={formData.DepartmentId} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                         </div>
-                        )
-                    }
+                        )}
                 </div>
             )}
         </RequestLayout >

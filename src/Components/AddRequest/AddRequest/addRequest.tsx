@@ -26,7 +26,7 @@ interface DepartmentMember {
 
 function AddRequest(): JSX.Element {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     //set layout
     const profile = false;
@@ -152,11 +152,20 @@ function AddRequest(): JSX.Element {
     };
 
     //set User values ​​for formdata
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
+    const handleSelectChange = (value: any, field: string) => {
+
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     //set Usage time from, Usage time to, Pick time values ​​for formdata
@@ -180,9 +189,11 @@ function AddRequest(): JSX.Element {
         if (dataDepartmentMember && dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    )
             )
         }
         else return [];
@@ -196,7 +207,7 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    console.log('formdata', formData);
+    // console.log('formdata', formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -216,6 +227,63 @@ function AddRequest(): JSX.Element {
                             </Spin>)
                             :
                             (
+                                <>
+                                    <div className='table-request'>
+                                        <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
+                                        <div className='table-content'>
+                                            <Form
+                                                className='form-add-request'
+                                            >
+                                                <Row className='row-request'>
+                                                    {/*Request Applicant*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('Applicant')}
+                                                            name="SenderId"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Applicant is require')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueSender}
+                                                        >
+                                                            <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Department*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('department')}
+                                                            name="DepartmentId"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Select something!'),
+                                                                },
+                                                            ]}
+                                                            initialValue={initialValueDepartment}
+                                                            labelCol={{ span: 24 }}
+                                                        >
+                                                            <Select
+                                                                virtual={false}
+                                                                value={formData.DepartmentId}
+                                                                onChange={(value) => handleSelectChange(value, 'DepartmentId')}
+                                                                showSearch
+                                                                optionFilterProp="children"
+                                                                filterOption={(inputValue, option) =>
+                                                                    option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
+                                                                }
+                                                            >
+                                                                {dataDepartment
+                                                                    .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                                    .map((filteredDepartment) => (
+                                                                        <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                            {filteredDepartment.Name}
+                                                                        </Option>
+                                                                    ))}
+                                                                {/* {dataDepartment.map((department) => (
                                 <div className='table-request'>
                                     <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
                                     <div className='table-content'>
@@ -267,231 +335,242 @@ function AddRequest(): JSX.Element {
                                                                 <Option key={department.Id} value={department.Id} >
                                                                     {department.Name}
                                                                 </Option>
-                                                            ))}
-                                                        </Select>
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request User*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('user')}
-                                                        name="ReceiverId"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Select something!'),
-                                                            },
-                                                        ]}
-                                                        initialValue={initialValueReceiver}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Select
-                                                            value={formData.SenderId}
-                                                            onChange={(value) => handleSelectChange(value, 'ReceiverId')}
-                                                            showSearch
-                                                            optionFilterProp="children"
-                                                            filterOption={false}
-                                                            onSearch={handleSearch}
+                                                            ))} */}
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request User*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('user')}
+                                                            name="ReceiverId"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Select something!'),
+                                                                },
+                                                            ]}
+                                                            initialValue={initialValueReceiver}
+                                                            labelCol={{ span: 24 }}
+                                                            className={initialValueReceiver === 'No Data' ? 'no-data' : ''}
                                                         >
-                                                            {filteredData().map((departmentMember) => (
-                                                                <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                                    <div>
-                                                                        <span>{departmentMember.User.FullName} </span>
-                                                                        <span>{departmentMember.User.Email} </span>
-                                                                        <span>{departmentMember.User.JobTitle}</span>
-                                                                    </div>
-                                                                </Option>
-                                                            ))}
-                                                        </Select>
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Mobile*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('mobile')}
-                                                        name="Mobile"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Mobile is required'),
-                                                            },
-                                                            {
-                                                                pattern: /^[0-9]*$/,
-                                                                message: t('Mobile must be a number'),
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                            <Row className='row-request'>
-                                                {/*Request Cost Center*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label="Cost Center"
-                                                        name="CostCenter"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Cost Center is required')
-                                                            },
-                                                            {
-                                                                pattern: /^[0-9]*$/,
-                                                                message: t('Cost Center must be a number'),
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Total passengers*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('totalpassengers')}
-                                                        name="Totalpassengers"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('totalpassengers')
-                                                            },
-                                                            {
-                                                                pattern: /^[0-9]*$/,
-                                                                message: t('Total passengers must be a number'),
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input maxLength={10} onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Usage time from*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('from')}
-                                                        name="UsageFrom"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Usage time from is required')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                        initialValue={initialValueUsageFrom}
-                                                    >
-                                                        <DatePicker
-                                                            className='add-request-width-formitem'
-                                                            value={dayjs(formData.UsageFrom)}
-                                                            onChange={(value) => handleDatePicker(value, 'UsageFrom')}
-                                                            showTime
-                                                            placeholder={t('from')}
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Usage time to*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('to')}
-                                                        name="UsageTo"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Usage time to is required')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                        initialValue={futureTime}
-                                                    >
-                                                        <DatePicker
-                                                            className='add-request-width-formitem'
-                                                            value={dayjs(formData.UsageTo)}
-                                                            onChange={(value) => handleDatePicker(value, 'UsageTo')}
-                                                            showTime
-                                                            placeholder={t('to')}
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                            <Row className='row-request'>
-                                                {/*Request Pick time*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('Pick time')}
-                                                        name="Picktime"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Pick time is required')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                        initialValue={dayjs()}
-                                                    >
-                                                        <DatePicker
-                                                            className='.add-request-width-formitem'
-                                                            value={dayjs(formData.PickTime)}
-                                                            onChange={(value) => handleDatePicker(value, 'PickTime')}
-                                                            showTime
-                                                            placeholder={t('Pick time')}
-                                                        />
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Pick location*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('picklocation')}
-                                                        name="Picklocation"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Pick location is required')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Destination */}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('destination')}
-                                                        name="Destination"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Destination is required')
+                                                            <Select
+                                                                labelInValue
+                                                                virtual={false}
+                                                                value={formData.ReceiverId}
+                                                                onChange={(value) => handleSelectChange(value, 'ReceiverId')}
+                                                                showSearch
+                                                                optionFilterProp="children"
+                                                                filterOption={false}
+                                                                onSearch={handleSearch}
+                                                            >
+                                                                {filteredData().map((departmentMember) => (
+                                                                    <Option key={departmentMember.Id} value={departmentMember.User.Id}>
+                                                                        <div>
+                                                                            <span>{departmentMember.User.FullName} </span>
+                                                                            <span>{departmentMember.User.Email} </span>
+                                                                            <span>{departmentMember.User.JobTitle}</span>
+                                                                        </div>
+                                                                    </Option>
+                                                                ))}
+                                                            </Select>
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Mobile*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('mobile')}
+                                                            name="Mobile"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Mobile is required'),
+                                                                },
+                                                                {
+                                                                    pattern: /^[0-9]*$/,
+                                                                    message: t('Mobile must be a number'),
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueMobile}
+                                                        >
+                                                            <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row className='row-request'>
+                                                    {/*Request Cost Center*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label="Cost Center"
+                                                            name="CostCenter"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Cost Center is required')
+                                                                },
+                                                                {
+                                                                    pattern: /^[0-9]*$/,
+                                                                    message: t('Cost Center must be a number'),
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueCostCenter}
+                                                        >
+                                                            <Input onKeyPress={handleKeyPress} type='text' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Total passengers*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('totalpassengers')}
+                                                            name="Totalpassengers"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('totalpassengers')
+                                                                },
+                                                                {
+                                                                    pattern: /^[0-9]*$/,
+                                                                    message: t('Total passengers must be a number'),
+                                                                },
+                                                            ]}
+                                                            initialValue={initialValueTotalPassengers}
+                                                            labelCol={{ span: 24 }}
+                                                        >
+                                                            <Input maxLength={9} onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Usage time from*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('from')}
+                                                            name="UsageFrom"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Usage time from is required')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueUsageFrom}
+                                                        >
+                                                            <DatePicker
+                                                                className='add-request-width-formitem'
+                                                                value={dayjs(formData.UsageFrom)}
+                                                                onChange={(value) => handleDatePicker(value, 'UsageFrom')}
+                                                                showTime
+                                                                placeholder={t('from')}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Usage time to*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('to')}
+                                                            name="UsageTo"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Usage time to is required')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueUsageTo}
+                                                        >
+                                                            <DatePicker
+                                                                className='add-request-width-formitem'
+                                                                value={dayjs(formData.UsageTo)}
+                                                                onChange={(value) => handleDatePicker(value, 'UsageTo')}
+                                                                showTime
+                                                                placeholder={t('to')}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                                <Row className='row-request'>
+                                                    {/*Request Pick time*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('Pick time')}
+                                                            name="Picktime"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Pick time is required')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValuePickTime}
+                                                        >
+                                                            <DatePicker
+                                                                className='.add-request-width-formitem'
+                                                                value={dayjs(formData.PickTime)}
+                                                                onChange={(value) => handleDatePicker(value, 'PickTime')}
+                                                                showTime
+                                                                placeholder={t('Pick time')}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Pick location*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('picklocation')}
+                                                            name="Picklocation"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Pick location is required')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValuePickLocation}
+                                                        >
+                                                            <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Destination */}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('destination')}
+                                                            name="Destination"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Destination is required')
 
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Reason*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('reason')}
-                                                        name="Reason"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Reason is required')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Input type='text' name="Reason" value={formData.Reason} onChange={handleInputChange}></Input>
-                                                    </Form.Item>
-                                                </Col>
-                                            </Row>
-                                        </Form>
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialValueDestination}
+                                                        >
+                                                            <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
+                                                        </Form.Item>
+                                                    </Col>
+                                                    {/*Request Reason*/}
+                                                    <Col span={6} className='col-request'>
+                                                        <Form.Item
+                                                            label={t('reason')}
+                                                            name="Reason"
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: t('Reason is required')
+                                                                },
+                                                            ]}
+                                                            labelCol={{ span: 24 }}
+                                                            initialValue={initialvalueReason}
+                                                        >
+                                                            <Input type='text' name="Reason" value={formData.Reason} onChange={handleInputChange}></Input>
+                                                        </Form.Item>
+                                                    </Col>
+                                                </Row>
+                                            </Form>
+                                        </div>
                                     </div>
-                                </div>)}
-                        <SendApprover fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} departmentId={''} />
+                                    <SendApprover departmentId={formData.DepartmentId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                                </>
+                            )}
                     </div>
                 </div>
             )

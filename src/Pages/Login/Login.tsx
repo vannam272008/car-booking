@@ -125,4 +125,4 @@ const Login = () => {
 
 // const mapDispatchToProps = { setUserInfo }
 
-export default Login
+export default Login;
