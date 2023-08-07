@@ -28,23 +28,66 @@ interface PropsDataList {
 function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUserId, setListOfUserId, departmentId }: PropsDataList): JSX.Element {
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
-    const [inputs, setInputs] = useState<string[]>(['Initial Input']);
-    const [counterApprover, setCounterApprover] = useState(1);
+    const [inputs, setInputs] = useState<string[]>([]);
     const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>([`Approver ${counterApprover}`]);
-    const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
+    const [counterApprover, setCounterApprover] = useState(1);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
+    // const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
     const [searchValue, setSearchValue] = useState<string>('');
+    const [initialValueApprover, setInitialValueApprover] = useState<string[]>([]);
+    // const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const getDataDepartmentMember = async () => {
             const endpoint = "/userRole/all-approvers/" + departmentId;
             await request.get(endpoint).then((res) => {
                 setDataDepartmentMember(res.data.Data);
+
+                // console.log('hi', res.data.Data);
+                setListOfUserId([]);
+
+                let tempListOfUserIdSupervisor = [];
+                let tempListOfUserIdManager = [];
+                let tempApproverSupervisor = [];
+                let tempApproverManager = [];
+                let tempLableApproverSupervisor = [];
+                let tempLableApproverManager = [];
+
+                for (let i = 0; i < res.data.Data.length; i++) {
+                    if (res.data.Data[i].Position === "Supervisor" && tempListOfUserIdSupervisor.length < 1) {
+                        tempListOfUserIdSupervisor.push(res.data.Data[i].Id);
+                        tempApproverSupervisor.push(res.data.Data[i].FullName + ' ' + res.data.Data[i].Email + ' ' + res.data.Data[i].JobTitle);
+                        tempLableApproverSupervisor.push(res.data.Data[i].Position);
+                        setCounterApprover(counterApprover + 2);
+                    }
+                    if (res.data.Data[i].Position === "Manager" && tempListOfUserIdManager.length < 1) {
+                        tempListOfUserIdManager.push(res.data.Data[i].Id);
+                        tempApproverManager.push(res.data.Data[i].FullName + ' ' + res.data.Data[i].Email + ' ' + res.data.Data[i].JobTitle);
+                        tempLableApproverManager.push(res.data.Data[i].Position);
+                        setCounterApprover(counterApprover + 2);
+                    }
+                }
+
+                const tempListOfUserId = tempListOfUserIdSupervisor.concat(tempListOfUserIdManager);
+                const tempApprover = tempApproverSupervisor.concat(tempApproverManager);
+                const tempLableApprover = tempLableApproverSupervisor.concat(tempLableApproverManager);
+
+                setLabelApprovers(tempLableApprover);
+                setInitialValueApprover(tempApprover);
+                setListOfUserId(tempListOfUserId);
+                setInputs(tempListOfUserId);
+
             }).catch(() => {
+                console.error("Error fetching data:");
             });
         }
         getDataDepartmentMember();
     }, [departmentId])
+
+    // useEffect(() => {
+    //     setLoading(false);
+    // }, [listOfUserId])
 
     const { Option } = Select;
 
@@ -53,8 +96,8 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
     };
 
     const handleAddInput = () => {
-        setInputs([...inputs, '']);
-        setLabelApprovers([...labelApprovers, `Approver ${counterApprover + 1}`]);
+        setInputs([...inputs, '' + counterApprover]);
+        setLabelApprovers([...labelApprovers, "Approve " + [counterApprover]]);
         setCounterApprover(counterApprover + 1);
     };
 
@@ -62,9 +105,15 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         const newInputs = [...inputs];
         newInputs.splice(index, 1);
         setInputs(newInputs);
+
         const newListOfUser = [...listOfUserId];
         newListOfUser.splice(index, 1);
         setListOfUserId(newListOfUser);
+
+        const newInitiValueApprover = [...initialValueApprover];
+        newInitiValueApprover.splice(index, 1);
+        setInitialValueApprover(newInitiValueApprover);
+
     };
 
     const handleInputChangeApprover = (index: number, value: string) => {
@@ -81,14 +130,26 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setEditingIndex(index);
     };
 
-    const handleSelectChange = (index: number, value: string) => {
-        if (listOfUserId.indexOf(value) !== -1) {
-            openNotification('topRight');
-        } else {
-            const temporaryList = { ...selectedApprovers, [index]: value };
-            const finalSelectedUserId = Object.values(temporaryList) as string[];
-            setListOfUserId(finalSelectedUserId);
-            setSelectedApprovers(temporaryList);
+    const handleSelectChange = (index: number, e: any) => {
+        const value = e.value;
+        if (Array.isArray(listOfUserId)) {
+
+            if (listOfUserId.indexOf(value) !== -1) {
+                openNotification('topRight');
+            } else {
+                // const temporaryList = { ...selectedApprovers, [index]: value };
+                // const finalSelectedUserId = Object.values(temporaryList) as string[];
+                // setListOfUserId(finalSelectedUserId);
+                // setSelectedApprovers(temporaryList);
+                const newListOfUser = [...listOfUserId];
+                newListOfUser[index] = value;
+                setListOfUserId(newListOfUser);
+                const dataDepartmentMemberSelected: DepartmentMember[] = dataDepartmentMember.filter((departmentMember) => departmentMember.Id === value);
+                const infoUserSelected = dataDepartmentMemberSelected[0].FullName + " " + dataDepartmentMemberSelected[0].Email + " " + dataDepartmentMemberSelected[0].JobTitle;
+                const newInitiValueApprover = [...initialValueApprover];
+                newInitiValueApprover[index] = infoUserSelected;
+                setInitialValueApprover(newInitiValueApprover);
+            }
         }
     }
 
@@ -104,13 +165,23 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setSearchValue(inputValue);
     };
 
+    // useEffect(() => {
+    //     const newDataDepartmentMember = [...dataDepartmentMember];
+    //     dataDepartmentMember.map((data) => {
+    //         listOfUserId.map((userId) => {
+    //             newDataDepartmentMember.filter(userId)
+    //         })
+    //     })
+    // }, [listOfUserId])
+
     const filteredData = () => {
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    listOfUserId.indexOf(departmentMember.Id) === -1 && (
+                        departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase()))
             )
         }
         else return [];
@@ -133,7 +204,11 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
         setFileList(updatedFileList);
     };
 
-    console.log(departmentId);
+    // console.log("initialValueApprover: ", initialValueApprover);
+    // console.log("labelApprovers", labelApprovers);
+    // console.log("123: ", listOfUserId);
+    // console.log('input', inputs);
+    // console.log('dataDepartmentMember', dataDepartmentMember);
 
     return (
         <div>
@@ -186,17 +261,19 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                                 )}
                                             </div>
                                         }
-                                        name={`Approver${index}`}
+                                        name={inputs[index]}
                                         rules={[
                                             {
                                                 required: true,
                                                 message: 'Select something!',
                                             },
                                         ]}
-                                        initialValue={'--Select a Approver--'}
+                                        initialValue={initialValueApprover[index] === undefined ? '--Select a Approver--' : initialValueApprover[index]}
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select
+                                            // defaultValue={initialValueApprover[index] === undefined ? '--Select a Approver--' : initialValueApprover[index]}
+                                            labelInValue
                                             virtual={false}
                                             onChange={(value) => handleSelectChange(index, value)}
                                             showSearch

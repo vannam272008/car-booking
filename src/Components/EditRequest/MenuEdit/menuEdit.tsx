@@ -46,6 +46,7 @@ interface MenuAddProps {
     }>>,
 }
 
+
 function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     const navigate = useNavigate();
@@ -55,7 +56,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleReSubmit = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
+        if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
             request.putForm("/request/Id=" + requestId, formData)
                 .then((response) => {
                     const data = response.data;
@@ -113,7 +114,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
-        console.log('succes');
+        // console.log('succes');
     }
     const handleClose = () => {
         setIsModalOpenDelete(false);
@@ -124,7 +125,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         request.delete("/request/" + requestId)
             .then(() => {
                 navigate("/request/carbooking");
-                console.log('sucess');
+                // console.log('sucess');
             })
             .catch((e) => {
                 setErrorMessage(e.response.data.Message);
@@ -137,6 +138,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         SetCheckBoxDelete(!checkBoxDelete);
     };
 
+    console.log('formData', formData);
 
     return (
 

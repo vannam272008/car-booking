@@ -135,4 +135,7 @@
 
 .no-data .ant-select-selector .ant-select-selection-item {
     color: red;
+    font-weight: 200;
+    font-size: medium;
+    justify-content: center;
 }
