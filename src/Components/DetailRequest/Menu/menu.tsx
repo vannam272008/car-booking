@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification } from 'antd';
+import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, message, notification } from 'antd';
 import './menu.css'
 import {
     ArrowLeftOutlined,
@@ -12,7 +12,8 @@ import {
     DeliveredProcedureOutlined,
     EllipsisOutlined,
     WarningOutlined,
-    CloseCircleFilled
+    CloseCircleFilled,
+    CheckCircleFilled
 } from '@ant-design/icons';
 // import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { useNavigate } from 'react-router';
@@ -20,6 +21,7 @@ import { useParams } from 'react-router';
 import request from '../../../Utils/request';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import TextArea from 'antd/es/input/TextArea';
+import { DepartmentMembers } from '../../AdminPage/Utils';
 
 interface ActionRequest {
     action: string,
@@ -33,10 +35,22 @@ interface ApproverShare {
     JobTitle: string;
 }
 
+interface DepartmentMember {
+    Id: string;
+    User: {
+        Id: string;
+        FullName: string;
+        Email: string;
+        JobTitle: string;
+    };
+}
+
 function MenuRequest(props: any): JSX.Element {
 
+    // console.log(props);
+
     const { Option } = Select;
-    const { requestStatus, requestCode, setLoading } = props;
+    const { departmentId, requestStatus, requestCode, setLoading } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
@@ -53,20 +67,32 @@ function MenuRequest(props: any): JSX.Element {
         comment: "",
     });
     const [showCancel, setShowCancel] = useState(false);
-    const [dataApprover, setDataApprover] = useState<ApproverShare[]>([]);
+    // const [dataApprover, setDataApprover] = useState<ApproverShare[]>([]);
+    const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
     const [searchValue, setSearchValue] = useState<string>('');
+    const [dataUserId, setDataUserId] = useState<string>('');
 
     useEffect(() => {
-        const getDataApprover = async () => {
-            const endpoint = "/userRole/all-approvers";
+        // const getDataApprover = async () => {
+        //     const endpoint = "/userRole/all-approvers";
+        //     await request.get(endpoint).then((res) => {
+        //         setDataApprover(res.data.Data);
+        //     }).catch(() => {
+        //     });
+        // }
+
+        const getDataDepatmentMember = async () => {
+            const endpoint = "departmentMember/position?departmentId=" + departmentId;
             await request.get(endpoint).then((res) => {
-                setDataApprover(res.data.Data);
+                setDataDepartmentMember(res.data.Data);
             }).catch(() => {
             });
         }
-        getDataApprover();
-    }, [])
+
+        // getDataApprover();
+        getDataDepatmentMember();
+    }, [departmentId])
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -94,8 +120,8 @@ function MenuRequest(props: any): JSX.Element {
                 navigate("/request/carbooking");
             })
             .catch((e) => {
-                setErrorMessage(e.response.data.Message);
-                openNotification('topRight');
+                // setErrorMessage(e.response.data.Message);
+                openNotification('topRight', e.response.data.Message);
             })
         setIsModalOpenDelete(false);
     }
@@ -105,6 +131,19 @@ function MenuRequest(props: any): JSX.Element {
     };
 
     const handleShare = () => {
+        console.log('dataUserId', dataUserId);
+        console.log('requestId', requestId);
+        request.post("/request/share/create", { UserId: dataUserId, RequestId: requestId })
+            .then(() => {
+                // setLoading(true);
+                openNotification('topRight', 'Success');
+            })
+            .catch((error) => {
+                console.log('error', error);
+                // setLoading(true);
+                // setErrorMessage(error.response.data.Message);
+                openNotification('topRight', error.response.data.Message);
+            });
         setIsModalOpenShare(false);
     }
 
@@ -118,8 +157,8 @@ function MenuRequest(props: any): JSX.Element {
                     navigate("/request/carbooking/detail/" + requestId);
                 })
                 .catch((e) => {
-                    setErrorMessage(e.response.data.Message);
-                    openNotification('topRight');
+                    // setErrorMessage(e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message);
                 })
         }
         putAction();
@@ -153,8 +192,8 @@ function MenuRequest(props: any): JSX.Element {
                     navigate("/request/carbooking/detail/" + requestId);
                 })
                 .catch((e) => {
-                    setErrorMessage(e.response.data.Message);
-                    openNotification('topRight');
+                    // setErrorMessage(e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message);
                 })
         }
         putAction();
@@ -190,15 +229,25 @@ function MenuRequest(props: any): JSX.Element {
     //     },
     // ];
 
-    const openNotification = (placement: NotificationPlacement) => {
-        notification.info({
-            message: <strong>Failed action</strong>,
-            description: errorMessage,
-            placement,
-            icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+    const openNotification = (placement: NotificationPlacement, msg: string) => {
+        if (msg !== 'Success') {
+            notification.info({
+                message: <strong>Failed action</strong>,
+                description: msg,
+                placement,
+                icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+            });
+        } else {
+            notification.info({
+                message: <strong>Successfull</strong>,
+                description: 'Action successfully',
+                placement,
+                icon: <CheckCircleFilled style={{ color: 'green' }} />,
 
-        });
-    };
+            });
+
+        };
+    }
     const downloadFilePdf = async () => {
         window.open(`http://localhost:63642/api/file/pdf-request/${requestId}`)
     }
@@ -206,6 +255,7 @@ function MenuRequest(props: any): JSX.Element {
     const handleSelectChange = (value: string) => {
         const temporaryList = { ...selectedApprovers, value };
         setSelectedApprovers(temporaryList);
+        setDataUserId((value));
     }
 
     const handleSearch = (inputValue: string) => {
@@ -213,16 +263,22 @@ function MenuRequest(props: any): JSX.Element {
     };
 
     const filteredDataApprover = () => {
-        if (dataApprover.length > 0) {
-            return dataApprover.filter(
-                (approver) =>
-                    approver.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    approver.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    approver.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-            )
+        if (dataDepartmentMember && dataDepartmentMember.length > 0) {
+            return dataDepartmentMember.filter(
+                (departmentMember) =>
+                    departmentMember.User.Id !== dataUserId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+
+                    ))
         }
         else return [];
     };
+
+
+
+    console.log(dataDepartmentMember);
 
     return (
         <div>
@@ -263,13 +319,14 @@ function MenuRequest(props: any): JSX.Element {
                         filterOption={false}
                         onSearch={handleSearch}
                         className='fixed-width-object'
+                        defaultValue={'--Select a User--'}
                     >
                         {filteredDataApprover().map((approver) => (
-                            <Option key={approver.Id} value={approver.Id}>
+                            <Option key={approver.Id} value={approver.User.Id}>
                                 <div>
-                                    <span>{approver.FullName} </span>
-                                    <span>{approver.Email} </span>
-                                    <span>{approver.JobTitle} </span>
+                                    <span>{approver.User.FullName} </span>
+                                    <span>{approver.User.Email} </span>
+                                    <span>{approver.User.JobTitle} </span>
                                 </div>
                             </Option>
                         ))}
