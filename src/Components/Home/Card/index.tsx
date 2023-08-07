@@ -1,4 +1,4 @@
-import { Card, Col, Row } from "antd";
+import { Card } from "antd";
 import "./CardContent.css";
 
 interface propsCardContent {

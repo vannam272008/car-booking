@@ -7,6 +7,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import request from "../../../Utils/request";
 import { RcFile } from 'antd/es/upload';
+import { useTranslation } from 'react-i18next';
 
 interface Department {
     Name: string;
@@ -24,6 +25,8 @@ interface DepartmentMember {
 }
 
 function AddRequest(): JSX.Element {
+
+    const { t } = useTranslation();
 
     //set layout
     const profile = false;
@@ -149,11 +152,20 @@ function AddRequest(): JSX.Element {
     };
 
     //set User values ​​for formdata
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
+    const handleSelectChange = (value: any, field: string) => {
+
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     //set Usage time from, Usage time to, Pick time values ​​for formdata
@@ -177,9 +189,11 @@ function AddRequest(): JSX.Element {
         if (dataDepartmentMember && dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    )
             )
         }
         else return [];
@@ -193,7 +207,7 @@ function AddRequest(): JSX.Element {
         }
     };
 
-    console.log('formdata', formData);
+    // console.log('formdata', formData);
 
     return (
         <RequestLayout profile={profile}>
@@ -207,7 +221,7 @@ function AddRequest(): JSX.Element {
                                 <Alert
                                     style={{ width: '100%', textAlign: 'center' }}
                                     message="Loading..."
-                                    description="There are some issues happening, please wait a moment or you can try reloading the page"
+                                    description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                                     type="info"
                                 />
                             </Spin>)
@@ -215,7 +229,7 @@ function AddRequest(): JSX.Element {
                             (
                                 <>
                                     <div className='table-request'>
-                                        <h2 className='title-request'>CAR BOOKING REQUEST</h2>
+                                        <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
                                         <div className='table-content'>
                                             <Form
                                                 className='form-add-request'
@@ -224,12 +238,12 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Applicant*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Applicant"
+                                                            label={t('Applicant')}
                                                             name="SenderId"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: 'Applicant is require'
+                                                                    message: t('Applicant is require')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -241,12 +255,12 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Department*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Dapartment"
+                                                            label={t('department')}
                                                             name="DepartmentId"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: 'Select something!',
+                                                                    message: t('Select something!'),
                                                                 },
                                                             ]}
                                                             initialValue={initialValueDepartment}
@@ -262,31 +276,40 @@ function AddRequest(): JSX.Element {
                                                                     option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                                 }
                                                             >
-                                                                {dataDepartment.map((department) => (
-                                                                    <Option key={department.Id} value={department.Id} >
-                                                                        {department.Name}
-                                                                    </Option>
-                                                                ))}
+                                                                {dataDepartment
+                                                                    .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                                    .map((filteredDepartment) => (
+                                                                        <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                            {filteredDepartment.Name}
+                                                                        </Option>
+                                                                    ))}
+                                                                {/* {dataDepartment.map((department) => (
+                                                                <Option key={department.Id} value={department.Id} >
+                                                                    {department.Name}
+                                                                </Option>
+                                                            ))} */}
                                                             </Select>
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request User*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="User"
+                                                            label={t('user')}
                                                             name="ReceiverId"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: 'Select something!',
+                                                                    message: t('Select something!'),
                                                                 },
                                                             ]}
                                                             initialValue={initialValueReceiver}
                                                             labelCol={{ span: 24 }}
+                                                            className={initialValueReceiver === 'No Data' ? 'no-data' : ''}
                                                         >
                                                             <Select
+                                                                labelInValue
                                                                 virtual={false}
-                                                                value={formData.SenderId}
+                                                                value={formData.ReceiverId}
                                                                 onChange={(value) => handleSelectChange(value, 'ReceiverId')}
                                                                 showSearch
                                                                 optionFilterProp="children"
@@ -308,16 +331,16 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Mobile*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Mobile"
+                                                            label={t('mobile')}
                                                             name="Mobile"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: 'Mobile is required',
+                                                                    message: t('Mobile is required'),
                                                                 },
                                                                 {
                                                                     pattern: /^[0-9]*$/,
-                                                                    message: 'Mobile must be a number',
+                                                                    message: t('Mobile must be a number'),
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -336,11 +359,11 @@ function AddRequest(): JSX.Element {
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Cost Center" is required'
+                                                                    message: t('Cost Center is required')
                                                                 },
                                                                 {
                                                                     pattern: /^[0-9]*$/,
-                                                                    message: 'Cost Center must be a number',
+                                                                    message: t('Cost Center must be a number'),
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -352,20 +375,20 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Total passengers*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Total passengers"
+                                                            label={t('totalpassengers')}
                                                             name="Totalpassengers"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Total passengers" is required'
+                                                                    message: t('totalpassengers')
                                                                 },
                                                                 {
                                                                     pattern: /^[0-9]*$/,
-                                                                    message: 'Total passengers must be a number',
+                                                                    message: t('Total passengers must be a number'),
                                                                 },
                                                             ]}
-                                                            labelCol={{ span: 24 }}
                                                             initialValue={initialValueTotalPassengers}
+                                                            labelCol={{ span: 24 }}
                                                         >
                                                             <Input maxLength={9} onKeyPress={handleKeyPress} type='text' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                         </Form.Item>
@@ -373,12 +396,12 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Usage time from*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Usage time from"
+                                                            label={t('from')}
                                                             name="UsageFrom"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Usage time from" is required'
+                                                                    message: t('Usage time from is required')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -389,19 +412,19 @@ function AddRequest(): JSX.Element {
                                                                 value={dayjs(formData.UsageFrom)}
                                                                 onChange={(value) => handleDatePicker(value, 'UsageFrom')}
                                                                 showTime
-                                                                placeholder='From date time'
+                                                                placeholder={t('from')}
                                                             />
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Usage time to*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Usage time to"
+                                                            label={t('to')}
                                                             name="UsageTo"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Usage time to" is required'
+                                                                    message: t('Usage time to is required')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -412,7 +435,7 @@ function AddRequest(): JSX.Element {
                                                                 value={dayjs(formData.UsageTo)}
                                                                 onChange={(value) => handleDatePicker(value, 'UsageTo')}
                                                                 showTime
-                                                                placeholder='To date time'
+                                                                placeholder={t('to')}
                                                             />
                                                         </Form.Item>
                                                     </Col>
@@ -421,12 +444,12 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Pick time*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Pick time"
+                                                            label={t('Pick time')}
                                                             name="Picktime"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Pick time" is required'
+                                                                    message: t('Pick time is required')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -437,19 +460,19 @@ function AddRequest(): JSX.Element {
                                                                 value={dayjs(formData.PickTime)}
                                                                 onChange={(value) => handleDatePicker(value, 'PickTime')}
                                                                 showTime
-                                                                placeholder='Pick time'
+                                                                placeholder={t('Pick time')}
                                                             />
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Pick location*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Pick location"
+                                                            label={t('picklocation')}
                                                             name="Picklocation"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Pick location" is required'
+                                                                    message: t('Pick location is required')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
@@ -461,12 +484,12 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Destination */}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Destination "
+                                                            label={t('destination')}
                                                             name="Destination"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Destination" is required'
+                                                                    message: t('Destination is required')
 
                                                                 },
                                                             ]}
@@ -479,18 +502,18 @@ function AddRequest(): JSX.Element {
                                                     {/*Request Reason*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
-                                                            label="Reason"
+                                                            label={t('reason')}
                                                             name="Reason"
                                                             rules={[
                                                                 {
                                                                     required: true,
-                                                                    message: ' "Reason" is required'
+                                                                    message: t('Reason is required')
                                                                 },
                                                             ]}
                                                             labelCol={{ span: 24 }}
                                                             initialValue={initialvalueReason}
                                                         >
-                                                            <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
+                                                            <Input type='text' name="Reason" value={formData.Reason} onChange={handleInputChange}></Input>
                                                         </Form.Item>
                                                     </Col>
                                                 </Row>
@@ -499,10 +522,7 @@ function AddRequest(): JSX.Element {
                                     </div>
                                     <SendApprover departmentId={formData.DepartmentId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                                 </>
-
-
                             )}
-
                     </div>
                 </div>
             )

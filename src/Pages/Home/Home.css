@@ -55,6 +55,8 @@
 }
 
 .content-col {
+    min-width: 170px;
+    max-width: 195px;
     display: flex;
     justify-content: center;
     padding-bottom: 12px;
@@ -149,8 +151,8 @@
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
-@media only screen and (min-width: 1240px) {
+@media only screen and (min-width: 1200px) {
     .content {
-        margin: 100px 150px;
+        margin: 100px 100px;
     }
 }

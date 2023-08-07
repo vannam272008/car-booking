@@ -1,7 +1,7 @@
 import { Col, Layout, Row, Button, Drawer, message, Badge } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import request from "../../Utils/request";
 import opus_logo from "../../assets/opus_logo.png";
@@ -20,18 +20,18 @@ interface LogoutValues {
 
 const AppHeader = (props: any) => {
     const userID = localStorage.getItem("Id");
-    const { setTab, setStatus } = props;
+    const { setTab, setStatus, userInfo } = props;
     const avatarDefault = require('../../public/images/avatarDefault.png');
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
     const [openProfile, setOpenProfile] = useState(false);
-    const [userLoginInfo, setUserLoginInfo] = useState({
-        FullName: "",
-        AvatarPath: "",
-        Email: ""
-    });
+    // const [userLoginInfo, setUserLoginInfo] = useState({
+    //     FullName: "",
+    //     AvatarPath: "",
+    //     Email: ""
+    // });
     const navigate = useNavigate();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const handlePathName = () => {
         setPathName(window.location.pathname);
@@ -56,21 +56,21 @@ const AppHeader = (props: any) => {
         setOpenHelp(!openHelp);
     };
 
-    useEffect(() => {
-        if (userID !== null) {
-            request.get("/user/profile/" + userID)
-                .then((res) => {
-                    setUserLoginInfo({
-                        FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
-                        AvatarPath: res.data.Data.AvatarPath,
-                        Email: res.data.Data.Email
-                    })
-                })
-                .catch((e) => {
-                    console.log(e.response.Data);
-                })
-        }
-    }, [userID])
+    // useEffect(() => {
+    //     if (userID !== null) {
+    //         request.get("/user/profile/" + userID)
+    //             .then((res) => {
+    //                 setUserLoginInfo({
+    //                     FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
+    //                     AvatarPath: res.data.Data.AvatarPath,
+    //                     Email: res.data.Data.Email
+    //                 })
+    //             })
+    //             .catch((e) => {
+    //                 console.log(e.response.Data);
+    //             })
+    //     }
+    // }, [userID])
 
     const handleLogout =
         (values: LogoutValues) => {
@@ -106,7 +106,7 @@ const AppHeader = (props: any) => {
                 <Col span={3} className="col-logo">
 
                     <div onClick={handlePathName}>
-                        <NavLink to="/request/carbooking" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
@@ -128,20 +128,20 @@ const AppHeader = (props: any) => {
                             {/* <div style={contentStyle}> */}
                             {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
                             <div className="title-dropdown">
-                                <span>Help</span>
+                                <span>{t('help')}</span>
                                 <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
                             </div>
                             <div className="content-dropdown">
                                 <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
                                 <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
-                                    <p>Introduction</p>
+                                    <p>{t('introduction')}</p>
                                 </NavLink>
                                 <Feedback />
                                 <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
-                                    <p>Open ticket</p>
+                                    <p>{t('openticket')}</p>
                                 </NavLink>
                                 <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
-                                    <p>Help</p>
+                                    <p>{t('help')}</p>
                                 </NavLink>
                             </div>
                             {/* </div> */}
@@ -169,17 +169,17 @@ const AppHeader = (props: any) => {
                             </div>
                             <div className="content-dropdown">
                                 <div className="account-info">
-                                    {userLoginInfo.AvatarPath
+                                    {userInfo.AvatarPath
                                         ? <img
-                                            src={`http://localhost:63642/${userLoginInfo.AvatarPath}`}
+                                            src={`http://localhost:63642/${userInfo.AvatarPath}`}
                                             alt="avatar"></img>
                                         : <img
                                             src={String(avatarDefault)}
                                             alt="avatar"></img>
                                     }
-                                    <span className="info-name">{userLoginInfo.FullName}</span>
+                                    <span className="info-name">{userInfo.FullName}</span>
                                     <br />
-                                    <span className="info-email">{userLoginInfo.Email}</span>
+                                    <span className="info-email">{userInfo.Email}</span>
                                 </div>
                                 <div className="content-info">
                                     <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
@@ -202,7 +202,8 @@ const AppHeader = (props: any) => {
 }
 const mapStateToProps = (state: RootState) => ({
     tab: state.request.tab,
-    status: state.request.status
+    status: state.request.status,
+    userInfo: state.request.userInfo
 });
 
 const mapDispatchToProps = { setTab, setStatus };

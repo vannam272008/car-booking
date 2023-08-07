@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination, Checkbox, Row, Col } from 'antd';
+import { Table, Button, Modal, Form, Typography, Input, message, Select, Pagination } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Department, DepartmentFormProps, ByIdDepartment } from '../Utils/interfaces';
+import { Department, DepartmentFormProps } from '../Utils/interfaces';
 import * as util from '../Utils'
 import axios from 'axios';
 import './departmentManage.scss'
-import { ACTION_HANDLE, resetDepartment } from '../Utils';
-import request from '../../../Utils/request';
+import { resetDepartment } from '../Utils';
+import { useTranslation } from 'react-i18next';
 
 const DepartmentManage: React.FC = () => {
+  const {t} = useTranslation();
 
   message.config(util.messageConfig)
   const columns = [
@@ -18,40 +19,40 @@ const DepartmentManage: React.FC = () => {
       key: 'Id',
     },
     {
-      title: 'Name',
+      title: t('Name'),
       dataIndex: 'Name',
       key: 'Name',
     },
     {
-      title: 'Contact Info',
+      title: t('Contact Info'),
       dataIndex: 'ContactInfo',
       key: 'ContactInfo',
     },
     {
-      title: 'Code',
+      title: t('Code'),
       dataIndex: 'Code',
       key: 'Code',
     },
     {
-      title: 'Under Department',
+      title: t('Under Department'),
       dataIndex: 'UnderDepartment',
       key: 'UnderDepartment',
     },
     {
-      title: 'Description',
+      title: t('Description'),
       dataIndex: 'Description',
       key: 'Description',
     },
     {
-      title: 'Actions',
+      title: t('Actions'),
       key: 'actions',
       render: (record: Department) => (
         <>
           <Button type="link" onClick={() => handleEdit(record)}>
-            Edit
+            {t('Edit')}
           </Button>
           <Button type="link" onClick={() => handleDelete(record.Id)}>
-            Delete
+            {t('delete')}
           </Button>
         </>
       ),
@@ -60,30 +61,19 @@ const DepartmentManage: React.FC = () => {
 
   const [departments, setDepartments] = useState<Department[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedDepartment, setSelectedDepartment] = useState<Department>(resetDepartment);
+  const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<any>();
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const limit = 5;
 
   const getDepartments = async () => {
     let res = await axios.get(`http://localhost:63642/api/department/all?page=${currentPage}&limit=${limit}`)
     console.log('>>check res department:', res)
     if (res.data.Success) {
       setTotal(res.data.Data.TotalPage);
-      let data: Department[] = res.data.Data.ListData
-      data.forEach(d => {
-        d.ManEm = false
-        d.SupEm = false
-        request.get(`/departmentMember/manager/${d.Id}`).then(res => {
-          d.Manager = res.data.Data
-        })
-        request.get(`/departmentMember/supervisors/${d.Id}`).then(res => {
-          d.Supervisors = res.data.Data ? res.data.Data : []
-        })
-      });
-      setDepartments(data)
+      setDepartments(res.data.Data.ListData)
     } else {
       setDepartments([])
     }
@@ -95,7 +85,7 @@ const DepartmentManage: React.FC = () => {
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
-    setSelectedDepartment(resetDepartment);
+    setSelectedDepartment(null);
     setIsModalVisible(true);
   };
 
@@ -116,12 +106,8 @@ const DepartmentManage: React.FC = () => {
     }
   };
 
-  const handlePageChange = (page: number, pageSize: number) => {
-    if (pageSize !== limit) {
-      setLimit(pageSize);
-      setCurrentPage(1);
-    } else
-      setCurrentPage(page);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleSave = async (department: Department) => {
@@ -129,36 +115,34 @@ const DepartmentManage: React.FC = () => {
     console.log('>>selected department:', selectedDepartment);
 
     if (action === util.ACTION_HANDLE.ADD) {
-      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error('Missing title !')
+      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error(t('Missing title !'))
       let res = await axios.post('http://localhost:63642/api/department/add', department)
       if (res.data.Success) {
-        message.success('Add success !')
-        setSelectedDepartment(resetDepartment)
+        message.success(t('Add success !'))
         setIsModalVisible(false)
         getDepartments()
       } else {
         message.error(res.data.Message)
       }
     } else if (action === util.ACTION_HANDLE.EDIT) {
-      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error('Missing title !')
+      if (!department.Name || !department.Code || !department.ContactInfo || !department.Description) return message.error(t('Missing title !'))
 
       let res = await axios.put(`http://localhost:63642/api/department/edit/${department.Id}`, department)
       if (res.data.Success) {
-        message.success('Edit success !')
-        setSelectedDepartment(resetDepartment)
+        message.success(t('Edit success !'))
         setIsModalVisible(false)
         getDepartments()
       } else {
         message.error(res.data.Message)
       }
     }
+    setSelectedDepartment(null)
   }
-
 
   return (
     <div className='manage-department-content'>
       <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add Department
+        {t('Add Department')}
       </Button>
 
       <Table dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
@@ -179,7 +163,7 @@ const DepartmentManage: React.FC = () => {
       />
 
       <Modal
-        title={action === ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit Department</Typography.Title> : <Typography.Title level={2}>Add Department</Typography.Title>}
+        title={selectedDepartment ? <Typography.Title level={2}>{t('Edit Department')}</Typography.Title> : <Typography.Title level={2}>{t('Add Department')}</Typography.Title>}
         open={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
@@ -189,22 +173,21 @@ const DepartmentManage: React.FC = () => {
         footer={null}
         style={{ display: 'flex', justifyContent: 'center' }}
       >
-        <DepartmentForm selectedDepartment={selectedDepartment} setDepartment={setSelectedDepartment} onSave={handleSave} form={form} action={action} />
+        <DepartmentForm initialValues={selectedDepartment ? selectedDepartment : resetDepartment} onSave={handleSave} form={form} />
       </Modal>
     </div>
   );
 };
 
-const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, setDepartment, onSave, form, action }) => {
+const DepartmentForm: React.FC<DepartmentFormProps> = ({ initialValues, onSave, form }) => {
+  const {t} = useTranslation();
   const { Option } = Select;
   const [departmentForDropDown, setDepartmentForDropDown] = useState<Department[]>([]);
-  const [memberDpt, setMemberDpt] = useState<ByIdDepartment[]>([]);
-
   const getDepartmentForDropDown = async () => {
     let res = await axios.get('http://localhost:63642/api/department/all?page=1&limit=200')
     console.log('>>check res department props:', res)
-    console.log('selecselectedDepartment:', selectedDepartment);
-    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !== selectedDepartment.Id)
+    console.log('initialValues:', initialValues);
+    var listForDropDown = res.data.Data.ListData.filter((d: Department) => d.Id !== initialValues.Id)
     console.log('>>check listForDropDown props:', listForDropDown)
 
     res.data.Success ? setDepartmentForDropDown(listForDropDown) : setDepartmentForDropDown([])
@@ -214,21 +197,10 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     console.log('useEffect reset fields run');
     getDepartmentForDropDown()
     form.resetFields()
-    if (selectedDepartment.Id && selectedDepartment.Id.length > 0) {
-      request.get(`/departmentMember/position?departmentId=${selectedDepartment.Id}`).then(res => {
-        console.log('>>now:', res.data);
-        let data: ByIdDepartment[] = res.data.Data
-        setMemberDpt(data)
-      }).catch(e => {
-        console.log(e);
-      })
-    }
-  }, [selectedDepartment])
+  }, [initialValues])
 
   const handleSubmit = () => {
     form.validateFields().then((values) => {
-      setDepartment(values)
-
       onSave(values as Department);
     });
   };
@@ -238,27 +210,24 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
     console.log('Form resetted');
   }
 
-
-  console.log('memberDpt check:', memberDpt);
-
   return (
-    <Form form={form} initialValues={selectedDepartment} layout="horizontal" style={{ minWidth: '450px', marginTop: '24px' }}>
+    <Form form={form} initialValues={initialValues} layout="horizontal" style={{ minWidth: '450px', marginTop: '24px' }}>
       <Form.Item label="Id" name="Id" hidden>
         <Input />
       </Form.Item>
-      <Form.Item label="Name" name="Name" rules={[{ required: true, message: "Please enter department's name !" }]}>
+      <Form.Item label={t('Name')} name="Name">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="ContactInfo" name="ContactInfo" rules={[{ required: true, message: "Please enter department's contact information !" }]}>
+      <Form.Item label={t('Contact Info')} name="ContactInfo">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="Code" name="Code" rules={[{ required: true, message: "Please enter department's code !" }]}>
+      <Form.Item label={t('Code')} name="Code">
         <Input className="right-80" />
       </Form.Item>
-      <Form.Item label="UnderDepartment" name="UnderDepartment">
+      <Form.Item label={t('Under Department')} name="UnderDepartment">
         <Select className="right-80">
           <Option value={''}>
-            None
+            {t('None')}
           </Option>
           {departmentForDropDown.map((d) => (
             <Option key={d.Id}>
@@ -267,58 +236,20 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
           ))}
         </Select>
       </Form.Item>
-      <Form.Item label="Description" name="Description" rules={[{ required: true, message: "Please enter department's description !" }]}>
+      <Form.Item label={t('Description')} name="Description">
         <Input className="right-80" />
       </Form.Item>
-      {action === ACTION_HANDLE.EDIT &&
-        <>
-          <Form.Item label="Manager" name="Manager">
-            <Select className="right-80">
-              {/* <Option value={''}>
-              None
-            </Option> */}
-              {memberDpt.map((d) => (
-                <Option key={d.User.Id}>
-                  {d.User.FullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Form.Item label="Supervisor" name="Supervisors">
-            <Select className="right-80" mode='multiple' maxTagCount={3}>
-              {memberDpt.map((d) => (
-                <Option key={d.User.Id}>
-                  {d.User.FullName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-          <Row gutter={12}>
-            <Col span={12}>
-              <Form.Item label="Manager & Employee" valuePropName="checked" name="ManEm">
-                <Checkbox value={true} />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label="Supervisor & Employee" valuePropName="checked" name="SupEm">
-                <Checkbox value={true}/>
-              </Form.Item>
-            </Col>
-          </Row>
-          </>
-      }
-
-          {/* save */}
-          <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px', marginTop: '20px' }}>
-            <Button onClick={handleFormReset} style={{ marginRight: '12px' }}>
-              Reset
-            </Button>
-            <Button type="primary" onClick={handleSubmit} style={{ marginLeft: '12px' }}>
-              Save
-            </Button>
-          </Form.Item>
-        </Form>
+      {/* save */}
+      <Form.Item style={{ display: 'flex', justifyContent: 'center', gap: '30px' }}>
+        <Button type="primary" onClick={handleSubmit} style={{ marginRight: '12px' }}>
+          {t('Save')}
+        </Button>
+        <Button onClick={handleFormReset} style={{ marginLeft: '12px' }}>
+          {t('Reset')}
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }
 
-      export default DepartmentManage;
+export default DepartmentManage;

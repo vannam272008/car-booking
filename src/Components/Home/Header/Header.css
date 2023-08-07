@@ -28,9 +28,21 @@
     top: -100px;
 }
 
+.header-homepage .img-avatar {
+    margin-left: 10px;
+    float: left;
+    width: 48px;
+    height: 48px;
+}
+
 .header-homepage .img-flat {
     margin-right: 5px;
     margin-bottom: 3px;
+}
+
+.header-homepage .ant-dropdown .ant-dropdown-menu {
+    min-width: 120px;
+    max-width: 120px;
 }
 
 .logo-name {

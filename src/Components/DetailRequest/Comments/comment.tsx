@@ -7,6 +7,7 @@ import { useParams } from 'react-router';
 import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 interface CommentItem {
     Account: {
@@ -31,6 +32,8 @@ interface NewComment {
 function Comment(): JSX.Element {
 
     // const [detailData, setDetailData] = useState<any>({});
+
+    const {t} = useTranslation();
 
     const { requestId } = useParams();
     const [showUpload, setShowUpload] = useState(false);
@@ -213,14 +216,14 @@ function Comment(): JSX.Element {
                 <Alert
                     style={{ width: '100%', textAlign: 'center' }}
                     message="Loading..."
-                    description="There are some issues happening, please wait a moment or you can try reloading the page"
+                    description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                     type="info"
                 />
             </Spin>)
                 : <>
                     <div className='title-comment'>
                         <CommentOutlined className='icon-comment' />
-                        <span> Comments</span>
+                        <span> {t('Comments')}</span>
                     </div>
                     <div>
                         <Row className='row-comment-box'>
@@ -230,7 +233,7 @@ function Comment(): JSX.Element {
                             <Col span={6}>
                                 <Input.TextArea
                                     className='input-comment'
-                                    placeholder='Write a comment...'
+                                    placeholder={t('Write a comment...')}
                                     value={newComment.comment}
                                     onChange={(e) =>
                                         setNewComment((comment) => ({
@@ -244,7 +247,7 @@ function Comment(): JSX.Element {
                                 <Button className='btn-comment' type="primary"
                                     onClick={handlePostComment}
                                     disabled={newComment.comment === ""}
-                                >Save</Button>
+                                >{t('Save')}</Button>
                             </Col>
                         </Row>
                         <Upload className='upload-comment'
@@ -254,8 +257,8 @@ function Comment(): JSX.Element {
                             accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                             onRemove={handleRemoveFile}
                         >
-                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>Add attachments</Button>
-                            <span> (Maximum 20MB per file)</span>
+                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>{t('Add attachments')}</Button>
+                            <span> {t('(Maximum 20MB per file)')}</span>
                         </Upload>
                     </div>
 
@@ -266,8 +269,8 @@ function Comment(): JSX.Element {
                                     <Avatar size={40} icon={<UserOutlined />} />
                                 </Col>
                                 <Col span={18}>
-                                    <span className="comment-author">{comment.Account ? comment.Account.FullName : "No Name"}</span>
-                                    <span className="comment-date">{comment.Created ? comment.Created : "No Data"}</span>
+                                    <span className="comment-author">{comment.Account ? comment.Account.FullName : t('No Name')}</span>
+                                    <span className="comment-date">{comment.Created ? comment.Created : t('No Data')}</span>
                                     <div className="comment-content">
                                         <span>{comment.Content?.includes("</br>") ? comment.Content?.substring(0, comment.Content.indexOf("</br>")) : comment.Content}</span>
                                         <br></br>

@@ -31,8 +31,7 @@ function getItem(
 }
 
 const AppSider = (props: any) => {
-    const userID = localStorage.getItem("Id")
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { tab, setTab, setStatus } = props
     const items: MenuProps['items'] = [
@@ -56,7 +55,7 @@ const AppSider = (props: any) => {
 
     const profileItems: MenuProps['items'] = [
 
-        getItem('Setting', 'setting', <SettingOutlined />),
+        getItem(t('Setting'), 'setting', <SettingOutlined />),
 
     ];
 

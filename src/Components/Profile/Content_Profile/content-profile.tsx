@@ -22,8 +22,11 @@ import Family from "../Family_Tab/family";
 import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 import { API } from "../interface";
+import { useTranslation } from "react-i18next";
+import { info } from "console";
 
 const ContentProfile: React.FC = () => {
+  const { t } = useTranslation();
   const jwt_admin = localStorage.getItem("Token");
 
   const uploadConfig = {
@@ -118,7 +121,7 @@ const ContentProfile: React.FC = () => {
   };
   const handleNotSave = () => {
     Modal.confirm({
-      title: "Are you sure you want to cancel this update session ?",
+      title: t('Are you sure you want to cancel this update session ?'),
       width: 1000,
       centered: true,
       onOk() {
@@ -141,11 +144,11 @@ const ContentProfile: React.FC = () => {
   const beforeUpload = (file: File) => {
     const isImage = file.type.includes("image/");
     if (!isImage) {
-      message.error("You can only upload image files!");
+      message.error(t('You can only upload image files!'));
     }
     const filesize = file.size / 1024 / 1024 < 5;
     if (!filesize) {
-      message.error("Image must smaller than 5MB ");
+      message.error(t('Image must smaller than 5MB '));
     }
     return isImage && filesize;
   };
@@ -167,7 +170,7 @@ const ContentProfile: React.FC = () => {
     const res = await request.putForm(endpoint, infoAPI, config);
 
     if (res.data.Success) {
-      message.success("Edit success !");
+      message.success(t('Edit success !'));
     } else {
       message.error(res.data.Message);
     }
@@ -267,7 +270,7 @@ const ContentProfile: React.FC = () => {
   let label: TabsProps["items"] = [
     {
       key: "1",
-      label: <strong>Overview</strong>,
+      label: <strong>{t('Overview')}</strong>,
       children: (
         <Overview
           infoAPI={infoAPI}
@@ -278,7 +281,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "2",
-      label: <strong>Additional</strong>,
+      label: <strong>{t('Additional')}</strong>,
       children: (
         <Additional
           infoAPI={infoAPI}
@@ -289,7 +292,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "3",
-      label: <strong>Family</strong>,
+      label: <strong>{t('Family')}</strong>,
       children: (
         <Family
           infoAPI={infoAPI}
@@ -300,7 +303,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "4",
-      label: <strong>Signature</strong>,
+      label: <strong>{t('Signature')}</strong>,
       children: (
         <Signature
           isEditing={isEditing}
@@ -323,7 +326,7 @@ const ContentProfile: React.FC = () => {
               }}
             >
               <SaveOutlined style={{ fontSize: "35px" }} />
-              Save
+              {t('Save')}
             </Button>
             <Button
               className="btn"
@@ -335,7 +338,7 @@ const ContentProfile: React.FC = () => {
                   fontSize: "35px",
                 }}
               />
-              Return
+              {t('return')}
             </Button>
           </>
         ) : (
@@ -349,7 +352,7 @@ const ContentProfile: React.FC = () => {
                 fontSize: "35px",
               }}
             />
-            Return
+            {t('return')}
           </Button>
         )}
       </div>
@@ -397,9 +400,8 @@ const ContentProfile: React.FC = () => {
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 icon={<UserOutlined />}
-                src={`http://localhost:63642/${
-                  infoAPI.AvatarPath
-                }?${Date.now()}`}
+                src={`http://localhost:63642/${infoAPI.AvatarPath
+                  }?${Date.now()}`}
               />
             )}
             <div className="Upload-Avatar">

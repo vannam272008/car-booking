@@ -4,6 +4,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { Input, DatePicker, Typography, Table } from "antd";
 import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
 import { AdditionalProps } from "../interface";
+import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 
@@ -12,6 +13,7 @@ const Additional: React.FC<AdditionalProps> = ({
   isEditing,
   setInfoAPI,
 }) => {
+  const {t} = useTranslation();
   const [edit_contract, setEdit_Contract] = useState(false);
 
   const handlestart_date_maternity_leave = (
@@ -65,31 +67,31 @@ const Additional: React.FC<AdditionalProps> = ({
 
   const columns_contract = [
     {
-      title: "Contract type",
+      title: t('Contract type'),
       dataIndex: "Contract_type",
     },
     {
-      title: "From",
+      title: t('from'),
       dataIndex: "From",
     },
     {
-      title: "To",
+      title: t('to'),
       dataIndex: "To",
     },
     {
-      title: "Signing date",
+      title: t('Signing date'),
       dataIndex: "Signing_date",
     },
     {
-      title: "Subject",
+      title: t('Subject'),
       dataIndex: "Subject",
     },
     {
-      title: "Department",
+      title: t('department'),
       dataIndex: "Department",
     },
     {
-      title: "Note",
+      title: t('Note'),
       dataIndex: "Note",
     },
     {
@@ -106,10 +108,10 @@ const Additional: React.FC<AdditionalProps> = ({
 
   let dataSource_additional = [
     {
-      additional_title: "Nation",
+      additional_title: t('Nation'),
       info: isEditing ? (
         <Input
-          placeholder="Nation"
+          placeholder={t('Nation')}
           value={infoAPI.Nation}
           name="nation"
           onChange={(e) => {
@@ -126,10 +128,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Phone",
+      additional_title: t('Phone'),
       info: isEditing ? (
         <Input
-          placeholder="Phone"
+          placeholder={t('Phone')}
           value={infoAPI.Phone}
           name="phone"
           onChange={(e) => {
@@ -146,10 +148,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "ID card number",
+      additional_title: t('Id card number'),
       info: isEditing ? (
         <Input
-          placeholder="ID card number"
+          placeholder={t('Id card number')}
           value={infoAPI.IdCardNumber}
           name="id_card_number"
           onChange={(e) => {
@@ -166,14 +168,14 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Date of ID card",
+      additional_title: t('Date of ID card'),
       info: isEditing ? (
         infoAPI.DateOfIdCard ? (
           <DatePicker
             value={dayjs(infoAPI.DateOfIdCard)}
             style={{ width: "100%" }}
             onChange={handleDate_Id_card}
-            placeholder="Date of ID card"
+            placeholder={t('Date of ID card')}
             format="YYYY-MM-DD"
           />
         ) : (
@@ -182,7 +184,7 @@ const Additional: React.FC<AdditionalProps> = ({
             value={null}
             style={{ width: "100%" }}
             onChange={handleDate_Id_card}
-            placeholder="Date of ID card"
+            placeholder={t('Date of ID card')}
             format="YYYY-MM-DD"
           />
         )
@@ -193,10 +195,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Health insurance",
+      additional_title: t('Health insurance'),
       info: isEditing ? (
         <Input
-          placeholder="Health insurance"
+          placeholder={t('Health insurance')}
           value={infoAPI.HealthInsurance}
           name="health insurance"
           onChange={(e) => {
@@ -213,14 +215,14 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Starting date",
+      additional_title: t('Starting date'),
       info: isEditing ? (
         infoAPI.StartingDate ? (
           <DatePicker
             value={dayjs(infoAPI.StartingDate)}
             style={{ width: "100%" }}
             onChange={handleDate_start_date}
-            placeholder="Starting date"
+            placeholder={t('Starting date')}
             format="YYYY-MM-DD"
           />
         ) : (
@@ -228,7 +230,7 @@ const Additional: React.FC<AdditionalProps> = ({
             value={null}
             style={{ width: "100%" }}
             onChange={handleDate_start_date}
-            placeholder="Starting date"
+            placeholder={t('Starting date')}
             format="YYYY-MM-DD"
           />
         )
@@ -239,7 +241,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Starting date offical",
+      additional_title: t('Starting date offical'),
       info: isEditing ? (
         infoAPI.StartingDateOfficial ? (
           <DatePicker
@@ -247,7 +249,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handleDate_start_date_official}
-            placeholder="Starting date offical"
+            placeholder={t('Starting date offical')}
             format="YYYY-MM-DD"
           />
         ) : (
@@ -256,7 +258,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handleDate_start_date_official}
-            placeholder="Starting date offical"
+            placeholder={t('Starting date offical')}
             format="YYYY-MM-DD"
           />
         )
@@ -269,7 +271,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Leaving date",
+      additional_title: t('Leaving date'),
       info: isEditing ? (
         infoAPI.LeavingDate ? (
           <DatePicker
@@ -277,7 +279,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handleleaving_date}
-            placeholder="Leaving date"
+            placeholder={t('Leaving date')}
             format="YYYY-MM-DD"
           />
         ) : (
@@ -286,7 +288,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handleleaving_date}
-            placeholder="Leaving date"
+            placeholder={t('Leaving date')}
             format="YYYY-MM-DD"
           />
         )
@@ -297,7 +299,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Start Date Maternity Leave",
+      additional_title: t('Start Date Maternity Leave'),
       info: isEditing ? (
         infoAPI.StartDateMaternityLeave ? (
           <DatePicker
@@ -305,7 +307,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handlestart_date_maternity_leave}
-            placeholder="Start Date Maternity Leave"
+            placeholder={t('Start Date Maternity Leave')}
             format="YYYY-MM-DD"
           />
         ) : (
@@ -314,7 +316,7 @@ const Additional: React.FC<AdditionalProps> = ({
             disabled
             style={{ width: "100%" }}
             onChange={handlestart_date_maternity_leave}
-            placeholder="Start Date Maternity Leave"
+            placeholder={t('Start Date Maternity Leave')}
             format="YYYY-MM-DD"
           />
         )
@@ -327,10 +329,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Note",
+      additional_title: t('Note'),
       info: isEditing ? (
         <Input
-          placeholder="Note"
+          placeholder={t('Note')}
           value={infoAPI.Note}
           name="Note"
           onChange={(e) => {
@@ -351,15 +353,15 @@ const Additional: React.FC<AdditionalProps> = ({
         <strong>
           <br />
           <br />
-          Literacy
+          {t('Literacy')}
         </strong>
       ),
     },
     {
-      additional_title: "Academic level",
+      additional_title: t('Academic level'),
       info: isEditing ? (
         <Input
-          placeholder="Academic level"
+          placeholder={t('Academic level')}
           value={infoAPI.AcademicLevel}
           name="Academic_level"
           onChange={(e) => {
@@ -376,10 +378,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Specialized qualification",
+      additional_title: t('Specialized qualification'),
       info: isEditing ? (
         <Input
-          placeholder="Specialized qualification"
+          placeholder={t('Specialized qualification')}
           value={infoAPI.Qualification}
           name="Specialized qualification"
           onChange={(e) => {
@@ -400,15 +402,15 @@ const Additional: React.FC<AdditionalProps> = ({
         <strong>
           <br />
           <br />
-          Contact Info
+          {t('Contact Info')}
         </strong>
       ),
     },
     {
-      additional_title: "Business phone",
+      additional_title: t('Business phone'),
       info: isEditing ? (
         <Input
-          placeholder="Business phone"
+          placeholder={t('Business phone')}
           value={infoAPI.BusinessPhone}
           name="Business_phone"
           onChange={(e) => {
@@ -425,10 +427,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Home phone",
+      additional_title: t('Home phone'),
       info: isEditing ? (
         <Input
-          placeholder="Home phone"
+          placeholder={t('Home phone')}
           value={infoAPI.HomePhone}
           name="home_phone"
           onChange={(e) => {
@@ -445,10 +447,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Personal email",
+      additional_title: t('Personal email'),
       info: isEditing ? (
         <Input
-          placeholder="Personal email"
+          placeholder={t('Personal email')}
           value={infoAPI.PersonalEmail}
           name="personal_email"
           onChange={(e) => {
@@ -469,15 +471,15 @@ const Additional: React.FC<AdditionalProps> = ({
         <strong>
           <br />
           <br />
-          Bank account
+          {t('Bank account')}
         </strong>
       ),
     },
     {
-      additional_title: "Bank Name",
+      additional_title: t('Bank Name'),
       info: isEditing ? (
         <Input
-          placeholder="Bank Name"
+          placeholder={t('Bank Name')}
           value={infoAPI.BankName}
           name="Bank_Name"
           onChange={(e) => {
@@ -494,10 +496,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Branch number",
+      additional_title: t('Branch number'),
       info: isEditing ? (
         <Input
-          placeholder="Branch number"
+          placeholder={t('Branch number')}
           value={infoAPI.BankBranchNumber}
           name="branch_number"
           onChange={(e) => {
@@ -514,10 +516,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Bank brach name",
+      additional_title: t('Bank brach name'),
       info: isEditing ? (
         <Input
-          placeholder="Bank brach name"
+          placeholder={t('Bank brach name')}
           value={infoAPI.BankBranchName}
           name="Bank brach name"
           onChange={(e) => {
@@ -534,10 +536,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Bank account number",
+      additional_title: t('Bank account number'),
       info: isEditing ? (
         <Input
-          placeholder="Bank account number"
+          placeholder={t('Bank account number')}
           value={infoAPI.BankAccountNumber}
           name="Bank account number"
           onChange={(e) => {
@@ -554,10 +556,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "NoteBank Account Name",
+      additional_title: t('NoteBank Account Name'),
       info: isEditing ? (
         <Input
-          placeholder="NoteBank Account Name"
+          placeholder={t('NoteBank Account Name')}
           value={infoAPI.BankAccountName}
           name="NoteBank_Account_Name"
           onChange={(e) => {
@@ -578,15 +580,15 @@ const Additional: React.FC<AdditionalProps> = ({
         <strong>
           <br />
           <br />
-          Address
+          {t('Address')}
         </strong>
       ),
     },
     {
-      additional_title: "Street",
+      additional_title: t('Street'),
       info: isEditing ? (
         <Input
-          placeholder="Street"
+          placeholder={t('Street')}
           value={infoAPI.Street}
           name="street"
           onChange={(e) => {
@@ -603,10 +605,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Building / flatnumber",
+      additional_title: t('Building / flatnumber'),
       info: isEditing ? (
         <Input
-          placeholder="Building / flatnumber"
+          placeholder={t('Building / flatnumber')}
           value={infoAPI.FlatNumber}
           name="Building_flatnumber"
           onChange={(e) => {
@@ -623,10 +625,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Province / state",
+      additional_title: t('Province / State'),
       info: isEditing ? (
         <Input
-          placeholder="Province / state"
+          placeholder={t('Province / State')}
           value={infoAPI.Province}
           name="Province / state"
           onChange={(e) => {
@@ -643,10 +645,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Postal code",
+      additional_title: t('Postal code'),
       info: isEditing ? (
         <Input
-          placeholder="Postal code"
+          placeholder={t('Postal code')}
           value={infoAPI.PostalCode}
           name="Postal_code"
           onChange={(e) => {
@@ -663,10 +665,10 @@ const Additional: React.FC<AdditionalProps> = ({
       ),
     },
     {
-      additional_title: "Country",
+      additional_title: t('Country'),
       info: isEditing ? (
         <Input
-          placeholder="Country"
+          placeholder={t('Country')}
           value={infoAPI.Country}
           name="country"
           onChange={(e) => {
@@ -709,7 +711,7 @@ const Additional: React.FC<AdditionalProps> = ({
       ></Table>
       <br />
       <br />
-      <Title>Contract</Title>
+      <Title>{t('Contract')}</Title>
       <Table
         pagination={false}
         dataSource={dataSource_contract}

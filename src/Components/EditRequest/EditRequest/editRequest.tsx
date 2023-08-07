@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import EditSendApprover from '../EditSendApprover/editSendApprover';
 import MenuEdit from '../MenuEdit/menuEdit';
 import RequestLayout from '../../RequestLayout/index.jsx';
+import { useTranslation } from 'react-i18next';
 
 interface Department {
     Name: string;
@@ -27,7 +28,10 @@ interface DepartmentMember {
 
 function EditRequest() {
 
+    const {t} = useTranslation();
+
     const { Option } = Select;
+    const profile = false;
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
@@ -37,52 +41,8 @@ function EditRequest() {
     const [listOfUserId, setListOfUserId] = useState<string[]>([]);
     const { requestId } = useParams();
     const [status, setStatus] = useState<string>("")
-    const [activeTabKey, setActiveTabKey] = useState<string>();
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-
-                const departmentEndpoint = "department/all?page=1&limit=100";
-                const departmentRes = await request.get(departmentEndpoint);
-                setDataDepartment(departmentRes.data.Data.ListData);
-
-                const departmentMemberEndpoint = `departmentMember/position?departmentId=${activeTabKey}`;
-                const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data);
-
-                const detailsDataEndpoint = "/request/Id=" + requestId;
-                const detailsDataRes = await request.get(detailsDataEndpoint);
-                setDetailData(detailsDataRes.data.Data);
-                setApplyNote(detailsDataRes.data.Data.ApplyNote);
-                setStatus(detailsDataRes.data.Data.Status);
-
-                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
-                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
-                // console.log(attachmentsDataRes);
-                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
-
-                if (formData.DepartmentId === '' && formData.ReceiverId === '') {
-                    setFormData((prevFormData) => ({
-                        ...prevFormData,
-                        DepartmentId: detailsDataRes.data.Data.Department.Id,
-                        ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
-                    }));
-                }
-
-                setLoading(false);
-            } catch (error) {
-                setLoading(true);
-            }
-        };
-
-        fetchData();
-    }, [activeTabKey]);
-
-
-
     const [detailData, setDetailData] = useState<any>({});
+
     const usageFrom = changeFormatDatePostRequest(detailData.UsageFrom);
     const usageTo = changeFormatDatePostRequest(detailData.UsageTo);
     const pickTime = changeFormatDatePostRequest(detailData.PickTime);
@@ -106,15 +66,64 @@ function EditRequest() {
         files: fileList,
     });
 
+
+    const initiValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
+    const initiValueReceiver = detailData.ReceiverUser && (formData.ReceiverId === detailData.ReceiverUser.Id) ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : (dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data');
+    const initiValueMoblie = formData.Mobile ? formData.Mobile : (detailData.Mobile ? detailData.Mobile : undefined);
+    const initiValueCostCenter = formData.CostCenter ? formData.CostCenter : (detailData.CostCenter ? detailData.CostCenter : undefined);
+    const initiValueTotalpassengers = formData.TotalPassengers ? formData.TotalPassengers : (detailData.TotalPassengers ? detailData.TotalPassengers : undefined);
+    const initiValueReason = formData.Reason ? formData.Reason : (detailData.Reason ? detailData.Reason : undefined);
+    const initiValueDestination = formData.Destination ? formData.Destination : (detailData.Destination ? detailData.Destination : undefined);
+    const initiValuePicklocation = formData.PickLocation ? formData.PickLocation : (detailData.PickLocation ? detailData.PickLocation : undefined);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentEndpoint = "department/all?page=1&limit=100";
+                const departmentRes = await request.get(departmentEndpoint);
+                setDataDepartment(departmentRes.data.Data.ListData);
+
+                const detailsDataEndpoint = "/request/Id=" + requestId;
+                const detailsDataRes = await request.get(detailsDataEndpoint);
+                setDetailData(detailsDataRes.data.Data);
+                setApplyNote(detailsDataRes.data.Data.ApplyNote);
+                setStatus(detailsDataRes.data.Data.Status);
+
+                // const attachmentsDataEndpoint = "/request/attachment/requestId=" + requestId;
+                // const attachmentsDataRes = await request.get(attachmentsDataEndpoint);
+                // console.log(attachmentsDataRes);
+                // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
+
+                console.log(detailsDataRes.data.Data);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    DepartmentId: detailsDataRes.data.Data.Department.Id,
+                    ReceiverId: detailsDataRes.data.Data.ReceiverUser.Id,
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [requestId]);
+
+
     useEffect(() => {
         const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
         const stringNumber = number.toString();
+
+        // console.log('setformdata');
 
         setFormData((prevFormData) => ({
             ...prevFormData,
             files: fileList,
             ApplyNote: applyNote,
-            ListOfUserId: listOfUserId,
             Mobile: detailData.Mobile,
             CostCenter: detailData.CostCenter,
             TotalPassengers: stringNumber,
@@ -127,11 +136,39 @@ function EditRequest() {
             PickTime: pickTime,
             Status: status,
         }));
-    }, [listOfUserId, status, usageFrom, usageTo, pickTime, detailData.SenderUser, fileList, applyNote, detailData.Mobile, detailData.CostCenter, detailData.TotalPassengers, detailData.PickLocation, detailData.Destination, detailData.Reason]);
+    }, [status, usageFrom, usageTo, pickTime, fileList, applyNote, detailData]);
 
     useEffect(() => {
-        setActiveTabKey(detailData.Department && !activeTabKey ? detailData.Department.Id : activeTabKey);
-    }, [detailData.Department, activeTabKey])
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ListOfUserId: listOfUserId,
+        }));
+    }, [listOfUserId]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
+                const departmentMemberRes = await request.get(departmentMemberEndpoint);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+
+                const ReceiverUserId = departmentMemberRes.data.Data.find((value: any) => value.User.Id === detailData.ReceiverUser.Id);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    ReceiverId: ReceiverUserId ? ReceiverUserId.User.Id : (departmentMemberRes.data.Data.length > 0 ? departmentMemberRes.data.Data[0].User.Id : ''),
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [formData.DepartmentId]);
+
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
 
@@ -143,12 +180,19 @@ function EditRequest() {
         }));
     };
 
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
-        setActiveTabKey(value);
+    const handleSelectChange = (value: any, field: string) => {
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -171,13 +215,13 @@ function EditRequest() {
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-            )
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    ))
         }
         else return [];
-
     };
 
     const onChange = (e: RadioChangeEvent) => {
@@ -189,7 +233,6 @@ function EditRequest() {
         return false;
     };
     const handleRemoveFile = (file: UploadFile<any>) => {
-        // Filter out the file to be removed from the fileList
         const updatedFileList = fileList.filter((item) => item.uid !== file.uid);
         setFileList(updatedFileList);
     };
@@ -201,9 +244,7 @@ function EditRequest() {
         }
     };
 
-    const profile = false;
-
-    console.log('formData', formData);
+    // console.log('formData', detailData);
 
     return (
         <RequestLayout profile={profile}>
@@ -216,14 +257,14 @@ function EditRequest() {
                             <Alert
                                 style={{ width: '100%', textAlign: 'center' }}
                                 message="Loading..."
-                                description="There are some issues happening, please wait a moment or you can try reloading the page"
+                                description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                                 type="info"
                             />
                         </Spin>)
                         :
                         (<div className='page-content'>
                             <div className='table-request'>
-                                <h2 className='title-request'>CAR BOOKING REQUEST</h2>
+                                <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
                                 <div className='table-content'>
                                     <Form
                                         className='form-add-request'
@@ -232,12 +273,12 @@ function EditRequest() {
                                             {/*Request Applicant*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Applicant"
+                                                    label={t('Applicant')}
                                                     name="SenderId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Applicant is require'
+                                                            message: t('Applicant is require')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -249,15 +290,15 @@ function EditRequest() {
                                             {/*Request Department*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Dapartment"
+                                                    label={t('department')}
                                                     name="DepartmentId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Select something!',
+                                                            message: t('Select something!'),
                                                         },
                                                     ]}
-                                                    initialValue={detailData.Department ? detailData.Department.Name : undefined}
+                                                    initialValue={initiValueDepartment}
                                                     labelCol={{ span: 24 }}
                                                 >
                                                     <Select
@@ -270,29 +311,38 @@ function EditRequest() {
                                                             option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                         }
                                                     >
-                                                        {dataDepartment.map((department) => (
+                                                        {dataDepartment
+                                                            .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                            .map((filteredDepartment) => (
+                                                                <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                    {filteredDepartment.Name}
+                                                                </Option>
+                                                            ))}
+                                                        {/* {dataDepartment.map((department) => (
                                                             <Option key={department.Id} value={department.Id} >
                                                                 {department.Name}
                                                             </Option>
-                                                        ))}
+                                                        ))} */}
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
                                             {/*Request User*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="User"
+                                                    label={t('user')}
                                                     name="ReceiverId"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Select something!',
+                                                            message: t('Select something!'),
                                                         },
                                                     ]}
-                                                    initialValue={detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : undefined}
+                                                    initialValue={initiValueReceiver}
                                                     labelCol={{ span: 24 }}
+                                                    className={initiValueReceiver === 'No Data' ? 'no-data' : ''}
                                                 >
                                                     <Select
+                                                        labelInValue
                                                         virtual={false}
                                                         value={formData.ReceiverId}
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
@@ -316,20 +366,20 @@ function EditRequest() {
                                             {/*Request Mobile*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Mobile"
+                                                    label={t('mobile')}
                                                     name="Mobile"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: 'Mobile is required',
+                                                            message: t('Mobile is required'),
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Mobile must be a number',
+                                                            message: t('Mobile must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Mobile ? detailData.Mobile : undefined}
+                                                    initialValue={initiValueMoblie}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -344,15 +394,15 @@ function EditRequest() {
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Cost Center" is required'
+                                                            message: t('Cost Center is required')
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Cost Center must be a number',
+                                                            message: t('Cost Center must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
+                                                    initialValue={initiValueCostCenter}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -360,20 +410,20 @@ function EditRequest() {
                                             {/*Request Total passengers*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Total passengers"
+                                                    label={t('totalpassengers')}
                                                     name="Totalpassengers"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Total passengers" is required'
+                                                            message: t('Total passengers is required')
                                                         },
                                                         {
                                                             pattern: /^[0-9]*$/,
-                                                            message: 'Total passengers must be a number',
+                                                            message: t('Total passengers must be a number'),
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
+                                                    initialValue={initiValueTotalpassengers}
                                                 >
                                                     <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -381,12 +431,12 @@ function EditRequest() {
                                             {/*Request Usage time from*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Usage time from"
+                                                    label={t('Usage time from')}
                                                     name="UsageFrom"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Usage time from" is required'
+                                                            message: t('Usage time from is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -397,19 +447,19 @@ function EditRequest() {
                                                         value={dayjs(formData.UsageFrom)}
                                                         onChange={(value) => handleDatePicker(value, 'UsageFrom')}
                                                         showTime
-                                                        placeholder='From date time'
+                                                        placeholder={t('from')}
                                                     />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time to*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Usage time to"
+                                                    label={t('Usage time to')}
                                                     name="UsageTo"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Usage time to" is required'
+                                                            message: t('Usage time to is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -429,12 +479,12 @@ function EditRequest() {
                                             {/*Request Pick time*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Pick time"
+                                                    label={t('Pick time')}
                                                     name="Picktime"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Pick time" is required'
+                                                            message: t('Pick time is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
@@ -445,23 +495,23 @@ function EditRequest() {
                                                         value={dayjs(formData.PickTime)}
                                                         onChange={(value) => handleDatePicker(value, 'PickTime')}
                                                         showTime
-                                                        placeholder='Pick time'
+                                                        placeholder={t('Pick time')}
                                                     />
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Pick location*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Pick location"
+                                                    label={t('picklocation')}
                                                     name="Picklocation"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Pick location" is required'
+                                                            message: t('Pick location is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.PickLocation ? detailData.PickLocation : undefined}
+                                                    initialValue={initiValuePicklocation}
                                                 >
                                                     <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -469,17 +519,17 @@ function EditRequest() {
                                             {/*Request Destination */}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Destination "
+                                                    label={t('destination')}
                                                     name="Destination"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Destination" is required'
+                                                            message: t('Destination is required')
 
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Destination ? detailData.Destination : undefined}
+                                                    initialValue={initiValueDestination}
                                                 >
                                                     <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -487,16 +537,16 @@ function EditRequest() {
                                             {/*Request Reason*/}
                                             <Col span={6} className='col-request'>
                                                 <Form.Item
-                                                    label="Reason"
+                                                    label={t('reason')}
                                                     name="Reason"
                                                     rules={[
                                                         {
                                                             required: true,
-                                                            message: ' "Reason" is required'
+                                                            message: t('Reason is required')
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Reason ? detailData.Reason : undefined}
+                                                    initialValue={initiValueReason}
                                                 >
                                                     <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -508,8 +558,8 @@ function EditRequest() {
                             <div className='attention-request' style={{ marginTop: '0', }}>
                                 <p>Chú ý: Trường hợp Phòng Hành Chính không đủ xe để đáp ứng yêu cầu điều xe của bộ phận, Phòng Hành Chính đề nghị sắp xếp phương tiện khác thay thế (thuê xe ngoài, hoặc dùng thẻ taxi, Grab,...) và chi phí sẽ hạch toán theo bộ phận yêu cầu.</p>
                                 <Radio.Group onChange={onChange} value={applyNote}>
-                                    <Radio value={true}>Yes</Radio>
-                                    <Radio value={false}>No</Radio>
+                                    <Radio value={true}>{t('yes')}</Radio>
+                                    <Radio value={false}>{t('no')}</Radio>
                                 </Radio.Group>
                             </div>
                             <div className='Attachment'>
@@ -524,15 +574,14 @@ function EditRequest() {
                                     onRemove={handleRemoveFile}
                                 >
                                     <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
-                                        Add attachments
+                                        {t('Add attachments')}
                                     </Button>
-                                    <span> (Maximum 20MB per file)</span>
+                                    <span> {t('(Maximum 20MB per file)')}</span>
                                 </Upload>
                             </div>
-                            <EditSendApprover listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
+                            <EditSendApprover departmentId={formData.DepartmentId} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                         </div>
-                        )
-                    }
+                        )}
                 </div>
             )}
         </RequestLayout >

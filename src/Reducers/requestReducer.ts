@@ -5,7 +5,6 @@ interface UserInfo {
     FullName: string | null,
     Email: string | null,
     AvatarPath: string | null,
-
 }
 
 type RequestState = {

@@ -3,9 +3,12 @@ import React, { useEffect, useState } from 'react';
 import './infoFeedback.css'
 import request from "../../../Utils/request";
 import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 
 function InfoFeedback() {
+
+    const {t} = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [vehicleData, setVehicleData] = useState<any>({})
@@ -38,41 +41,41 @@ function InfoFeedback() {
                     <Alert
                         style={{ width: '100%', textAlign: 'center' }}
                         message="Loading..."
-                        description="There are some issues happening, please wait a moment or you can try reloading the page"
+                        description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
                         type="info"
                     />
                 </Spin>)
                 :
                 (
                     <div>
-                        <p>Infomation feedback vehicle type</p>
+                        <p>{t('Infomation feedback vehicle type')}</p>
                         {checkValue === true ? (
-                            <div><Radio checked>Company vehicle</Radio></div>
+                            <div><Radio checked>{t('Company vehicle')}</Radio></div>
                         ) : (
-                            <div><Radio checked>Rented car, taxi</Radio></div>
+                            <div><Radio checked>{t('Rented car, taxi')}</Radio></div>
                         )}
                         {checkValue ? (
                             <Row className='info-feadback-row'>
                                 <Col span={6}>
-                                    <div className='info-feadback-col-title'>Driver</div>
+                                    <div className='info-feadback-col-title'>{t('Driver')}</div>
                                     <div>{vehicleData.User.FullName}</div>
                                 </Col>
                                 <Col span={6}>
-                                    <div className='info-feadback-col-title'>Mobile</div>
+                                    <div className='info-feadback-col-title'>{t('Mobile')}</div>
                                     <div>{vehicleData.DriverMobile}</div>
                                 </Col>
                                 <Col span={6}>
-                                    <div className='info-feadback-col-title'>Car plate</div>
+                                    <div className='info-feadback-col-title'>{t('Car plate')}</div>
                                     <div>{vehicleData.DriverCarplate}</div>
                                 </Col>
                                 <Col span={6}>
-                                    <div className='info-feadback-col-title'>Rotation</div>
+                                    <div className='info-feadback-col-title'>{t('Rotation')}</div>
                                     <div>{vehicleData.Rotation.Type}</div>
                                 </Col>
                             </Row>) : (
                             <Row className='info-feadback-row'>
                                 <Col span={6}>
-                                    <div className='info-feadback-col-title'>Reason</div>
+                                    <div className='info-feadback-col-title'>{t('reason')}</div>
                                     <div>{vehicleData.Reason}</div>
                                 </Col>
                             </Row>
@@ -80,7 +83,7 @@ function InfoFeedback() {
                         }
                         {vehicleData.Note ? (
                             <Row className='info-feadback-row'><Col span={24}>
-                                <div className='info-feadback-col-title'>Note</div>
+                                <div className='info-feadback-col-title'>{t('Note')}</div>
                                 <div>{vehicleData.Note}</div>
                             </Col></Row>) :
                             (null)

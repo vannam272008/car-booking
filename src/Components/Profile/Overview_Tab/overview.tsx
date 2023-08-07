@@ -2,12 +2,14 @@ import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, Table, DatePicker } from "antd";
 import { OverviewProps } from "../interface";
+import { useTranslation } from "react-i18next";
 
 const Overview: React.FC<OverviewProps> = ({
   infoAPI,
   isEditing,
   setInfoAPI,
 }) => {
+  const {t} = useTranslation();
   // tab_overview
   const handleDate_birth = (date: Dayjs | null, dateString: string) => {
     setInfoAPI((prevInfo) => ({
@@ -28,18 +30,18 @@ const Overview: React.FC<OverviewProps> = ({
 
   const dataSource_overview = [
     {
-      overview_title: "Login",
+      overview_title: t('Login'),
       info: <strong>{infoAPI.Username}</strong>,
     },
     {
-      overview_title: "Email",
+      overview_title:"Email",
       info: <strong>{infoAPI.Email}</strong>,
     },
     {
-      overview_title: "Employee number",
+      overview_title: t('Employee number'),
       info: isEditing ? (
         <Input
-          placeholder="Employee number"
+          placeholder={t('Employee number')}
           name="Employee Number"
           value={infoAPI.EmployeeNumber}
           disabled
@@ -57,10 +59,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "First name",
+      overview_title: t('First name'),
       info: isEditing ? (
         <Input
-          placeholder="First name"
+          placeholder={t('First name')}
           name="First name"
           disabled
           value={infoAPI.FirstName}
@@ -78,10 +80,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Last name",
+      overview_title: t('Last name'),
       info: isEditing ? (
         <Input
-          placeholder="Last Name"
+          placeholder={t('Last Name')}
           name="Last Name"
           disabled
           value={infoAPI.LastName}
@@ -99,10 +101,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Sex",
+      overview_title: t('Sex'),
       info: isEditing ? (
         <Input
-          placeholder="Sex"
+          placeholder={t('Sex')}
           name="sex"
           // value={infoAPI.Sex}
           disabled
@@ -120,7 +122,7 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Birth day",
+      overview_title: t('Birthday'),
       info: isEditing ? (
         infoAPI.Birthday ? (
           <DatePicker
@@ -138,7 +140,7 @@ const Overview: React.FC<OverviewProps> = ({
             style={{ width: "100%" }}
             onChange={handleDate_birth}
             disabled
-            placeholder="Birth day"
+            placeholder={t('Birthday')}
             format="YYYY-MM-DD"
           />
         )
@@ -149,14 +151,14 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Job title",
+      overview_title: t('Job title'),
       info: <strong>{infoAPI.JobTitle}</strong>,
     },
     {
-      overview_title: "Company",
+      overview_title: t('Company'),
       info: isEditing ? (
         <Input
-          placeholder="Company"
+          placeholder={t('Company')}
           name="company"
           value={infoAPI.Company}
           disabled
@@ -174,10 +176,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Unit",
+      overview_title: t('Unit'),
       info: isEditing ? (
         <Input
-          placeholder="Unit"
+          placeholder={t('Unit')}
           name="unit"
           value={infoAPI.Unit}
           disabled
@@ -195,10 +197,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Function",
+      overview_title: t('Function'),
       info: isEditing ? (
         <Input
-          placeholder="Function"
+          placeholder={t('Function')}
           name="function"
           disabled
           value={infoAPI.Function}
@@ -216,10 +218,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Sections/Teams",
+      overview_title: t('Sections/Teams'),
       info: isEditing ? (
         <Input
-          placeholder="Sections/Teams"
+          placeholder={t('Sections/Teams')}
           disabled
           name="sections_teams"
           value={infoAPI.SectionsOrTeam}
@@ -237,10 +239,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Groups",
+      overview_title: t('Groups'),
       info: isEditing ? (
         <Input
-          placeholder="Groups"
+          placeholder={t('Groups')}
           name="groups"
           disabled
           value={infoAPI.Groups}
@@ -258,10 +260,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Office location",
+      overview_title: t('Office location'),
       info: isEditing ? (
         <Input
-          placeholder="Office location"
+          placeholder={t('Office location')}
           name="office_location"
           disabled
           value={infoAPI.OfficeLocation}
@@ -279,18 +281,18 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Line Manager",
+      overview_title: t('Line manager'),
       info: <strong>{infoAPI.LineManager}</strong>,
     },
     {
-      overview_title: "Belong to departments",
+      overview_title: t('Belong to departments'),
       info: <strong>{infoAPI.BelongToDepartments}</strong>,
     },
     {
-      overview_title: "Rank",
+      overview_title: t('Rank'),
       info: isEditing ? (
         <Input
-          placeholder="Rank"
+          placeholder={t('Rank')}
           name="rank"
           value={infoAPI.Rank}
           onChange={(e) => {
@@ -307,10 +309,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Employee type",
+      overview_title: t('Employee type'),
       info: isEditing ? (
         <Input
-          placeholder="Employee type"
+          placeholder={t('Employee type')}
           name="Employee_type"
           value={infoAPI.EmployeeType}
           onChange={(e) => {
@@ -327,10 +329,10 @@ const Overview: React.FC<OverviewProps> = ({
       ),
     },
     {
-      overview_title: "Rights",
+      overview_title: t('Rights'),
       info: isEditing ? (
         <Input
-          placeholder="Rights"
+          placeholder={t('Rights')}
           name="rights"
           disabled
           value={infoAPI.Rights}

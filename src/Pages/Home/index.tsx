@@ -21,7 +21,7 @@ import { useNavigate } from "react-router";
 
 import { useState } from "react";
 // import CardContent from "./CardContent";
-import { Card, Col, Row } from "antd";
+import { Col, Row } from "antd";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import CardContent from "../../Components/Home/Card";
@@ -56,7 +56,6 @@ import { FaEarthAmericas } from "react-icons/fa6";
 import { TfiTimer } from "react-icons/tfi";
 import { FaPersonDress, FaFileContract } from "react-icons/fa6";
 import { RiComputerLine } from "react-icons/ri";
-import { title } from "process";
 import request from "../../Utils/request";
 
 const Home = () => {
@@ -170,9 +169,9 @@ const Home = () => {
                 key={dt.id}
                 xs={24}
                 sm={12}
-                md={8}
-                lg={6}
-                xl={4}>
+                md={10}
+                lg={8}
+                xl={6}>
                 <CardContent
                   className={dt.icon}
                   icon={mergedObject[dt.icon]}
