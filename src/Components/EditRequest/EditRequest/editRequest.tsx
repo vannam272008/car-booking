@@ -63,8 +63,9 @@ function EditRequest() {
         files: fileList,
     });
 
+
     const initiValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
-    const initiValueReceiver = formData.ReceiverId && detailData.ReceiverUser ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : 'No Data';
+    const initiValueReceiver = detailData.ReceiverUser && (formData.ReceiverId === detailData.ReceiverUser.Id) ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : (dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data');
 
 
     useEffect(() => {
@@ -103,37 +104,6 @@ function EditRequest() {
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                setLoading(true);
-
-                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
-                const departmentMemberRes = await request.get(departmentMemberEndpoint);
-                setDataDepartmentMember(departmentMemberRes.data.Data);
-
-                const ReceiverUserId = departmentMemberRes.data.Data.find((value: any) => value.User.Id === detailData.ReceiverUser.Id);
-
-                // console.log('1', departmentMemberRes.data.Data);
-                // console.log('2', detailData.ReceiverUser.Id);
-                // console.log('3', ReceiverUserId);
-
-                setFormData((prevFormData) => ({
-                    ...prevFormData,
-                    ReceiverId: ReceiverUserId ? ReceiverUserId.User.Id : '',
-                }));
-
-
-
-            } catch (error) {
-                setLoading(true);
-            }
-            setLoading(false);
-        };
-        fetchData();
-    }, [formData.DepartmentId]);
-
-
-    useEffect(() => {
         const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
         const stringNumber = number.toString();
 
@@ -154,7 +124,31 @@ function EditRequest() {
             PickTime: pickTime,
             Status: status,
         }));
-    }, [listOfUserId, status, usageFrom, usageTo, pickTime, detailData.SenderUser, fileList, applyNote, detailData.Mobile, detailData.CostCenter, detailData.TotalPassengers, detailData.PickLocation, detailData.Destination, detailData.Reason]);
+    }, [listOfUserId, status, usageFrom, usageTo, pickTime, fileList, applyNote, detailData]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+
+                const departmentMemberEndpoint = "departmentMember/position?departmentId=" + formData.DepartmentId;
+                const departmentMemberRes = await request.get(departmentMemberEndpoint);
+                setDataDepartmentMember(departmentMemberRes.data.Data);
+
+                const ReceiverUserId = departmentMemberRes.data.Data.find((value: any) => value.User.Id === detailData.ReceiverUser.Id);
+
+                setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    ReceiverId: ReceiverUserId ? ReceiverUserId.User.Id : (departmentMemberRes.data.Data.length > 0 ? departmentMemberRes.data.Data[0].User.Id : ''),
+                }));
+
+            } catch (error) {
+                setLoading(true);
+            }
+            setLoading(false);
+        };
+        fetchData();
+    }, [formData.DepartmentId]);
 
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -167,11 +161,19 @@ function EditRequest() {
         }));
     };
 
-    const handleSelectChange = (value: string, field: string) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [field]: value,
-        }));
+    const handleSelectChange = (value: any, field: string) => {
+        if (field === 'ReceiverId') {
+            const valueReceiverId = value.value;
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                ReceiverId: valueReceiverId,
+            }));
+        } else {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [field]: value,
+            }));
+        }
     };
 
     const handleDatePicker = (value: Dayjs | null, field: string) => {
@@ -194,10 +196,11 @@ function EditRequest() {
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-            )
+                    departmentMember.User.Id !== formData.ReceiverId && (
+                        departmentMember.User.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.User.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    ))
         }
         else return [];
     };
@@ -222,7 +225,7 @@ function EditRequest() {
         }
     };
 
-    console.log('formData', formData);
+    // console.log('formData', detailData);
 
     return (
         <RequestLayout profile={profile}>
@@ -289,11 +292,18 @@ function EditRequest() {
                                                             option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                         }
                                                     >
-                                                        {dataDepartment.map((department) => (
+                                                        {dataDepartment
+                                                            .filter((department) => !formData.DepartmentId.includes(department.Id))
+                                                            .map((filteredDepartment) => (
+                                                                <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                    {filteredDepartment.Name}
+                                                                </Option>
+                                                            ))}
+                                                        {/* {dataDepartment.map((department) => (
                                                             <Option key={department.Id} value={department.Id} >
                                                                 {department.Name}
                                                             </Option>
-                                                        ))}
+                                                        ))} */}
                                                     </Select>
                                                 </Form.Item>
                                             </Col>
@@ -313,6 +323,7 @@ function EditRequest() {
                                                     className={initiValueReceiver === 'No Data' ? 'no-data' : ''}
                                                 >
                                                     <Select
+                                                        labelInValue
                                                         virtual={false}
                                                         value={formData.ReceiverId}
                                                         onChange={(value) => handleSelectChange(value, 'ReceiverId')}
@@ -551,8 +562,7 @@ function EditRequest() {
                             </div>
                             <EditSendApprover departmentId={formData.DepartmentId} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                         </div>
-                        )
-                    }
+                        )}
                 </div>
             )}
         </RequestLayout >

@@ -25,6 +25,12 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [workflowData, setWorkflowData] = useState<any>([])
+    const [initialValueWorkflow, setInitialValueWorkflow] = useState<string[]>([]);
+    const [editingIndex, setEditingIndex] = useState(-1);
+    const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
+    const [counterApprover, setCounterApprover] = useState(1);
+    const [searchValue, setSearchValue] = useState<string>('');
+
 
     const { requestId } = useParams();
 
@@ -39,38 +45,52 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
 
                 const workflowDataEndpoint = "/request/workflow/requestId=" + requestId;
                 const workflowDataRes = await request.get(workflowDataEndpoint);
-                setListOfUserId([...listOfUserId, ...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)]);
+
+                setListOfUserId([]);
+                setWorkflowData([]);
+                setLabelApprovers([]);
+                setInitialValueWorkflow([]);
+                setCounterApprover(1);
+                setInputs([]);
+
+                setListOfUserId([...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)]);
                 setWorkflowData(workflowDataRes.data.Data);
+                setLabelApprovers([...workflowDataRes.data.Data.map((item: { Position: string }) => item.Position)])
+                setInitialValueWorkflow([...workflowDataRes.data.Data.map((item: { User: { FullName: string, Email: string, JobTitle: string } }) => item.User.FullName + ' ' + item.User.Email + ' ' + item.User.JobTitle)])
+                setCounterApprover(counterApprover + workflowDataRes.data.Data.length)
+                setInputs([...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)])
 
             } catch (error) {
                 // Handle errors if needed
             }
         };
         fetchData();
-    }, [departmentId]);
+    }, []);
 
 
     const { Option } = Select;
 
-    const [counterApprover, setCounterApprover] = useState(1);
 
     const handleAddInput = () => {
-        setInputs([...inputs, '']);
-        setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
+        setInputs([...inputs, '' + counterApprover]);
+        setLabelApprovers([...labelApprovers, "Approve " + [counterApprover]]);
         setCounterApprover(counterApprover + 1);
     };
 
     const handleDelete = (index: number) => {
+
         const newInputs = [...inputs];
+        newInputs.splice(index, 1);
+        setInputs(newInputs);
+
         const newListOfUser = [...listOfUserId];
         newListOfUser.splice(index, 1);
         setListOfUserId(newListOfUser);
-        newInputs.splice(index, 1);
-        setInputs(newInputs);
-    };
 
-    const [editingIndex, setEditingIndex] = useState(-1);
-    const [labelApprovers, setLabelApprovers] = useState<string[]>([]);
+        const newLableApprover = [...labelApprovers];
+        newLableApprover.splice(index, 1);
+        setLabelApprovers(newLableApprover);
+    };
 
     const handleInputChangeApprover = (index: number, value: string) => {
         const newApprovers = [...labelApprovers];
@@ -108,7 +128,6 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
             placement,
         });
     };
-    const [searchValue, setSearchValue] = useState<string>('');
 
     const handleSearch = (inputValue: string) => {
         setSearchValue(inputValue);
@@ -127,13 +146,22 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
         else return [];
     };
 
-    useEffect(() => {
-        setInputs(listOfUserId);
-        setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
-        setCounterApprover(counterApprover + 1);
-    }, [listOfUserId]);
+    // useEffect(() => {
+    //     setInputs(listOfUserId);
+    //     setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
+    //     setCounterApprover(counterApprover + 1);
+    // }, [listOfUserId]);
 
-    // console.log('hello', dataDepartmentMember);
+    // console.log('hello', workflowData.Position);
+
+    // console.log('1', listOfUserId);
+    // console.log('2', workflowData);
+    // console.log('3', labelApprovers);
+    // console.log('4', initialValueWorkflow);
+    // console.log('5', counterApprover);
+    // console.log('6', inputs);
+
+    console.log(workflowData);
 
     return (
         <div>
@@ -162,14 +190,14 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                                                 )}
                                             </div>
                                         }
-                                        name={`Approver${index}`}
+                                        name={inputs[index]}
                                         rules={[
                                             {
                                                 required: true,
                                                 message: 'Select something!',
                                             },
                                         ]}
-                                        initialValue={workflowData[index] && workflowData[index].User ? (workflowData[index].User.FullName + ' ' + workflowData[index].User.Email + ' ' + workflowData[index].User.JobTitle) : '--Select a Approver--'}
+                                        initialValue={initialValueWorkflow[index] === undefined ? '--Select a Approver--' : initialValueWorkflow[index]}
                                         labelCol={{ span: 24 }}
                                     >
                                         <Select

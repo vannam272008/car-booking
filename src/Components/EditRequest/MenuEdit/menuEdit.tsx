@@ -56,7 +56,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleReSubmit = () => {
-        if (formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
+        if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
             request.putForm("/request/Id=" + requestId, formData)
                 .then((response) => {
                     const data = response.data;
