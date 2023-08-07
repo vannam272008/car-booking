@@ -3,7 +3,7 @@ export interface API {
   EmployeeNumber: string;
   Username: string;
   Email: string;
-  AvatarPath: RcFile | null;
+  AvatarPath: string;
   FirstName: string;
   LastName: string;
   Sex: boolean;
@@ -59,6 +59,7 @@ export interface API {
   CountryR: string;
   Signature: string;
   SignatureTemp: string;
+  // AvatarPathtemp: string;
 }
 
 export interface SignatureProps {
