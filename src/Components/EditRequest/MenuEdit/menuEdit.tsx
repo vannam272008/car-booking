@@ -114,7 +114,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
-        console.log('succes');
+        // console.log('succes');
     }
     const handleClose = () => {
         setIsModalOpenDelete(false);
@@ -125,7 +125,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         request.delete("/request/" + requestId)
             .then(() => {
                 navigate("/request/carbooking");
-                console.log('sucess');
+                // console.log('sucess');
             })
             .catch((e) => {
                 setErrorMessage(e.response.data.Message);
@@ -138,7 +138,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
         SetCheckBoxDelete(!checkBoxDelete);
     };
 
-    // console.log('formData', formData);
+    console.log('formData', formData);
 
     return (
 

@@ -53,12 +53,20 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                 setCounterApprover(1);
                 setInputs([]);
 
-                setListOfUserId([...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)]);
-                setWorkflowData(workflowDataRes.data.Data);
-                setLabelApprovers([...workflowDataRes.data.Data.map((item: { Position: string }) => item.Position)])
-                setInitialValueWorkflow([...workflowDataRes.data.Data.map((item: { User: { FullName: string, Email: string, JobTitle: string } }) => item.User.FullName + ' ' + item.User.Email + ' ' + item.User.JobTitle)])
-                setCounterApprover(counterApprover + workflowDataRes.data.Data.length)
-                setInputs([...workflowDataRes.data.Data.map((item: { User: { Id: string } }) => item.User.Id)])
+                // console.log('1', dataDepartmentMember);
+                // console.log('2', workflowData);
+                const workflowDataApprover = workflowDataRes.data.Data.filter((workflow: any) =>
+                    departmentMemberRes.data.Data.some((departmentMember: any) => workflow.User.Id === departmentMember.Id)
+                );
+
+                // console.log('hello', workflowDataApprover);
+
+                setListOfUserId([...workflowDataApprover.map((item: { User: { Id: string } }) => item.User.Id)]);
+                setWorkflowData(workflowDataApprover);
+                setLabelApprovers([...workflowDataApprover.map((item: { Position: string }) => item.Position)])
+                setInitialValueWorkflow([...workflowDataApprover.map((item: { User: { FullName: string, Email: string, JobTitle: string } }) => item.User.FullName + ' ' + item.User.Email + ' ' + item.User.JobTitle)])
+                setCounterApprover(counterApprover + workflowDataApprover.length)
+                setInputs([...workflowDataApprover.map((item: { User: { Id: string } }) => item.User.Id)])
 
             } catch (error) {
                 // Handle errors if needed
@@ -138,14 +146,16 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
         if (dataDepartmentMember.length > 0) {
             return dataDepartmentMember.filter(
                 (departmentMember) =>
-                    departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
-            )
+                    listOfUserId.indexOf(departmentMember.Id) === -1 && (
+                        departmentMember.FullName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.Email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                        departmentMember.JobTitle?.toLowerCase().includes(searchValue.toLowerCase())
+                    ))
         }
         else return [];
     };
 
+    // console.log(filteredWorkflowData);
     // useEffect(() => {
     //     setInputs(listOfUserId);
     //     setLabelApprovers([...labelApprovers, `Approver ${counterApprover}`]);
@@ -161,7 +171,7 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
     // console.log('5', counterApprover);
     // console.log('6', inputs);
 
-    console.log(workflowData);
+    // console.log(workflowData);
 
     return (
         <div>

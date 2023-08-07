@@ -66,6 +66,12 @@ function EditRequest() {
 
     const initiValueDepartment = dataDepartment.find((value) => value.Id === formData.DepartmentId)?.Name;
     const initiValueReceiver = detailData.ReceiverUser && (formData.ReceiverId === detailData.ReceiverUser.Id) ? detailData.ReceiverUser.FullName + ' ' + detailData.ReceiverUser.Email + ' ' + detailData.ReceiverUser.JobTitle : (dataDepartmentMember.length > 0 ? dataDepartmentMember[0].User.FullName + ' ' + dataDepartmentMember[0].User.Email + ' ' + dataDepartmentMember[0].User.JobTitle : 'No Data');
+    const initiValueMoblie = formData.Mobile ? formData.Mobile : (detailData.Mobile ? detailData.Mobile : undefined);
+    const initiValueCostCenter = formData.CostCenter ? formData.CostCenter : (detailData.CostCenter ? detailData.CostCenter : undefined);
+    const initiValueTotalpassengers = formData.TotalPassengers ? formData.TotalPassengers : (detailData.TotalPassengers ? detailData.TotalPassengers : undefined);
+    const initiValueReason = formData.Reason ? formData.Reason : (detailData.Reason ? detailData.Reason : undefined);
+    const initiValueDestination = formData.Destination ? formData.Destination : (detailData.Destination ? detailData.Destination : undefined);
+    const initiValuePicklocation = formData.PickLocation ? formData.PickLocation : (detailData.PickLocation ? detailData.PickLocation : undefined);
 
 
     useEffect(() => {
@@ -88,6 +94,8 @@ function EditRequest() {
                 // console.log(attachmentsDataRes);
                 // setFileList([...fileList, attachmentsDataRes.data.Data.Path]);
 
+                console.log(detailsDataRes.data.Data);
+
                 setFormData((prevFormData) => ({
                     ...prevFormData,
                     DepartmentId: detailsDataRes.data.Data.Department.Id,
@@ -107,11 +115,12 @@ function EditRequest() {
         const number: number = detailData.TotalPassengers ? detailData.TotalPassengers : "";
         const stringNumber = number.toString();
 
+        // console.log('setformdata');
+
         setFormData((prevFormData) => ({
             ...prevFormData,
             files: fileList,
             ApplyNote: applyNote,
-            ListOfUserId: listOfUserId,
             Mobile: detailData.Mobile,
             CostCenter: detailData.CostCenter,
             TotalPassengers: stringNumber,
@@ -124,7 +133,14 @@ function EditRequest() {
             PickTime: pickTime,
             Status: status,
         }));
-    }, [listOfUserId, status, usageFrom, usageTo, pickTime, fileList, applyNote, detailData]);
+    }, [status, usageFrom, usageTo, pickTime, fileList, applyNote, detailData]);
+
+    useEffect(() => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ListOfUserId: listOfUserId,
+        }));
+    }, [listOfUserId]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -360,7 +376,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Mobile ? detailData.Mobile : undefined}
+                                                    initialValue={initiValueMoblie}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -383,7 +399,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.CostCenter ? detailData.CostCenter : undefined}
+                                                    initialValue={initiValueCostCenter}
                                                 >
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='CostCenter' value={formData.CostCenter ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -404,7 +420,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.TotalPassengers ? detailData.TotalPassengers : undefined}
+                                                    initialValue={initiValueTotalpassengers}
                                                 >
                                                     <Input maxLength={9} onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='TotalPassengers' value={formData.TotalPassengers ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
@@ -492,7 +508,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.PickLocation ? detailData.PickLocation : undefined}
+                                                    initialValue={initiValuePicklocation}
                                                 >
                                                     <Input type='text' name='PickLocation' value={formData.PickLocation} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -510,7 +526,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Destination ? detailData.Destination : undefined}
+                                                    initialValue={initiValueDestination}
                                                 >
                                                     <Input type='text' name='Destination' value={formData.Destination} onChange={handleInputChange}></Input>
                                                 </Form.Item>
@@ -527,7 +543,7 @@ function EditRequest() {
                                                         },
                                                     ]}
                                                     labelCol={{ span: 24 }}
-                                                    initialValue={detailData.Reason ? detailData.Reason : undefined}
+                                                    initialValue={initiValueReason}
                                                 >
                                                     <Input type='text' name='Reason' value={formData.Reason} onChange={handleInputChange}></Input>
                                                 </Form.Item>
