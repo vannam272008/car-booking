@@ -18,7 +18,12 @@
         }
     }
 
+    & .col-menu {
+        float: left;
+    }
+
     & .col-logo {
+        float: left;
         width: 100%;
         border-right: 1px solid rgba(255, 255, 255, 0.3);
 
@@ -31,7 +36,8 @@
     }
 
     & .col-label {
-        padding-left: 49px;
+        float: left;
+        padding-left: 10px;
         width: 100%;
 
 
@@ -46,8 +52,16 @@
     }
 
     & .col-function {
+        float: right;
+
+        // & .ant-menu-overflow {
+        //     display: flex;
+        // }
+
         & .group-btn {
             float: right;
+            background: none;
+            font-size: 20px;
 
             & .btn-item {
                 font-size: 20px;
@@ -59,6 +73,10 @@
                 height: fit-content;
                 padding-bottom: 10px;
                 margin-left: 10px;
+
+                & svg {
+                    font-size: 20px;
+                }
             }
 
             & .btn-item:hover {

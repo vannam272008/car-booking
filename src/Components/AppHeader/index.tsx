@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer, message, Badge } from "antd";
+import { Col, Layout, Row, Button, Drawer, message, Badge, Menu } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -97,13 +97,27 @@ const AppHeader = (props: any) => {
 
     return (
         <Header className="mcs-header">
-            <Row className="row-header">
-                <Col span={1}>
+            <Row className="row-header" >
+                <Col xs={1}
+                    sm={1}
+                    md={1}
+                    lg={1}
+                    xl={1}
+                    xxl={1}
+                    // span={1}
+                    className="col-menu"
+                >
                     <Button className="btn-menu">
                         <MenuOutlined />
                     </Button>
                 </Col>
-                <Col span={3} className="col-logo">
+                <Col xs={3}
+                    sm={3}
+                    md={3}
+                    lg={4}
+                    xl={4}
+                    xxl={3}
+                    className="col-logo">
 
                     <div onClick={handlePathName}>
                         <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
@@ -111,11 +125,110 @@ const AppHeader = (props: any) => {
                         </NavLink>
                     </div>
                 </Col>
-                <Col span={2} className="col-label">
+                <Col xs={13}
+                    sm={13}
+                    md={13}
+                    lg={13}
+                    xl={13}
+                    xxl={2}
+                    className="col-label">
                     <p>eOffice</p>
                 </Col>
-                <Col span={18} className="col-function">
-                    <div className="group-btn">
+                <Col xs={6}
+                    sm={6}
+                    md={6}
+                    lg={6}
+                    xl={6}
+                    xxl={18}
+                    className="col-function">
+                    <Menu className="group-btn" mode="horizontal">
+                        <Menu.Item>
+                            <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
+                            <Drawer
+                                className="dropdown-help"
+                                placement="right"
+                                onClose={onClose}
+                                open={openHelp}
+                                mask={false}
+                                closable={false}
+                            >
+                                <div className="title-dropdown">
+                                    <span>{t('help')}</span>
+                                    <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
+                                </div>
+                                <div className="content-dropdown">
+                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
+                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                        <p>{t('introduction')}</p>
+                                    </NavLink>
+                                    <Feedback />
+                                    <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                        <p>{t('openticket')}</p>
+                                    </NavLink>
+                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                        <p>{t('help')}</p>
+                                    </NavLink>
+                                </div>
+                            </Drawer>
+                        </Menu.Item>
+
+                        <Menu.Item>
+                            <Badge count={3000} style={{ zIndex: '9999' }}>
+                                <Button className="btn-item"><BellOutlined style={{ fontSize: '24px', color: 'white' }} /></Button>
+                            </Badge>
+                        </Menu.Item>
+                        <Menu.Item>
+                            <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
+                                <Button className="btn-item"><SettingOutlined /></Button>
+                            </NavLink>
+                        </Menu.Item>
+
+                        <Menu.Item>
+                            <Button onClick={handleClickProfile} className="btn-item"><UserOutlined /></Button>
+                            <Drawer
+                                className="dropdown-help"
+                                placement="right" onClose={onClose}
+                                open={openProfile}
+                                mask={false}
+                                closable={false}
+                            >
+                                <div className="title-dropdown">
+                                    <span>{t('myaccount')}</span>
+                                    <Button className="header-btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
+                                </div>
+                                <div className="content-dropdown">
+                                    <div className="account-info">
+                                        {userInfo.AvatarPath
+                                            ? <img
+                                                src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                                alt="avatar"></img>
+                                            : <img
+                                                src={String(avatarDefault)}
+                                                alt="avatar"></img>
+                                        }
+                                        <span className="info-name">{userInfo.FullName}</span>
+                                        <br />
+                                        <span className="info-email">{userInfo.Email}</span>
+                                    </div>
+                                    <div className="content-info">
+                                        <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
+                                            <p>{t('myprofile')}</p>
+                                        </div>
+                                        <div className='my-profile' style={{ textDecoration: 'none' }}>
+                                            <p>{t('myaccount')}</p>
+                                        </div>
+                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                            <p>{t('signout')}</p>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            </Drawer>
+                        </Menu.Item>
+
+
+                    </Menu>
+
+                    {/* <div className="group-btn">
                         <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
                         <Drawer
                             className="dropdown-help"
@@ -125,8 +238,6 @@ const AppHeader = (props: any) => {
                             mask={false}
                             closable={false}
                         >
-                            {/* <div style={contentStyle}> */}
-                            {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
                             <div className="title-dropdown">
                                 <span>{t('help')}</span>
                                 <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
@@ -144,7 +255,6 @@ const AppHeader = (props: any) => {
                                     <p>{t('help')}</p>
                                 </NavLink>
                             </div>
-                            {/* </div> */}
                         </Drawer>
 
                         <Badge count={3000} style={{ zIndex: '9999' }}>
@@ -162,7 +272,6 @@ const AppHeader = (props: any) => {
                             mask={false}
                             closable={false}
                         >
-                            {/* {React.cloneElement(menu as React.ReactElement, { style: menuStyle })} */}
                             <div className="title-dropdown">
                                 <span>{t('myaccount')}</span>
                                 <Button className="header-btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
@@ -194,7 +303,7 @@ const AppHeader = (props: any) => {
                                 </div>
                             </div>
                         </Drawer>
-                    </div>
+                    </div> */}
                 </Col>
             </Row >
         </Header >
