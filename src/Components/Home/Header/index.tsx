@@ -121,8 +121,8 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
       <div className="logo-name">
         <img src={opus_logo} alt="Logo" className="logo" />
         <div className="header-name">
-          <span style={{ float: 'left', marginTop: '15px' }}>OPUS SOLUTION COMPANY</span>
-          <span style={{ float: 'left', color: '#4ba747', fontSize: '14px' }}>ENTERPRISE APPROVAL MANAGEMENT SYSTEM</span>
+          <span style={{ float: 'left', marginTop: '15px', fontSize: '14px' }}>OPUS SOLUTION COMPANY</span>
+          <span style={{ float: 'left', color: '#4ba747', fontSize: '14px', textAlign: 'initial' }}>ENTERPRISE APPROVAL MANAGEMENT SYSTEM</span>
         </div>
       </div>
       <div>

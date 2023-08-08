@@ -61,7 +61,7 @@
     }
 
     .header .logo-name {
-        display: block;
+        display: flex;
         float: none;
         height: 100px;
     }
@@ -78,9 +78,9 @@
     }
 
     .header .header-homepage .ant-select {
-        float: left;
+        float: right;
         margin-top: 30px;
-        margin-left: 10px;
+        margin-right: 10px;
     }
 
 
@@ -90,7 +90,39 @@
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+@media only screen and (min-width: 600px) and (max-width: 911px) {
+    .header {
+        height: 200px;
+    }
+
+    .header .logo-name {
+        display: flex;
+        float: none;
+        height: 100px;
+    }
+
+    .header .header-homepage {
+        display: contents;
+        width: 200px;
+    }
+
+    .header .header-homepage .ant-dropdown-trigger {
+        float: right;
+        margin-right: 10px;
+        height: 100px;
+    }
+
+    .header .header-homepage .ant-select {
+        float: right;
+        margin-top: 30px;
+        margin-right: 10px;
+    }
+
+
+    .header-name {
+        font-size: 10px;
+    }
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {}
