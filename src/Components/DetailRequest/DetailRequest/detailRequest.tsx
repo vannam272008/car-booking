@@ -40,6 +40,8 @@ function DetailRequest(): JSX.Element {
     const [workflowData, setWorkflowData] = useState<any>({})
     const [loading, setLoading] = useState(true);
     const [showFeedback, setShowFeedback] = useState<string>('')
+    const departmentId = detailData.Department ? detailData.Department.Id : undefined;
+
 
     //Data Approver
     // const Approver1: string = 'Approver 1';
@@ -107,7 +109,7 @@ function DetailRequest(): JSX.Element {
     //     window = attachment;
     // }
 
-    console.log('hello', workflowData);
+    // console.log('hello', detailData.Department ? detailData.Department.Id : undefined);
 
     return (
         <RequestLayout profile={profile}>
@@ -122,7 +124,7 @@ function DetailRequest(): JSX.Element {
                         />
                     </Spin>)
                         : <>
-                            <MenuRequest requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
+                            <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
                             <div className='info-detail-request'>
                                 <div className='info-basic-detail-request'>
                                     <p>{t('requestcode')}: {detailData.RequestCode}</p>

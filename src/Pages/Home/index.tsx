@@ -21,7 +21,7 @@ import { useNavigate } from "react-router";
 
 import { useState } from "react";
 // import CardContent from "./CardContent";
-import { Col, Row } from "antd";
+import { Alert, Col, Row, Spin } from "antd";
 import { Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import CardContent from "../../Components/Home/Card";
@@ -57,11 +57,14 @@ import { TfiTimer } from "react-icons/tfi";
 import { FaPersonDress, FaFileContract } from "react-icons/fa6";
 import { RiComputerLine } from "react-icons/ri";
 import request from "../../Utils/request";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const [data, setData] = useState<any>([]);
   const [payload, setPayload] = useState<any>("en-US");
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // console.log(iconname);
 
@@ -85,6 +88,7 @@ const Home = () => {
       .then((response) => {
         //   console.log("Response:", response.status);
         setData(response.data);
+        setLoading(false);
         // console.log(response.data);
       })
       .catch((error) => {
@@ -155,65 +159,79 @@ const Home = () => {
   // #337ab7
   // console.log(mergedObject['ion-md-stats']);
   // console.log(icon);
+  console.log(loading);
 
   return (
     <div className="home-page">
-      <HomeHeader setPayload={setPayload} />
-      <Content className="content">
-        <Row gutter={[16, 16]} className="justify-center">
-          {data.map((dt: any) =>
-            dt.type === "buttonContent" ? (
-              <Col
-                className="content-col"
-                onClick={() => handleClickModule(dt.title)}
-                key={dt.id}
-                xs={24}
-                sm={12}
-                md={8}
-                lg={6}
-                xl={4}>
-                <CardContent
-                  className={dt.icon}
-                  icon={mergedObject[dt.icon]}
-                  decription={dt.decription}
-                  title={dt.title}
-                />
-              </Col>
-            ) : (
-              ""
-            )
-          )}
-        </Row>
-      </Content>
-      <Footer className="footer">
-        <Row gutter={[16, 16]} className="justify-center">
-          {data.map((dt: any) =>
-            dt.type === "topFooter" ? (
-              <Col className="topfooter-col" key={dt.id}>
-                <TopFooter decription={dt.decription} title={dt.title} />
-              </Col>
-            ) : (
-              ""
-            )
-          )}
-        </Row>
-        <Row className="bottomfooter-row">
-          {data.map((dt: any) =>
-            dt.type === "bottomFooter" ? (
-              <Col
-                className="bottomfooter-col"
-                key={dt.id}
-                xs={24}
-                sm={12}
-                md={8}>
-                <BottomFooter decription={dt.decription} title={dt.title} />
-              </Col>
-            ) : (
-              ""
-            )
-          )}
-        </Row>
-      </Footer>
+      {loading
+        ? <Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+          <Alert
+            style={{ width: '100%', textAlign: 'center' }}
+            message="Loading..."
+            description={t('There are some issues happening, please wait a moment or you can try reloading the page')}
+            type="info"
+          />
+        </Spin>
+        : <>
+          <HomeHeader setPayload={setPayload} />
+          <Content className="content">
+            <Row gutter={[16, 16]} className="justify-center">
+              {data.map((dt: any) =>
+                dt.type === "buttonContent" ? (
+                  <Col
+                    className="content-col"
+                    onClick={() => handleClickModule(dt.title)}
+                    key={dt.id}
+                    xs={24}
+                    sm={12}
+                    md={10}
+                    lg={8}
+                    xl={6}>
+                    <CardContent
+                      className={dt.icon}
+                      icon={mergedObject[dt.icon]}
+                      decription={dt.decription}
+                      title={dt.title}
+                    />
+                  </Col>
+                ) : (
+                  ""
+                )
+              )}
+            </Row>
+          </Content>
+          <Footer className="footer">
+            <Row gutter={[16, 16]} className="justify-center">
+              {data.map((dt: any) =>
+                dt.type === "topFooter" ? (
+                  <Col className="topfooter-col" key={dt.id}>
+                    <TopFooter decription={dt.decription} title={dt.title} />
+                  </Col>
+                ) : (
+                  ""
+                )
+              )}
+            </Row>
+            <Row className="bottomfooter-row">
+              {data.map((dt: any) =>
+                dt.type === "bottomFooter" ? (
+                  <Col
+                    className="bottomfooter-col"
+                    key={dt.id}
+                    xs={24}
+                    sm={12}
+                    md={8}>
+                    <BottomFooter decription={dt.decription} title={dt.title} />
+                  </Col>
+                ) : (
+                  ""
+                )
+              )}
+            </Row>
+          </Footer>
+        </>
+      }
+
     </div>
   );
 };

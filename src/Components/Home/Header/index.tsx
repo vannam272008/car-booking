@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useState } from "react";
 import { Dropdown, Layout, MenuProps, Select, Space, message } from "antd";
 import UserOutlined from "@ant-design/icons"
@@ -26,6 +26,7 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
   const navigate = useNavigate();
   const userID = localStorage.getItem("Id");
   const [data, setData] = useState<any>([]);
+  const avatarDefault = require('../../../public/images/avatarDefault.png');
   const handleMenuClick = (e: any) => {
     setPayload(e.key)
   }
@@ -122,9 +123,19 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
         <div className="header-name">{data.name}</div>
       </div>
       <div className="header-homepage">
-        <Dropdown menu={{ items }} trigger={['click']} >
-          <span onClick={(e) => e.preventDefault()} >
-            <Space>
+        <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" overlayStyle={{ minWidth: 'none' }}>
+          <span onClick={(e) => e.preventDefault()}>
+            <Space style={{ cursor: 'pointer' }} >
+              {userInfo.AvatarPath
+                ? <img
+                  src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                  alt="avatar"
+                  className="img-avatar"></img>
+                : <img
+                  src={String(avatarDefault)}
+                  className="img-avatar"
+                  alt="avatar"></img>
+              }
               <UserOutlined />{userInfo ? userInfo.FullName : ""}
             </Space>
           </span>
