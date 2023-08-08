@@ -235,6 +235,7 @@ function AddRequest(): JSX.Element {
                                                 className='form-add-request'
                                             >
                                                 <Row className='row-request'>
+
                                                     {/*Request Applicant*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
@@ -267,7 +268,6 @@ function AddRequest(): JSX.Element {
                                                             labelCol={{ span: 24 }}
                                                         >
                                                             <Select
-                                                                virtual={false}
                                                                 value={formData.DepartmentId}
                                                                 onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                                 showSearch
@@ -276,66 +276,11 @@ function AddRequest(): JSX.Element {
                                                                     option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                                 }
                                                             >
-                                                                {dataDepartment
-                                                                    .filter((department) => !formData.DepartmentId.includes(department.Id))
-                                                                    .map((filteredDepartment) => (
-                                                                        <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
-                                                                            {filteredDepartment.Name}
-                                                                        </Option>
-                                                                    ))}
-                                                                {/* {dataDepartment.map((department) => (
-                                <div className='table-request'>
-                                    <h2 className='title-request'>{t('CAR BOOKING REQUEST')}</h2>
-                                    <div className='table-content'>
-                                        <Form
-                                            className='form-add-request'
-                                        >
-                                            <Row className='row-request'>
-                                                {/*Request Applicant*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('Applicant')}
-                                                        name="SenderId"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Applicant is require')
-                                                            },
-                                                        ]}
-                                                        labelCol={{ span: 24 }}
-                                                        initialValue={initialValueSender}
-                                                    >
-                                                        <Input type='text' value={formData.SenderId ?? ''} name='SenderId' readOnly onChange={handleInputChange} className='cursor-notallow-applicant' />
-                                                    </Form.Item>
-                                                </Col>
-                                                {/*Request Department*/}
-                                                <Col span={6} className='col-request'>
-                                                    <Form.Item
-                                                        label={t('department')}
-                                                        name="DepartmentId"
-                                                        rules={[
-                                                            {
-                                                                required: true,
-                                                                message: t('Select something!'),
-                                                            },
-                                                        ]}
-                                                        initialValue={initialValueDepartment}
-                                                        labelCol={{ span: 24 }}
-                                                    >
-                                                        <Select
-                                                            value={formData.DepartmentId}
-                                                            onChange={(value) => handleSelectChange(value, 'DepartmentId')}
-                                                            showSearch
-                                                            optionFilterProp="children"
-                                                            filterOption={(inputValue, option) =>
-                                                                option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
-                                                            }
-                                                        >
-                                                            {dataDepartment.map((department) => (
-                                                                <Option key={department.Id} value={department.Id} >
-                                                                    {department.Name}
-                                                                </Option>
-                                                            ))} */}
+                                                                {dataDepartment.map((department) => (
+                                                                    <Option key={department.Id} value={department.Id} >
+                                                                        {department.Name}
+                                                                    </Option>
+                                                                ))}
                                                             </Select>
                                                         </Form.Item>
                                                     </Col>
@@ -571,6 +516,7 @@ function AddRequest(): JSX.Element {
                                     <SendApprover departmentId={formData.DepartmentId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                                 </>
                             )}
+
                     </div>
                 </div>
             )
