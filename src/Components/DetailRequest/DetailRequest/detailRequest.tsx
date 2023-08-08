@@ -233,8 +233,8 @@ function DetailRequest(): JSX.Element {
                                                             <Card
                                                                 title={
                                                                     approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                        (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                        : (<span style={{ fontWeight: '̃700' }}>${t('Approver')}  {index + 1}</span>)
+                                                                        (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
+                                                                        : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
                                                                 }
                                                                 size="small">
                                                                 {approverData.User.FullName}
@@ -247,8 +247,8 @@ function DetailRequest(): JSX.Element {
                                                                     title={
 
                                                                         approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                            (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
+                                                                            (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
                                                                     }
                                                                     size="small">
                                                                     {approverData.User.FullName}
@@ -258,8 +258,8 @@ function DetailRequest(): JSX.Element {
                                                                 <Card
                                                                     title={
                                                                         approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                            (<span style={{ fontWeight: '̃700' }}>{approverData.Position}</span>)
-                                                                            : (<span style={{ fontWeight: '̃700' }}>{`t('Approver')} ${index + 1}`}</span>)
+                                                                            (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
+                                                                            : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
                                                                     }
                                                                     size="small">
                                                                     {approverData.User.FullName}
