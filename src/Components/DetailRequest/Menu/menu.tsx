@@ -118,12 +118,13 @@ function MenuRequest(props: any): JSX.Element {
 
     const handleDelete = () => {
         request.delete("/request/" + requestId)
-            .then(() => {
+            .then((res) => {
                 navigate("/request/carbooking");
+                openNotification('topRight', 'Delete successful', true);
             })
             .catch((e) => {
                 // setErrorMessage(e.response.data.Message);
-                openNotification('topRight', e.response.data.Message);
+                openNotification('topRight', e.response.data.Message, false);
             })
         setIsModalOpenDelete(false);
     }
@@ -138,13 +139,13 @@ function MenuRequest(props: any): JSX.Element {
         request.post("/request/share/create", { UserId: dataUserId, RequestId: requestId })
             .then(() => {
                 // setLoading(true);
-                openNotification('topRight', 'Success');
+                openNotification('topRight', 'Shared successful', true);
             })
             .catch((error) => {
                 console.log('error', error);
                 // setLoading(true);
                 // setErrorMessage(error.response.data.Message);
-                openNotification('topRight', error.response.data.Message);
+                openNotification('topRight', error.response.data.Message, false);
             });
         setIsModalOpenShare(false);
     }
@@ -153,14 +154,15 @@ function MenuRequest(props: any): JSX.Element {
     const putActionRequest = () => {
         const putAction = () => {
             request.putForm("/request/action/Id=" + requestId, actionRequest)
-                .then(() => {
+                .then((res) => {
                     request.postForm("/request/comment/requestId=" + requestId, comment)
                     setLoading(true);
                     navigate("/request/carbooking/detail/" + requestId);
+                    openNotification('topRight', actionRequest.action + ' successful', true);
                 })
                 .catch((e) => {
                     // setErrorMessage(e.response.data.Message);
-                    openNotification('topRight', e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message, false);
                 })
         }
         putAction();
@@ -188,14 +190,15 @@ function MenuRequest(props: any): JSX.Element {
     const handleCancelClick = () => {
         const putAction = () => {
             request.putForm("/request/action/cancel/Id=" + requestId, actionRequest)
-                .then(() => {
+                .then((res) => {
                     request.postForm("/request/comment/requestId=" + requestId, comment);
                     setLoading(true);
                     navigate("/request/carbooking/detail/" + requestId);
+                    openNotification('topRight', actionRequest.action + ' successful', true);
                 })
                 .catch((e) => {
                     // setErrorMessage(e.response.data.Message);
-                    openNotification('topRight', e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message, false);
                 })
         }
         putAction();
@@ -231,8 +234,8 @@ function MenuRequest(props: any): JSX.Element {
     //     },
     // ];
 
-    const openNotification = (placement: NotificationPlacement, msg: string) => {
-        if (msg !== 'Success') {
+    const openNotification = (placement: NotificationPlacement, msg: string, success: boolean) => {
+        if (success === false) {
             notification.info({
                 message: <strong>{t('Failed action')}</strong>,
                 description: msg,
@@ -242,7 +245,7 @@ function MenuRequest(props: any): JSX.Element {
         } else {
             notification.info({
                 message: <strong>Successfull</strong>,
-                description: 'Action successfully',
+                description: msg,
                 placement,
                 icon: <CheckCircleFilled style={{ color: 'green' }} />,
 

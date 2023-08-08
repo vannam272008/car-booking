@@ -120,52 +120,54 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
     <Header className="header">
       <div className="logo-name">
         <img src={opus_logo} alt="Logo" className="logo" />
-        <div className="header-name">{data.name}</div>
+        <div className="header-name">
+          <span style={{ float: 'left', marginTop: '15px' }}>OPUS SOLUTION COMPANY</span>
+          <span style={{ float: 'left', color: '#4ba747', fontSize: '14px' }}>ENTERPRISE APPROVAL MANAGEMENT SYSTEM</span>
+        </div>
       </div>
-      <div className="header-homepage">
-        <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" overlayStyle={{ minWidth: 'none' }}>
-          <span onClick={(e) => e.preventDefault()}>
-            <Space style={{ cursor: 'pointer' }} >
-              {userInfo.AvatarPath
-                ? <img
-                  src={`http://localhost:63642/${userInfo.AvatarPath}`}
-                  alt="avatar"
-                  className="img-avatar"></img>
-                : <img
-                  src={String(avatarDefault)}
-                  className="img-avatar"
-                  alt="avatar"></img>
-              }
-              <UserOutlined />{userInfo ? userInfo.FullName : ""}
-            </Space>
-          </span>
-        </Dropdown>
-      </div>
-      <div className="header-homepage">
-        <Select
-          labelInValue
-          style={{ width: 90 }}
-          defaultValue={
+      <div>
+        <div className="header-homepage">
+          <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" overlayStyle={{ minWidth: 'none' }}>
+            <span onClick={(e) => e.preventDefault()}>
+              <Space style={{ cursor: 'pointer' }} >
+                {userInfo.AvatarPath
+                  ? <img
+                    src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                    alt="avatar"
+                    className="img-avatar"></img>
+                  : <img
+                    src={String(avatarDefault)}
+                    className="img-avatar"
+                    alt="avatar"></img>
+                }
+                <UserOutlined />{userInfo ? userInfo.FullName : ""}
+              </Space>
+            </span>
+          </Dropdown>
+        </div>
+        <div className="header-homepage">
+          <Select
+            labelInValue
+            style={{ width: 90 }}
+            defaultValue={
+              <Option key="en-US">
+                <img src={united_states} alt="img-en-flat" width={20} className="img-flat" />
+                <span>EN</span>
+              </Option>
+            }
+            onChange={handleMenuClick}
+          >
             <Option key="en-US">
-              <img src={united_states} alt="img-en-flat" width={20} className="img-flat" />
+              <img src={united_states} alt="img-en-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
               <span>EN</span>
             </Option>
-          }
-          onChange={handleMenuClick}
-        >
-          <Option key="en-US">
-            <img src={united_states} alt="img-en-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
-            <span>EN</span>
-          </Option>
-          <Option key="vi-VN">
-            <img src={vietnam} alt="img-vn-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
-            <span>VN</span>
-          </Option>
-        </Select>
+            <Option key="vi-VN">
+              <img src={vietnam} alt="img-vn-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
+              <span>VN</span>
+            </Option>
+          </Select>
+        </div>
       </div>
-
-
-
     </Header>
   );
 };
