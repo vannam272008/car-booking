@@ -52,9 +52,34 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .header-homepage {
-        display: none;
+
+    .header {
+        height: 200px;
     }
+
+    .header .logo-name {
+        display: block;
+        float: none;
+        height: 100px;
+    }
+
+    .header .header-homepage {
+        display: contents;
+        width: 200px;
+    }
+
+    .header .header-homepage .ant-dropdown-trigger {
+        float: right;
+        margin-right: 10px;
+        height: 100px;
+    }
+
+    .header .header-homepage .ant-select {
+        float: left;
+        margin-top: 30px;
+        margin-left: 10px;
+    }
+
 
     .header-name {
         font-size: 10px;

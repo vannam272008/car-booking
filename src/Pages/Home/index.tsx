@@ -184,7 +184,7 @@ const Home = () => {
                     key={dt.id}
                     xs={24}
                     sm={12}
-                    md={10}
+                    md={12}
                     lg={8}
                     xl={6}>
                     <CardContent
