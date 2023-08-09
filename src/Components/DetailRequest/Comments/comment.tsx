@@ -262,7 +262,6 @@ function Comment(): JSX.Element {
                             <span className='attention-upload-attachment'> {t('(Maximum 20MB per file)')}</span>
                         </Upload>
                     </div>
-
                     <div className='comments-detail-request'>
                         {comments.map((comment) => (
                             <Row align="middle" className='list-comment' key={comment.Id}>
