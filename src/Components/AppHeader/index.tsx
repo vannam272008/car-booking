@@ -72,7 +72,7 @@ const AppHeader = (props: any) => {
                     console.log(e.response.Data);
                 })
         }
-    }, [userID])
+    }, [userID, setUserInfo])
 
     const handleLogout =
         (values: LogoutValues) => {
@@ -100,19 +100,8 @@ const AppHeader = (props: any) => {
     return (
         <Header className="mcs-header">
             <Row className="row-header" gutter={[24, 24]}>
-                {/* <Col xs={1}
-                    sm={1}
-                    md={1}
-                    lg={1}
-                    xl={1}
-                    xxl={1}
-                    // span={1}
-                    className="col-menu"
-                >
-                    
-                </Col> */}
-                <Col xs={23}
-                    sm={16}
+                <Col xs={22}
+                    sm={20}
                     md={16}
                     lg={16}
                     xl={16}
@@ -132,23 +121,20 @@ const AppHeader = (props: any) => {
                         <p>eOffice</p>
                     </div>
                 </Col>
-                {/* <Col xs={13}
-                    sm={13}
-                    md={13}
-                    lg={15}
-                    xl={12}
-                    xxl={14}
-                    className="col-label">
-                    
-                </Col> */}
-                <Col xs={1}
-                    sm={8}
+
+                <Col xs={2}
+                    sm={4}
                     md={8}
                     lg={8}
                     xl={8}
                     xxl={8}
                     className="col-function">
-                    <Menu className="group-btn" mode="horizontal">
+                    <Menu
+                        className="group-btn"
+                        mode="horizontal"
+                        overflowedIndicatorPopupClassName="popup-menu"
+                    // overflowedIndicator={<MenuOutlined />}
+                    >
                         <Menu.Item className="function-menu-item">
                             <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
                             <Drawer
@@ -181,7 +167,7 @@ const AppHeader = (props: any) => {
 
                         <Menu.Item className="function-menu-item">
                             <Badge count={3000} style={{ zIndex: '9999' }}>
-                                <Button className="btn-item"><BellOutlined style={{ fontSize: '24px', color: 'white' }} /></Button>
+                                <Button className="btn-item"><BellOutlined /></Button>
                             </Badge>
                         </Menu.Item>
                         <Menu.Item className="function-menu-item">
@@ -231,9 +217,8 @@ const AppHeader = (props: any) => {
                                 </div>
                             </Drawer>
                         </Menu.Item>
-
-
                     </Menu>
+
 
                     {/* <div className="group-btn">
                         <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
