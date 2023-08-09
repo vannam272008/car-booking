@@ -1,10 +1,12 @@
 import { setTab, setStatus, setUserInfo } from "../Actions/requestAction";
 
 
+
 interface UserInfo {
     FullName: string | null,
     Email: string | null,
     AvatarPath: string | null,
+    UserRoles: [],
 }
 
 type RequestState = {
@@ -22,6 +24,7 @@ const initState: RequestState = {
         FullName: "",
         Email: "",
         AvatarPath: "",
+        UserRoles: [],
     },
 }
 

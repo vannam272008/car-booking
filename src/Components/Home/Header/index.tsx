@@ -104,7 +104,8 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
           setUserInfo({
             FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
             AvatarPath: res.data.Data.AvatarPath,
-            Email: res.data.Data.Email
+            Email: res.data.Data.Email,
+            UserRoles: res.data.Data.UserRoles
           })
         })
         .catch((e) => {
@@ -113,8 +114,6 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
     }
 
   }, [userID, setUserInfo])
-
-
 
   return (
     <Header className="header">

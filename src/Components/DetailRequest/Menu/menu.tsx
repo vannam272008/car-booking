@@ -23,6 +23,9 @@ import { NotificationPlacement } from 'antd/es/notification/interface';
 import TextArea from 'antd/es/input/TextArea';
 import { DepartmentMembers } from '../../AdminPage/Utils';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
+import { ESLint } from 'eslint';
 
 interface ActionRequest {
     action: string,
@@ -51,7 +54,7 @@ function MenuRequest(props: any): JSX.Element {
     // console.log(props);
 
     const { Option } = Select;
-    const { departmentId, requestStatus, requestCode, setLoading } = props;
+    const { departmentId, requestStatus, requestCode, setLoading, userInfo } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
@@ -281,9 +284,19 @@ function MenuRequest(props: any): JSX.Element {
         else return [];
     };
 
-
-
-    console.log(dataDepartmentMember);
+    const checkUserRoles = () => {
+        if (userInfo.UserRoles) {
+            const checkAdminRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+            if (checkAdminRole.length === 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
 
     return (
         <div>
@@ -294,6 +307,7 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={downloadFilePdf} key="download" icon={<FilePdfOutlined />}>
                     {t('downloadfile')}
                 </Menu.Item>
+                { }
                 <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                     {t('delete')}
                 </Menu.Item>
@@ -410,4 +424,9 @@ function MenuRequest(props: any): JSX.Element {
     );
 }
 
-export default MenuRequest;
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
+
+
+export default connect(mapStateToProps, null)(MenuRequest);
