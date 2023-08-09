@@ -263,9 +263,9 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 678px) {
-    // .col-function .ant-menu-overflow {
-    //     display: flex;
-    // }
+    .col-function .ant-menu-overflow {
+        display: initial;
+    }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
