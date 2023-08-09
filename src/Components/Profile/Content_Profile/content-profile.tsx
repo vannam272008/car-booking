@@ -11,7 +11,6 @@ import {
   CameraOutlined,
   SaveOutlined,
   EditOutlined,
-  InfoCircleFilled,
   UserOutlined,
 } from "@ant-design/icons";
 import "./profile.css";
@@ -29,6 +28,7 @@ import { info } from "console";
 const ContentProfile: React.FC = () => {
   const { t } = useTranslation();
   const jwt_admin = localStorage.getItem("Token");
+
   const uploadConfig = {
     action: "http://localhost:63642/api/file/upload-temp",
     headers: {
@@ -105,7 +105,6 @@ const ContentProfile: React.FC = () => {
     CountryR: "",
     Signature: "",
     SignatureTemp: "",
-    // AvatarPathtemp: "",
   });
 
   const { userID } = useParams();
@@ -139,7 +138,7 @@ const ContentProfile: React.FC = () => {
   const onSave = () => {
     setIsEditing(false);
     handleUpdateInfo();
-    setOnOk(false)
+    setOnOk(false);
   };
 
   const beforeUpload = (file: File) => {
@@ -169,6 +168,7 @@ const ContentProfile: React.FC = () => {
       if (!resSig.data.Success) return message.error(resSig.data.Message);
     }
     const res = await request.putForm(endpoint, infoAPI, config);
+
     if (res.data.Success) {
       message.success(t('Edit success !'));
     } else {
@@ -191,7 +191,7 @@ const ContentProfile: React.FC = () => {
   // const [relationship, setRelationship] = useState("");
   // const [relationshipnote, setRelationshipNote] = useState("");
 
-  const [onOk, setOnOk] = useState<Boolean>(false);
+  const [onOk,setOnOk] = useState<Boolean>(false);
 
   const handleOk = () => {
     setVisible(false);
@@ -209,11 +209,8 @@ const ContentProfile: React.FC = () => {
       setImage(croppedImage);
       infoAPI.AvatarPath = res.data.Data;
       setInfoAPI((prev) => ({ ...prev, AvatarPath: res.data.Data }));
-      // console.log("infoAPI.AvatarPath trong if:", infoAPI.AvatarPath);
     }
-    // console.log("infoAPI.AvatarPath ngoai if:", infoAPI.AvatarPath);
   };
-  // console.log("infoAPI.AvatarPath ngoai ham:", infoAPI.AvatarPath);
 
   // visible avatar
   const [visible, setVisible] = useState(false);
@@ -396,6 +393,7 @@ const ContentProfile: React.FC = () => {
             {image ? (
               <Avatar
                 size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
+                icon={<UserOutlined />}
                 src={URL.createObjectURL(image as RcFile)}
               />
             ) : (
@@ -427,13 +425,12 @@ const ContentProfile: React.FC = () => {
             <Avatar
               size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
               icon={<UserOutlined />}
-              // src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
               src={URL.createObjectURL(image as RcFile)}
             />
           ) : (
             <Avatar
               size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-              // icon={<UserOutlined />}
+              icon={<UserOutlined />}
               src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
             />
           )}
