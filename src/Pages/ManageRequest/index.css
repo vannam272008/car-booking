@@ -176,7 +176,8 @@
   }
   .manage-request-content{
     padding-top: 45px;
-    margin-right: 30px;
+    margin-right: 42px;
+    margin-left: 48px;
   }
   .manage-request-navbar .search-bar{
     width: 200px;
@@ -255,9 +256,6 @@
 @media screen and (max-width: 1010px) {
   .manage-request-title {
     display: none;
-  }
-  .manage-request-navbar{
-    height: 70px;
   }
   .manage-request-content .ant-pagination{
     padding-right: 120px;
