@@ -126,11 +126,11 @@ function DetailRequest(): JSX.Element {
                         />
                     </Spin>)
                         : <>
-                            <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
                             <HelmetProvider>
                                 <Helmet>
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                                 </Helmet>
+                                <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
                                 <div className='info-detail-request'>
                                     <div className='info-basic-detail-request'>
                                         <p>{t('requestcode')}: {detailData.RequestCode}</p>
@@ -140,58 +140,54 @@ function DetailRequest(): JSX.Element {
                                     <div className='main-detail-request'>
                                         <h2 className='title-detail-request'>{t('CAR BOOKING REQUEST')}</h2>
                                         <div className='content-detail-request'>
-                                            <Row className='row-detail-request'>
-                                                <Col xs={24} md={12} sm={12} lg={6} className='col-detail-request'>
+                                            <Row wrap={true} className='row-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('Applicant')} <span className='required'>*</span></label>
-                                                    <div>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</div>
+                                                    <p>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</p>
                                                 </Col>
-                                                <Col xs={24} md={12} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('department')} <span className='required'>*</span></label>
-                                                    <div>{detailData.Department ? detailData.Department.Name : ""}</div>
+                                                    <p>{detailData.Department ? detailData.Department.Name : ""}</p>
                                                 </Col>
-                                                <Col xs={24} md={12} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('user')} <span className='required'>*</span></label>
-                                                    <div>{detailData.ReceiverUser ? detailData.ReceiverUser.FullName : ""} </div>
+                                                    <p>{detailData.ReceiverUser ? detailData.ReceiverUser.FullName : ""} </p>
                                                 </Col>
-                                                <Col xs={24} md={12} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('mobile')} <span className='required'>*</span></label>
-                                                    <div>{detailData.Mobile}</div>
+                                                    <p>{detailData.Mobile}</p>
                                                 </Col>
-                                            </Row>
-                                            <Row className='row-request'>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('Cost Center')} <span className='required'>*</span></label>
-                                                    <div>{detailData.CostCenter}</div>
+                                                    <p>{detailData.CostCenter}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('totalpassengers')} <span className='required'>*</span></label>
-                                                    <div>{detailData.TotalPassengers}</div>
+                                                    <p>{detailData.TotalPassengers}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('Usage time from')} <span className='required'>*</span></label>
-                                                    <div>{changeFormatDatePostRequest(detailData.UsageFrom)}</div>
+                                                    <p>{changeFormatDatePostRequest(detailData.UsageFrom)}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('Usage time to')} <span className='required'>*</span></label>
-                                                    <div>{changeFormatDatePostRequest(detailData.UsageTo)}</div>
+                                                    <p>{changeFormatDatePostRequest(detailData.UsageTo)}</p>
                                                 </Col>
-                                            </Row>
-                                            <Row className='row-request'>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('Pick time')} <span className='required'>*</span></label>
-                                                    <div>{changeFormatDatePostRequest(detailData.PickTime)}</div>
+                                                    <p>{changeFormatDatePostRequest(detailData.PickTime)}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('picklocation')} <span className='required'>*</span></label>
-                                                    <div>{detailData.PickLocation}</div>
+                                                    <p>{detailData.PickLocation}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('destination')} <span className='required'>*</span></label>
-                                                    <div>{detailData.Destination}</div>
+                                                    <p>{detailData.Destination}</p>
                                                 </Col>
-                                                <Col xs={24} sm={12} lg={6} className='col-detail-request'>
+                                                <Col xs={24} sm={12} md={8} xl={6} className='col-detail-request'>
                                                     <label>{t('reason')} <span className='required'>*</span></label>
-                                                    <div>{detailData.Reason}</div>
+                                                    <p>{detailData.Reason}</p>
                                                 </Col>
                                             </Row>
                                         </div>
@@ -219,7 +215,7 @@ function DetailRequest(): JSX.Element {
                                                     >
                                                         <span><FileTextOutlined /> </span>
                                                         {/* <span onClick={() => { handleDownloadFile(attachment.Path); console.log(attachment.Path); }}>{attachment.Path.substring(39)} </span> */}
-                                                        <span>{attachment.Path.split('/').pop()} </span>
+                                                        <span className='detail-request-attachment-name-file'>{attachment.Path.split('/').pop()} </span>
                                                         <span style={{ color: 'black' }}>{detailData.SenderUser ? detailData.SenderUser.FullName : ""}</span>
                                                     </div>
                                                 ))
@@ -230,49 +226,26 @@ function DetailRequest(): JSX.Element {
                                     </div>
                                     <div className='list-approvers'>
                                         <p style={{ fontWeight: '700' }}>Approvers:</p>
-                                        <Row>
+                                        <Row wrap={true}>
                                             {Array.isArray(workflowData) ? (
                                                 workflowData.map((approverData: { Id: number; Status: string; Position: string; User: { Id: number; FullName: string } }, index: number) => (
-                                                    <Col xs={24} sm={24} md={12} lg={12} xl={6} key={approverData.Id} className='approver'>
-                                                        {approverData.Status === 'Rejected' ? (
-                                                            <Badge.Ribbon text={t('rejected')} color="red" >
-                                                                <Card
-                                                                    title={
-                                                                        approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                            (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
-                                                                            : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
-                                                                    }
-                                                                    size="small">
-                                                                    {approverData.User.FullName}
-                                                                </Card>
-                                                            </Badge.Ribbon>
-                                                        ) : (
-                                                            approverData.Status === 'Approved' ? (
-                                                                <Badge.Ribbon text={t('approved')} color="green" >
-                                                                    <Card
-                                                                        title={
-
-                                                                            approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                                (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
-                                                                                : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
-                                                                        }
-                                                                        size="small">
-                                                                        {approverData.User.FullName}
-                                                                    </Card>
-                                                                </Badge.Ribbon>) : (
-                                                                <Badge.Ribbon text={t('waitingforapproval')} color="blue" >
-                                                                    <Card
-                                                                        title={
-                                                                            approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
-                                                                                (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
-                                                                                : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
-                                                                        }
-                                                                        size="small">
-                                                                        {approverData.User.FullName}
-                                                                    </Card>
-                                                                </Badge.Ribbon>
-                                                            )
-                                                        )}
+                                                    <Col xs={24} sm={24} md={12} lg={12} xl={8} key={approverData.Id} className='approver'>
+                                                        <Badge.Ribbon text={approverData.Status === 'Rejected' ? t('rejected') : (approverData.Status === 'Approved' ? t('approved') : t('waitingforapproval'))} color={approverData.Status === 'Rejected' ? 'red' : (approverData.Status === 'Approved' ? 'green' : 'blue')} >
+                                                            <Card
+                                                                className='responsive-title'
+                                                                title={
+                                                                    approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
+                                                                        (<span style={{ fontWeight: '̃700' }}>{t(approverData.Position)}</span>)
+                                                                        : (<span style={{ fontWeight: '̃700' }}>{t('Approver')}  {index + 1}</span>)
+                                                                }
+                                                                size="small"
+                                                            >
+                                                                {approverData.Position === 'Supervisor' || approverData.Position === 'Manager' ?
+                                                                    (<span className='responsive-title-after'>{t(approverData.Position)} : </span>)
+                                                                    : (<span className='responsive-title-after'>{t('Approver')}  {index + 1} : </span>)}
+                                                                <p>{approverData.User.FullName}</p>
+                                                            </Card>
+                                                        </Badge.Ribbon>
                                                     </Col>
                                                 ))
                                             ) : (
