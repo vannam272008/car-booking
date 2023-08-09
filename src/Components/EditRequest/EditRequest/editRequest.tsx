@@ -28,7 +28,7 @@ interface DepartmentMember {
 
 function EditRequest() {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { Option } = Select;
     const profile = false;
@@ -250,7 +250,7 @@ function EditRequest() {
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-request'>
-                    <MenuEdit formData={formData} setFormData={setFormData} />
+                    <MenuEdit formData={formData} setFormData={setFormData} senderId={detailData.senderId} />
                     {loading
                         ?
                         (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">

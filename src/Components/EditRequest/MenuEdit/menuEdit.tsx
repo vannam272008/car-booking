@@ -7,6 +7,8 @@ import request from '../../../Utils/request';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
 interface MenuAddProps {
     formData: {
@@ -45,10 +47,12 @@ interface MenuAddProps {
         Status: string,
         files: RcFile[];
     }>>,
+    userInfo: any,
+    senderId: any
 }
 
 
-function MenuEdit({ formData, setFormData }: MenuAddProps) {
+function MenuEdit({ formData, setFormData, userInfo, senderId }: MenuAddProps) {
 
     const { t } = useTranslation();
 
@@ -154,6 +158,28 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     console.log('formData', formData);
 
+    const checkUserRoles = (roles: number[]) => {
+        if (userInfo.UserRoles) {
+            let checkRole = [];
+            // ADMIN OR ADMINSTRATIVE
+            if (roles.includes(1) || roles.includes(2)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+            }
+            // APPROVER
+            else if (roles.includes(3)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
+            }
+            if (checkRole.length === 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
 
     return (
 
@@ -162,9 +188,12 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}
                 </Menu.Item>
-                <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
-                    {t('delete')}
-                </Menu.Item>
+                {(senderId === userInfo.Id || checkUserRoles([1, 2])) && (
+                    <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
+                        {t('delete')}
+                    </Menu.Item>
+                )}
+
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
@@ -184,4 +213,9 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     );
 }
 
-export default MenuEdit;
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
+
+
+export default connect(mapStateToProps, null)(MenuEdit);
