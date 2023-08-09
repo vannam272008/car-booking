@@ -78,7 +78,6 @@ const AppHeader = (props: any) => {
                 .get("/user/logout")
                 .then((response) => {
                     const data = response.data;
-                    console.log(response);
                     if (data) {
                         if (data.Success === false) {
                             message.error(data.Message);
@@ -86,6 +85,7 @@ const AppHeader = (props: any) => {
                             localStorage.clear();
                             setStatus('');
                             setTab('get-all');
+                            navigate('/login');
                             window.location.reload();
                         }
                     }

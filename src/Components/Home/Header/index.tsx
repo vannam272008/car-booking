@@ -102,6 +102,7 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
       request.get("/user/profile/" + userID)
         .then((res) => {
           setUserInfo({
+            Id: res.data.Data.Id,
             FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
             AvatarPath: res.data.Data.AvatarPath,
             Email: res.data.Data.Email,

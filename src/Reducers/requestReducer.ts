@@ -3,6 +3,7 @@ import { setTab, setStatus, setUserInfo } from "../Actions/requestAction";
 
 
 interface UserInfo {
+    Id: string | null,
     FullName: string | null,
     Email: string | null,
     AvatarPath: string | null,
@@ -21,6 +22,7 @@ const initState: RequestState = {
     tab: 'get-all',
     status: '',
     userInfo: {
+        Id: "",
         FullName: "",
         Email: "",
         AvatarPath: "",

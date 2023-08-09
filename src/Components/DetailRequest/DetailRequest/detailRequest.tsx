@@ -117,7 +117,7 @@ function DetailRequest(): JSX.Element {
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    {loading ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                    {loading && workflowData !== null ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
                         <Alert
                             style={{ width: '100%', textAlign: 'center' }}
                             message={t('Loading...')}
@@ -130,7 +130,7 @@ function DetailRequest(): JSX.Element {
                                 <Helmet>
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                                 </Helmet>
-                                <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} />
+                                <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
                                 <div className='info-detail-request'>
                                     <div className='info-basic-detail-request'>
                                         <p>{t('requestcode')}: {detailData.RequestCode}</p>
