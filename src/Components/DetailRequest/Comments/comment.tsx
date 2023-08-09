@@ -33,7 +33,7 @@ function Comment(): JSX.Element {
 
     // const [detailData, setDetailData] = useState<any>({});
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { requestId } = useParams();
     const [showUpload, setShowUpload] = useState(false);
@@ -226,7 +226,7 @@ function Comment(): JSX.Element {
                         <span> {t('Comments')}</span>
                     </div>
                     <div>
-                        <Row className='row-comment-box'>
+                        <Row gutter={5} className='row-comment-box' align="middle">
                             <Col span={1}>
                                 <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
                             </Col>
@@ -242,7 +242,6 @@ function Comment(): JSX.Element {
                                         }))}
                                 />
                             </Col>
-                            <Col span={1}></Col>
                             <Col span={2}>
                                 <Button className='btn-comment' type="primary"
                                     onClick={handlePostComment}
