@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, message, notification } from 'antd';
+import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification } from 'antd';
 import './menu.css'
 import {
     ArrowLeftOutlined,
@@ -21,20 +21,21 @@ import { useParams } from 'react-router';
 import request from '../../../Utils/request';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import TextArea from 'antd/es/input/TextArea';
-import { DepartmentMembers } from '../../AdminPage/Utils';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
 interface ActionRequest {
     action: string,
     Note: string
 }
 
-interface ApproverShare {
-    Id: string;
-    FullName: string;
-    Email: string;
-    JobTitle: string;
-}
+// interface ApproverShare {
+//     Id: string;
+//     FullName: string;
+//     Email: string;
+//     JobTitle: string;
+// }
 
 interface DepartmentMember {
     Id: string;
@@ -51,14 +52,13 @@ function MenuRequest(props: any): JSX.Element {
     // console.log(props);
 
     const { Option } = Select;
-    const { departmentId, requestStatus, requestCode, setLoading } = props;
+    const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
     const [isModalOpenShare, setIsModalOpenShare] = useState(false);
     const [isModalOpenForward, setIsModalOpenForward] = useState(false);
     const [checkBoxDelete, SetCheckBoxDelete] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
     const { requestId } = useParams();
     const { t } = useTranslation();
     const [actionRequest, setActionRequest] = useState<ActionRequest>({
@@ -93,7 +93,10 @@ function MenuRequest(props: any): JSX.Element {
         }
 
         // getDataApprover();
-        getDataDepatmentMember();
+        if (departmentId !== undefined) {
+            getDataDepatmentMember();
+        }
+
     }, [departmentId])
 
     const showModalDelete = () => {
@@ -105,10 +108,20 @@ function MenuRequest(props: any): JSX.Element {
     }
 
     const showModalApprove = () => {
+        setActionRequest({ action: "Approved", Note: "" });
+        setComment((prevComment) => ({
+            ...prevComment,
+            comment: t('Request ') + requestCode + t(' has been Approved. Note: ')
+        }));
         setIsModalOpenApprove(true);
     };
 
     const showModalReject = () => {
+        setActionRequest({ action: "Rejected", Note: "" });
+        setComment((prevComment) => ({
+            ...prevComment,
+            comment: t('Request ') + requestCode + t(' has been Rejected. Note: ')
+        }));
         setIsModalOpenReject(true);
     };
 
@@ -118,12 +131,13 @@ function MenuRequest(props: any): JSX.Element {
 
     const handleDelete = () => {
         request.delete("/request/" + requestId)
-            .then(() => {
+            .then((res) => {
                 navigate("/request/carbooking");
+                openNotification('topRight', 'Delete successful', true);
             })
             .catch((e) => {
                 // setErrorMessage(e.response.data.Message);
-                openNotification('topRight', e.response.data.Message);
+                openNotification('topRight', e.response.data.Message, false);
             })
         setIsModalOpenDelete(false);
     }
@@ -133,18 +147,16 @@ function MenuRequest(props: any): JSX.Element {
     };
 
     const handleShare = () => {
-        console.log('dataUserId', dataUserId);
-        console.log('requestId', requestId);
         request.post("/request/share/create", { UserId: dataUserId, RequestId: requestId })
             .then(() => {
                 // setLoading(true);
-                openNotification('topRight', 'Success');
+                openNotification('topRight', 'Shared successful', true);
             })
             .catch((error) => {
                 console.log('error', error);
                 // setLoading(true);
                 // setErrorMessage(error.response.data.Message);
-                openNotification('topRight', error.response.data.Message);
+                openNotification('topRight', error.response.data.Message, false);
             });
         setIsModalOpenShare(false);
     }
@@ -153,14 +165,15 @@ function MenuRequest(props: any): JSX.Element {
     const putActionRequest = () => {
         const putAction = () => {
             request.putForm("/request/action/Id=" + requestId, actionRequest)
-                .then(() => {
+                .then((res) => {
                     request.postForm("/request/comment/requestId=" + requestId, comment)
                     setLoading(true);
                     navigate("/request/carbooking/detail/" + requestId);
+                    openNotification('topRight', actionRequest.action + ' successful', true);
                 })
                 .catch((e) => {
                     // setErrorMessage(e.response.data.Message);
-                    openNotification('topRight', e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message, false);
                 })
         }
         putAction();
@@ -188,14 +201,15 @@ function MenuRequest(props: any): JSX.Element {
     const handleCancelClick = () => {
         const putAction = () => {
             request.putForm("/request/action/cancel/Id=" + requestId, actionRequest)
-                .then(() => {
+                .then((res) => {
                     request.postForm("/request/comment/requestId=" + requestId, comment);
                     setLoading(true);
                     navigate("/request/carbooking/detail/" + requestId);
+                    openNotification('topRight', actionRequest.action + ' successful', true);
                 })
                 .catch((e) => {
                     // setErrorMessage(e.response.data.Message);
-                    openNotification('topRight', e.response.data.Message);
+                    openNotification('topRight', e.response.data.Message, false);
                 })
         }
         putAction();
@@ -231,8 +245,8 @@ function MenuRequest(props: any): JSX.Element {
     //     },
     // ];
 
-    const openNotification = (placement: NotificationPlacement, msg: string) => {
-        if (msg !== 'Success') {
+    const openNotification = (placement: NotificationPlacement, msg: string, success: boolean) => {
+        if (success === false) {
             notification.info({
                 message: <strong>{t('Failed action')}</strong>,
                 description: msg,
@@ -242,7 +256,7 @@ function MenuRequest(props: any): JSX.Element {
         } else {
             notification.info({
                 message: <strong>Successfull</strong>,
-                description: 'Action successfully',
+                description: msg,
                 placement,
                 icon: <CheckCircleFilled style={{ color: 'green' }} />,
 
@@ -278,9 +292,36 @@ function MenuRequest(props: any): JSX.Element {
         else return [];
     };
 
+    // check User Roles is Admin || AdminStative || Approver
+    const checkUserRoles = (roles: number[]) => {
+        if (userInfo.UserRoles) {
+            let checkRole = [];
+            // ADMIN OR ADMINSTRATIVE
+            if (roles.includes(1) || roles.includes(2)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+            }
+            // APPROVER
+            else if (roles.includes(3)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
+            }
+            if (checkRole.length === 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
 
-
-    console.log(dataDepartmentMember);
+    // Check User is Approver of this Request
+    const checkUserApprover = () => {
+        const checkUserApprover = workflowData.filter((data: any) => data.User.Id === userInfo.Id);
+        if (checkUserApprover.length !== 0) {
+            return true;
+        } else return false;
+    }
 
     return (
         <div>
@@ -291,9 +332,11 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={downloadFilePdf} key="download" icon={<FilePdfOutlined />}>
                     {t('downloadfile')}
                 </Menu.Item>
-                <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
-                    {t('delete')}
-                </Menu.Item>
+                {(senderId === userInfo.Id || checkUserRoles([1, 2])) && (
+                    <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
+                        {t('delete')}
+                    </Menu.Item>
+                )}
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
                         <Button type="primary" onClick={handleDelete}>OK</Button>
@@ -334,7 +377,7 @@ function MenuRequest(props: any): JSX.Element {
                         ))}
                     </Select>
                 </Modal>
-                {requestStatus === 'Waiting for approval' && (
+                {(requestStatus === 'Waiting for approval' && (checkUserApprover() || checkUserRoles([1, 2]))) && (
                     <>
                         <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
                             {t('approve')}
@@ -389,7 +432,7 @@ function MenuRequest(props: any): JSX.Element {
                     </Select>
                     <Input className='menu-after-btn-forward'></Input>
                 </Modal>
-                {requestStatus === 'Approved' &&
+                {(requestStatus === 'Approved' && checkUserRoles([1, 2])) &&
                     <Dropdown overlay={menu} trigger={['click']}
                         onOpenChange={() => {
                             setActionRequest({ action: "Canceled", Note: "Canceled" });
@@ -407,4 +450,9 @@ function MenuRequest(props: any): JSX.Element {
     );
 }
 
-export default MenuRequest;
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
+
+
+export default connect(mapStateToProps, null)(MenuRequest);

@@ -1,6 +1,25 @@
 *{
     box-sizing: border-box;
   }
+
+  .responsive-title-after{
+    display: none;
+  }
+
+  @media screen and (max-width: 768px) {
+    .responsive-title p {
+      text-align: center;
+    }
+    .responsive-title .ant-card-head-title{
+      display: none;
+    }
+    .responsive-title-after{
+      display: inline-block;
+      font-weight: 600;
+      font-size: medium;
+    }
+  }
+
   .required {
     color: red;
   }
@@ -61,6 +80,9 @@
     cursor: default;
     font-family: "Segoe UI";
   }
+  .col-detail-request p{
+    overflow-wrap: break-word;
+  }
   .attention-detail-request{
     margin-top: 30px;
     margin-bottom: 30px;
@@ -97,3 +119,8 @@
     font-weight: 700;
     cursor: default;
   }
+  .detail-request-attachment-name-file{
+    overflow-wrap: break-word;
+  }
+
+  

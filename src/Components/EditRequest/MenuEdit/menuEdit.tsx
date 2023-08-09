@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Menu, Modal, message, notification, Checkbox } from 'antd';
-import { ArrowLeftOutlined, DeleteOutlined, SendOutlined, WarningOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, CheckCircleFilled, DeleteOutlined, SendOutlined, WarningOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/es/upload';
 import { NotificationPlacement } from 'antd/es/notification/interface';
 import request from '../../../Utils/request';
 import { useNavigate } from 'react-router';
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
 interface MenuAddProps {
     formData: {
@@ -45,18 +47,19 @@ interface MenuAddProps {
         Status: string,
         files: RcFile[];
     }>>,
+    userInfo: any,
+    senderId: any
 }
 
 
-function MenuEdit({ formData, setFormData }: MenuAddProps) {
+function MenuEdit({ formData, setFormData, userInfo, senderId }: MenuAddProps) {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const navigate = useNavigate();
     const { requestId } = useParams();
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [checkBoxDelete, SetCheckBoxDelete] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
 
     const handleReSubmit = () => {
         if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason && formData.ListOfUserId !== null && formData.ListOfUserId.length !== 0) {
@@ -64,6 +67,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 .then((response) => {
                     const data = response.data;
                     if (data) {
+                        openNotification('topRight', 'Create Request successfull', true);
                         const comment = t('Submit the request ') + data.Data.RequestCode + t(' for approval');
                         request.postForm("/request/comment/requestId=" + data.Data.Id, { comment });
                         localStorage.setItem("Data", data?.Data);
@@ -76,6 +80,7 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 })
                 .catch((error) => {
                     console.log(error);
+                    openNotification('topRight', error.response.data.Message, false);
                 });
             setFormData((prevFormData) => ({
                 ...prevFormData,
@@ -97,22 +102,32 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 files: [],
             }));
         } else {
-            openNotification('topRight');
+            openNotification('topRight', 'Failed', false);
         }
     }
 
     const handleReturn = () => {
         navigate("/request/carbooking");
     }
-    const openNotification = (placement: NotificationPlacement) => {
-        notification.info({
-            message: <strong>{t('Failed action')}</strong>,
-            description: t('Please fill in all the information in the form and and do the action again'),
-            placement,
-            icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+    const openNotification = (placement: NotificationPlacement, msg: string, success: boolean) => {
+        if (success === false) {
+            notification.info({
+                message: <strong>{t('Failed action')}</strong>,
+                description: msg,
+                placement,
+                icon: <WarningOutlined style={{ color: '#FF0000' }} />,
+            });
+        } else {
+            notification.info({
+                message: <strong>Successful</strong>,
+                description: msg,
+                placement,
+                icon: <CheckCircleFilled style={{ color: 'green' }} />,
 
-        });
-    };
+            });
+
+        };
+    }
 
 
     const showModalDelete = () => {
@@ -129,10 +144,10 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
             .then(() => {
                 navigate("/request/carbooking");
                 // console.log('sucess');
+                openNotification('topRight', 'Delete successful', true);
             })
             .catch((e) => {
-                setErrorMessage(e.response.data.Message);
-                openNotification('topRight');
+                openNotification('topRight', e.response.data.Message, false);
             })
         setIsModalOpenDelete(false);
     }
@@ -143,6 +158,29 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
 
     console.log('formData', formData);
 
+    const checkUserRoles = (roles: number[]) => {
+        if (userInfo.UserRoles) {
+            let checkRole = [];
+            // ADMIN OR ADMINSTRATIVE
+            if (roles.includes(1) || roles.includes(2)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+            }
+            // APPROVER
+            else if (roles.includes(3)) {
+                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
+            }
+            if (checkRole.length === 0) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
+
     return (
 
         <div>
@@ -150,12 +188,15 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}
                 </Menu.Item>
-                <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
-                    {t('delete')}
-                </Menu.Item>
+                {(senderId === userInfo.Id || checkUserRoles([1, 2])) && (
+                    <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
+                        {t('delete')}
+                    </Menu.Item>
+                )}
+
                 <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
                     <div className='menu-btn-delete'>
-                        <Button type="primary" onClick={handleDelete} disabled={checkBoxDelete ? false : true}>OK</Button>
+                        <Button type="primary" onClick={handleDelete}>OK</Button>
                         <Button onClick={handleClose}>{t('cancel')}</Button>
                     </div>
                 }>
@@ -172,4 +213,9 @@ function MenuEdit({ formData, setFormData }: MenuAddProps) {
     );
 }
 
-export default MenuEdit;
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
+
+
+export default connect(mapStateToProps, null)(MenuEdit);
