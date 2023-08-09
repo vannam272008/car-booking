@@ -12,7 +12,7 @@ const { Option } = Select;
 
 function DoneRequest(props: any) {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { requestCode } = props;
     const [checkFeedback, setCheckFeedback] = useState<boolean>(true);
@@ -112,7 +112,7 @@ function DoneRequest(props: any) {
                                 <Radio.Group name="Type" onChange={onChange} value={checkFeedback} style={{ width: '100%' }}>
                                     <Radio className='done-request-check-radio' value={true}>1. {t('Company vehicle')}</Radio>
                                     <Row className='row-request'>
-                                        <Col span={6} className='col-request'>
+                                        <Col xs={24} sm={24} md={12} xl={6} className='col-request'>
                                             <Form.Item
                                                 label={t('Driver')}
                                                 name="DriverId"
@@ -138,7 +138,7 @@ function DoneRequest(props: any) {
                                                 </Select>
                                             </Form.Item>
                                         </Col>
-                                        <Col span={6} className='col-request'>
+                                        <Col xs={24} sm={24} md={12} xl={6} className='col-request'>
                                             <Form.Item
                                                 label={t('mobile')}
                                                 name="DriverMobile"
@@ -154,7 +154,7 @@ function DoneRequest(props: any) {
                                                 <Input disabled={!checkFeedback} type='text' inputMode='numeric' name='Mobile' />
                                             </Form.Item>
                                         </Col>
-                                        <Col span={6} className='col-request'>
+                                        <Col xs={24} sm={24} md={12} xl={6} className='col-request'>
                                             <Form.Item
                                                 label={t('Car plate')}
                                                 name="DriverCarplate"
@@ -163,7 +163,7 @@ function DoneRequest(props: any) {
                                                 <Input disabled={!checkFeedback} type='text' inputMode='numeric' name='Carplate' />
                                             </Form.Item>
                                         </Col>
-                                        <Col span={6} className='col-request'>
+                                        <Col xs={24} sm={24} md={12} xl={6} className='col-request'>
                                             <Form.Item
                                                 label={t('Rotation')}
                                                 name="RotaionId"
@@ -192,7 +192,7 @@ function DoneRequest(props: any) {
                                     </Row>
                                     <Radio className='done-request-check-radio' value={false}>2. {t('Rented car, taxi')}</Radio>
                                     <Row className='row-request'>
-                                        <Col span={12} className='col-request'>
+                                        <Col xs={24} sm={24} md={18} xl={12} className='col-request'>
                                             <Form.Item
                                                 label={t('reason')}
                                                 name="Reason"
@@ -204,7 +204,7 @@ function DoneRequest(props: any) {
                                     </Row>
                                 </Radio.Group>
                                 <Row className='row-request'>
-                                    <Col span={18} className='col-request'>
+                                    <Col xs={24} sm={24} xl={18} className='col-request'>
                                         <Form.Item
                                             label={t('Note')}
                                             name="Note"

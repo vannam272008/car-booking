@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 function InfoFeedback() {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [vehicleData, setVehicleData] = useState<any>({})
@@ -54,40 +54,45 @@ function InfoFeedback() {
                         ) : (
                             <div><Radio checked>{t('Rented car, taxi')}</Radio></div>
                         )}
-                        {checkValue ? (
-                            <Row className='info-feadback-row'>
-                                <Col span={6}>
-                                    <div className='info-feadback-col-title'>{t('Driver')}</div>
-                                    <div>{vehicleData.User.FullName}</div>
-                                </Col>
-                                <Col span={6}>
-                                    <div className='info-feadback-col-title'>{t('Mobile')}</div>
-                                    <div>{vehicleData.DriverMobile}</div>
-                                </Col>
-                                <Col span={6}>
-                                    <div className='info-feadback-col-title'>{t('Car plate')}</div>
-                                    <div>{vehicleData.DriverCarplate}</div>
-                                </Col>
-                                <Col span={6}>
-                                    <div className='info-feadback-col-title'>{t('Rotation')}</div>
-                                    <div>{vehicleData.Rotation.Type}</div>
-                                </Col>
-                            </Row>) : (
-                            <Row className='info-feadback-row'>
-                                <Col span={6}>
-                                    <div className='info-feadback-col-title'>{t('reason')}</div>
-                                    <div>{vehicleData.Reason}</div>
-                                </Col>
-                            </Row>
-                        )
-                        }
-                        {vehicleData.Note ? (
-                            <Row className='info-feadback-row'><Col span={24}>
-                                <div className='info-feadback-col-title'>{t('Note')}</div>
-                                <div>{vehicleData.Note}</div>
-                            </Col></Row>) :
-                            (null)
-                        }
+                        <Row gutter={15} className='info-feadback-row'>
+                            {checkValue ? (
+                                <>
+                                    <Col className='info-feadback-col' xs={24} sm={12} lg={6} >
+                                        <div className='info-feadback-col-title'>{t('Driver')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.User.FullName}</p>
+                                    </Col>
+                                    <Col className='info-feadback-col' xs={24} sm={12} lg={6} >
+                                        <div className='info-feadback-col-title'>{t('Mobile')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.DriverMobile}</p>
+                                    </Col>
+                                    <Col className='info-feadback-col' xs={24} sm={12} lg={6} >
+                                        <div className='info-feadback-col-title'>{t('Car plate')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.DriverCarplate}</p>
+                                    </Col>
+                                    <Col className='info-feadback-col' xs={24} sm={12} lg={6} >
+                                        <div className='info-feadback-col-title'>{t('Rotation')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.Rotation.Type}</p>
+                                    </Col>
+                                </>
+                            ) : (
+                                <>
+                                    <Col className='info-feadback-col' span={24} >
+                                        <div className='info-feadback-col-title'>{t('reason')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.Reason}</p>
+                                    </Col>
+                                </>
+                            )
+                            }
+                            {vehicleData.Note ? (
+                                <>
+                                    <Col className='info-feadback-col' span={24}>
+                                        <div className='info-feadback-col-title'>{t('Note')}</div>
+                                        <p className='info-feadback-col-content'>{vehicleData.Note}</p>
+                                    </Col>
+                                </>) :
+                                (null)
+                            }
+                        </Row>
                     </div>
                 )}
         </div>
