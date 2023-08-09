@@ -225,17 +225,17 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                 <b>Attachment(s)</b>
             </div>
             <div className='reply-upload-comment' style={{ width: 'fit-content' }}>
-                <Upload
+                <Upload className='upload-attachment-addrequest'
                     beforeUpload={handleBeforeUpload}
                     accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                     fileList={fileList}
                     onRemove={handleRemoveFile}
                     multiple={true}
                 >
-                    <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>
+                    <Button icon={<UploadOutlined />} className='btn-attachment-comment'>
                         {t('Add attachments')}
                     </Button>
-                    <span> {t('(Maximum 20MB per file)')}</span>
+                    <span className='attention-upload-attachment'> {t('(Maximum 20MB per file)')}</span>
                 </Upload>
             </div>
             <div className='form-approver'>

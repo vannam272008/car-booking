@@ -7,3 +7,12 @@
 .col-request .ant-select-selection-search{
     line-height: 53px;
 }
+@media screen and (max-width: 576px) {
+    .upload-attachment-addrequest .ant-upload{
+        float: left;
+    }
+}
+.btn-attachment-comment{
+    background-color: rgb(47,133,239);
+    color: white;
+}

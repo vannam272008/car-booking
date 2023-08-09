@@ -139,3 +139,12 @@
     font-size: medium;
     justify-content: center;
 }
+.responsive-select-option .ant-select-selector::after{
+    width: 12px;
+}
+.responsive-select-option .ant-select-selector .ant-select-selection-search{
+    width: 242px;
+}
+.add-request-width-formitem .ant-picker-input input{
+    border-bottom: none;
+}
