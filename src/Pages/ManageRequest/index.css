@@ -163,4 +163,53 @@
   border-bottom: 10px solid transparent;
 }
 
+/* RESPONSIVE
+TABLET */
+@media screen and (max-width: 992px) {
+  #projects .project li{
+      width: calc(100% / 2 - 1rem);
+  }
+  #about ul li{
+      width: calc(100% / 2 - 1rem);
+  }
+}
+
+/* @media screen and (max-width: 600px) {
+  #projects .project li{
+      width: 100%;
+  }
+  #about ul li{
+      width: 100%;
+
+  }
+  #navbar .nav-item{
+      display: none;
+  }
+  #hero h2 span{
+      display: none;
+  }
+  #hero h2 img{
+      display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #projects .project li{
+      width: 100%;
+  }
+  #about ul li{
+      width: 100%;
+
+  }
+  #navbar .nav-item{
+      display: none;
+  }
+  #hero h2 span{
+      display: none;
+  }
+  #hero h2 img{
+      display: none;
+  }
+} */
+
 

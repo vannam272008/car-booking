@@ -115,8 +115,6 @@ const ManageRequest = (props: any) => {
   useEffect(() => {
     handleGetAllRequest();
   }, [tab, filter, status, currentPage, limit]);
-  
-  console.log(t)
 
   const profile = false;
   return (
