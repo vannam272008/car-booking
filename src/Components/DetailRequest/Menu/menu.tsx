@@ -108,10 +108,20 @@ function MenuRequest(props: any): JSX.Element {
     }
 
     const showModalApprove = () => {
+        setActionRequest({ action: "Approved", Note: "" });
+        setComment((prevComment) => ({
+            ...prevComment,
+            comment: t('Request ') + requestCode + t(' has been Approved. Note: ')
+        }));
         setIsModalOpenApprove(true);
     };
 
     const showModalReject = () => {
+        setActionRequest({ action: "Rejected", Note: "" });
+        setComment((prevComment) => ({
+            ...prevComment,
+            comment: t('Request ') + requestCode + t(' has been Rejected. Note: ')
+        }));
         setIsModalOpenReject(true);
     };
 

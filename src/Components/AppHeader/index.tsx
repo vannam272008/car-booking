@@ -1,13 +1,13 @@
 import { Col, Layout, Row, Button, Drawer, message, Badge, Menu } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { QuestionOutlined, BellOutlined, SettingOutlined, UserOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
 import request from "../../Utils/request";
 import opus_logo from "../../assets/opus_logo.png";
 import { connect } from 'react-redux';
 import { RootState } from '../../Reducers/rootReducer';
-import { setTab, setStatus } from "../../Actions/requestAction";
+import { setTab, setStatus, setUserInfo } from "../../Actions/requestAction";
 import Feedback from "../Feedback/Feedback";
 import { useTranslation } from "react-i18next";
 
@@ -20,7 +20,7 @@ interface LogoutValues {
 
 const AppHeader = (props: any) => {
     const userID = localStorage.getItem("Id");
-    const { setTab, setStatus, userInfo } = props;
+    const { setTab, setStatus, userInfo, setUserInfo } = props;
     const avatarDefault = require('../../public/images/avatarDefault.png');
     const [pathName, setPathName] = useState(window.location.pathname);
     const [openHelp, setOpenHelp] = useState(false);
@@ -56,21 +56,23 @@ const AppHeader = (props: any) => {
         setOpenHelp(!openHelp);
     };
 
-    // useEffect(() => {
-    //     if (userID !== null) {
-    //         request.get("/user/profile/" + userID)
-    //             .then((res) => {
-    //                 setUserLoginInfo({
-    //                     FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
-    //                     AvatarPath: res.data.Data.AvatarPath,
-    //                     Email: res.data.Data.Email
-    //                 })
-    //             })
-    //             .catch((e) => {
-    //                 console.log(e.response.Data);
-    //             })
-    //     }
-    // }, [userID])
+    useEffect(() => {
+        if (userID !== null) {
+            request.get("/user/profile/" + userID)
+                .then((res) => {
+                    setUserInfo({
+                        Id: res.data.Data.Id,
+                        FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
+                        AvatarPath: res.data.Data.AvatarPath,
+                        Email: res.data.Data.Email,
+                        UserRoles: res.data.Data.UserRoles
+                    })
+                })
+                .catch((e) => {
+                    console.log(e.response.Data);
+                })
+        }
+    }, [userID])
 
     const handleLogout =
         (values: LogoutValues) => {
@@ -97,8 +99,8 @@ const AppHeader = (props: any) => {
 
     return (
         <Header className="mcs-header">
-            <Row className="row-header" >
-                <Col xs={1}
+            <Row className="row-header" gutter={[24, 24]}>
+                {/* <Col xs={1}
                     sm={1}
                     md={1}
                     lg={1}
@@ -107,42 +109,47 @@ const AppHeader = (props: any) => {
                     // span={1}
                     className="col-menu"
                 >
-                    <Button className="btn-menu">
-                        <MenuOutlined />
-                    </Button>
-                </Col>
-                <Col xs={3}
-                    sm={3}
-                    md={3}
-                    lg={4}
-                    xl={4}
-                    xxl={3}
+                    
+                </Col> */}
+                <Col xs={23}
+                    sm={16}
+                    md={16}
+                    lg={16}
+                    xl={16}
+                    xxl={16}
                     className="col-logo">
-
-                    <div onClick={handlePathName}>
+                    <div className="col-logo-menu">
+                        <Button className="btn-menu">
+                            <MenuOutlined />
+                        </Button>
+                    </div>
+                    <div onClick={handlePathName} className="col-logo-img">
                         <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
+                    <div className="col-logo-label">
+                        <p>eOffice</p>
+                    </div>
                 </Col>
-                <Col xs={13}
+                {/* <Col xs={13}
                     sm={13}
                     md={13}
-                    lg={13}
-                    xl={13}
-                    xxl={2}
+                    lg={15}
+                    xl={12}
+                    xxl={14}
                     className="col-label">
-                    <p>eOffice</p>
-                </Col>
-                <Col xs={6}
-                    sm={6}
-                    md={6}
-                    lg={6}
-                    xl={6}
-                    xxl={18}
+                    
+                </Col> */}
+                <Col xs={1}
+                    sm={8}
+                    md={8}
+                    lg={8}
+                    xl={8}
+                    xxl={8}
                     className="col-function">
                     <Menu className="group-btn" mode="horizontal">
-                        <Menu.Item>
+                        <Menu.Item className="function-menu-item">
                             <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
                             <Drawer
                                 className="dropdown-help"
@@ -172,18 +179,18 @@ const AppHeader = (props: any) => {
                             </Drawer>
                         </Menu.Item>
 
-                        <Menu.Item>
+                        <Menu.Item className="function-menu-item">
                             <Badge count={3000} style={{ zIndex: '9999' }}>
                                 <Button className="btn-item"><BellOutlined style={{ fontSize: '24px', color: 'white' }} /></Button>
                             </Badge>
                         </Menu.Item>
-                        <Menu.Item>
+                        <Menu.Item className="function-menu-item">
                             <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
                                 <Button className="btn-item"><SettingOutlined /></Button>
                             </NavLink>
                         </Menu.Item>
 
-                        <Menu.Item>
+                        <Menu.Item className="function-menu-item">
                             <Button onClick={handleClickProfile} className="btn-item"><UserOutlined /></Button>
                             <Drawer
                                 className="dropdown-help"
@@ -315,6 +322,6 @@ const mapStateToProps = (state: RootState) => ({
     userInfo: state.request.userInfo
 });
 
-const mapDispatchToProps = { setTab, setStatus };
+const mapDispatchToProps = { setTab, setStatus, setUserInfo };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);

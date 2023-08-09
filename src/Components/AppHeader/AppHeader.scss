@@ -18,14 +18,21 @@
         }
     }
 
-    & .col-menu {
-        float: left;
-    }
+
 
     & .col-logo {
         float: left;
         width: 100%;
-        border-right: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+
+        & .col-menu {
+            float: left;
+        }
+
+        .col-logo-img {
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
 
 
         & p {
@@ -33,30 +40,36 @@
             color: white;
             display: contents;
         }
-    }
 
-    & .col-label {
-        float: left;
-        padding-left: 10px;
-        width: 100%;
-
-
-        & p {
+        & .col-logo-label {
+            float: left;
+            padding-left: 10px;
             width: 100%;
-            color: white;
-            display: contents;
-            font-size: 17px;
-            cursor: pointer;
-            font-family: 'Segoe UI';
+
+
+            & p {
+                width: 100%;
+                color: white;
+                display: contents;
+                font-size: 17px;
+                cursor: pointer;
+                font-family: 'Segoe UI';
+            }
         }
     }
+
+
 
     & .col-function {
         float: right;
+        display: initial;
 
-        // & .ant-menu-overflow {
-        //     display: flex;
-        // }
+        & .ant-menu {
+            .function-menu-item {
+                background-color: #167c82;
+            }
+        }
+
 
         & .group-btn {
             float: right;
@@ -72,7 +85,7 @@
                 color: white;
                 height: fit-content;
                 padding-bottom: 10px;
-                margin-left: 10px;
+                padding-left: 10px;
 
                 & svg {
                     font-size: 20px;
@@ -242,10 +255,18 @@
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+@media only screen and (max-width: 677px) {
+    .col-function .ant-menu-overflow {
+        display: block;
+    }
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
-@media only screen and (min-width: 768px) {}
+@media only screen and (min-width: 678px) {
+    // .col-function .ant-menu-overflow {
+    //     display: flex;
+    // }
+}
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {}
