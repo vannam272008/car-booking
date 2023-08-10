@@ -28,3 +28,20 @@
 .selected {
   background-color: #bce2e4;
 }
+
+@media only screen and (max-width: 677px) {
+  .mcs-footer {
+    display: flex;
+    z-index: 1000;
+    justify-content: center;
+  }
+
+  .mcs-footer .footer-left {
+    text-align: center;
+    float: none;
+  }
+
+  .mcs-footer .footer-right {
+    float: none;
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 
-import { FolderOpenOutlined, BarChartOutlined, SettingOutlined } from '@ant-design/icons';
+import { FolderOpenOutlined, BarChartOutlined, SettingOutlined, FileTextOutlined } from '@ant-design/icons';
 
 import { connect } from 'react-redux';
 import "./AppSider.scss";
@@ -49,7 +49,7 @@ const AppSider = (props: any) => {
             getItem(t('rejected'), 'Rejected'),
         ]),
 
-        getItem('Reports', 'reports', <BarChartOutlined />),
+        getItem('Reports', 'reports', <FileTextOutlined />),
 
     ];
 
