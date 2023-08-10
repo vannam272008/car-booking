@@ -440,9 +440,7 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            // onClick={() => setIsEditing(true)}
             onClick={() => onEditInfo()}
-            // icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           >
             <UserAddOutlined style={{ fontSize: "50px" }} />
           </Button>

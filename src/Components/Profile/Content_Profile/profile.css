@@ -28,10 +28,10 @@
     width: 100%;
     height: calc(100vh - 100px);
     overflow: scroll;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     margin-top: 50px;
     padding-left: 15px;
-    margin-bottom: 50px;
+    padding-bottom: 30px;
 }
 .btn{
     border: none;
@@ -45,14 +45,16 @@
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
-    .name_user{
+    /* .name_user{
         font-size: 25px;
-        
-    }
+    } */
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */
-@media only screen and (min-width: 600px) {}
+@media only screen and (min-width: 600px) {
+    
+}
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {}
