@@ -24,6 +24,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { RootState } from '../../../Reducers/rootReducer';
+import { checkUserRoles } from '../../../Utils/checkUserRoles';
 
 interface ActionRequest {
     action: string,
@@ -293,27 +294,27 @@ function MenuRequest(props: any): JSX.Element {
     };
 
     // check User Roles is Admin || AdminStative || Approver
-    const checkUserRoles = (roles: number[]) => {
-        if (userInfo.UserRoles) {
-            let checkRole = [];
-            // ADMIN OR ADMINSTRATIVE
-            if (roles.includes(1) || roles.includes(2)) {
-                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
-            }
-            // APPROVER
-            else if (roles.includes(3)) {
-                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
-            }
-            if (checkRole.length === 0) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+    // const checkUserRoles = (roles: number[]) => {
+    //     if (userInfo.UserRoles) {
+    //         let checkRole = [];
+    //         // ADMIN OR ADMINSTRATIVE
+    //         if (roles.includes(1) || roles.includes(2)) {
+    //             checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+    //         }
+    //         // APPROVER
+    //         else if (roles.includes(3)) {
+    //             checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
+    //         }
+    //         if (checkRole.length === 0) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
     // Check User is Approver of this Request
     const checkUserApprover = () => {
@@ -332,7 +333,7 @@ function MenuRequest(props: any): JSX.Element {
                 <Menu.Item onClick={downloadFilePdf} key="download" icon={<FilePdfOutlined />}>
                     {t('downloadfile')}
                 </Menu.Item>
-                {(senderId === userInfo.Id || checkUserRoles([1, 2])) && (
+                {(senderId === userInfo.Id || checkUserRoles([1, 2], userInfo)) && (
                     <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                         {t('delete')}
                     </Menu.Item>
@@ -377,7 +378,7 @@ function MenuRequest(props: any): JSX.Element {
                         ))}
                     </Select>
                 </Modal>
-                {(requestStatus === 'Waiting for approval' && (checkUserApprover() || checkUserRoles([1, 2]))) && (
+                {(requestStatus === 'Waiting for approval' && (checkUserApprover() || checkUserRoles([1, 2], userInfo))) && (
                     <>
                         <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
                             {t('approve')}
@@ -432,7 +433,7 @@ function MenuRequest(props: any): JSX.Element {
                     </Select>
                     <Input className='menu-after-btn-forward'></Input>
                 </Modal>
-                {(requestStatus === 'Approved' && checkUserRoles([1, 2])) &&
+                {(requestStatus === 'Approved' && checkUserRoles([1, 2], userInfo)) &&
                     <Dropdown overlay={menu} trigger={['click']}
                         onOpenChange={() => {
                             setActionRequest({ action: "Canceled", Note: "Canceled" });

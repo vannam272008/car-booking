@@ -33,7 +33,9 @@ const AppFooter = () => {
     return (
         <Footer className='mcs-footer'>
             <div>
-                <span className='footer-left'><b>Tasken @ Opus Solution</b></span>
+                <div className='footer-left'>
+                    <span ><b>Tasken @ Opus Solution</b></span>
+                </div>
                 <div className='footer-right'>
                     <Dropdown overlay={menu} trigger={['click']} className='dropdown-language'>
                         <span>
