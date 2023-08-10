@@ -23,7 +23,7 @@ import Signature from "../Signature_Tab/signature";
 import request from "../../../Utils/request";
 import { API } from "../interface";
 import { useTranslation } from "react-i18next";
-import { info } from "console";
+// import { info } from "console";
 
 const ContentProfile: React.FC = () => {
   const { t } = useTranslation();
@@ -42,9 +42,12 @@ const ContentProfile: React.FC = () => {
   };
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [visible, setVisible] = useState(false);
   //avatar
   const [image, setImage] = useState<RcFile | string>();
-
+  const [onOk, setOnOk] = useState<Boolean>(false);
+  const [defaultAvatar, setDefaultAvatar] = useState<string>();
+  // const [onOkImgcrop, setOnOkImgCrop] = useState<Boolean>(false);
   const [infoAPI, setInfoAPI] = useState<API>({
     EmployeeNumber: "",
     Username: "",
@@ -106,22 +109,28 @@ const ContentProfile: React.FC = () => {
     Signature: "",
     SignatureTemp: "",
   });
-
   const { userID } = useParams();
   const endpoint = "/user/profile/" + userID;
+
   const getProfile = async () => {
     await request
       .get(endpoint)
       .then((response) => {
         setInfoAPI(response.data.Data);
+        setDefaultAvatar(response.data.Data.AvatarPath);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   const handleNotSave = () => {
     Modal.confirm({
-      title: t('Are you sure you want to cancel this update session ?'),
+      title: t("Are you sure you want to cancel this update session ?"),
       width: 1000,
       centered: true,
       onOk() {
@@ -131,24 +140,43 @@ const ContentProfile: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    getProfile();
-  }, []);
-
   const onSave = () => {
     setIsEditing(false);
     handleUpdateInfo();
     setOnOk(false);
   };
 
+  const handleOk = () => {
+    setVisible(false);
+    setOnOk(true);
+    setImage("");
+    // setDefaultAvatar(infoAPI.AvatarPath);
+  };
+
+  const handleOpenModal = () => {
+    setVisible(true);
+    setOnOk(false);
+    setDefaultAvatar(infoAPI.AvatarPath);
+  };
+
+  const handleCloseModal = () => {
+    setVisible(false);
+    setImage('');
+    setInfoAPI((prev)=>({...prev,AvatarPath: defaultAvatar as string}))
+  };
+
+  const handleReturnSetting = () => {
+    navigate("/setting");
+  };
+
   const beforeUpload = (file: File) => {
     const isImage = file.type.includes("image/");
     if (!isImage) {
-      message.error(t('You can only upload image files!'));
+      message.error(t("You can only upload image files!"));
     }
     const filesize = file.size / 1024 / 1024 < 5;
     if (!filesize) {
-      message.error(t('Image must smaller than 5MB '));
+      message.error(t("Image must smaller than 5MB "));
     }
     return isImage && filesize;
   };
@@ -170,32 +198,11 @@ const ContentProfile: React.FC = () => {
     const res = await request.putForm(endpoint, infoAPI, config);
 
     if (res.data.Success) {
-      message.success(t('Edit success !'));
+      message.success(t("Edit success !"));
     } else {
       message.error(res.data.Message);
     }
     getProfile();
-  };
-
-  //declare contract
-  // const [contractType, setContractType] = useState("");
-  // const [contractFrom, setContracFrom] = useState(dayjs());
-  // const [contarctTo, setContractTo] = useState(dayjs());
-  // const [signningdate, setSigningdate] = useState(dayjs());
-  // const [subject, setSubject] = useState("");
-  // const [deparment, setDepartment] = useState("");
-  // const [contractnote, setContractNote] = useState("");
-  // //declare relationship
-  // const [contactname, setContactName] = useState("");
-  // const [birthday, setBirthday] = useState(dayjs());
-  // const [relationship, setRelationship] = useState("");
-  // const [relationshipnote, setRelationshipNote] = useState("");
-
-  const [onOk,setOnOk] = useState<Boolean>(false);
-
-  const handleOk = () => {
-    setVisible(false);
-    setOnOk(true);
   };
 
   const handleFileChange = async (info: UploadChangeParam<UploadFile<any>>) => {
@@ -207,14 +214,12 @@ const ContentProfile: React.FC = () => {
       formData.append("userId", userID ? userID : "");
       let res = await request.postForm("/file/upload-finish", formData, config);
       setImage(croppedImage);
-      infoAPI.AvatarPath = res.data.Data;
+      // infoAPI.AvatarPath = res.data.Data;
       setInfoAPI((prev) => ({ ...prev, AvatarPath: res.data.Data }));
     }
   };
 
   // visible avatar
-  const [visible, setVisible] = useState(false);
-  // const handleDeleteContract = () => {};
   const onEditInfo = () => {
     setInfoAPI((prevInfo) => ({
       ...prevInfo,
@@ -253,24 +258,10 @@ const ContentProfile: React.FC = () => {
     setIsEditing(true);
   };
 
-  // handle Modal
-  const handleOpenModal = () => {
-    setVisible(true);
-    // setImage(null);
-  };
-
-  const handleCloseModal = () => {
-    setVisible(false);
-  };
-
-  const handleReturnSetting = () => {
-    navigate("/setting");
-  };
-
   let label: TabsProps["items"] = [
     {
       key: "1",
-      label: <strong>{t('Overview')}</strong>,
+      label: <strong>{t("Overview")}</strong>,
       children: (
         <Overview
           infoAPI={infoAPI}
@@ -281,7 +272,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "2",
-      label: <strong>{t('Additional')}</strong>,
+      label: <strong>{t("Additional")}</strong>,
       children: (
         <Additional
           infoAPI={infoAPI}
@@ -292,7 +283,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "3",
-      label: <strong>{t('Family')}</strong>,
+      label: <strong>{t("Family")}</strong>,
       children: (
         <Family
           infoAPI={infoAPI}
@@ -303,7 +294,7 @@ const ContentProfile: React.FC = () => {
     },
     {
       key: "4",
-      label: <strong>{t('Signature')}</strong>,
+      label: <strong>{t("Signature")}</strong>,
       children: (
         <Signature
           isEditing={isEditing}
@@ -326,7 +317,7 @@ const ContentProfile: React.FC = () => {
               }}
             >
               <SaveOutlined style={{ fontSize: "35px" }} />
-              {t('Save')}
+              {t("Save")}
             </Button>
             <Button
               className="btn"
@@ -338,7 +329,7 @@ const ContentProfile: React.FC = () => {
                   fontSize: "35px",
                 }}
               />
-              {t('return')}
+              {t("return")}
             </Button>
           </>
         ) : (
@@ -352,7 +343,7 @@ const ContentProfile: React.FC = () => {
                 fontSize: "35px",
               }}
             />
-            {t('return')}
+            {t("return")}
           </Button>
         )}
       </div>
@@ -392,16 +383,16 @@ const ContentProfile: React.FC = () => {
           >
             {image ? (
               <Avatar
-                size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                icon={<UserOutlined />}
+                size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
+                icon={<UserOutlined />} 
                 src={URL.createObjectURL(image as RcFile)}
+                // src={`http://localhost:63642/${defaultAvatar}?${Date.now()}`}
               />
             ) : (
               <Avatar
-                size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
+                size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 icon={<UserOutlined />}
-                src={`http://localhost:63642/${infoAPI.AvatarPath
-                  }?${Date.now()}`}
+                src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
               />
             )}
             <div className="Upload-Avatar">
@@ -421,21 +412,28 @@ const ContentProfile: React.FC = () => {
           </div>
         </Modal>
         <span>
-          {image ? (
+          {onOk ? (
             <Avatar
-              size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
-              icon={<UserOutlined />}
-              src={URL.createObjectURL(image as RcFile)}
-            />
-          ) : (
-            <Avatar
-              size={{ xs: 140, sm: 160, md: 180, lg: 200, xl: 250, xxl: 300 }}
+              size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
               icon={<UserOutlined />}
               src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
             />
+          ) : (
+            <Avatar
+              size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
+              icon={<UserOutlined />}
+              // src={`http://localhost:63642/${infoAPI.AvatarPath}`}
+              src={`http://localhost:63642/${defaultAvatar}?${Date.now()}`}
+            />
           )}
+
+          {/* <Avatar
+            size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
+            icon={<UserOutlined />}
+            src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
+          /> */}
         </span>
-        <h1 style={{ marginLeft: "50px" }}>
+        <h1 className="name_user" style={{ marginLeft: "50px" }}>
           {infoAPI.FirstName} {infoAPI.LastName}
         </h1>
         {isEditing ? null : (
@@ -444,8 +442,10 @@ const ContentProfile: React.FC = () => {
             style={{ marginLeft: "50px" }}
             // onClick={() => setIsEditing(true)}
             onClick={() => onEditInfo()}
-            icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
-          />
+            // icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
+          >
+            <UserAddOutlined style={{ fontSize: "50px" }} />
+          </Button>
         )}
       </div>
       <div className="profile-table">

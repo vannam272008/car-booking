@@ -1,12 +1,12 @@
 import React from "react";
-import { useState } from "react";
+//  
 import dayjs, { Dayjs } from "dayjs";
-import { Input, DatePicker, Typography, Table } from "antd";
-import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
+import { Input, DatePicker, Table } from "antd";
+// import { PlusCircleFilled } from "@ant-design/icons";
 import { AdditionalProps } from "../interface";
 import { useTranslation } from "react-i18next";
 
-const { Title } = Typography;
+// const { Title } = Typography;
 
 const Additional: React.FC<AdditionalProps> = ({
   infoAPI,
@@ -14,7 +14,7 @@ const Additional: React.FC<AdditionalProps> = ({
   setInfoAPI,
 }) => {
   const {t} = useTranslation();
-  const [edit_contract, setEdit_Contract] = useState(false);
+  // const [edit_contract, setEdit_Contract] = useState(false);
 
   const handlestart_date_maternity_leave = (
     date: Dayjs | null,
@@ -65,46 +65,46 @@ const Additional: React.FC<AdditionalProps> = ({
     },
   ];
 
-  const columns_contract = [
-    {
-      title: t('Contract type'),
-      dataIndex: "Contract_type",
-    },
-    {
-      title: t('from'),
-      dataIndex: "From",
-    },
-    {
-      title: t('to'),
-      dataIndex: "To",
-    },
-    {
-      title: t('Signing date'),
-      dataIndex: "Signing_date",
-    },
-    {
-      title: t('Subject'),
-      dataIndex: "Subject",
-    },
-    {
-      title: t('department'),
-      dataIndex: "Department",
-    },
-    {
-      title: t('Note'),
-      dataIndex: "Note",
-    },
-    {
-      title: isEditing ? (
-        <PlusCircleFilled
-          onClick={() => {
-            setEdit_Contract(true);
-          }}
-        />
-      ) : null,
-      dataIndex: "action",
-    },
-  ];
+  // const columns_contract = [
+  //   {
+  //     title: t('Contract type'),
+  //     dataIndex: "Contract_type",
+  //   },
+  //   {
+  //     title: t('from'),
+  //     dataIndex: "From",
+  //   },
+  //   {
+  //     title: t('to'),
+  //     dataIndex: "To",
+  //   },
+  //   {
+  //     title: t('Signing date'),
+  //     dataIndex: "Signing_date",
+  //   },
+  //   {
+  //     title: t('Subject'),
+  //     dataIndex: "Subject",
+  //   },
+  //   {
+  //     title: t('department'),
+  //     dataIndex: "Department",
+  //   },
+  //   {
+  //     title: t('Note'),
+  //     dataIndex: "Note",
+  //   },
+  //   {
+  //     title: isEditing ? (
+  //       <PlusCircleFilled
+  //         onClick={() => {
+  //           setEdit_Contract(true);
+  //         }}
+  //       />
+  //     ) : null,
+  //     dataIndex: "action",
+  //   },
+  // ];
 
   let dataSource_additional = [
     {
@@ -686,22 +686,22 @@ const Additional: React.FC<AdditionalProps> = ({
     },
   ];
 
-  let dataSource_contract = [
-    {
-      Contract_type: isEditing ? edit_contract ? <Input /> : null : null,
-      From: isEditing ? edit_contract ? <DatePicker /> : null : null,
-      To: isEditing ? edit_contract ? <DatePicker /> : null : null,
-      Signing_date: isEditing ? edit_contract ? <DatePicker /> : null : null,
-      Subject: isEditing ? edit_contract ? <Input /> : null : null,
-      Department: isEditing ? edit_contract ? <Input /> : null : null,
-      Note: isEditing ? edit_contract ? <Input /> : null : null,
-      action: isEditing ? (
-        edit_contract ? (
-          <DeleteFilled onClick={() => {}} />
-        ) : null
-      ) : null,
-    },
-  ];
+  // let dataSource_contract = [
+  //   {
+  //     Contract_type: isEditing ? edit_contract ? <Input /> : null : null,
+  //     From: isEditing ? edit_contract ? <DatePicker /> : null : null,
+  //     To: isEditing ? edit_contract ? <DatePicker /> : null : null,
+  //     Signing_date: isEditing ? edit_contract ? <DatePicker /> : null : null,
+  //     Subject: isEditing ? edit_contract ? <Input /> : null : null,
+  //     Department: isEditing ? edit_contract ? <Input /> : null : null,
+  //     Note: isEditing ? edit_contract ? <Input /> : null : null,
+  //     action: isEditing ? (
+  //       edit_contract ? (
+  //         <DeleteFilled onClick={() => {}} />
+  //       ) : null
+  //     ) : null,
+  //   },
+  // ];
   return (
     <div>
       <Table
@@ -711,12 +711,12 @@ const Additional: React.FC<AdditionalProps> = ({
       ></Table>
       <br />
       <br />
-      <Title>{t('Contract')}</Title>
-      <Table
+      {/* <Title>{t('Contract')}</Title> */}
+      {/* <Table
         pagination={false}
         dataSource={dataSource_contract}
         columns={columns_contract}
-      ></Table>
+      ></Table> */}
     </div>
   );
 };

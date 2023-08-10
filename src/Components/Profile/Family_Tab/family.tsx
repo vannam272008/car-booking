@@ -1,16 +1,16 @@
 import React from "react";
-import { useState } from "react";
-import { Input, DatePicker, Typography, Table } from "antd";
-import { DeleteFilled, PlusCircleFilled } from "@ant-design/icons";
+// import { useState } from "react";
+import { Input, Table } from "antd";
+// import { PlusCircleFilled } from "@ant-design/icons";
 import { FamilyProps } from "../interface"
 import { useTranslation } from "react-i18next";
 
-const { Title } = Typography;
+// const { Title } = Typography;
 
 const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
   //tab_family
   const {t} = useTranslation();
-  const [edit_family, setEditFamily] = useState(false);
+  // const [edit_family, setEditFamily] = useState(false);
   const columns_family = [
     {
       dataIndex: "Family_title",
@@ -21,28 +21,28 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
     },
   ];
 
-  const columns_relationship = [
-    {
-      title: t('Contact name'),
-      dataIndex: "Contact_name",
-    },
-    {
-      title: t('Birthday'),
-      dataIndex: "Birth_day",
-    },
-    {
-      title: t('Relationship'),
-      dataIndex: "Relationship",
-    },
-    {
-      title: t('Note'),
-      dataIndex: "Note",
-    },
-    {
-      title: isEditing ? <PlusCircleFilled onClick={() => {setEditFamily(true)}} /> : null,
-      dataIndex: "action",
-    },
-  ];
+  // const columns_relationship = [
+  //   {
+  //     title: t('Contact name'),
+  //     dataIndex: "Contact_name",
+  //   },
+  //   {
+  //     title: t('Birthday'),
+  //     dataIndex: "Birth_day",
+  //   },
+  //   {
+  //     title: t('Relationship'),
+  //     dataIndex: "Relationship",
+  //   },
+  //   {
+  //     title: t('Note'),
+  //     dataIndex: "Note",
+  //   },
+  //   {
+  //     title: isEditing ? <PlusCircleFilled onClick={() => {setEditFamily(true)}} /> : null,
+  //     dataIndex: "action",
+  //   },
+  // ];
 
   let dataSource_family = [
     {
@@ -265,15 +265,15 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
     },
   ];
 
-  let dataSource_relationship = [
-    {
-      Contact_name:isEditing ?(edit_family ? <Input /> : null ): (null),
-      Birth_day: isEditing ?(edit_family ? <DatePicker /> : null): (null),
-      Relationship:isEditing ?(edit_family ?  <Input /> : null): (null),
-      Note:isEditing ?(edit_family ?  <Input /> : null): (null),
-      action:isEditing ?(edit_family ? <DeleteFilled /> : null): (null) ,
-    },
-  ];
+  // let dataSource_relationship = [
+  //   {
+  //     Contact_name:isEditing ?(edit_family ? <Input /> : null ): (null),
+  //     Birth_day: isEditing ?(edit_family ? <DatePicker /> : null): (null),
+  //     Relationship:isEditing ?(edit_family ?  <Input /> : null): (null),
+  //     Note:isEditing ?(edit_family ?  <Input /> : null): (null),
+  //     action:isEditing ?(edit_family ? <DeleteFilled /> : null): (null) ,
+  //   },
+  // ]; 
   return (
     <div>
       <Table
@@ -283,12 +283,12 @@ const Family: React.FC<FamilyProps> = ({ isEditing, setInfoAPI, infoAPI }) => {
       ></Table>
       <br />
       <br />
-      <Title>{t('Relationship')}</Title>
+      {/* <Title>{t('Relationship')}</Title>
       <Table
         pagination={false}
         dataSource={dataSource_relationship}
         columns={columns_relationship}
-      ></Table>
+      ></Table> */}
     </div>
   );
 };
