@@ -9,6 +9,7 @@ import "./AppSider.scss";
 import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 const { Sider } = Layout;
 
@@ -32,6 +33,7 @@ function getItem(
 
 const AppSider = (props: any) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const { tab, setTab, setStatus } = props
     const items: MenuProps['items'] = [
@@ -71,6 +73,10 @@ const AppSider = (props: any) => {
             setStatus(e.key);
         }
         else { setTab(e.key); setStatus("") }
+
+        if (e.keyPath[0] === 'setting') {
+            navigate('/setting');
+        }
     };
     const [collapsed, setCollapsed] = useState(false);
     const {
