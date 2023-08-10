@@ -29,10 +29,9 @@
   background-color: #bce2e4;
 }
 
-@media only screen and (max-width: 677px) {
+@media only screen and (max-width: 767px) {
   .mcs-footer {
     display: flex;
-    z-index: 1000;
     justify-content: center;
   }
 
