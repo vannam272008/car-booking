@@ -45,18 +45,20 @@ const RoleManage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [isLoading, setIsLoading] = useState(true)
 
   const getRoles = async () => {
     let res = await axios.get(`http://localhost:63642/api/role/all?page=${currentPage}&limit=${limit}`)
     console.log('>>check res role:', res)
 
-    res.data.Success ? setRoles(res.data.Data.ListData) : setRoles([])
+    res && res.data && res.data.Success ? setRoles(res.data.Data.ListData) : setRoles([])
     setTotal(res.data.Data.TotalPage);
+    setIsLoading(false)
   }
 
   useEffect(() => {
     getRoles()
-  }, [])
+  }, [currentPage])
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
@@ -126,8 +128,9 @@ const RoleManage: React.FC = () => {
         Add Role
       </Button>
 
-      <Table dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
+      <Table loading={isLoading} dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
       <Pagination
+        showSizeChanger
         current={currentPage}
         pageSize={limit}
         total={total * limit}
@@ -166,6 +169,8 @@ const RoleForm: React.FC<RoleFormProps> = ({ selectedRole, setSelectedRole, onSa
     form.validateFields().then((values) => {
       setSelectedRole(values)
       onSave(values as Role);
+    }).catch(e => {
+      console.log('role data submit error:', e);
     });
   };
 
