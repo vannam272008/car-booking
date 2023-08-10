@@ -244,21 +244,23 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                     <Form>
                         <Row gutter={16}>
                             {inputs.map((input, index) => (
-                                <Col span={8} key={index} className='col-request '>
+                                <Col xs={24} sm={24} md={12} lg={12} xl={8} key={index} className='col-request '>
                                     <Form.Item
                                         label={
                                             <div className='label-approver'>
                                                 {editingIndex === index ? (
-                                                    <Space>
+                                                    <>
                                                         <Input value={labelApprovers[index]} onChange={(e) => handleInputChangeApprover(index, e.target.value)} />
                                                         <Button type="link" onClick={() => handleSave(index)} icon={<SaveOutlined />} />
-                                                    </Space>
+                                                    </>
                                                 ) : (
                                                     <Space>
-                                                        <span>{labelApprovers[index]}</span>
-                                                        <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
-                                                        <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
-                                                        <Button type="link" icon={<DragOutlined />} />
+                                                        <div className='responsive-lable-approver'><span title={labelApprovers[index]}>{labelApprovers[index]}</span></div>
+                                                        <div className='responsive-btn-approver'>
+                                                            <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
+                                                            <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
+                                                            <Button type="link" icon={<DragOutlined />} />
+                                                        </div>
                                                     </Space>
                                                 )}
                                             </div>
@@ -272,6 +274,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         ]}
                                         initialValue={initialValueApprover[index] === undefined ? t('--Select a Approver--') : initialValueApprover[index]}
                                         labelCol={{ span: 24 }}
+                                        className='responsive-send-approver'
                                     >
                                         <Select
                                             // defaultValue={initialValueApprover[index] === undefined ? '--Select a Approver--' : initialValueApprover[index]}
@@ -282,6 +285,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                             optionFilterProp="children"
                                             filterOption={false}
                                             onSearch={handleSearch}
+                                            className='responsive-select-option'
                                         >
                                             {filteredData().map((departmentMember) => (
                                                 <Option key={departmentMember.Id} value={departmentMember.Id}>
@@ -296,7 +300,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                     </Form.Item>
                                 </Col>
                             ))}
-                            <Col span={8} className='btn-add-approver'>
+                            <Col xs={24} sm={24} md={12} lg={12} xl={8} className='btn-add-approver'>
                                 <Button
                                     type="primary"
                                     onClick={handleAddInput}

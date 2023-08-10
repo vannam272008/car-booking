@@ -112,12 +112,12 @@ function DetailRequest(): JSX.Element {
     // }
 
     // console.log('hello', detailData.Department ? detailData.Department.Id : undefined);
-
+    // console.log("123:", Object.keys(workflowData).length === 0);
     return (
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    {loading && workflowData !== null ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                    {loading || Object.keys(workflowData).length === 0 ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
                         <Alert
                             style={{ width: '100%', textAlign: 'center' }}
                             message={t('Loading...')}
