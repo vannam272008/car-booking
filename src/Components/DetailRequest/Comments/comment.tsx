@@ -8,6 +8,7 @@ import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 interface CommentItem {
     Account: {
@@ -227,11 +228,12 @@ function Comment(): JSX.Element {
                     </div>
                     <div>
                         <Row gutter={5} className='row-comment-box' align="middle">
-                            <Col span={1}>
+                            <Col xs={6} sm={2} lg={1} xl={1}>
                                 <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
                             </Col>
-                            <Col span={6}>
+                            <Col xs={18} sm={14} lg={10} xl={8}>
                                 <Input.TextArea
+                                    rows={3}
                                     className='input-comment'
                                     placeholder={t('Write a comment...')}
                                     value={newComment.comment}
@@ -242,7 +244,7 @@ function Comment(): JSX.Element {
                                         }))}
                                 />
                             </Col>
-                            <Col span={2}>
+                            <Col xs={24} sm={2} lg={2} xl={2}>
                                 <Button className='btn-comment' type="primary"
                                     onClick={handlePostComment}
                                     disabled={newComment.comment === ""}
@@ -256,20 +258,24 @@ function Comment(): JSX.Element {
                             accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                             onRemove={handleRemoveFile}
                         >
-                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>{t('Add attachments')}</Button>
-                            <span> {t('(Maximum 20MB per file)')}</span>
+                            <Button className='btn-attachment-comment' icon={<UploadOutlined />}>{t('Add attachments')}</Button>
+                            <span className='attention-upload-attachment'> {t('(Maximum 20MB per file)')}</span>
                         </Upload>
                     </div>
-
                     <div className='comments-detail-request'>
                         {comments.map((comment) => (
-                            <Row className='list-comment' key={comment.Id}>
-                                <Col span={2} className="comment-avatar">
+                            <Row align="middle" className='list-comment' key={comment.Id}>
+                                <Col xs={4} sm={2} className="comment-avatar">
                                     <Avatar size={40} icon={<UserOutlined />} />
                                 </Col>
-                                <Col span={18}>
+                                <Col xs={18} sm={20}>
                                     <span className="comment-author">{comment.Account ? comment.Account.FullName : t('No Name')}</span>
-                                    <span className="comment-date">{comment.Created ? comment.Created : t('No Data')}</span>
+                                    <span className="comment-date">{comment.Created
+                                        ? dayjs(comment.Created).format('YYYY-MM-DD HH:mm:ss')
+                                        : t('No Data')}
+                                    </span>
+                                </Col>
+                                <Col xs={24} sm={24}>
                                     <div className="comment-content">
                                         <span>{comment.Content?.includes("</br>") ? comment.Content?.substring(0, comment.Content.indexOf("</br>")) : comment.Content}</span>
                                         <br></br>
