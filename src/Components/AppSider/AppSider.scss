@@ -4,7 +4,7 @@
         & .sider-layout {
                 background-color: rgba(var(--palette-neutral-2, 248, 248, 248), 1);
                 margin-top: 64px;
-                height: calc(100vh - 112px);
+                height: calc(100vh - 117px);
         }
 
         & li {
@@ -12,8 +12,8 @@
         }
 
         & .ant-layout-sider {
-                background-color: rgba(var(--palette-neutral-2, 248, 248, 248), 1);
-                background: rgba(var(--palette-neutral-2, 248, 248, 248), 1);
+                // background-color: rgba(var(--palette-neutral-2, 248, 248, 248), 1);
+                background: rgba(var(--palette-neutral-2, 248, 248, 248), 1) !important;
                 position: sticky;
                 left: 0;
 
@@ -39,6 +39,8 @@
 
 @media only screen and (max-width: 767px) {
         .sider-layout {
+                z-index: 1000;
+                position: fixed;
 
                 & .ant-layout-sider {
 

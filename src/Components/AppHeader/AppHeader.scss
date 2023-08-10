@@ -129,7 +129,7 @@
     // height: calc(100vh - 31113px);
     background-color: #fff;
     border: 1px solid #c8c8c8;
-    margin-top: 62px;
+    margin-top: 61px;
 
     & .title-dropdown {
         font-size: 28px;
@@ -305,7 +305,15 @@
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
-@media only screen and (min-width: 992px) {}
+@media only screen and (max-width: 767px) {
+    .dropdown-help {
+        margin-top: 40px;
+
+        & .ant-drawer-body {
+            padding: 36px 24px 24px 24px !important;
+        }
+    }
+}
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1240px) {}
