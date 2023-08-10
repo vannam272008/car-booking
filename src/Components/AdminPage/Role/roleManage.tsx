@@ -56,7 +56,7 @@ const RoleManage: React.FC = () => {
 
   useEffect(() => {
     getRoles()
-  }, [])
+  }, [currentPage])
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
@@ -128,6 +128,7 @@ const RoleManage: React.FC = () => {
 
       <Table dataSource={roles} columns={columns} rowKey="Id" pagination={false} />
       <Pagination
+        showSizeChanger
         current={currentPage}
         pageSize={limit}
         total={total * limit}
@@ -166,6 +167,8 @@ const RoleForm: React.FC<RoleFormProps> = ({ selectedRole, setSelectedRole, onSa
     form.validateFields().then((values) => {
       setSelectedRole(values)
       onSave(values as Role);
+    }).catch(e => {
+      console.log('role data submit error:', e);
     });
   };
 

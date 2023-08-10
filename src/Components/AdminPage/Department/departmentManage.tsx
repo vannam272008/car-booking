@@ -91,7 +91,7 @@ const DepartmentManage: React.FC = () => {
 
   useEffect(() => {
     getDepartments()
-  }, [])
+  }, [currentPage])
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
@@ -163,6 +163,7 @@ const DepartmentManage: React.FC = () => {
 
       <Table dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
       <Pagination
+        showSizeChanger
         current={currentPage}
         pageSize={limit}
         total={total * limit}
@@ -230,7 +231,9 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
       setDepartment(values)
 
       onSave(values as Department);
-    });
+    }).catch(e => {
+      console.log('department data submit error:', e);
+    });;
   };
 
   const handleFormReset = () => {

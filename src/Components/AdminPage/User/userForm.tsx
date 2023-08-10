@@ -67,7 +67,6 @@ const UserForm: React.FC<UserFormProps> = ({ selectedUser, setSelectedUser, onSa
       onSave(values as User, file);
     }).catch(e => {
       console.log('user data submit error:', e);
-      
     });
 
   };

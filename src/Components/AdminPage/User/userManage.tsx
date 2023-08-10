@@ -225,6 +225,7 @@ const UserManage: React.FC = () => {
 
       <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
       <Pagination
+        showSizeChanger
         current={currentPage}
         pageSize={limit}
         total={total * limit}
