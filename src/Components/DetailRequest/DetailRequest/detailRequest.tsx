@@ -14,9 +14,12 @@ import InfoFeedback from '../InfoFeedback/infoFeedback';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { checkUserRoles } from '../../../Utils/checkUserRoles';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
-
-function DetailRequest(): JSX.Element {
+function DetailRequest(props: any): JSX.Element {
+    const { userInfo } = props;
 
     //Data information detail request
     // const requestCode: string = '2023OPS-CAR-0704-001';
@@ -199,7 +202,7 @@ function DetailRequest(): JSX.Element {
                                             <Radio value={false}>{t('no')}</Radio>
                                         </Radio.Group>
                                     </div>
-                                    {showFeedback === 'Approved' ? (
+                                    {(showFeedback === 'Approved' && checkUserRoles([1, 2], userInfo)) ? (
                                         <DoneRequest requestCode={detailData.RequestCode} />
                                     ) : showFeedback === 'Done' ? (
                                         <InfoFeedback />
@@ -263,5 +266,9 @@ function DetailRequest(): JSX.Element {
         </RequestLayout >
     );
 }
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
 
-export default DetailRequest;
+
+export default connect(mapStateToProps, null)(DetailRequest);

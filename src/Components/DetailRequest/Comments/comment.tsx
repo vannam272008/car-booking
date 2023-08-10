@@ -9,14 +9,18 @@ import type { UploadFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
 interface CommentItem {
     Account: {
-        FullName: string | null
+        FullName: string | null,
+        AvatarPath: string | null,
     },
     Content: string | null,
     Created: string,
     Id: string,
+
     RequestCommentAttachment: [{
         Id: string,
         Path: string,
@@ -30,12 +34,12 @@ interface NewComment {
 
 
 
-function Comment(): JSX.Element {
+function Comment(props: any): JSX.Element {
 
     // const [detailData, setDetailData] = useState<any>({});
-
+    const avatarDefault = require('../../../public/images/avatarDefault.png');
     const { t } = useTranslation();
-
+    const { userInfo } = props;
     const { requestId } = useParams();
     const [showUpload, setShowUpload] = useState(false);
     // const [fileList, setFileList] = useState<RcFile[]>([]);
@@ -53,7 +57,8 @@ function Comment(): JSX.Element {
     const [comments, setComments] = useState<CommentItem[]>([
         {
             Account: {
-                FullName: ""
+                FullName: "",
+                AvatarPath: "",
             },
             Content: "",
             Created: "",
@@ -210,6 +215,7 @@ function Comment(): JSX.Element {
     //     setShowReplyForm(true);
     //     setReplyToCommentId(commentId);
     // };
+    console.log("comment: ", comments);
 
     return (
         <div className='comments-detail-request'>
@@ -229,7 +235,15 @@ function Comment(): JSX.Element {
                     <div>
                         <Row gutter={5} className='row-comment-box' align="middle">
                             <Col xs={6} sm={2} lg={1} xl={1}>
-                                <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
+                                {userInfo.AvatarPath
+                                    ? <Avatar size={37} className='avatar-comment'
+                                        src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                        alt="avatar" />
+                                    : <Avatar size={37} className='avatar-comment'
+                                        src={String(avatarDefault)}
+                                        alt="avatar" />
+                                }
+                                {/* <Avatar size={37} className='avatar-comment' /> */}
                             </Col>
                             <Col xs={18} sm={14} lg={10} xl={8}>
                                 <Input.TextArea
@@ -266,7 +280,14 @@ function Comment(): JSX.Element {
                         {comments.map((comment) => (
                             <Row align="middle" className='list-comment' key={comment.Id}>
                                 <Col xs={4} sm={2} className="comment-avatar">
-                                    <Avatar size={40} icon={<UserOutlined />} />
+                                    {comment.Account.AvatarPath
+                                        ? <Avatar size={37} className='avatar-comment'
+                                            src={`http://localhost:63642/${comment.Account.AvatarPath}`}
+                                            alt="avatar" />
+                                        : <Avatar size={37} className='avatar-comment'
+                                            src={String(avatarDefault)}
+                                            alt="avatar" />
+                                    }
                                 </Col>
                                 <Col xs={18} sm={20}>
                                     <span className="comment-author">{comment.Account ? comment.Account.FullName : t('No Name')}</span>
@@ -351,5 +372,8 @@ function Comment(): JSX.Element {
         </div >
     );
 }
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
 
-export default Comment;
+export default connect(mapStateToProps, null)(Comment);

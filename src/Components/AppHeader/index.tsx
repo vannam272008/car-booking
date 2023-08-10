@@ -177,7 +177,16 @@ const AppHeader = (props: any) => {
                         </Menu.Item>
 
                         <Menu.Item className="function-menu-item">
-                            <Button onClick={handleClickProfile} className="btn-item"><UserOutlined /></Button>
+                            <Button onClick={handleClickProfile} className="btn-item">
+                                {userInfo.AvatarPath
+                                    ? <img
+                                        src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                        alt="avatar"></img>
+                                    : <img
+                                        src={String(avatarDefault)}
+                                        alt="avatar"></img>
+                                }
+                            </Button>
                             <Drawer
                                 className="dropdown-help"
                                 placement="right" onClose={onClose}
