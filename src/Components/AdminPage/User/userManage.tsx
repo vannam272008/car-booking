@@ -1,6 +1,6 @@
 // src/UserManage.tsx
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Form, Tag, Typography, message, Pagination } from 'antd';
+import { Table, Button, Modal, Form, Tag, Typography, message, Pagination, Spin, Alert } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import UserForm from './userForm';
 import { User, UserRoles, DepartmentMembers, Department, Role } from '../Utils/interfaces';
@@ -25,7 +25,7 @@ const UserManage: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User>(resetUser);
   const [action, setAction] = useState<string>('');
   const [form] = Form.useForm<User>();
-  const [isLoading, setIsLoading] = useState<Boolean>(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(5);
@@ -103,11 +103,12 @@ const UserManage: React.FC = () => {
 
 
       setUsers(usersData)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000)
 
-      setIsLoading(false)
     } else {
       setUsers([])
-      setIsLoading(true)
     }
   }
 
@@ -120,7 +121,7 @@ const UserManage: React.FC = () => {
       setDpt(res.data.Data.ListData)
     }).catch(e => {
       console.log(e);
-      
+
     })
     request.get('/role/all?page=1&limit=100').then(res => {
       setRol(res.data.Data.ListData)
@@ -215,44 +216,53 @@ const UserManage: React.FC = () => {
   console.log('>>selectedUser:', selectedUser);
   console.log('roles get:', rol);
   console.log('departments get:', dpt);
-  
+
 
   return (
-    <div className='manage-user-content'>
-      <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
-        Add User
-      </Button>
+    <>
+      {isLoading ?
+        <Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+          <Alert
+            style={{ width: '100%', textAlign: 'center', backgroundColor: 'transparent', border: 'none' }}
+          />
+        </Spin>
+        :
+        <div className='manage-user-content'>
+          <Button type="primary" icon={<PlusOutlined />} onClick={handleAdd}>
+            Add User
+          </Button>
 
-      <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
-      <Pagination
-        showSizeChanger
-        current={currentPage}
-        pageSize={limit}
-        total={total * limit}
-        onChange={handlePageChange}
-        itemRender={(page, type, originalElement) => {
-          if (type === 'prev') {
-            return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
-          }
-          if (type === 'next') {
-            return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
-          }
-          return originalElement;
-        }}
-      />
+          <Table dataSource={users} columns={columns} rowKey="id" pagination={false} />
+          <Pagination
+            showSizeChanger
+            current={currentPage}
+            pageSize={limit}
+            total={total * limit}
+            onChange={handlePageChange}
+            itemRender={(page, type, originalElement) => {
+              if (type === 'prev') {
+                return <a style={{ color: currentPage === 1 ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Previous</a>;
+              }
+              if (type === 'next') {
+                return <a style={{ color: currentPage === total ? 'gray' : '#337ab7', border: '1px solid #777777', padding: '5px' }}>Next</a>;
+              }
+              return originalElement;
+            }}
+          />
 
-      <Modal
-        title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
-        open={isModalVisible}
-        closable={true}
-        onCancel={handleCancel}
-        maskClosable={false}
-        footer={null}
-        style={{ display: 'flex', justifyContent: 'center' }}
-      >
-        <UserForm selectedUser={selectedUser} setSelectedUser={setSelectedUser} onSave={handleSave} form={form} action={action} />
-      </Modal>
-    </div>
+          <Modal
+            title={action === util.ACTION_HANDLE.EDIT ? <Typography.Title level={2}>Edit User</Typography.Title> : <Typography.Title level={2}>Add User</Typography.Title>}
+            open={isModalVisible}
+            closable={true}
+            onCancel={handleCancel}
+            maskClosable={false}
+            footer={null}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <UserForm selectedUser={selectedUser} setSelectedUser={setSelectedUser} onSave={handleSave} form={form} action={action} />
+          </Modal>
+        </div>}
+    </>
   );
 };
 
