@@ -9,6 +9,7 @@ import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { RootState } from '../../../Reducers/rootReducer';
+import { checkUserRoles } from '../../../Utils/checkUserRoles';
 
 interface MenuAddProps {
     formData: {
@@ -158,27 +159,27 @@ function MenuEdit({ formData, setFormData, userInfo, senderId }: MenuAddProps) {
 
     console.log('formData', formData);
 
-    const checkUserRoles = (roles: number[]) => {
-        if (userInfo.UserRoles) {
-            let checkRole = [];
-            // ADMIN OR ADMINSTRATIVE
-            if (roles.includes(1) || roles.includes(2)) {
-                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
-            }
-            // APPROVER
-            else if (roles.includes(3)) {
-                checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
-            }
-            if (checkRole.length === 0) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+    // const checkUserRoles = (roles: number[]) => {
+    //     if (userInfo.UserRoles) {
+    //         let checkRole = [];
+    //         // ADMIN OR ADMINSTRATIVE
+    //         if (roles.includes(1) || roles.includes(2)) {
+    //             checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 1 || role.RoleId === 2);
+    //         }
+    //         // APPROVER
+    //         else if (roles.includes(3)) {
+    //             checkRole = userInfo.UserRoles.filter((role: any) => role.RoleId === 3);
+    //         }
+    //         if (checkRole.length === 0) {
+    //             return false;
+    //         } else {
+    //             return true;
+    //         }
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
 
 
     return (
@@ -188,7 +189,7 @@ function MenuEdit({ formData, setFormData, userInfo, senderId }: MenuAddProps) {
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}
                 </Menu.Item>
-                {(senderId === userInfo.Id || checkUserRoles([1, 2])) && (
+                {(senderId === userInfo.Id || checkUserRoles([1, 2], userInfo)) && (
                     <Menu.Item onClick={showModalDelete} key="delete" icon={<DeleteOutlined />}>
                         {t('delete')}
                     </Menu.Item>
