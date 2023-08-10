@@ -43,6 +43,10 @@ const AppHeader = (props: any) => {
         setOpenProfile(false);
     }
 
+    const handleClickSetting = () => {
+        navigate('/setting');
+    }
+
     const handleClickProfile = () => {
         setOpenProfile(!openProfile);
         setOpenHelp(false);
@@ -113,7 +117,7 @@ const AppHeader = (props: any) => {
                         </Button>
                     </div>
                     <div onClick={handlePathName} className="col-logo-img">
-                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/">
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
@@ -150,15 +154,15 @@ const AppHeader = (props: any) => {
                                     <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
                                 </div>
                                 <div className="content-dropdown">
-                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI', marginLeft: '10px' }}>Opus Helpdesk</h4>
+                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
                                         <p>{t('introduction')}</p>
                                     </NavLink>
                                     <Feedback />
-                                    <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="https://tasken.io/issue/new" style={{ textDecoration: 'none' }}>
                                         <p>{t('openticket')}</p>
                                     </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
                                         <p>{t('help')}</p>
                                     </NavLink>
                                 </div>
@@ -171,9 +175,7 @@ const AppHeader = (props: any) => {
                             </Badge>
                         </Menu.Item>
                         <Menu.Item className="function-menu-item">
-                            <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
-                                <Button className="btn-item"><SettingOutlined /></Button>
-                            </NavLink>
+                            <Button className="btn-item" onClick={handleClickSetting}><SettingOutlined /></Button>
                         </Menu.Item>
 
                         <Menu.Item className="function-menu-item">
@@ -219,7 +221,7 @@ const AppHeader = (props: any) => {
                                         <div className='my-profile' style={{ textDecoration: 'none' }}>
                                             <p>{t('myaccount')}</p>
                                         </div>
-                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} style={{ textDecoration: 'none' }}>
                                             <p>{t('signout')}</p>
                                         </NavLink>
                                     </div>
