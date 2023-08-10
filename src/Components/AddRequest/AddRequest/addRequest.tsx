@@ -235,6 +235,7 @@ function AddRequest(): JSX.Element {
                                                 className='form-add-request'
                                             >
                                                 <Row className='row-request'>
+
                                                     {/*Request Applicant*/}
                                                     <Col span={6} className='col-request'>
                                                         <Form.Item
@@ -267,7 +268,6 @@ function AddRequest(): JSX.Element {
                                                             labelCol={{ span: 24 }}
                                                         >
                                                             <Select
-                                                                virtual={false}
                                                                 value={formData.DepartmentId}
                                                                 onChange={(value) => handleSelectChange(value, 'DepartmentId')}
                                                                 showSearch
@@ -276,18 +276,11 @@ function AddRequest(): JSX.Element {
                                                                     option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                                 }
                                                             >
-                                                                {dataDepartment
-                                                                    .filter((department) => !formData.DepartmentId.includes(department.Id))
-                                                                    .map((filteredDepartment) => (
-                                                                        <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
-                                                                            {filteredDepartment.Name}
-                                                                        </Option>
-                                                                    ))}
-                                                                {/* {dataDepartment.map((department) => (
-                                                                <Option key={department.Id} value={department.Id} >
-                                                                    {department.Name}
-                                                                </Option>
-                                                            ))} */}
+                                                                {dataDepartment.map((department) => (
+                                                                    <Option key={department.Id} value={department.Id} >
+                                                                        {department.Name}
+                                                                    </Option>
+                                                                ))}
                                                             </Select>
                                                         </Form.Item>
                                                     </Col>
@@ -523,6 +516,7 @@ function AddRequest(): JSX.Element {
                                     <SendApprover departmentId={formData.DepartmentId} fileList={fileList} setFileList={setFileList} applyNote={applyNote} setApplyNote={setApplyNote} listOfUserId={listOfUserId} setListOfUserId={setListOfUserId} />
                                 </>
                             )}
+
                     </div>
                 </div>
             )

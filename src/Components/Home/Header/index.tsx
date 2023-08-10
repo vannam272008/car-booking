@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useState } from "react";
 import { Dropdown, Layout, MenuProps, Select, Space, message } from "antd";
 import UserOutlined from "@ant-design/icons"
@@ -102,9 +102,11 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
       request.get("/user/profile/" + userID)
         .then((res) => {
           setUserInfo({
+            Id: res.data.Data.Id,
             FullName: res.data.Data.FirstName + " " + res.data.Data.LastName,
             AvatarPath: res.data.Data.AvatarPath,
-            Email: res.data.Data.Email
+            Email: res.data.Data.Email,
+            UserRoles: res.data.Data.UserRoles
           })
         })
         .catch((e) => {
@@ -114,58 +116,58 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
 
   }, [userID, setUserInfo])
 
-
-
   return (
     <Header className="header">
       <div className="logo-name">
         <img src={opus_logo} alt="Logo" className="logo" />
-        <div className="header-name">{data.name}</div>
+        <div className="header-name">
+          <span style={{ float: 'left', marginTop: '15px', fontSize: '14px' }}>OPUS SOLUTION COMPANY</span>
+          <span style={{ float: 'left', color: '#4ba747', fontSize: '14px', textAlign: 'initial' }}>ENTERPRISE APPROVAL MANAGEMENT SYSTEM</span>
+        </div>
       </div>
-      <div className="header-homepage">
-        <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" overlayStyle={{ minWidth: 'none' }}>
-          <span onClick={(e) => e.preventDefault()}>
-            <Space style={{ cursor: 'pointer' }} >
-              {userInfo.AvatarPath
-                ? <img
-                  src={`http://localhost:63642/${userInfo.AvatarPath}`}
-                  alt="avatar"
-                  className="img-avatar"></img>
-                : <img
-                  src={String(avatarDefault)}
-                  className="img-avatar"
-                  alt="avatar"></img>
-              }
-              <UserOutlined />{userInfo ? userInfo.FullName : ""}
-            </Space>
-          </span>
-        </Dropdown>
-      </div>
-      <div className="header-homepage">
-        <Select
-          labelInValue
-          style={{ width: 90 }}
-          defaultValue={
+      <div>
+        <div className="header-homepage">
+          <Dropdown menu={{ items }} trigger={['click']} placement="bottomRight" overlayStyle={{ minWidth: 'none' }}>
+            <span onClick={(e) => e.preventDefault()}>
+              <Space style={{ cursor: 'pointer' }} >
+                {userInfo.AvatarPath
+                  ? <img
+                    src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                    alt="avatar"
+                    className="img-avatar"></img>
+                  : <img
+                    src={String(avatarDefault)}
+                    className="img-avatar"
+                    alt="avatar"></img>
+                }
+                <UserOutlined />{userInfo ? userInfo.FullName : ""}
+              </Space>
+            </span>
+          </Dropdown>
+        </div>
+        <div className="header-homepage">
+          <Select
+            labelInValue
+            style={{ width: 90 }}
+            defaultValue={
+              <Option key="en-US">
+                <img src={united_states} alt="img-en-flat" width={20} className="img-flat" />
+                <span>EN</span>
+              </Option>
+            }
+            onChange={handleMenuClick}
+          >
             <Option key="en-US">
-              <img src={united_states} alt="img-en-flat" width={20} className="img-flat" />
+              <img src={united_states} alt="img-en-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
               <span>EN</span>
             </Option>
-          }
-          onChange={handleMenuClick}
-        >
-          <Option key="en-US">
-            <img src={united_states} alt="img-en-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
-            <span>EN</span>
-          </Option>
-          <Option key="vi-VN">
-            <img src={vietnam} alt="img-vn-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
-            <span>VN</span>
-          </Option>
-        </Select>
+            <Option key="vi-VN">
+              <img src={vietnam} alt="img-vn-flat" width={20} style={{ marginBottom: 3, marginRight: 5 }} />
+              <span>VN</span>
+            </Option>
+          </Select>
+        </div>
       </div>
-
-
-
     </Header>
   );
 };

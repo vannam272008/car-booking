@@ -12,14 +12,15 @@ import { setTab, setStatus } from '../../Actions/requestAction';
 import { RootState } from '../../Reducers/rootReducer';
 import { Pagination, Form } from 'antd';
 import CommonUtils from '../../Utils/CommonUtils';
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next';
+import { checkUserRoles } from '../../Utils/checkUserRoles';
 
 interface RequestType {
   Id: string;
   requestCode: string;
   department: object;
   createdBy: object;
-  user: object;
+  senderId: string;
   createdDate: string;
   from: string;
   to: string;
@@ -30,7 +31,7 @@ const { Search } = Input;
 
 const ManageRequest = (props: any) => {
 
-  const { tab, status, setStatus } = props
+  const { tab, status, setStatus, userInfo } = props
   const [requestData, setRequestData] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const ManageRequest = (props: any) => {
   const [total, setTotal] = useState(0);
   const [form] = Form.useForm();
   const [limit, setLimit] = useState(20);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [filter, setFilter] = useState({
     requestCode: "",
     createdFrom: "",
@@ -102,23 +103,22 @@ const ManageRequest = (props: any) => {
 
   const handleOnClickExport = () => {
     if (requestData.length !== 0) {
-        if (status !== "") {
-            CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
-        } else {
-            CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
-        }
+      if (status !== "") {
+        CommonUtils.exportExcel(requestData, `List of ${status} request`, `${status}-request`)
+      } else {
+        CommonUtils.exportExcel(requestData, `List of ${tab} request`, `${tab}-request`)
+      }
     } else {
-        message.error("No data to export excel!!!");
+      message.error("No data to export excel!!!");
     }
-}
+  }
 
   useEffect(() => {
     handleGetAllRequest();
   }, [tab, filter, status, currentPage, limit]);
-  
-  console.log(t)
 
   const profile = false;
+
   return (
     <RequestLayout profile={profile}>
       {() => (
@@ -127,14 +127,15 @@ const ManageRequest = (props: any) => {
             <div className='manage-request-title'>{t('carbooking')}</div>
             <Space.Compact size="large">
               <Search
+                className='search-bar'
                 placeholder={t('search')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value) }}
                 onSearch={() => handleGetAllRequest()}
               />
             </Space.Compact>
-            <div>
-              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />{t('exportexcel')}</Button>
+            <div className='manage-request-button-navbar'>
+              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} /><span className='text-export-excel'>{t('exportexcel')}</span></Button>
               <FilterDropdown
                 handleClear={handleClear}
                 form={form}
@@ -142,7 +143,7 @@ const ManageRequest = (props: any) => {
                 setLoading={setLoading}
                 onApply={onApply}
               />
-              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />{t('createnew')}</Button>
+              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined /><span className='text-create-new'>{t('createnew')}</span></Button>
             </div>
           </div>
           <div className='manage-request-content'>
@@ -151,7 +152,7 @@ const ManageRequest = (props: any) => {
               loading={loading}
               onRow={(record) => ({
                 onDoubleClick: () => {
-                  if (record.Status === 'Rejected' || record.Status === 'Draft') {
+                  if ((record.senderId === userInfo.Id || checkUserRoles([1, 2], userInfo)) && (record.Status === 'Rejected' || record.Status === 'Draft')) {
                     navigate(`/request/carbooking/edit/${record.Id}`);
                   }
                   else {
@@ -252,7 +253,8 @@ const ManageRequest = (props: any) => {
 
 const mapStateToProps = (state: RootState) => ({
   tab: state.request.tab,
-  status: state.request.status
+  status: state.request.status,
+  userInfo: state.request.userInfo
 })
 
 const mapDispatchToProps = { setTab, setStatus }
