@@ -83,7 +83,7 @@ const Overview: React.FC<OverviewProps> = ({
       overview_title: t('Last name'),
       info: isEditing ? (
         <Input
-          placeholder={t('Last Name')}
+          placeholder={t('Last name')}
           name="Last Name"
           disabled
           value={infoAPI.LastName}
