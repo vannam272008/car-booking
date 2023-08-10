@@ -125,14 +125,15 @@ const ManageRequest = (props: any) => {
             <div className='manage-request-title'>{t('carbooking')}</div>
             <Space.Compact size="large">
               <Search
+              className='search-bar'
                 placeholder={t('search')}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value) }}
                 onSearch={() => handleGetAllRequest()}
               />
             </Space.Compact>
-            <div>
-              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{ color: 'green' }} />{t('exportexcel')}</Button>
+            <div className='manage-request-button-navbar'>
+              <Button style={{ marginRight: 8, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={handleOnClickExport}><FileExcelOutlined style={{color: 'green'}}/><span className='text-export-excel'>{t('exportexcel')}</span></Button>
               <FilterDropdown
                 handleClear={handleClear}
                 form={form}
@@ -140,7 +141,7 @@ const ManageRequest = (props: any) => {
                 setLoading={setLoading}
                 onApply={onApply}
               />
-              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined />{t('createnew')}</Button>
+              <Button style={{ marginRight: 5, marginLeft: 5, backgroundColor: '#5cb85c', color: 'white', fontFamily: 'Segoe UI', fontWeight: 600 }} onClick={() => navigate('/request/addrequest')}><PlusOutlined/><span className='text-create-new'>{t('createnew')}</span></Button>
             </div>
           </div>
           <div className='manage-request-content'>

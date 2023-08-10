@@ -79,7 +79,13 @@ const AppSider = (props: any) => {
 
     return (
         <div className='sider-layout'>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{ background: colorBgContainer }} width={230}>
+            <Sider
+                collapsible
+                collapsed={collapsed}
+                onCollapse={(value) => setCollapsed(value)}
+                style={{ background: colorBgContainer }}
+                width={230}
+                breakpoint='md'>
                 <div>
                     <Menu
                         mode="inline"

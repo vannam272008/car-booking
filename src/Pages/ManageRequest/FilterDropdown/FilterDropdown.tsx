@@ -47,8 +47,8 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
             trigger={["click"]}
         >
             <Button style={{ marginRight: 5, marginLeft: 3, color: '#8894a1', fontFamily: 'Segoe UI', fontWeight: 600 }}>
-                <FilterOutlined style={{ color: 'green' }} />
-                    {t('filter')}
+                <FilterOutlined style={{color: 'green'}}/>
+                    <span className='text-filter'>{t('filter')}</span>
                 <CaretDownOutlined />
             </Button>
         </Dropdown>

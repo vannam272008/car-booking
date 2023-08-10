@@ -13,7 +13,14 @@
                 margin-bottom: 29px;
         }
 }
-.sider-layout{
+
+.sider-layout {
         margin-top: 64px;
         height: calc(100vh - 112px);
+}
+
+@media only screen and (max-width: 677px) {
+        .sider-layout {
+                z-index: 9999;
+        }
 }
