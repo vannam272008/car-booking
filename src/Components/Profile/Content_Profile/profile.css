@@ -1,11 +1,11 @@
 .info-user{
-    background-color: '';
+    /* background-color:antiquewhite; */
     position: relative;
     display: inline-flex;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 10px;
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 .nav-bar-profile{
     margin-top:  15px;
@@ -40,3 +40,25 @@
     outline: none;
     color: inherit;
 }
+
+
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .name_user{
+        font-size: 25px;
+        
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1240px) {}
