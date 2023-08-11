@@ -184,7 +184,7 @@ function MenuEdit({ formData, setFormData, userInfo, senderId }: MenuAddProps) {
 
     return (
 
-        <div>
+        <div className='menu-detail-request'>
             <Menu mode="horizontal" className='fixed-menu '>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}

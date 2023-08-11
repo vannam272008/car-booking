@@ -69,8 +69,7 @@
 @media only screen and (max-width: 1200px) {
     .menu-detail-request .fixed-menu .ant-menu-item {
         display: flex;
-    }
-    
+    }  
   }
 
   @media only screen and (min-width: 1200px) {
@@ -90,7 +89,9 @@
         opacity: 0 !important;
         order: 12 !important;
     }
-    
+  }
+  .menu-detail-request .ant-menu-overflow{
+    width: 100%;
   }
 
 
