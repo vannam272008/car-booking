@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer, message, Badge, Menu } from "antd";
+import { Col, Layout, Row, Button, Drawer, message, Badge, Menu, Avatar } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -181,12 +181,16 @@ const AppHeader = (props: any) => {
                         <Menu.Item className="function-menu-item">
                             <Button onClick={handleClickProfile} className="btn-item">
                                 {userInfo.AvatarPath
-                                    ? <img
+                                    ? <Avatar
+                                        shape='circle'
+                                        size={32}
                                         src={`http://localhost:63642/${userInfo.AvatarPath}`}
-                                        alt="avatar"></img>
-                                    : <img
+                                        alt="avatar"></Avatar>
+                                    : <Avatar
+                                        shape='circle'
+                                        size={32}
                                         src={String(avatarDefault)}
-                                        alt="avatar"></img>
+                                        alt="avatar"></Avatar>
                                 }
                             </Button>
                             <Drawer

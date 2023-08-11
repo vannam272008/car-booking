@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useState } from "react";
-import { Dropdown, Layout, MenuProps, Select, Space, message } from "antd";
+import { Avatar, Dropdown, Layout, MenuProps, Select, Space, message } from "antd";
 import UserOutlined from "@ant-design/icons"
 import "./Header.css";
 import request from "../../../Utils/request";
@@ -131,14 +131,16 @@ const HomeHeader = ({ setPayload, userInfo, setUserInfo }: propsHomeHeader) => {
             <span onClick={(e) => e.preventDefault()}>
               <Space style={{ cursor: 'pointer' }} >
                 {userInfo.AvatarPath
-                  ? <img
+                  ? <Avatar
+                    size={48}
                     src={`http://localhost:63642/${userInfo.AvatarPath}`}
                     alt="avatar"
-                    className="img-avatar"></img>
-                  : <img
+                    className="img-avatar"></Avatar>
+                  : <Avatar
+                    size={48}
                     src={String(avatarDefault)}
                     className="img-avatar"
-                    alt="avatar"></img>
+                    alt="avatar"></Avatar>
                 }
                 <UserOutlined />{userInfo ? userInfo.FullName : ""}
               </Space>
