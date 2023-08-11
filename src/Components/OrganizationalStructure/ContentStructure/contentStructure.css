@@ -12,10 +12,10 @@
     padding: 10px 20px;
     transition: all 0.3s;
     background-color: #ffffff;
-    width: 100%;
+    width: auto;
     height: 100%;
     overflow: scroll;
-    overflow-x: hidden;
+    /* overflow-x: hidden; */
     padding-top: 24px;
 }
 .organizational-structure-content h3{
@@ -104,6 +104,23 @@
 .tabs-container .ant-tabs .ant-tabs-nav-operations button{
     display: none;
 }
+@media screen and (max-width: 768px) {
+   .organizational-structure{
+    margin-left: 80px;
+   }
+}
+@media screen and (max-width: 1200px) {
+    .organizational-structure-content{
+        width: 1200px;
+    }
+    .organizational-structure{
+        overflow: scroll;
+        height: auto;
+
+    }
+ }
+
+
 
 
 

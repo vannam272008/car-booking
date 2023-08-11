@@ -3,7 +3,7 @@
     min-height: calc(100vh - 83px);
     transition: all 0.3s;
     background-color: #ffffff;
-    width: 100%;
+    width: auto;
     height: calc(100vh - 156px);
     overflow: scroll;
     overflow-x: hidden;
