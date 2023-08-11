@@ -39,6 +39,7 @@ const AppHeader = (props: any) => {
     }
 
     const handleClickHelp = () => {
+        console.log("hi");
         setOpenHelp(!openHelp);
         setOpenProfile(false);
     }
@@ -57,8 +58,12 @@ const AppHeader = (props: any) => {
     }
 
     const onClose = () => {
-        setOpenHelp(!openHelp);
+        console.log("123");
+        setOpenHelp(false);
+        setOpenProfile(false);
     };
+
+    console.log("help: ", openHelp);
 
     useEffect(() => {
         if (userID !== null) {
@@ -136,22 +141,23 @@ const AppHeader = (props: any) => {
                     <Menu
                         className="group-btn"
                         mode="horizontal"
+                        triggerSubMenuAction="click"
                         overflowedIndicatorPopupClassName="popup-menu"
                     // overflowedIndicator={<MenuOutlined />}
                     >
-                        <Menu.Item className="function-menu-item">
+                        <Menu.Item className="function-menu-item" >
                             <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
                             <Drawer
                                 className="dropdown-help"
                                 placement="right"
-                                onClose={onClose}
+                                // onClose={onClose}
                                 open={openHelp}
                                 mask={false}
                                 closable={false}
                             >
                                 <div className="title-dropdown">
                                     <span>{t('help')}</span>
-                                    <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
+                                    <Button className="header-btn-close" onClick={onClose}><CloseOutlined /></Button>
                                 </div>
                                 <div className="content-dropdown">
                                     <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI', marginLeft: '10px' }}>Opus Helpdesk</h4>

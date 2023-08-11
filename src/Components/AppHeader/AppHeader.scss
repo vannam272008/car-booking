@@ -132,11 +132,18 @@
             line-height: 55px !important;
             background-color: #167c82;
 
+            & .ant-menu-title-content {
+                & .ant-btn {
+                    height: 40px !important;
+                    width: 62px !important;
+                }
+            }
+
         }
 
         & img {
-            height: 16px;
-            width: 16px;
+            height: 32px;
+            width: 32px;
         }
 
     }
@@ -176,8 +183,8 @@
 
         & .header-btn-close {
             font-size: 20px;
-            margin-left: 5px;
-            margin-right: 5px;
+            // margin-left: 5px;
+            // margin-right: 5px;
             border: none;
             background-color: white;
             color: black;
