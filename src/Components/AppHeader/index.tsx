@@ -147,32 +147,6 @@ const AppHeader = (props: any) => {
                     >
                         <Menu.Item className="function-menu-item" >
                             <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
-                            <Drawer
-                                className="dropdown-help"
-                                placement="right"
-                                // onClose={onClose}
-                                open={openHelp}
-                                mask={false}
-                                closable={false}
-                            >
-                                <div className="title-dropdown">
-                                    <span>{t('help')}</span>
-                                    <Button className="header-btn-close" onClick={onClose}><CloseOutlined /></Button>
-                                </div>
-                                <div className="content-dropdown">
-                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI', marginLeft: '10px' }}>Opus Helpdesk</h4>
-                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
-                                        <p>{t('introduction')}</p>
-                                    </NavLink>
-                                    <Feedback />
-                                    <NavLink to="https://tasken.io/issue/new" style={{ textDecoration: 'none' }}>
-                                        <p>{t('openticket')}</p>
-                                    </NavLink>
-                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
-                                        <p>{t('help')}</p>
-                                    </NavLink>
-                                </div>
-                            </Drawer>
                         </Menu.Item>
 
                         <Menu.Item className="function-menu-item">
@@ -180,6 +154,7 @@ const AppHeader = (props: any) => {
                                 <Button className="btn-item"><BellOutlined /></Button>
                             </Badge>
                         </Menu.Item>
+
                         <Menu.Item className="function-menu-item">
                             <Button className="btn-item" onClick={handleClickSetting}><SettingOutlined /></Button>
                         </Menu.Item>
@@ -199,47 +174,74 @@ const AppHeader = (props: any) => {
                                         alt="avatar"></Avatar>
                                 }
                             </Button>
-                            <Drawer
-                                className="dropdown-help"
-                                placement="right" onClose={onClose}
-                                open={openProfile}
-                                mask={false}
-                                closable={false}
-                            >
-                                <div className="title-dropdown">
-                                    <span>{t('myaccount')}</span>
-                                    <Button className="header-btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
-                                </div>
-                                <div className="content-dropdown">
-                                    <div className="account-info">
-                                        {userInfo.AvatarPath
-                                            ? <img
-                                                src={`http://localhost:63642/${userInfo.AvatarPath}`}
-                                                alt="avatar"></img>
-                                            : <img
-                                                src={String(avatarDefault)}
-                                                alt="avatar"></img>
-                                        }
-                                        <span className="info-name">{userInfo.FullName}</span>
-                                        <br />
-                                        <span className="info-email">{userInfo.Email}</span>
-                                    </div>
-                                    <div className="content-info">
-                                        <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
-                                            <p>{t('myprofile')}</p>
-                                        </div>
-                                        <div className='my-profile' style={{ textDecoration: 'none' }}>
-                                            <p>{t('myaccount')}</p>
-                                        </div>
-                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} style={{ textDecoration: 'none' }}>
-                                            <p>{t('signout')}</p>
-                                        </NavLink>
-                                    </div>
-                                </div>
-                            </Drawer>
                         </Menu.Item>
-                    </Menu>
 
+                    </Menu>
+                    <Drawer
+                        className="dropdown-help"
+                        placement="right"
+                        rootClassName="root-dropdown-help"
+                        // onClose={onClose}
+                        open={openHelp}
+                        mask={false}
+                        closable={false}
+                    >
+                        <div className="title-dropdown">
+                            <span>{t('help')}</span>
+                            <Button className="header-btn-close" onClick={onClose}><CloseOutlined /></Button>
+                        </div>
+                        <div className="content-dropdown">
+                            <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI', marginLeft: '10px' }}>Opus Helpdesk</h4>
+                            <NavLink to="/" style={{ textDecoration: 'none' }}>
+                                <p>{t('introduction')}</p>
+                            </NavLink>
+                            <Feedback />
+                            <NavLink to="https://tasken.io/issue/new" style={{ textDecoration: 'none' }}>
+                                <p>{t('openticket')}</p>
+                            </NavLink>
+                            <NavLink to="/" style={{ textDecoration: 'none' }}>
+                                <p>{t('help')}</p>
+                            </NavLink>
+                        </div>
+                    </Drawer>
+                    <Drawer
+                        className="dropdown-help"
+                        placement="right" onClose={onClose}
+                        open={openProfile}
+                        mask={false}
+                        closable={false}
+                    >
+                        <div className="title-dropdown">
+                            <span>{t('myaccount')}</span>
+                            <Button className="header-btn-close" onClick={handleClickProfile}><CloseOutlined /></Button>
+                        </div>
+                        <div className="content-dropdown">
+                            <div className="account-info">
+                                {userInfo.AvatarPath
+                                    ? <img
+                                        src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                        alt="avatar"></img>
+                                    : <img
+                                        src={String(avatarDefault)}
+                                        alt="avatar"></img>
+                                }
+                                <span className="info-name">{userInfo.FullName}</span>
+                                <br />
+                                <span className="info-email">{userInfo.Email}</span>
+                            </div>
+                            <div className="content-info">
+                                <div className='my-profile' style={{ textDecoration: 'none' }} onClick={handleClickMyProfile}>
+                                    <p>{t('myprofile')}</p>
+                                </div>
+                                <div className='my-profile' style={{ textDecoration: 'none' }}>
+                                    <p>{t('myaccount')}</p>
+                                </div>
+                                <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} style={{ textDecoration: 'none' }}>
+                                    <p>{t('signout')}</p>
+                                </NavLink>
+                            </div>
+                        </div>
+                    </Drawer>
 
                     {/* <div className="group-btn">
                         <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>

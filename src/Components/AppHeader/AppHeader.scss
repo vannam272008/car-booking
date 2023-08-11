@@ -151,9 +151,7 @@
 }
 
 
-.ant-drawer-content-wrapper {
-    height: calc(100vh - 93px);
-}
+
 
 .dropdown-help {
     // display: block;
@@ -163,6 +161,10 @@
     background-color: #fff;
     border: 1px solid #c8c8c8;
     margin-top: 61px;
+
+    & .ant-drawer-content-wrapper {
+        height: calc(100vh - 93px);
+    }
 
     & .title-dropdown {
         font-size: 28px;
