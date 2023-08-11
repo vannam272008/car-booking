@@ -3,7 +3,7 @@ import type { TabsProps } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import { UploadFile } from "antd/lib/upload/interface";
 import ImgCrop from "antd-img-crop";
-import { Tabs, Upload, Avatar, Modal, message, Button } from "antd";
+import { Tabs, Upload, Avatar, Modal, message, Button, Row, Col } from "antd";
 import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
@@ -161,8 +161,8 @@ const ContentProfile: React.FC = () => {
 
   const handleCloseModal = () => {
     setVisible(false);
-    setImage('');
-    setInfoAPI((prev)=>({...prev,AvatarPath: defaultAvatar as string}))
+    setImage("");
+    setInfoAPI((prev) => ({ ...prev, AvatarPath: defaultAvatar as string }));
   };
 
   const handleReturnSetting = () => {
@@ -384,15 +384,16 @@ const ContentProfile: React.FC = () => {
             {image ? (
               <Avatar
                 size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
-                icon={<UserOutlined />} 
+                icon={<UserOutlined />}
                 src={URL.createObjectURL(image as RcFile)}
-                // src={`http://localhost:63642/${defaultAvatar}?${Date.now()}`}
               />
             ) : (
               <Avatar
                 size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
                 icon={<UserOutlined />}
-                src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
+                src={`http://localhost:63642/${
+                  infoAPI.AvatarPath
+                }?${Date.now()}`}
               />
             )}
             <div className="Upload-Avatar">
@@ -440,9 +441,7 @@ const ContentProfile: React.FC = () => {
           <Button
             className="btn"
             style={{ marginLeft: "50px" }}
-            // onClick={() => setIsEditing(true)}
             onClick={() => onEditInfo()}
-            // icon={<UserAddOutlined style={{ fontSize: "50px" }} />}
           >
             <UserAddOutlined style={{ fontSize: "50px" }} />
           </Button>
@@ -450,7 +449,7 @@ const ContentProfile: React.FC = () => {
       </div>
       <div className="profile-table">
         <div className="tab-content ">
-          <Tabs style={{ padding: "10px 10px" }} type="card" items={label} />
+          <Tabs className="tabs_component" style={{ padding: "10px 10px" }} type="card" items={label} />
         </div>
       </div>
     </div>
