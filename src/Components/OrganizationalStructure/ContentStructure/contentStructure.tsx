@@ -32,7 +32,7 @@ const { TabPane } = Tabs;
 
 function ContentStructure(): JSX.Element {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [dataDepartment, setDataDepartment] = useState<Department[]>([]);
     const [filteredDataDepartment, setFilteredDataDepartment] = useState<Department[]>([]);
