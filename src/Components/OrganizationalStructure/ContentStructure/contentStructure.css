@@ -104,6 +104,21 @@
 .tabs-container .ant-tabs .ant-tabs-nav-operations button{
     display: none;
 }
+@media screen and (max-width: 768px) {
+   .organizational-structure{
+    margin-left: 80px;
+   }
+}
+@media screen and (max-width: 1200px) {
+    .organizational-structure{
+        width: 1200px;
+    }
+    .organizational-structure-content{
+     overflow-x: scroll;
+    }
+ }
+
+
 
 
 

@@ -31,7 +31,7 @@ function SettingPage(): JSX.Element {
                         <b>{t('System')}</b>
                         <b className='titile-integration'> {t('Integration')}</b>
                     </div>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button onClick={handleOrganizationStructure}>{t('Organizational structure')}<br /><TeamOutlined /></Button>
                         </Col>
@@ -44,7 +44,7 @@ function SettingPage(): JSX.Element {
                         </Col>
                     </Row>
                     <b>{t('requests')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
@@ -65,25 +65,25 @@ function SettingPage(): JSX.Element {
                         </Col>
                     </Row>
                     <b>{t('Payment')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Car Booking')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button onClick={handleAdmin}>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Document approval')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Employee Offboarding')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
@@ -92,13 +92,13 @@ function SettingPage(): JSX.Element {
                         </Col>
                     </Row>
                     <b>{t('Promotion')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Contract')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
@@ -107,49 +107,49 @@ function SettingPage(): JSX.Element {
                         </Col>
                     </Row>
                     <b>{t('Asset In/Out gate')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Capex Disposal')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Capital Expenditure')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Scheme')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>SMOS</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Prepayment')}</b>
-                    <Row wrap={true} align='middle' className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Asset Transfer')}</b>
-                    <Row className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
                     </Row>
                     <b>{t('Partner')}</b>
-                    <Row className='setting-page-row'>
+                    <Row gutter={5} wrap={true} align='middle' className='setting-page-row'>
                         <Col className='setting-page-col' xxl={3}>
                             <Button>{t('Permission')}<br /><SafetyCertificateFilled /></Button>
                         </Col>
