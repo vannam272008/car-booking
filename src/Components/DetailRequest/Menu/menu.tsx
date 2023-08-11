@@ -112,7 +112,7 @@ function MenuRequest(props: any): JSX.Element {
         setActionRequest({ action: "Approved", Note: "" });
         setComment((prevComment) => ({
             ...prevComment,
-            comment: t('Request ') + requestCode + t(' has been Approved. Note: ')
+            comment: t('Request ') + requestCode + t(' has been Approved. </br> Note: ')
         }));
         setIsModalOpenApprove(true);
     };
@@ -121,7 +121,7 @@ function MenuRequest(props: any): JSX.Element {
         setActionRequest({ action: "Rejected", Note: "" });
         setComment((prevComment) => ({
             ...prevComment,
-            comment: t('Request ') + requestCode + t(' has been Rejected. Note: ')
+            comment: t('Request ') + requestCode + t(' has been Rejected. </br> Reason: ')
         }));
         setIsModalOpenReject(true);
     };
@@ -393,7 +393,7 @@ function MenuRequest(props: any): JSX.Element {
                                 setActionRequest({ action: "Approved", Note: e.target.value });
                                 setComment((prevComment) => ({
                                     ...prevComment,
-                                    comment: t('Request ') + requestCode + t(' has been Approved. Note: ') + e.target.value
+                                    comment: t('Request ') + requestCode + t(' has been Approved. </br> Note: ') + e.target.value
                                 }));
                             }} />
                         </Modal>
@@ -411,7 +411,7 @@ function MenuRequest(props: any): JSX.Element {
                                     setActionRequest({ action: "Rejected", Note: e.target.value });
                                     setComment((prevComment) => ({
                                         ...prevComment,
-                                        comment: t('Request ') + requestCode + t(' has been Rejected. Reason: ') + e.target.value
+                                        comment: t('Request ') + requestCode + t(' has been Rejected. </br> Reason: ') + e.target.value
                                     }));
                                 }} />
                         </Modal>

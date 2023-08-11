@@ -113,9 +113,19 @@ const ManageRequest = (props: any) => {
     }
   }
 
+  const checkRequestShared = (record: any) => {
+    if (record.SenderUser.Id !== userInfo.Id && record.ReceiveUser.Id !== userInfo.Id && !record.RequestWorkflows.includes(userInfo.Id)
+    ) {
+      return 'request-shared';
+    }
+    else return '';
+  }
+
   useEffect(() => {
+    setLoading(true);
     handleGetAllRequest();
   }, [tab, filter, status, currentPage, limit]);
+
 
   const profile = false;
 
@@ -160,6 +170,7 @@ const ManageRequest = (props: any) => {
                   }
                 },
               })}
+              rowClassName={(record) => checkRequestShared(record)}
               columns={[
                 {
                   title: t('requestcode'),

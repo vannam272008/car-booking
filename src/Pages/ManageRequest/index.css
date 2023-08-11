@@ -32,7 +32,7 @@
   color: #a3a6b4;
 }
 
-.manage-request-content .ant-table-tbody > tr:hover {
+.manage-request-content .ant-table-tbody>tr:hover {
   background-color: #f4f0f0;
   cursor: pointer;
 }
@@ -164,6 +164,10 @@
   border-bottom: 10px solid transparent;
 }
 
+.request-shared {
+  font-weight: bold;
+}
+
 /* RESPONSIVE */
 
 /* SAMSUNG GALAXY S8+ */
@@ -171,37 +175,46 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-navbar{
+
+  .manage-request-navbar {
     display: inline-table;
     width: 5px;
     padding-left: 60px;
   }
-  .manage-request-content{
+
+  .manage-request-content {
     padding-top: 45px;
     margin-right: 42px;
     margin-left: 48px;
   }
-  .manage-request-navbar .search-bar{
+
+  .manage-request-navbar .search-bar {
     padding-bottom: 10px;
   }
-  .manage-request-navbar .ant-space-compact{
+
+  .manage-request-navbar .ant-space-compact {
     padding-right: 70px;
   }
-  .manage-request-button-navbar{
+
+  .manage-request-button-navbar {
     display: flex;
     flex-direction: row;
     padding-right: 50px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -210,37 +223,46 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-navbar{
+
+  .manage-request-navbar {
     display: inline-table;
     width: 5px;
   }
-  .manage-request-content{
+
+  .manage-request-content {
     padding-top: 45px;
     margin-right: 42px;
     margin-left: 48px;
   }
-  .manage-request-navbar .search-bar{
+
+  .manage-request-navbar .search-bar {
     padding-bottom: 10px;
     margin-right: 10px;
   }
-  .manage-request-navbar .ant-space-compact{
+
+  .manage-request-navbar .ant-space-compact {
     padding-right: 70px;
   }
-  .manage-request-button-navbar{
+
+  .manage-request-button-navbar {
     display: flex;
     flex-direction: row;
     padding-right: 50px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -249,25 +271,32 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-navbar{
+
+  .manage-request-navbar {
     height: 70px;
   }
-  .manage-request-navbar .search-bar{
+
+  .manage-request-navbar .search-bar {
     width: 200px;
   }
-  .manage-request-button-navbar button{
+
+  .manage-request-button-navbar button {
     font-size: 10px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -276,24 +305,30 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-navbar{
+
+  .manage-request-navbar {
     height: 70px;
     width: 80%;
     margin-left: 80px;
   }
-  .manage-request-content{
+
+  .manage-request-content {
     margin-left: 100px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -302,19 +337,24 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-navbar{
+
+  .manage-request-navbar {
     height: 70px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -323,19 +363,24 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 120px;
   }
+
   .manage-request-button-navbar .text-export-excel {
     display: none;
   }
+
   .manage-request-button-navbar .text-create-new {
     display: none;
   }
+
   .manage-request-button-navbar .text-filter {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 150px;
   }
 }
@@ -344,7 +389,8 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 120px;
   }
 }
@@ -353,10 +399,8 @@
   .manage-request-title {
     display: none;
   }
-  .manage-request-content .ant-pagination{
+
+  .manage-request-content .ant-pagination {
     padding-right: 120px;
   }
 }
-
-
-

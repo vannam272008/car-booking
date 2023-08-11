@@ -215,7 +215,6 @@ function Comment(props: any): JSX.Element {
     //     setShowReplyForm(true);
     //     setReplyToCommentId(commentId);
     // };
-    console.log("comment: ", comments);
 
     return (
         <div className='comments-detail-request'>
