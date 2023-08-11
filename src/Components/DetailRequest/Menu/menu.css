@@ -1,7 +1,6 @@
 .fixed-menu {
     position: fixed;
     top: 64px;
-    width: 100%;
     z-index: 999;
     border-bottom: 1px solid #e1e1e1;
     border-top-left-radius: 0;
@@ -58,4 +57,41 @@
 .menu-btn-delete{
     text-align: center;
 }
+/* .popup-menu-detail-request .ant-menu {
+    max-height: fit-content;
+    min-width: auto !important;
+}
+.popup-menu-detail-request .ant-menu .function-menu-{
+    height: 55px !important;
+    line-height: 55px !important;
+    background-color: #167c82;
+} */
+@media only screen and (max-width: 1200px) {
+    .menu-detail-request .fixed-menu .ant-menu-item {
+        display: flex;
+    }
+    
+  }
+
+  @media only screen and (min-width: 1200px) {
+    .menu-detail-request .fixed-menu {
+        display: flex;
+    }
+    .menu-detail-request .fixed-menu .ant-menu-item {
+        position: unset !important;
+        overflow-y: unset !important;
+        height: fit-content !important;
+        opacity: 1 !important;
+    }
+
+    .menu-detail-request .fixed-menu .ant-menu-overflow-item-rest {
+        position: unset !important;
+        overflow-y: unset !important;
+        opacity: 0 !important;
+        order: 12 !important;
+    }
+    
+  }
+
+
   

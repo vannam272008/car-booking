@@ -69,6 +69,7 @@
     line-height: 1.7em;
     color: #130e0e;
     margin: 0 0 10px;
+    margin-left: 65px;
 }
 .comment-content span{
     overflow-wrap: break-word;

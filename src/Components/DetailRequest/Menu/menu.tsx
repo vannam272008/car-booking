@@ -325,8 +325,8 @@ function MenuRequest(props: any): JSX.Element {
     }
 
     return (
-        <div>
-            <Menu mode="horizontal" className='fixed-menu'>
+        <div className='menu-detail-request'>
+            <Menu overflowedIndicatorPopupClassName="popup-menu-detail-request" mode="horizontal" className='fixed-menu'>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}
                 </Menu.Item>
