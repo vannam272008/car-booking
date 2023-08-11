@@ -9,7 +9,6 @@ const Profile = () => {
             {() => (
                 <ContentProfile />
             )}
-            
         </RequestLayout>
     )
 }
