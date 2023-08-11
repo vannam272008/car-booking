@@ -277,7 +277,7 @@ function AddRequest(): JSX.Element {
                                                                 className='responsive-select-option'
                                                             >
                                                                 {dataDepartment.map((department) => (
-                                                                    <Option key={department.Id} value={department.Id} >
+                                                                    <Option key={department.Id} value={department.Id} className='responsive-select-option'>
                                                                         {department.Name}
                                                                     </Option>
                                                                 ))}
@@ -312,7 +312,7 @@ function AddRequest(): JSX.Element {
                                                             >
                                                                 {filteredData().map((departmentMember) => (
                                                                     <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                                        <div>
+                                                                        <div className='responsive-limit-width-ellipsis' title={departmentMember.User.FullName + ' ' + departmentMember.User.Email + ' ' + departmentMember.User.JobTitle}>
                                                                             <span>{departmentMember.User.FullName} </span>
                                                                             <span>{departmentMember.User.Email} </span>
                                                                             <span>{departmentMember.User.JobTitle}</span>

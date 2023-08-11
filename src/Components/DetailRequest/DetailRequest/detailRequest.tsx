@@ -130,7 +130,9 @@ function DetailRequest(): JSX.Element {
                                 <Helmet>
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                                 </Helmet>
-                                <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
+                                <div>
+                                    <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
+                                </div>
                                 <div className='info-detail-request'>
                                     <div className='info-basic-detail-request'>
                                         <p>{t('requestcode')}: {detailData.RequestCode}</p>

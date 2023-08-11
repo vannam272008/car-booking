@@ -249,10 +249,10 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         label={
                                             <div className='label-approver'>
                                                 {editingIndex === index ? (
-                                                    <>
+                                                    <Space>
                                                         <Input value={labelApprovers[index]} onChange={(e) => handleInputChangeApprover(index, e.target.value)} />
                                                         <Button type="link" onClick={() => handleSave(index)} icon={<SaveOutlined />} />
-                                                    </>
+                                                    </Space>
                                                 ) : (
                                                     <Space>
                                                         <div className='responsive-lable-approver'><span title={labelApprovers[index]}>{labelApprovers[index]}</span></div>
@@ -289,7 +289,7 @@ function SendApprover({ fileList, setFileList, applyNote, setApplyNote, listOfUs
                                         >
                                             {filteredData().map((departmentMember) => (
                                                 <Option key={departmentMember.Id} value={departmentMember.Id}>
-                                                    <div>
+                                                    <div className='responsive-limit-width-ellipsis'>
                                                         <span>{departmentMember.FullName} </span>
                                                         <span>{departmentMember.Email} </span>
                                                         <span>{departmentMember.JobTitle} </span>
