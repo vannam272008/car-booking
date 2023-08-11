@@ -14,9 +14,12 @@ import InfoFeedback from '../InfoFeedback/infoFeedback';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { checkUserRoles } from '../../../Utils/checkUserRoles';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
-
-function DetailRequest(): JSX.Element {
+function DetailRequest(props: any): JSX.Element {
+    const { userInfo } = props;
 
     //Data information detail request
     // const requestCode: string = '2023OPS-CAR-0704-001';
@@ -112,12 +115,12 @@ function DetailRequest(): JSX.Element {
     // }
 
     // console.log('hello', detailData.Department ? detailData.Department.Id : undefined);
-
+    // console.log("123:", Object.keys(workflowData).length === 0);
     return (
         <RequestLayout profile={profile}>
             {() => (
                 <div className='page-detail-request'>
-                    {loading && workflowData !== null ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
+                    {loading || Object.keys(workflowData).length === 0 ? (<Spin style={{ height: '100vh' }} tip="Loading..." size="large">
                         <Alert
                             style={{ width: '100%', textAlign: 'center' }}
                             message={t('Loading...')}
@@ -130,7 +133,9 @@ function DetailRequest(): JSX.Element {
                                 <Helmet>
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                                 </Helmet>
-                                <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
+                                <div>
+                                    <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
+                                </div>
                                 <div className='info-detail-request'>
                                     <div className='info-basic-detail-request'>
                                         <p>{t('requestcode')}: {detailData.RequestCode}</p>
@@ -199,7 +204,7 @@ function DetailRequest(): JSX.Element {
                                             <Radio value={false}>{t('no')}</Radio>
                                         </Radio.Group>
                                     </div>
-                                    {showFeedback === 'Approved' ? (
+                                    {(showFeedback === 'Approved' && checkUserRoles([1, 2], userInfo)) ? (
                                         <DoneRequest requestCode={detailData.RequestCode} />
                                     ) : showFeedback === 'Done' ? (
                                         <InfoFeedback />
@@ -263,5 +268,9 @@ function DetailRequest(): JSX.Element {
         </RequestLayout >
     );
 }
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
 
-export default DetailRequest;
+
+export default connect(mapStateToProps, null)(DetailRequest);

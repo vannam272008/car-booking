@@ -66,6 +66,7 @@ const DepartmentManage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [limit, setLimit] = useState(5);
+  const [isLoading, setIsLoading] = useState(true)
 
   const getDepartments = async () => {
     let res = await axios.get(`http://localhost:63642/api/department/all?page=${currentPage}&limit=${limit}`)
@@ -84,6 +85,7 @@ const DepartmentManage: React.FC = () => {
         })
       });
       setDepartments(data)
+      setIsLoading(false)
     } else {
       setDepartments([])
     }
@@ -91,7 +93,7 @@ const DepartmentManage: React.FC = () => {
 
   useEffect(() => {
     getDepartments()
-  }, [])
+  }, [currentPage])
 
   const handleAdd = () => {
     setAction(util.ACTION_HANDLE.ADD)
@@ -161,8 +163,9 @@ const DepartmentManage: React.FC = () => {
         Add Department
       </Button>
 
-      <Table dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
+      <Table loading={isLoading} dataSource={departments} columns={columns} rowKey="Id" pagination={false} />
       <Pagination
+        showSizeChanger
         current={currentPage}
         pageSize={limit}
         total={total * limit}
@@ -230,7 +233,9 @@ const DepartmentForm: React.FC<DepartmentFormProps> = ({ selectedDepartment, set
       setDepartment(values)
 
       onSave(values as Department);
-    });
+    }).catch(e => {
+      console.log('department data submit error:', e);
+    });;
   };
 
   const handleFormReset = () => {

@@ -18,6 +18,9 @@
       font-weight: 600;
       font-size: medium;
     }
+    .page-detail-request{
+      margin-left: 80px;
+    }
   }
 
   .required {

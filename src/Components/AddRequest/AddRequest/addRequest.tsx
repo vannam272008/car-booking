@@ -235,9 +235,8 @@ function AddRequest(): JSX.Element {
                                                 className='form-add-request'
                                             >
                                                 <Row className='row-request'>
-
                                                     {/*Request Applicant*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('Applicant')}
                                                             name="SenderId"
@@ -254,7 +253,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Department*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('department')}
                                                             name="DepartmentId"
@@ -275,9 +274,10 @@ function AddRequest(): JSX.Element {
                                                                 filterOption={(inputValue, option) =>
                                                                     option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                                 }
+                                                                className='responsive-select-option'
                                                             >
                                                                 {dataDepartment.map((department) => (
-                                                                    <Option key={department.Id} value={department.Id} >
+                                                                    <Option key={department.Id} value={department.Id} className='responsive-select-option'>
                                                                         {department.Name}
                                                                     </Option>
                                                                 ))}
@@ -285,7 +285,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request User*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('user')}
                                                             name="ReceiverId"
@@ -308,10 +308,11 @@ function AddRequest(): JSX.Element {
                                                                 optionFilterProp="children"
                                                                 filterOption={false}
                                                                 onSearch={handleSearch}
+                                                                className='responsive-select-option'
                                                             >
                                                                 {filteredData().map((departmentMember) => (
                                                                     <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                                        <div>
+                                                                        <div className='responsive-limit-width-ellipsis' title={departmentMember.User.FullName + ' ' + departmentMember.User.Email + ' ' + departmentMember.User.JobTitle}>
                                                                             <span>{departmentMember.User.FullName} </span>
                                                                             <span>{departmentMember.User.Email} </span>
                                                                             <span>{departmentMember.User.JobTitle}</span>
@@ -322,7 +323,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Mobile*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('mobile')}
                                                             name="Mobile"
@@ -342,10 +343,8 @@ function AddRequest(): JSX.Element {
                                                             <Input onKeyPress={handleKeyPress} type='text' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                         </Form.Item>
                                                     </Col>
-                                                </Row>
-                                                <Row className='row-request'>
                                                     {/*Request Cost Center*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label="Cost Center"
                                                             name="CostCenter"
@@ -366,7 +365,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Total passengers*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('totalpassengers')}
                                                             name="Totalpassengers"
@@ -387,7 +386,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Usage time from*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('from')}
                                                             name="UsageFrom"
@@ -410,7 +409,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Usage time to*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('to')}
                                                             name="UsageTo"
@@ -432,10 +431,8 @@ function AddRequest(): JSX.Element {
                                                             />
                                                         </Form.Item>
                                                     </Col>
-                                                </Row>
-                                                <Row className='row-request'>
                                                     {/*Request Pick time*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('Pick time')}
                                                             name="Picktime"
@@ -449,7 +446,7 @@ function AddRequest(): JSX.Element {
                                                             initialValue={initialValuePickTime}
                                                         >
                                                             <DatePicker
-                                                                className='.add-request-width-formitem'
+                                                                className='add-request-width-formitem'
                                                                 value={dayjs(formData.PickTime)}
                                                                 onChange={(value) => handleDatePicker(value, 'PickTime')}
                                                                 showTime
@@ -458,7 +455,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Pick location*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('picklocation')}
                                                             name="Picklocation"
@@ -475,7 +472,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Destination */}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('destination')}
                                                             name="Destination"
@@ -493,7 +490,7 @@ function AddRequest(): JSX.Element {
                                                         </Form.Item>
                                                     </Col>
                                                     {/*Request Reason*/}
-                                                    <Col span={6} className='col-request'>
+                                                    <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                         <Form.Item
                                                             label={t('reason')}
                                                             name="Reason"

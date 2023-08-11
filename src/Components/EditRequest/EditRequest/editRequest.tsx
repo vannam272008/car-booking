@@ -271,7 +271,7 @@ function EditRequest() {
                                     >
                                         <Row className='row-request'>
                                             {/*Request Applicant*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('Applicant')}
                                                     name="SenderId"
@@ -288,7 +288,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Department*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('department')}
                                                     name="DepartmentId"
@@ -310,11 +310,12 @@ function EditRequest() {
                                                         filterOption={(inputValue, option) =>
                                                             option?.props.children?.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
                                                         }
+                                                        className='responsive-select-option'
                                                     >
                                                         {dataDepartment
                                                             .filter((department) => !formData.DepartmentId.includes(department.Id))
                                                             .map((filteredDepartment) => (
-                                                                <Option key={filteredDepartment.Id} value={filteredDepartment.Id} >
+                                                                <Option key={filteredDepartment.Id} value={filteredDepartment.Id} className='responsive-select-option'>
                                                                     {filteredDepartment.Name}
                                                                 </Option>
                                                             ))}
@@ -327,7 +328,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request User*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('user')}
                                                     name="ReceiverId"
@@ -350,10 +351,11 @@ function EditRequest() {
                                                         optionFilterProp="children"
                                                         filterOption={false}
                                                         onSearch={handleSearch}
+                                                        className='responsive-select-option'
                                                     >
                                                         {filteredData().map((departmentMember) => (
                                                             <Option key={departmentMember.Id} value={departmentMember.User.Id}>
-                                                                <div>
+                                                                <div className='responsive-limit-width-ellipsis' title={departmentMember.User.FullName + ' ' + departmentMember.User.Email + ' ' + departmentMember.User.JobTitle}>
                                                                     <span>{departmentMember.User.FullName} </span>
                                                                     <span>{departmentMember.User.Email} </span>
                                                                     <span>{departmentMember.User.JobTitle}</span>
@@ -364,7 +366,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Mobile*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('mobile')}
                                                     name="Mobile"
@@ -384,10 +386,8 @@ function EditRequest() {
                                                     <Input onKeyPress={handleKeyPress} type='text' inputMode='numeric' name='Mobile' value={formData.Mobile ?? ''} onChange={handleInputChange} />
                                                 </Form.Item>
                                             </Col>
-                                        </Row>
-                                        <Row className='row-request'>
                                             {/*Request Cost Center*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label="Cost Center"
                                                     name="CostCenter"
@@ -408,7 +408,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Total passengers*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('totalpassengers')}
                                                     name="Totalpassengers"
@@ -429,7 +429,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time from*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('Usage time from')}
                                                     name="UsageFrom"
@@ -452,7 +452,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Usage time to*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('Usage time to')}
                                                     name="UsageTo"
@@ -474,10 +474,8 @@ function EditRequest() {
                                                     />
                                                 </Form.Item>
                                             </Col>
-                                        </Row>
-                                        <Row className='row-request'>
                                             {/*Request Pick time*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('Pick time')}
                                                     name="Picktime"
@@ -500,7 +498,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Pick location*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('picklocation')}
                                                     name="Picklocation"
@@ -517,7 +515,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Destination */}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('destination')}
                                                     name="Destination"
@@ -535,7 +533,7 @@ function EditRequest() {
                                                 </Form.Item>
                                             </Col>
                                             {/*Request Reason*/}
-                                            <Col span={6} className='col-request'>
+                                            <Col xs={24} sm={24} md={12} lg={8} xl={6} className='col-request'>
                                                 <Form.Item
                                                     label={t('reason')}
                                                     name="Reason"

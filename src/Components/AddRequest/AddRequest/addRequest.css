@@ -1,3 +1,8 @@
+@media screen and (max-width: 768px) {
+    .page-request{
+        margin-left: 80px;
+    }
+}
 .page-request{
     background-color: #ffffff;
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -138,4 +143,34 @@
     font-weight: 200;
     font-size: medium;
     justify-content: center;
+}
+/* .responsive-select-option .ant-select-selector::after{
+   position: absolute;
+   right: -1px;
+} */
+.responsive-select-option  .ant-select-arrow{
+    position: absolute;
+    right: -1px;
+}
+
+.add-request-width-formitem .ant-picker-input {
+    width: 100%;
+}
+.add-request-width-formitem .ant-picker-input input{   
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+/* .responsive-select-option .ant-select-selector{
+    width: 100%;
+}
+.responsive-select-option .ant-select-selector .ant-select-selection-item{   
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
+.responsive-limit-width-ellipsis{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

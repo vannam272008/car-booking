@@ -1,4 +1,4 @@
-import { Col, Layout, Row, Button, Drawer, message, Badge, Menu } from "antd";
+import { Col, Layout, Row, Button, Drawer, message, Badge, Menu, Avatar } from "antd";
 import "./AppHeader.scss";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -39,8 +39,13 @@ const AppHeader = (props: any) => {
     }
 
     const handleClickHelp = () => {
+        console.log("hi");
         setOpenHelp(!openHelp);
         setOpenProfile(false);
+    }
+
+    const handleClickSetting = () => {
+        navigate('/setting');
     }
 
     const handleClickProfile = () => {
@@ -53,8 +58,12 @@ const AppHeader = (props: any) => {
     }
 
     const onClose = () => {
-        setOpenHelp(!openHelp);
+        console.log("123");
+        setOpenHelp(false);
+        setOpenProfile(false);
     };
+
+    console.log("help: ", openHelp);
 
     useEffect(() => {
         if (userID !== null) {
@@ -113,7 +122,7 @@ const AppHeader = (props: any) => {
                         </Button>
                     </div>
                     <div onClick={handlePathName} className="col-logo-img">
-                        <NavLink to="/" className={`${pathName === "/" && "select-page"}`}>
+                        <NavLink to="/">
                             <img src={opus_logo} alt="img-opus" />
                         </NavLink>
                     </div>
@@ -132,33 +141,34 @@ const AppHeader = (props: any) => {
                     <Menu
                         className="group-btn"
                         mode="horizontal"
+                        triggerSubMenuAction="click"
                         overflowedIndicatorPopupClassName="popup-menu"
                     // overflowedIndicator={<MenuOutlined />}
                     >
-                        <Menu.Item className="function-menu-item">
+                        <Menu.Item className="function-menu-item" >
                             <Button className="btn-item" onClick={handleClickHelp}><QuestionOutlined /></Button>
                             <Drawer
                                 className="dropdown-help"
                                 placement="right"
-                                onClose={onClose}
+                                // onClose={onClose}
                                 open={openHelp}
                                 mask={false}
                                 closable={false}
                             >
                                 <div className="title-dropdown">
                                     <span>{t('help')}</span>
-                                    <Button className="header-btn-close" onClick={handleClickHelp}><CloseOutlined /></Button>
+                                    <Button className="header-btn-close" onClick={onClose}><CloseOutlined /></Button>
                                 </div>
                                 <div className="content-dropdown">
-                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI' }}>Opus Helpdesk</h4>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <h4 style={{ fontSize: '18px', fontFamily: 'Segoe UI', marginLeft: '10px' }}>Opus Helpdesk</h4>
+                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
                                         <p>{t('introduction')}</p>
                                     </NavLink>
                                     <Feedback />
-                                    <NavLink to="https://tasken.io/issue/new" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="https://tasken.io/issue/new" style={{ textDecoration: 'none' }}>
                                         <p>{t('openticket')}</p>
                                     </NavLink>
-                                    <NavLink to="/" className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                    <NavLink to="/" style={{ textDecoration: 'none' }}>
                                         <p>{t('help')}</p>
                                     </NavLink>
                                 </div>
@@ -171,13 +181,24 @@ const AppHeader = (props: any) => {
                             </Badge>
                         </Menu.Item>
                         <Menu.Item className="function-menu-item">
-                            <NavLink to="/setting" className={`${pathName === "/setting" && "select-page"}`}>
-                                <Button className="btn-item"><SettingOutlined /></Button>
-                            </NavLink>
+                            <Button className="btn-item" onClick={handleClickSetting}><SettingOutlined /></Button>
                         </Menu.Item>
 
                         <Menu.Item className="function-menu-item">
-                            <Button onClick={handleClickProfile} className="btn-item"><UserOutlined /></Button>
+                            <Button onClick={handleClickProfile} className="btn-item">
+                                {userInfo.AvatarPath
+                                    ? <Avatar
+                                        shape='circle'
+                                        size={32}
+                                        src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                        alt="avatar"></Avatar>
+                                    : <Avatar
+                                        shape='circle'
+                                        size={32}
+                                        src={String(avatarDefault)}
+                                        alt="avatar"></Avatar>
+                                }
+                            </Button>
                             <Drawer
                                 className="dropdown-help"
                                 placement="right" onClose={onClose}
@@ -210,7 +231,7 @@ const AppHeader = (props: any) => {
                                         <div className='my-profile' style={{ textDecoration: 'none' }}>
                                             <p>{t('myaccount')}</p>
                                         </div>
-                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} className={`${pathName === "/" && "select-page"}`} style={{ textDecoration: 'none' }}>
+                                        <NavLink to="/" onClick={() => handleLogout({ username: "", password: "" })} style={{ textDecoration: 'none' }}>
                                             <p>{t('signout')}</p>
                                         </NavLink>
                                     </div>

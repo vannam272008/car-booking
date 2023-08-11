@@ -1,3 +1,4 @@
+
 .comments-detail-request{
     margin-top: 25px;
 }
@@ -12,6 +13,7 @@
 }
 .row-comment-box{
     margin-bottom: 25px;
+    text-align: center;
 }
 .input-comment{
     width: 100%;
@@ -26,9 +28,20 @@
 .btn-comment{
     background-color: rgb(75,167,71);
     color: white;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 .upload-comment{
     padding-left: 40px;
+}
+.btn-attachment-comment{
+    background-color: rgb(47,133,239);
+    color: white;
+}
+@media screen and (max-width: 576px) {
+    .upload-comment .ant-upload{
+        float: left;
+    }
 }
 .list-comment{
     max-width: 555px;
@@ -56,6 +69,10 @@
     line-height: 1.7em;
     color: #130e0e;
     margin: 0 0 10px;
+    margin-left: 65px;
+}
+.comment-content span{
+    overflow-wrap: break-word;
 }
 .comment-author{
     font-weight: 700;

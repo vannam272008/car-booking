@@ -8,14 +8,19 @@ import { RcFile } from 'antd/es/upload';
 import type { UploadFile } from 'antd/lib/upload';
 import { FileTextOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import { connect } from 'react-redux';
+import { RootState } from '../../../Reducers/rootReducer';
 
 interface CommentItem {
     Account: {
-        FullName: string | null
+        FullName: string | null,
+        AvatarPath: string | null,
     },
     Content: string | null,
     Created: string,
     Id: string,
+
     RequestCommentAttachment: [{
         Id: string,
         Path: string,
@@ -29,12 +34,12 @@ interface NewComment {
 
 
 
-function Comment(): JSX.Element {
+function Comment(props: any): JSX.Element {
 
     // const [detailData, setDetailData] = useState<any>({});
-
+    const avatarDefault = require('../../../public/images/avatarDefault.png');
     const { t } = useTranslation();
-
+    const { userInfo } = props;
     const { requestId } = useParams();
     const [showUpload, setShowUpload] = useState(false);
     // const [fileList, setFileList] = useState<RcFile[]>([]);
@@ -52,7 +57,8 @@ function Comment(): JSX.Element {
     const [comments, setComments] = useState<CommentItem[]>([
         {
             Account: {
-                FullName: ""
+                FullName: "",
+                AvatarPath: "",
             },
             Content: "",
             Created: "",
@@ -227,11 +233,20 @@ function Comment(): JSX.Element {
                     </div>
                     <div>
                         <Row gutter={5} className='row-comment-box' align="middle">
-                            <Col span={1}>
-                                <Avatar size={37} icon={<UserOutlined />} className='avatar-comment' />
+                            <Col xs={6} sm={2} lg={1} xl={1}>
+                                {userInfo.AvatarPath
+                                    ? <Avatar size={37} className='avatar-comment'
+                                        src={`http://localhost:63642/${userInfo.AvatarPath}`}
+                                        alt="avatar" />
+                                    : <Avatar size={37} className='avatar-comment'
+                                        src={String(avatarDefault)}
+                                        alt="avatar" />
+                                }
+                                {/* <Avatar size={37} className='avatar-comment' /> */}
                             </Col>
-                            <Col span={6}>
+                            <Col xs={18} sm={14} lg={10} xl={8}>
                                 <Input.TextArea
+                                    rows={3}
                                     className='input-comment'
                                     placeholder={t('Write a comment...')}
                                     value={newComment.comment}
@@ -242,7 +257,7 @@ function Comment(): JSX.Element {
                                         }))}
                                 />
                             </Col>
-                            <Col span={2}>
+                            <Col xs={24} sm={2} lg={2} xl={2}>
                                 <Button className='btn-comment' type="primary"
                                     onClick={handlePostComment}
                                     disabled={newComment.comment === ""}
@@ -256,20 +271,31 @@ function Comment(): JSX.Element {
                             accept=".png, .jpg, .jpeg, .pdf, .csv, .doc, .docx, .pptx, .ppt, .txt, .xls, .xlsx"
                             onRemove={handleRemoveFile}
                         >
-                            <Button icon={<UploadOutlined />} style={{ backgroundColor: 'rgb(47,133,239)', color: 'white' }}>{t('Add attachments')}</Button>
-                            <span> {t('(Maximum 20MB per file)')}</span>
+                            <Button className='btn-attachment-comment' icon={<UploadOutlined />}>{t('Add attachments')}</Button>
+                            <span className='attention-upload-attachment'> {t('(Maximum 20MB per file)')}</span>
                         </Upload>
                     </div>
-
                     <div className='comments-detail-request'>
                         {comments.map((comment) => (
-                            <Row className='list-comment' key={comment.Id}>
-                                <Col span={2} className="comment-avatar">
-                                    <Avatar size={40} icon={<UserOutlined />} />
+                            <Row align="middle" className='list-comment' key={comment.Id}>
+                                <Col xs={4} sm={2} className="comment-avatar">
+                                    {comment.Account.AvatarPath
+                                        ? <Avatar size={37} className='avatar-comment'
+                                            src={`http://localhost:63642/${comment.Account.AvatarPath}`}
+                                            alt="avatar" />
+                                        : <Avatar size={37} className='avatar-comment'
+                                            src={String(avatarDefault)}
+                                            alt="avatar" />
+                                    }
                                 </Col>
-                                <Col span={18}>
+                                <Col xs={18} sm={20}>
                                     <span className="comment-author">{comment.Account ? comment.Account.FullName : t('No Name')}</span>
-                                    <span className="comment-date">{comment.Created ? comment.Created : t('No Data')}</span>
+                                    <span className="comment-date">{comment.Created
+                                        ? dayjs(comment.Created).format('YYYY-MM-DD HH:mm:ss')
+                                        : t('No Data')}
+                                    </span>
+                                </Col>
+                                <Col xs={24} sm={24}>
                                     <div className="comment-content">
                                         <span>{comment.Content?.includes("</br>") ? comment.Content?.substring(0, comment.Content.indexOf("</br>")) : comment.Content}</span>
                                         <br></br>
@@ -345,5 +371,8 @@ function Comment(): JSX.Element {
         </div >
     );
 }
+const mapStateToProps = (state: RootState) => ({
+    userInfo: state.request.userInfo
+});
 
-export default Comment;
+export default connect(mapStateToProps, null)(Comment);

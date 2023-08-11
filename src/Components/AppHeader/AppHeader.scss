@@ -70,7 +70,7 @@
             font-size: 20px;
 
             & .function-menu-item {
-                padding-inline: 0px !important;
+                padding-inline: 2px !important;
 
                 & .ant-menu-title-content {
                     & .ant-badge {
@@ -107,6 +107,11 @@
                 & svg {
                     font-size: 20px;
                 }
+
+                & img {
+                    height: 32px;
+                    width: 32px;
+                }
             }
 
             // & .btn-item:hover {
@@ -127,8 +132,19 @@
             line-height: 55px !important;
             background-color: #167c82;
 
+            & .ant-menu-title-content {
+                & .ant-btn {
+                    height: 40px !important;
+                    width: 62px !important;
+                }
+            }
+
         }
 
+        & img {
+            height: 32px;
+            width: 32px;
+        }
 
     }
 
@@ -151,7 +167,6 @@
     & .title-dropdown {
         font-size: 28px;
         font-weight: 400;
-        padding: 5px 15px;
         border-bottom: 1px solid #ddd;
     }
 
@@ -168,8 +183,8 @@
 
         & .header-btn-close {
             font-size: 20px;
-            margin-left: 5px;
-            margin-right: 5px;
+            // margin-left: 5px;
+            // margin-right: 5px;
             border: none;
             background-color: white;
             color: black;
@@ -209,7 +224,7 @@
 
         .content-info {
             border-top: 1px solid #ddd;
-            margin-top: 20px;
+            margin-top: 25px;
 
             & span {
                 font-size: 20px;
@@ -218,7 +233,7 @@
 
             & p {
                 color: #4BA747;
-                margin-left: 25px;
+                margin-left: 10px;
             }
 
             & .my-profile {

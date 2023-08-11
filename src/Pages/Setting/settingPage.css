@@ -12,12 +12,13 @@
 .setting-page-col {
     float: left;
     border: 1px solid #d7dadb;
-    width: 135px;
+    width: 160px;
     text-align: center;
     padding: 20px;
     margin: 15px 5px 35px 5px;
     opacity: 1;
     height: 150px;
+    /* height: fit-content; */    
 }
 .setting-page-col .ant-btn{
     color: inherit;
@@ -28,7 +29,9 @@
     border: none;
     box-sizing: border-box;
     background-color: transparent;
-      white-space: normal;
+    white-space: normal;
+    width: fit-content;
+    height: fit-content;
 }
 .setting-page-col .ant-btn .anticon{
     width: 60px;
@@ -47,5 +50,34 @@
     line-height: 1.42857143;
     font-weight: 400;
 }
+.responsive-before-titile-integration{
+    display: block;
+}
+.titile-integration{
+    float: right;
+    margin-right: 150px;
+}
+.responsive-after-titile-intergration{
+    display: none;
+}
+.integration-office-365{
+    display: block;
+}
+@media screen and (max-width: 1383px) {
+    .responsive-before-titile-integration {
+      display: none;
+    }
+    .responsive-after-titile-intergration{
+        display: block;
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .setting-page-content{
+        margin-left: 80px;
+    }
+    .integration-office-365{
+        display: none;
+    }
+  }
 
 
