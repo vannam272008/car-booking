@@ -56,7 +56,7 @@ interface MenuAddProps {
 function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
 
     const navigate = useNavigate();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const handleSaveDraft = () => {
         if (formData.ReceiverId && formData.Mobile && formData.CostCenter && formData.TotalPassengers && formData.PickTime && formData.PickLocation && formData.Destination && formData.Reason !== null && formData.ListOfUserId.length !== 0) {
@@ -171,7 +171,7 @@ function MenuAdd({ formData, setFormData }: MenuAddProps): JSX.Element {
     console.log(formData);
 
     return (
-        <div>
+        <div className='menu-detail-request'>
             <Menu mode="horizontal" className='fixed-menu '>
                 <Menu.Item onClick={handleReturn} key="return" icon={<ArrowLeftOutlined />}>
                     {t('return')}

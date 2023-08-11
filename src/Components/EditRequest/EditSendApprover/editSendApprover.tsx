@@ -24,7 +24,7 @@ interface PropsDataList {
 
 function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: PropsDataList): JSX.Element {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [dataDepartmentMember, setDataDepartmentMember] = useState<DepartmentMember[]>([]);
     const [workflowData, setWorkflowData] = useState<any>([])
@@ -184,7 +184,7 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                     <Form>
                         <Row gutter={16}>
                             {inputs.map((input, index) => (
-                                <Col span={8} key={index} className='col-request '>
+                                <Col xs={24} sm={24} md={12} lg={12} xl={8} key={index} className='col-request '>
                                     <Form.Item
                                         label={
                                             <div className='label-approver'>
@@ -195,10 +195,12 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                                                     </Space>
                                                 ) : (
                                                     <Space>
-                                                        <span>{labelApprovers[index]}</span>
-                                                        <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
-                                                        <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
-                                                        <Button type="link" icon={<DragOutlined />} />
+                                                        <div className='responsive-lable-approver'><span title={labelApprovers[index]}>{labelApprovers[index]}</span></div>
+                                                        <div className='responsive-btn-approver'>
+                                                            <Button type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(index)} />
+                                                            <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(index)} />
+                                                            <Button type="link" icon={<DragOutlined />} />
+                                                        </div>
                                                     </Space>
                                                 )}
                                             </div>
@@ -212,6 +214,7 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                                         ]}
                                         initialValue={initialValueWorkflow[index] === undefined ? '--Select a Approver--' : initialValueWorkflow[index]}
                                         labelCol={{ span: 24 }}
+                                        className='responsive-send-approver'
                                     >
                                         <Select
                                             virtual={false}
@@ -220,10 +223,11 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                                             optionFilterProp="children"
                                             filterOption={false}
                                             onSearch={handleSearch}
+                                            className='responsive-select-option'
                                         >
                                             {filteredData().map((departmentMember) => (
                                                 <Option key={departmentMember.Id} value={departmentMember.Id}>
-                                                    <div>
+                                                    <div className='responsive-limit-width-ellipsis'>
                                                         <span>{departmentMember.FullName} </span>
                                                         <span>{departmentMember.Email} </span>
                                                         <span>{departmentMember.JobTitle} </span>
@@ -234,7 +238,7 @@ function EditSendApprover({ departmentId, listOfUserId, setListOfUserId }: Props
                                     </Form.Item>
                                 </Col>
                             ))}
-                            <Col span={8} className='btn-add-approver'>
+                            <Col xs={24} sm={24} md={12} lg={12} xl={8} className='btn-add-approver'>
                                 <Button
                                     type="primary"
                                     onClick={handleAddInput}
