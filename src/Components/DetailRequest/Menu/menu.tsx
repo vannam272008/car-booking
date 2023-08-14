@@ -355,12 +355,12 @@ function MenuRequest(props: any): JSX.Element {
                 }>
                     <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
                 </Modal>
-                <Menu.Item key="progress" icon={<RiseOutlined />}>
+                <Menu.Item key="progress" onClick={showModalProgress} icon={<RiseOutlined />}>
                     {t('progress')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
                     {t('share')}
-                </Menu.Item>
+                </Menu.Item> 
                 {(requestStatus === 'Waiting for approval' && (checkUserApprover() || checkUserRoles([1, 2], userInfo))) && (
                     <>
                         <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
@@ -521,7 +521,7 @@ function MenuRequest(props: any): JSX.Element {
                                 </Col>
                             </Row> 
                         </Col>
-                </Modal>
+            </Modal>
         </div>
     );
 }
