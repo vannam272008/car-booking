@@ -93,6 +93,10 @@
   .menu-detail-request .ant-menu-overflow{
     width: 100%;
   }
+  .menu-detail-request .ant-menu-overflow .ant-menu-item::after{
+    border-bottom: none;
+  }
+
 
 
   
