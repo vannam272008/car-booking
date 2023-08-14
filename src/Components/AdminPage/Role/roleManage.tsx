@@ -5,7 +5,7 @@ import { Role, RoleFormProps } from '../Utils/interfaces'
 import * as util from '../Utils'
 import axios from 'axios';
 import { resetRole } from '../Utils';
-import "./roleManage.css";
+import "./roleManage.scss";
 
 const RoleManage: React.FC = () => {
 
