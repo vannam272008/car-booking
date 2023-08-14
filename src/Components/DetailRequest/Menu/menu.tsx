@@ -338,101 +338,25 @@ function MenuRequest(props: any): JSX.Element {
                         {t('delete')}
                     </Menu.Item>
                 )}
-                <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
-                    <div className='menu-btn-delete'>
-                        <Button type="primary" onClick={handleDelete}>OK</Button>
-                        <Button onClick={handleClose}>{t('Cancel')}</Button>
-                    </div>
-                }>
-                    <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
-                </Modal>
                 <Menu.Item key="progress" icon={<RiseOutlined />}>
                     {t('progress')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
                     {t('share')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4>{t('share')}</h4>} open={isModalOpenShare} footer={
-                    <div >
-                        <Button type="primary" onClick={handleShare}>{t('share')}</Button>
-                        <Button onClick={handleClose}>{t('Close')}</Button>
-                    </div>
-                }>
-                    <Select
-                        onChange={handleSelectChange}
-                        showSearch
-                        optionFilterProp="children"
-                        filterOption={false}
-                        onSearch={handleSearch}
-                        className='fixed-width-object'
-                        defaultValue={'--Select a User--'}
-                    >
-                        {filteredDataApprover().map((approver) => (
-                            <Option key={approver.Id} value={approver.User.Id}>
-                                <div>
-                                    <span>{approver.User.FullName} </span>
-                                    <span>{approver.User.Email} </span>
-                                    <span>{approver.User.JobTitle} </span>
-                                </div>
-                            </Option>
-                        ))}
-                    </Select>
-                </Modal>
                 {(requestStatus === 'Waiting for approval' && (checkUserApprover() || checkUserRoles([1, 2], userInfo))) && (
                     <>
                         <Menu.Item onClick={showModalApprove} key="approve" icon={<CheckOutlined />}>
                             {t('approve')}
                         </Menu.Item>
-                        <Modal className='custom-menu' title={<h4>Note</h4>} closable={false} open={isModalOpenApprove} footer={
-                            <div>
-                                <Button type="primary" onClick={handleApprove}>{t('approve')}</Button>
-                                <Button onClick={handleClose}>{t('Close')}</Button>
-                            </div>
-                        }>
-                            <TextArea rows={5} className='menu-after-btn-input' onChange={(e) => {
-                                setActionRequest({ action: "Approved", Note: e.target.value });
-                                setComment((prevComment) => ({
-                                    ...prevComment,
-                                    comment: t('Request ') + requestCode + t(' has been Approved. Note: ') + e.target.value
-                                }));
-                            }} />
-                        </Modal>
                         <Menu.Item onClick={showModalReject} key="reject" icon={<CloseOutlined />}>
                             {t('reject')}
                         </Menu.Item>
-                        <Modal className='custom-menu' closable={false} title={<h4>{t('reason')}</h4>} open={isModalOpenReject} footer={
-                            <div>
-                                <Button type="primary" onClick={handleReject}>{t('reject')}</Button>
-                                <Button onClick={handleClose}>{t('Close')}</Button>
-                            </div>
-                        }>
-                            <TextArea rows={5} className='menu-after-btn-input'
-                                onChange={(e) => {
-                                    setActionRequest({ action: "Rejected", Note: e.target.value });
-                                    setComment((prevComment) => ({
-                                        ...prevComment,
-                                        comment: t('Request ') + requestCode + t(' has been Rejected. Reason: ') + e.target.value
-                                    }));
-                                }} />
-                        </Modal>
                     </>
                 )}
-
                 <Menu.Item onClick={showModalForward} key="forward" icon={<DeliveredProcedureOutlined />}>
                     {t('forward')}
                 </Menu.Item>
-                <Modal className='custom-menu' closable={false} title={<h4>{t('Choose User')}</h4>} open={isModalOpenForward} footer={
-                    <div >
-                        <Button type="primary" onClick={handleForward}>{t('forward')}</Button>
-                        <Button onClick={handleClose}>{t('Close')}</Button>
-                    </div>
-                }>
-                    <Select className='fixed-width-object'>
-                        <Option value="1">bangnm@o365.vn, Developer</Option>
-                        <Option value="2">bu.test5@o365.vn, Tài xế</Option>
-                    </Select>
-                    <Input className='menu-after-btn-forward'></Input>
-                </Modal>
                 {(requestStatus === 'Approved' && checkUserRoles([1, 2], userInfo)) &&
                     <Dropdown overlay={menu} trigger={['click']}
                         onOpenChange={() => {
@@ -447,6 +371,81 @@ function MenuRequest(props: any): JSX.Element {
                         )}
                     </Dropdown>}
             </Menu>
+            <Modal className='custom-menu' closable={false} title={<h4 className='menu-title-alert'>{t('Are you sure ?')}</h4>} open={isModalOpenDelete} footer={
+                <div className='menu-btn-delete'>
+                    <Button type="primary" onClick={handleDelete}>OK</Button>
+                    <Button onClick={handleClose}>{t('Cancel')}</Button>
+                </div>
+            }>
+                <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
+            </Modal>
+            <Modal className='custom-menu' closable={false} title={<h4>{t('share')}</h4>} open={isModalOpenShare} footer={
+                <div >
+                    <Button type="primary" onClick={handleShare}>{t('share')}</Button>
+                    <Button onClick={handleClose}>{t('Close')}</Button>
+                </div>
+            }>
+                <Select
+                    onChange={handleSelectChange}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={false}
+                    onSearch={handleSearch}
+                    className='fixed-width-object'
+                    defaultValue={'--Select a User--'}
+                >
+                    {filteredDataApprover().map((approver) => (
+                        <Option key={approver.Id} value={approver.User.Id}>
+                            <div>
+                                <span>{approver.User.FullName} </span>
+                                <span>{approver.User.Email} </span>
+                                <span>{approver.User.JobTitle} </span>
+                            </div>
+                        </Option>
+                    ))}
+                </Select>
+            </Modal>
+            <Modal className='custom-menu' title={<h4>Note</h4>} closable={false} open={isModalOpenApprove} footer={
+                <div>
+                    <Button type="primary" onClick={handleApprove}>{t('approve')}</Button>
+                    <Button onClick={handleClose}>{t('Close')}</Button>
+                </div>
+            }>
+                <TextArea rows={5} className='menu-after-btn-input' onChange={(e) => {
+                    setActionRequest({ action: "Approved", Note: e.target.value });
+                    setComment((prevComment) => ({
+                        ...prevComment,
+                        comment: t('Request ') + requestCode + t(' has been Approved. Note: ') + e.target.value
+                    }));
+                }} />
+            </Modal>
+            <Modal className='custom-menu' closable={false} title={<h4>{t('reason')}</h4>} open={isModalOpenReject} footer={
+                <div>
+                    <Button type="primary" onClick={handleReject}>{t('reject')}</Button>
+                    <Button onClick={handleClose}>{t('Close')}</Button>
+                </div>
+            }>
+                <TextArea rows={5} className='menu-after-btn-input'
+                    onChange={(e) => {
+                        setActionRequest({ action: "Rejected", Note: e.target.value });
+                        setComment((prevComment) => ({
+                            ...prevComment,
+                            comment: t('Request ') + requestCode + t(' has been Rejected. Reason: ') + e.target.value
+                        }));
+                    }} />
+            </Modal>
+            <Modal className='custom-menu' closable={false} title={<h4>{t('Choose User')}</h4>} open={isModalOpenForward} footer={
+                <div >
+                    <Button type="primary" onClick={handleForward}>{t('forward')}</Button>
+                    <Button onClick={handleClose}>{t('Close')}</Button>
+                </div>
+            }>
+                <Select className='fixed-width-object'>
+                    <Option value="1">bangnm@o365.vn, Developer</Option>
+                    <Option value="2">bu.test5@o365.vn, Tài xế</Option>
+                </Select>
+                <Input className='menu-after-btn-forward'></Input>
+            </Modal>
         </div>
     );
 }

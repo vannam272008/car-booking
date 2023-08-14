@@ -66,11 +66,19 @@
     line-height: 55px !important;
     background-color: #167c82;
 } */
+@media only screen and (max-width: 809px) {
+    .menu-detail-request .fixed-menu .ant-menu-overflow-item-rest {
+        opacity: 1 !important;
+        order: 3 !important;
+    }
+  }
+
 @media only screen and (max-width: 1200px) {
-    .menu-detail-request .fixed-menu .ant-menu-item {
+    .menu-detail-request .fixed-menu {
         display: flex;
     }  
   }
+
 
   @media only screen and (min-width: 1200px) {
     .menu-detail-request .fixed-menu {
@@ -91,7 +99,7 @@
     }
   }
   .menu-detail-request .ant-menu-overflow{
-    width: 100%;
+    width: auto;
   }
   .menu-detail-request .ant-menu-overflow .ant-menu-item::after{
     border-bottom: none;
