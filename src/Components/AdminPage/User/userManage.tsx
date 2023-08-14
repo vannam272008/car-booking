@@ -9,7 +9,7 @@ import * as util from '../Utils'
 import axios from 'axios';
 import { jwt_admin } from '../Utils/constants'
 import { RcFile } from 'antd/es/upload';
-import "./userManage.css";
+import "./userManage.scss";
 import request from '../../../Utils/request';
 
 const UserManage: React.FC = () => {
