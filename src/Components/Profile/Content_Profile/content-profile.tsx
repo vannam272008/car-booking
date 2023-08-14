@@ -3,7 +3,7 @@ import type { TabsProps } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import { UploadFile } from "antd/lib/upload/interface";
 import ImgCrop from "antd-img-crop";
-import { Tabs, Upload, Avatar, Modal, message, Button, Row, Col } from "antd";
+import { Tabs, Upload, Avatar, Modal, message, Button} from "antd";
 import { useState, useEffect } from "react";
 import {
   UserAddOutlined,
@@ -423,16 +423,9 @@ const ContentProfile: React.FC = () => {
             <Avatar
               size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
               icon={<UserOutlined />}
-              // src={`http://localhost:63642/${infoAPI.AvatarPath}`}
               src={`http://localhost:63642/${defaultAvatar}?${Date.now()}`}
             />
           )}
-
-          {/* <Avatar
-            size={{ xs: 100, sm: 140, md: 180, lg: 200, xl: 250, xxl: 300 }}
-            icon={<UserOutlined />}
-            src={`http://localhost:63642/${infoAPI.AvatarPath}?${Date.now()}`}
-          /> */}
         </span>
         <h1 className="name_user" style={{ marginLeft: "50px" }}>
           {infoAPI.FirstName} {infoAPI.LastName}

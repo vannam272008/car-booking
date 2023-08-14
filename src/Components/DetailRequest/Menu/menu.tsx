@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification } from 'antd';
+import { Avatar, Button, Checkbox, Dropdown, Input, Menu, Modal, Select, notification, Steps, Row, Col, Divider, Card} from 'antd';
 import './menu.css'
 import {
     ArrowLeftOutlined,
@@ -59,9 +59,12 @@ function MenuRequest(props: any): JSX.Element {
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
     const [isModalOpenShare, setIsModalOpenShare] = useState(false);
     const [isModalOpenForward, setIsModalOpenForward] = useState(false);
+    const [isModalProgress, setIsModalProgress] = useState(false);
     const [checkBoxDelete, SetCheckBoxDelete] = useState(false);
     const { requestId } = useParams();
     const { t } = useTranslation();
+    const { Step } = Steps;
+    const { Meta } = Card;
     const [actionRequest, setActionRequest] = useState<ActionRequest>({
         action: "",
         Note: ""
@@ -75,7 +78,10 @@ function MenuRequest(props: any): JSX.Element {
     const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
     const [searchValue, setSearchValue] = useState<string>('');
     const [dataUserId, setDataUserId] = useState<string>('');
-
+    const description = 'This is a description.'
+    
+    // console.log("workFlowdata:",workflowData)
+    // console.log("userinfo:",userInfo)
     useEffect(() => {
         // const getDataApprover = async () => {
         //     const endpoint = "/userRole/all-approvers";
@@ -106,6 +112,9 @@ function MenuRequest(props: any): JSX.Element {
 
     const showModalShare = () => {
         setIsModalOpenShare(true);
+    }
+    const showModalProgress = () =>{
+        setIsModalProgress(true);
     }
 
     const showModalApprove = () => {
@@ -346,9 +355,11 @@ function MenuRequest(props: any): JSX.Element {
                 }>
                     <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
                 </Modal>
-                <Menu.Item key="progress" icon={<RiseOutlined />}>
+                <Menu.Item  onClick = {showModalProgress} key="progress" icon={<RiseOutlined />}>
                     {t('progress')}
                 </Menu.Item>
+                
+
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
                     {t('share')}
                 </Menu.Item>
@@ -447,6 +458,65 @@ function MenuRequest(props: any): JSX.Element {
                         )}
                     </Dropdown>}
             </Menu>
+            {/* MODAL PROGRESS HERE */}
+            <Modal className='Modal-progress' title ={<h2>{t('progress')}</h2>} open = {isModalProgress} width ="70%"  bodyStyle = {{ overflow: 'auto', maxHeight: 'calc(100vh - 300px)', minWidth: '30%'}} footer = {null} onCancel={()=>setIsModalProgress(false)}>
+                        <Col>
+                            <Divider orientation="left">Approver 1</Divider>
+                            <Row>
+                                <Col span={10}>
+                                    <Card>
+                                        <Meta
+                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
+                                            description="This is the description"
+                                        />
+                                    </Card>
+                                </Col>
+                                <Col span = {13} offset={1}>   
+                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
+                                        <Step title= 'Waiting for approval' />  
+                                        <Step title= 'Approved'/>
+                                        <Step title= 'Rejected' status='error'/>
+                                    </Steps>
+                                </Col>
+                            </Row> 
+                            <Divider orientation="left">Approver 2</Divider>
+                            <Row>
+                                <Col span={10}>
+                                    <Card>
+                                        <Meta
+                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
+                                            description="This is the description"
+                                        />
+                                    </Card>
+                                </Col>
+                                <Col span = {13} offset={1}>   
+                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
+                                        <Step title= 'Waiting for approval' />  
+                                        <Step title= 'Approved'/>
+                                        <Step title= 'Rejected' status='error'/>
+                                    </Steps>
+                                </Col>
+                            </Row> 
+                            <Divider orientation="left">Approver 3</Divider>
+                            <Row>
+                                <Col span={10}>
+                                    <Card>
+                                        <Meta
+                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
+                                            description="This is the description"
+                                        />
+                                    </Card>
+                                </Col>
+                                <Col span = {13} offset={1}>   
+                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
+                                        <Step title= 'Waiting for approval' />  
+                                        <Step title= 'Approved'/>
+                                        <Step title= 'Rejected' status='error'/>
+                                    </Steps>
+                                </Col>
+                            </Row> 
+                        </Col>
+                </Modal>
         </div>
     );
 }
