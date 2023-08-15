@@ -50,7 +50,7 @@ interface DepartmentMember {
 
 function MenuRequest(props: any): JSX.Element {
 
-    // console.log(props);
+    console.log('props',props);
 
     const { Option } = Select;
     const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData } = props;
@@ -78,10 +78,8 @@ function MenuRequest(props: any): JSX.Element {
     const [selectedApprovers, setSelectedApprovers] = useState<{ [key: string]: string }>({});
     const [searchValue, setSearchValue] = useState<string>('');
     const [dataUserId, setDataUserId] = useState<string>('');
-    const description = 'This is a description.'
-    
-    // console.log("workFlowdata:",workflowData)
-    // console.log("userinfo:",userInfo)
+    const [current, setCurrent] = useState(0);
+
     useEffect(() => {
         // const getDataApprover = async () => {
         //     const endpoint = "/userRole/all-approvers";
@@ -105,6 +103,11 @@ function MenuRequest(props: any): JSX.Element {
         }
 
     }, [departmentId])
+
+    const ChangeCurrentStatus = (value: number) =>{
+        
+        setCurrent(value);
+    }
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -332,7 +335,8 @@ function MenuRequest(props: any): JSX.Element {
             return true;
         } else return false;
     }
-
+    // console.log('workflowdata: ', workflowData)
+    // console.log('userinfo:', userInfo)
     return (
         <div className='menu-detail-request'>
             <Menu overflowedIndicatorPopupClassName="popup-menu-detail-request" mode="horizontal" className='fixed-menu'>
@@ -465,62 +469,51 @@ function MenuRequest(props: any): JSX.Element {
             </Modal>
             {/* MODAL PROGRESS HERE */}
             <Modal className='Modal-progress' title ={<h2>{t('progress')}</h2>} open = {isModalProgress} width ="70%"  bodyStyle = {{ overflow: 'auto', maxHeight: 'calc(100vh - 300px)', minWidth: '30%'}} footer = {null} onCancel={()=>setIsModalProgress(false)}>
-                        <Col>
-                            <Divider orientation="left">Approver 1</Divider>
-                            <Row>
-                                <Col span={10}>
-                                    <Card>
-                                        <Meta
-                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
-                                            description="This is the description"
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span = {13} offset={1}>   
-                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
-                                        <Step title= 'Waiting for approval' />  
-                                        <Step title= 'Approved'/>
-                                        <Step title= 'Rejected' status='error'/>
-                                    </Steps>
-                                </Col>
-                            </Row> 
-                            <Divider orientation="left">Approver 2</Divider>
-                            <Row>
-                                <Col span={10}>
-                                    <Card>
-                                        <Meta
-                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
-                                            description="This is the description"
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span = {13} offset={1}>   
-                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
-                                        <Step title= 'Waiting for approval' />  
-                                        <Step title= 'Approved'/>
-                                        <Step title= 'Rejected' status='error'/>
-                                    </Steps>
-                                </Col>
-                            </Row> 
-                            <Divider orientation="left">Approver 3</Divider>
-                            <Row>
-                                <Col span={10}>
-                                    <Card>
-                                        <Meta
-                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
-                                            description="This is the description"
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span = {13} offset={1}>   
-                                    <Steps size ="small" type="navigation" style={{padding: "50px 50px"}} direction='horizontal' current={0} responsive={true}>
-                                        <Step title= 'Waiting for approval' />  
-                                        <Step title= 'Approved'/>
-                                        <Step title= 'Rejected' status='error'/>
-                                    </Steps>
-                                </Col>
-                            </Row> 
+                <Col>
+                    <Divider orientation="left">Sender</Divider>
+                    <Row>
+                        <Col span={12} offset={6}>
+                            <Card   
+                                title="Sender"
+                                headStyle={{ backgroundColor: 'blue', color: 'white' }}
+                            >   
+                                <Meta
+                                    avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
+                                    title = {userInfo.FullName}
+                                    description={<>{userInfo.Email}</>}
+                                />
+                            </Card>
                         </Col>
+                    </Row> 
+                    <Divider orientation="left">Approver</Divider> 
+                    <Col span={13} offset={5}>
+                        <Steps direction="vertical" current={current} onChange={ChangeCurrentStatus}>   
+                            {Array.isArray(workflowData) ?
+                            (
+                                workflowData.map((approverData: { Id: number; Status: string; Position: string; User: { AvatarPath: string; FullName: string; JobTitle: string } }, index: number) => (
+                                <Step
+                                title={<strong>Status: {approverData.Status}</strong>}
+                                description={
+                                    <Card   
+                                        title= {`Approver ${index+1}`}
+                                        headStyle={{ backgroundColor: 'blue', color: 'white' }}
+                                    >   
+                                        <Meta
+                                            avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${approverData.User.AvatarPath}`}/>}
+                                            title = {approverData.User.FullName}
+                                            description={<span>{`Postion: ${approverData.Position}`}<p>{`Job title: ${approverData.User.JobTitle}`}</p><>{`${approverData.Status}`}</></span>}
+                                        />
+                                    </Card>
+                                }   
+                                />
+                                )) 
+                            ):(
+                                <div>{('No workflow data available.')}</div>
+                            )}
+                            
+                        </Steps>
+                    </Col>   
+                </Col>
             </Modal>
         </div>
     );
@@ -529,6 +522,5 @@ function MenuRequest(props: any): JSX.Element {
 const mapStateToProps = (state: RootState) => ({
     userInfo: state.request.userInfo
 });
-
-
+    
 export default connect(mapStateToProps, null)(MenuRequest);
