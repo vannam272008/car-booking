@@ -116,6 +116,7 @@ function DetailRequest(props: any): JSX.Element {
 
     // console.log('hello', detailData.Department ? detailData.Department.Id : undefined);
     // console.log("123:", Object.keys(workflowData).length === 0);
+    console.log(detailData)
     return (
         <RequestLayout profile={profile}>
             {() => (
@@ -134,7 +135,7 @@ function DetailRequest(props: any): JSX.Element {
                                     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                                 </Helmet>
                                 <div>
-                                    <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} />
+                                    <MenuRequest departmentId={departmentId} requestStatus={detailData.Status} requestCode={detailData.RequestCode} setLoading={setLoading} senderId={detailData.senderId} workflowData={workflowData} senderUser={detailData.SenderUser}/>
                                 </div>
                                 <div className='info-detail-request'>
                                     <div className='info-basic-detail-request'>
@@ -249,7 +250,7 @@ function DetailRequest(props: any): JSX.Element {
                                                                     (<span className='responsive-title-after'>{t(approverData.Position)} : </span>)
                                                                     : (<span className='responsive-title-after'>{t('Approver')}  {index + 1} : </span>)}
                                                                 <p>{approverData.User.FullName}</p>
-                                                            </Card>
+                                                            </Card>     
                                                         </Badge.Ribbon>
                                                     </Col>
                                                 ))

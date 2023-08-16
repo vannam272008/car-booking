@@ -50,7 +50,7 @@ interface DepartmentMember {
 
 function MenuRequest(props: any): JSX.Element {
     const { Option } = Select;
-    const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData } = props;
+    const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData, senderUser} = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
     const [isModalOpenApprove, setIsModalOpenApprove] = useState(false);
     const [isModalOpenReject, setIsModalOpenReject] = useState(false);
@@ -490,9 +490,9 @@ function MenuRequest(props: any): JSX.Element {
                                 headStyle={{ backgroundColor: 'blue', color: 'white' }}
                             >   
                                 <Meta
-                                    avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${userInfo.AvatarPath}`}/>}
-                                    title = {userInfo.FullName}
-                                    description={<>{userInfo.Email}</>}
+                                    avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${senderUser.AvatarPath}`}/>}
+                                    title = {senderUser.FullName}
+                                    description={<>{senderUser.Email}</>}
                                 />
                             </Card>
                         </Col>
