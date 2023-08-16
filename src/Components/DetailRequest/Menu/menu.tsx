@@ -49,7 +49,6 @@ interface DepartmentMember {
 }
 
 function MenuRequest(props: any): JSX.Element {
-
     const { Option } = Select;
     const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -103,19 +102,25 @@ function MenuRequest(props: any): JSX.Element {
     }, [departmentId])
 
     const handleClickProgress = (value: any) =>{
+        // let refresh = false;
         for(let i = 0; i < workflowData.length; i++ ){
+            if(workflowData[i].Status === 'This current rejected and the following approvers will not be approved' || workflowData[i].Status === ' In progress'){
+                value = i;
+                break;
+            }
             if(workflowData[i].Status === 'Rejected'){
+                // refresh = true;
                 value = i;
                 workflowData[i].Status = 'This current rejected and the following approvers will not be approved';
                 break;
-            }else if (workflowData[i].Status === 'Waiting for approval'){
+            } else if (workflowData[i].Status === 'Waiting for approval'){
                 value = i;
                 workflowData[i].Status = ' In progress';
                 break;
             }
-    }
+        }
         setCurrent(value);
-        setIsModalProgress(true);
+        setIsModalProgress(true);  
     }
        
        
