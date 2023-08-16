@@ -492,7 +492,7 @@ function MenuRequest(props: any): JSX.Element {
                                 <Meta
                                     avatar={<Avatar size = {{xs: 30, sm: 40, md: 50, lg: 70, xl: 90, xxl: 110}} src = {`http://localhost:63642/${senderUser.AvatarPath}`}/>}
                                     title = {senderUser.FullName}
-                                    description={<>{senderUser.Email}</>}
+                                    description={<>{`Email: ${senderUser.Email}`}<p>{`Job title: ${senderUser.JobTitle}`}</p></>}
                                 />
                             </Card>
                         </Col>
