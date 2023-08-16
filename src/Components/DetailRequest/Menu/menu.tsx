@@ -50,8 +50,6 @@ interface DepartmentMember {
 
 function MenuRequest(props: any): JSX.Element {
 
-    console.log('props',props);
-
     const { Option } = Select;
     const { departmentId, requestStatus, requestCode, setLoading, userInfo, senderId, workflowData } = props;
     const [isModalOpenDelete, setIsModalOpenDelete] = useState(false);
@@ -104,10 +102,23 @@ function MenuRequest(props: any): JSX.Element {
 
     }, [departmentId])
 
-    const ChangeCurrentStatus = (value: number) =>{
-        
-        setCurrent(value);
+    const handleClickProgress = (value: any) =>{
+        for(let i = 0; i < workflowData.length; i++ ){
+            if(workflowData[i].Status === 'Rejected'){
+                value = i;
+                workflowData[i].Status = 'This current rejected and the following approvers will not be approved';
+                break;
+            }else if (workflowData[i].Status === 'Waiting for approval'){
+                value = i;
+                workflowData[i].Status = ' In progress';
+                break;
+            }
     }
+        setCurrent(value);
+        setIsModalProgress(true);
+    }
+       
+       
 
     const showModalDelete = () => {
         setIsModalOpenDelete(true);
@@ -115,9 +126,6 @@ function MenuRequest(props: any): JSX.Element {
 
     const showModalShare = () => {
         setIsModalOpenShare(true);
-    }
-    const showModalProgress = () =>{
-        setIsModalProgress(true);
     }
 
     const showModalApprove = () => {
@@ -335,8 +343,7 @@ function MenuRequest(props: any): JSX.Element {
             return true;
         } else return false;
     }
-    // console.log('workflowdata: ', workflowData)
-    // console.log('userinfo:', userInfo)
+
     return (
         <div className='menu-detail-request'>
             <Menu overflowedIndicatorPopupClassName="popup-menu-detail-request" mode="horizontal" className='fixed-menu'>
@@ -359,7 +366,7 @@ function MenuRequest(props: any): JSX.Element {
                 }>
                     <Checkbox className='menu-btn-delete-checkbox' onChange={onChangeCheckBoxDelete}>{t('Delete approval tasks related to this request.')}</Checkbox>
                 </Modal>
-                <Menu.Item key="progress" onClick={showModalProgress} icon={<RiseOutlined />}>
+                <Menu.Item key="progress" onClick={handleClickProgress} icon={<RiseOutlined />}>
                     {t('progress')}
                 </Menu.Item>
                 <Menu.Item onClick={showModalShare} key="share" icon={<ShareAltOutlined />}>
@@ -487,10 +494,10 @@ function MenuRequest(props: any): JSX.Element {
                     </Row> 
                     <Divider orientation="left">Approver</Divider> 
                     <Col span={13} offset={5}>
-                        <Steps direction="vertical" current={current} onChange={ChangeCurrentStatus}>   
+                        <Steps direction="vertical" current={current}>   
                             {Array.isArray(workflowData) ?
                             (
-                                workflowData.map((approverData: { Id: number; Status: string; Position: string; User: { AvatarPath: string; FullName: string; JobTitle: string } }, index: number) => (
+                                workflowData.map((approverData: { Status: string; Position: string; User: { AvatarPath: string; FullName: string; JobTitle: string } }, index: number) => (
                                 <Step
                                 title={<strong>Status: {approverData.Status}</strong>}
                                 description={
